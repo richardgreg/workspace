@@ -57,24 +57,29 @@ export interface Proposal {
 export class BeneficiaryGovernanceAdapter {
   constructor(private contract: Contract, private IpfsClient: IIpfsClient) {}
 
-  public async getProposal(id: number): Promise<Proposal> {
+  public async getProposal(
+    id: number,
+    proposalType: ProposalType
+  ): Promise<Proposal> {
     const proposal = await this.contract.proposals(id);
-    return {
-      application: await this.IpfsClient.get(proposal.applicationCid),
-      id: id.toString(),
-      proposalType: proposal.proposalType,
-      status: Number(proposal.status.toString()),
-      stageDeadline: new Date(
-        (Number(proposal.startTime.toString()) +
-          Number(proposal.configurationOptions.votingPeriod.toString()) +
-          Number(proposal.configurationOptions.vetoPeriod.toString())) *
-          1000
-      ),
-      votes: {
-        for: proposal.yesCount,
-        against: proposal.noCount,
-      },
-    };
+    if (proposal.proposalType === proposalType) {
+      return {
+        application: await this.IpfsClient.get(proposal.applicationCid),
+        id: id.toString(),
+        proposalType: proposal.proposalType,
+        status: Number(proposal.status.toString()),
+        stageDeadline: new Date(
+          (Number(proposal.startTime.toString()) +
+            Number(proposal.configurationOptions.votingPeriod.toString()) +
+            Number(proposal.configurationOptions.vetoPeriod.toString())) *
+            1000
+        ),
+        votes: {
+          for: proposal.yesCount,
+          against: proposal.noCount,
+        },
+      };
+    }
   }
 
   public async getAllProposals(
@@ -95,7 +100,7 @@ export class BeneficiaryGovernanceAdapter {
 
     return Promise.all(
       proposalIds.map(async (id) => {
-        return this.getProposal(id.toNumber());
+        return this.getProposal(id.toNumber(), proposalType);
       })
     );
   }
