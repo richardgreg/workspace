@@ -1,4 +1,5 @@
 import { DocumentReportIcon, XIcon } from '@heroicons/react/outline';
+import { ImpactReport } from '@popcorn/contracts/adapters/BeneficiaryGovernance/BeneficiaryGovernanceAdapter';
 import { FormStepProps } from 'pages/proposals/propose';
 import React from 'react';
 import IpfsUpload from './IpfsUpload';
@@ -11,7 +12,7 @@ const HeaderImage: React.FC<FormStepProps> = ({
 }) => {
   const [formData, setFormData] = form;
 
-  function updateImpactReports(impactReports: string[]): void {
+  function updateImpactReports(impactReports: ImpactReport[]): void {
     setFormData({
       ...formData,
       files: {
@@ -57,12 +58,17 @@ const HeaderImage: React.FC<FormStepProps> = ({
           maxFileSizeMB={10}
         />
         <div className="mx-auto">
-          {formData?.files?.impactReports.map((IpfsHash, i) => {
+          {formData?.files?.impactReports.map((impactReport, i) => {
             return (
-              <div key={IpfsHash} className="flex flex-row items-center">
+              <div
+                key={impactReport.report}
+                className="flex flex-row items-center"
+              >
                 <a
                   className="justify-self-center mx-auto mt-4 inline-flex py-1"
-                  href={'https://gateway.pinata.cloud/ipfs/' + IpfsHash}
+                  href={
+                    'https://gateway.pinata.cloud/ipfs/' + impactReport.report
+                  }
                 >
                   {`Impact Report/Audit ${i + 1}: `}
                   <DocumentReportIcon className="ml-2 h-5 w-5" />
