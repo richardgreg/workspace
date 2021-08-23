@@ -1,13 +1,28 @@
+import { InfuraProvider } from '@ethersproject/providers';
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const IndexPage = () => {
   const router = useRouter();
+  const [provider, setProvider] = useState<InfuraProvider>();
   useEffect(() => {
     if (typeof window !== 'undefined' && window.location.pathname !== '/') {
       router.replace(window.location.pathname);
     }
   }, [router.pathname]);
+
+  const initializeProvider = async () => {
+    console.log('Setting up Infura provider...');
+    const provider = new InfuraProvider('homestead', {
+      projectId: process.env.INFURA_PROJECT_ID,
+      projectSecret: process.env.INFURA_PROJECT_SECRET,
+    });
+    setProvider(provider);
+  };
+
+  useEffect(() => {
+    initializeProvider();
+  }, []);
 
   return (
     <div
