@@ -1,10 +1,12 @@
 import { InfuraProvider } from '@ethersproject/providers';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
+const EthDater = require('ethereum-block-by-date');
 
 const IndexPage = () => {
   const router = useRouter();
   const [provider, setProvider] = useState<InfuraProvider>();
+  const [dater, setDater] = useState();
   useEffect(() => {
     if (typeof window !== 'undefined' && window.location.pathname !== '/') {
       router.replace(window.location.pathname);
@@ -17,7 +19,9 @@ const IndexPage = () => {
       projectId: process.env.INFURA_PROJECT_ID,
       projectSecret: process.env.INFURA_PROJECT_SECRET,
     });
+    const dater = new EthDater(provider);
     setProvider(provider);
+    setDater(dater);
   };
 
   useEffect(() => {
