@@ -1,12 +1,14 @@
 import { InfuraProvider } from '@ethersproject/providers';
+import Patch from '@patch-technology/patch';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
+const patch = Patch(process.env.PATCH_API_KEY);
 const EthDater = require('ethereum-block-by-date');
 
 const UNISWAP_V2_CONTRACT_ADDRESSES =
   '0x7a250d5630b4cf539739df2c5dacb4c659f2488d';
 const START_DATE = '2021-08-20T00:00:00Z';
-const END_DATE = '2021-08-20T00:02:00Z';
+const END_DATE = '2021-08-20T00:01:00Z';
 
 const IndexPage = () => {
   const router = useRouter();
@@ -23,7 +25,6 @@ const IndexPage = () => {
   }, [router.pathname]);
 
   const initialize = async () => {
-    console.log('Setting up Infura provider...');
     const provider = new InfuraProvider('homestead', {
       projectId: process.env.INFURA_PROJECT_ID,
       projectSecret: process.env.INFURA_PROJECT_SECRET,
@@ -57,8 +58,21 @@ const IndexPage = () => {
     setTransactions(transactions);
   };
 
+  const getCO2Emissions = async (
+    gasUsed: number,
+    timestamp: string,
+  ): Promise<number> => {
+    return await (
+      await patch.estimates.createEthereumEstimate({
+        timestamp: timestamp,
+        gasUsed: gasUsed,
+      })
+    ).data.mass_g;
+  };
+
   useEffect(() => {
     initialize();
+    getCO2Emissions(50000, '2021-07-16T15:35:26-04:00');
   }, []);
 
   useEffect(() => {

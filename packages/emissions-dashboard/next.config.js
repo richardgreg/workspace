@@ -28,6 +28,10 @@ module.exports = {
     IPFS_GATEWAY_RETRIEVE: process.env.IPFS_GATEWAY_RETRIEVE,
     IPFS_GATEWAY_PIN_JSON: process.env.IPFS_GATEWAY_PIN_JSON,
     IPFS_GATEWAY_PIN: process.env.IPFS_GATEWAY_PIN,
+    INFURA_PROJECT_ID: process.env.INFURA_PROJECT_ID,
+    INFURA_PROJECT_SECRET: process.env.INFURA_PROJECT_SECRET,
+    INFURA_MAINNET_ENDPOINT: process.env.INFURA_MAINNET_ENDPOINT,
+    PATCH_API_KEY: process.env.PATCH_API_KEY,
   },
   poweredByHeader: false,
   webpack: (config, options) => {
