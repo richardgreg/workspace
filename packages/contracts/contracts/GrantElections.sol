@@ -284,7 +284,7 @@ contract GrantElections is ParticipationReward, KeeperIncentive {
     emit BeneficiaryRegistered(_beneficiary, _electionId);
   }
 
-  function refreshElectionState(uint256 _electionId) public {
+  function refreshElectionState(uint256 _electionId) public keeperIncentive(0) {
     Election storage election = elections[_electionId];
     if (
       block.timestamp >=
