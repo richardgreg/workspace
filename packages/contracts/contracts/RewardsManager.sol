@@ -83,7 +83,7 @@ contract RewardsManager is
     rewardLimits[uint8(RewardTargets.Insurance)] = [0, 10e18];
     rewardLimits[uint8(RewardTargets.BeneficiaryVaults)] = [20e18, 90e18];
     rewardSplits = [32e18, 32e18, 2e18, 34e18];
-    lastSwapTime = now;
+    lastSwapTime = block.timestamp;
   }
 
   /* ========== VIEW FUNCTIONS ========== */
@@ -116,7 +116,7 @@ contract RewardsManager is
       "POP must be last in path"
     );
     require(
-      lastSwapTime + MIN_SWAP_GAP > now,
+      lastSwapTime + MIN_SWAP_GAP > block.timestamp,
       "Not enough time has elapsed since last swap"
     );
     IERC20 _token = IERC20(path_[0]);
@@ -132,7 +132,7 @@ contract RewardsManager is
       block.timestamp.add(SWAP_TIMEOUT)
     );
     emit TokenSwapped(path_[0], _amounts[0], _amounts[1]);
-    _setLastTimeSwap(now);
+    _setLastTimeSwap(block.timestamp);
     return _amounts;
   }
 

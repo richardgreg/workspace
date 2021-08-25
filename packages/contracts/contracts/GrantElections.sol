@@ -76,13 +76,13 @@ contract GrantElections is ParticipationReward, KeeperIncentive {
   /* ========== STATE VARIABLES ========== */
 
   IRegion internal region;
-  IStaking internal staking;
   IBeneficiaryRegistry internal beneficiaryRegistry;
   IRandomNumberConsumer internal randomNumberConsumer;
 
   Election[] public elections;
   mapping(bytes2 => uint256[3]) public activeElections;
   ElectionConfiguration[3] public electionDefaults;
+  uint256 public incentiveBudget;
 
   /* ========== EVENTS ========== */
 
@@ -107,7 +107,7 @@ contract GrantElections is ParticipationReward, KeeperIncentive {
     address _governance
   )
     ParticipationReward(_pop, _governance)
-    KeeperIncentive(msg.sender, pop_, staking_)
+    KeeperIncentive(msg.sender, _pop, _staking)
   {
     staking = _staking;
     beneficiaryRegistry = _beneficiaryRegistry;
@@ -368,6 +368,7 @@ contract GrantElections is ParticipationReward, KeeperIncentive {
   function fundKeeperIncentive(uint256 _amount) public {
     require(POP.balanceOf(msg.sender) >= _amount, "not enough pop");
     POP.safeTransferFrom(msg.sender, address(this), _amount);
+    incentiveBudget = incentiveBudget.add(_amount);
   }
 
   function getRandomNumber(uint256 _electionId) public {
@@ -407,6 +408,15 @@ contract GrantElections is ParticipationReward, KeeperIncentive {
     uint256 finalizationIncentive = electionDefaults[
       uint8(_election.electionTerm)
     ].finalizationIncentive;
+
+    if (
+      incentiveBudget >= finalizationIncentive &&
+      _election.electionState != ElectionState.FinalizationProposed
+    ) {
+      POP.approve(address(this), finalizationIncentive);
+      POP.safeTransferFrom(address(this), msg.sender, finalizationIncentive);
+      incentiveBudget = incentiveBudget.sub(finalizationIncentive);
+    }
 
     _election.merkleRoot = _merkleRoot;
     _election.electionState = ElectionState.FinalizationProposed;
