@@ -40,6 +40,8 @@ contract RewardsManager is
   /* ========== STATE VARIABLES ========== */
 
   uint256 public constant SWAP_TIMEOUT = 600;
+  uint256 public constant MIN_SWAP_GAP = 10 minutes;
+  uint256 public lastSwapTime;
   ITreasury public treasury;
   IInsurance public insurance;
   IRegion public region;
@@ -81,6 +83,7 @@ contract RewardsManager is
     rewardLimits[uint8(RewardTargets.Insurance)] = [0, 10e18];
     rewardLimits[uint8(RewardTargets.BeneficiaryVaults)] = [20e18, 90e18];
     rewardSplits = [32e18, 32e18, 2e18, 34e18];
+    lastSwapTime = now;
   }
 
   /* ========== VIEW FUNCTIONS ========== */
@@ -112,7 +115,10 @@ contract RewardsManager is
       path_[path_.length - 1] == address(POP),
       "POP must be last in path"
     );
-
+    require(
+      lastSwapTime + MIN_SWAP_GAP > now,
+      "Not enough time has elapsed since last swap"
+    );
     IERC20 _token = IERC20(path_[0]);
     uint256 _balance = _token.balanceOf(address(this));
     require(_balance > 0, "No swappable balance");
@@ -126,7 +132,7 @@ contract RewardsManager is
       block.timestamp.add(SWAP_TIMEOUT)
     );
     emit TokenSwapped(path_[0], _amounts[0], _amounts[1]);
-
+    _setLastTimeSwap(now);
     return _amounts;
   }
 
@@ -190,6 +196,10 @@ contract RewardsManager is
       POP.transfer(regionVaults[i], split);
     }
     emit BeneficiaryVaultsDeposited(amount_);
+  }
+
+  function _setLastTimeSwap(uint256 time_) internal {
+    lastSwapTime = time_;
   }
 
   /* ========== SETTER ========== */
