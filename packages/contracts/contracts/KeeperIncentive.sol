@@ -1,13 +1,12 @@
 pragma solidity >=0.7.0 <0.8.0;
 
 import "@openzeppelin/contracts/math/SafeMath.sol";
-import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
-import "./IStaking.sol";
 import "./Governed.sol";
+import "./IStaking.sol";
+import "./UsesPOP.sol";
 
-contract KeeperIncentive is Governed {
+contract KeeperIncentive is Governed, UsesPOP {
   using SafeMath for uint256;
-  using SafeERC20 for IERC20;
 
   struct Incentive {
     uint256 reward; //pop reward for calling the function
@@ -17,7 +16,6 @@ contract KeeperIncentive is Governed {
 
   /* ========== STATE VARIABLES ========== */
 
-  IERC20 public immutable POP;
   Incentive[] public incentives;
   IStaking public staking;
   uint256 public incentiveBudget;
@@ -36,12 +34,11 @@ contract KeeperIncentive is Governed {
 
   /* ========== CONSTRUCTOR ========== */
 
-  constructor(
-    address _governance,
-    IERC20 _pop,
-    IStaking _staking
-  ) public Governed(_governance) {
-    POP = _pop;
+  constructor(address _governance, IStaking _staking)
+    public
+    Governed(_governance)
+    UsesPOP()
+  {
     createIncentive(10e18, true, false);
     staking = _staking;
   }
