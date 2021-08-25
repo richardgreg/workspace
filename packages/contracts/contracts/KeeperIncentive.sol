@@ -2,6 +2,7 @@ pragma solidity >=0.7.0 <0.8.0;
 
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
+import "./IStaking.sol";
 import "./Governed.sol";
 
 contract KeeperIncentive is Governed {
@@ -14,10 +15,13 @@ contract KeeperIncentive is Governed {
     bool openToEveryone; //can everyone call the function to get the reward or only approved?
   }
 
+  uint256 const minLockedVoiceCredits = 350000;
+
   /* ========== STATE VARIABLES ========== */
 
   IERC20 public immutable POP;
   Incentive[] public incentives;
+  IStaking internal staking;
   uint256 public incentiveBudget;
   mapping(address => bool) public approved;
 
@@ -33,9 +37,10 @@ contract KeeperIncentive is Governed {
 
   /* ========== CONSTRUCTOR ========== */
 
-  constructor(address _governance, IERC20 _pop) public Governed(_governance) {
+  constructor(address _governance, IERC20 _pop, IStaking _staking) public Governed(_governance) {
     POP = _pop;
     createIncentive(10e18, true, false);
+    staking = _staking;
   }
 
   /* ========== SETTER ========== */
@@ -111,6 +116,7 @@ contract KeeperIncentive is Governed {
   /* ========== MODIFIER ========== */
 
   modifier keeperIncentive(uint256 _incentiveId) {
+    uint256 _stakedVoiceCredits = staking.getVoiceCredits(msg.sender);
     if (_incentiveId < incentives.length) {
       Incentive storage incentive = incentives[_incentiveId];
 
@@ -120,6 +126,7 @@ contract KeeperIncentive is Governed {
           "you are not approved as a keeper"
         );
       }
+      require(_stakedVoiceCredits > minLockedVoiceCredits, "Insufficient voice credits");
       if (incentive.reward <= incentiveBudget) {
         incentiveBudget = incentiveBudget.sub(incentive.reward);
         POP.approve(address(this), incentive.reward);

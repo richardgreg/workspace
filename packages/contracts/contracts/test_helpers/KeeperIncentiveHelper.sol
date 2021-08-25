@@ -5,6 +5,7 @@ import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 import "@openzeppelin/contracts/math/SafeMath.sol";
 
 import "../KeeperIncentive.sol";
+import "../IStaking.sol";
 
 contract KeeperIncentiveHelper is KeeperIncentive {
   using SafeERC20 for IERC20;
@@ -12,7 +13,10 @@ contract KeeperIncentiveHelper is KeeperIncentive {
 
   event FunctionCalled(address account);
 
-  constructor(IERC20 pop_) public KeeperIncentive(msg.sender, pop_) {}
+  constructor(IERC20 pop_, IStaking _staking)
+    public
+    KeeperIncentive(msg.sender, pop_, _staking)
+  {}
 
   function defaultIncentivisedFunction() public keeperIncentive(0) {
     emit FunctionCalled(msg.sender);
