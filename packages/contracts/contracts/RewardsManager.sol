@@ -40,8 +40,6 @@ contract RewardsManager is
   /* ========== STATE VARIABLES ========== */
 
   uint256 public constant SWAP_TIMEOUT = 600;
-
-  IStaking public staking;
   ITreasury public treasury;
   IInsurance public insurance;
   IRegion public region;
@@ -59,7 +57,6 @@ contract RewardsManager is
   event RewardsDistributed(uint256 amount);
   event RewardSplitsUpdated(uint256[4] splits);
   event TokenSwapped(address token, uint256 amountIn, uint256 amountOut);
-  event StakingChanged(IStaking from, IStaking to);
   event TreasuryChanged(ITreasury from, ITreasury to);
   event InsuranceChanged(IInsurance from, IInsurance to);
   event RegionChanged(IRegion from, IRegion to);
@@ -73,7 +70,7 @@ contract RewardsManager is
     IInsurance insurance_,
     IRegion region_,
     IUniswapV2Router02 uniswapV2Router_
-  ) Owned(msg.sender) KeeperIncentive(msg.sender, pop_) {
+  ) Owned(msg.sender) KeeperIncentive(msg.sender, pop_, staking_) {
     staking = staking_;
     treasury = treasury_;
     insurance = insurance_;
@@ -196,18 +193,6 @@ contract RewardsManager is
   }
 
   /* ========== SETTER ========== */
-
-  /**
-   * @notice Overrides existing Staking contract
-   * @param staking_ Address of new Staking contract
-   * @dev Must implement IStaking and cannot be same as existing
-   */
-  function setStaking(IStaking staking_) public onlyOwner {
-    require(staking != staking_, "Same Staking");
-    IStaking _previousStaking = staking;
-    staking = staking_;
-    emit StakingChanged(_previousStaking, staking);
-  }
 
   /**
    * @notice Overrides existing Treasury contract

@@ -15,29 +15,32 @@ contract KeeperIncentive is Governed {
     bool openToEveryone; //can everyone call the function to get the reward or only approved?
   }
 
-  uint256 const minLockedVoiceCredits = 350000;
-
   /* ========== STATE VARIABLES ========== */
 
   IERC20 public immutable POP;
   Incentive[] public incentives;
-  IStaking internal staking;
+  IStaking public staking;
   uint256 public incentiveBudget;
   mapping(address => bool) public approved;
 
   /* ========== EVENTS ========== */
 
-  event IncentiveCreated(uint256 incentiveId);
-  event IncentiveChanged(uint256 incentiveId);
-  event IncentiveFunded(uint256 amount);
-  event Approved(address account);
-  event RemovedApproval(address account);
   event ApprovalToggled(uint256 incentiveId, bool openToEveryone);
+  event Approved(address account);
+  event IncentiveChanged(uint256 incentiveId);
+  event IncentiveCreated(uint256 incentiveId);
+  event IncentiveFunded(uint256 amount);
   event IncentiveToggled(uint256 incentiveId, bool enabled);
+  event RemovedApproval(address account);
+  event StakingChanged(IStaking from, IStaking to);
 
   /* ========== CONSTRUCTOR ========== */
 
-  constructor(address _governance, IERC20 _pop, IStaking _staking) public Governed(_governance) {
+  constructor(
+    address _governance,
+    IERC20 _pop,
+    IStaking _staking
+  ) public Governed(_governance) {
     POP = _pop;
     createIncentive(10e18, true, false);
     staking = _staking;
@@ -68,6 +71,18 @@ contract KeeperIncentive is Governed {
     );
     emit IncentiveCreated(incentives.length);
     return incentives.length;
+  }
+
+  /**
+   * @notice Overrides existing Staking contract
+   * @param staking_ Address of new Staking contract
+   * @dev Must implement IStaking and cannot be same as existing
+   */
+  function setStaking(IStaking staking_) public {
+    require(staking != staking_, "Same Staking");
+    IStaking _previousStaking = staking;
+    staking = staking_;
+    emit StakingChanged(_previousStaking, staking);
   }
 
   /* ========== RESTRICTED FUNCTIONS ========== */
@@ -126,7 +141,7 @@ contract KeeperIncentive is Governed {
           "you are not approved as a keeper"
         );
       }
-      require(_stakedVoiceCredits > minLockedVoiceCredits, "Insufficient voice credits");
+      require(_stakedVoiceCredits >= 350000, "Insufficient voice credits");
       if (incentive.reward <= incentiveBudget) {
         incentiveBudget = incentiveBudget.sub(incentive.reward);
         POP.approve(address(this), incentive.reward);

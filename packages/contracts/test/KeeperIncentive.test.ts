@@ -1,5 +1,6 @@
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { expect } from "chai";
+import { MockContract } from "ethereum-waffle";
 import { parseEther } from "ethers/lib/utils";
 import { ethers, waffle } from "hardhat";
 import { KeeperIncentiveHelper, MockERC20 } from "../typechain";
@@ -7,6 +8,7 @@ import { KeeperIncentiveHelper, MockERC20 } from "../typechain";
 let deployTimestamp;
 let owner: SignerWithAddress, nonOwner: SignerWithAddress;
 let mockPop: MockERC20;
+
 let keeperIncentiveHelper: KeeperIncentiveHelper;
 const dayInSec = 86400;
 const incentive = parseEther("10");
@@ -14,6 +16,11 @@ const incentive = parseEther("10");
 describe("Keeper incentives", function () {
   beforeEach(async function () {
     [owner, nonOwner] = await ethers.getSigners();
+    const Staking = await ethers.getContractFactory("Staking");
+    const mockStaking: MockContract = await waffle.deployMockContract(
+      owner,
+      Staking.interface.format() as any
+    );
     const mockERC20Factory = await ethers.getContractFactory("MockERC20");
     mockPop = (await (
       await mockERC20Factory.deploy("TestPOP", "TPOP", 18)
@@ -25,9 +32,10 @@ describe("Keeper incentives", function () {
     keeperIncentiveHelper = await (
       await (
         await ethers.getContractFactory("KeeperIncentiveHelper")
-      ).deploy(mockPop.address)
+      ).deploy(mockPop.address, mockStaking.addres)
     ).deployed();
   });
+
   it("should create incentives with the correct parameters", async function () {
     expect(await keeperIncentiveHelper.incentives(0)).to.deep.equal([
       incentive,
