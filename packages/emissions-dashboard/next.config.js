@@ -32,6 +32,7 @@ module.exports = {
     INFURA_PROJECT_SECRET: process.env.INFURA_PROJECT_SECRET,
     INFURA_MAINNET_ENDPOINT: process.env.INFURA_MAINNET_ENDPOINT,
     PATCH_API_KEY: process.env.PATCH_API_KEY,
+    ETHERSCAN_API_KEY: process.env.ETHERSCAN_API_KEY,
   },
   poweredByHeader: false,
   webpack: (config, options) => {
