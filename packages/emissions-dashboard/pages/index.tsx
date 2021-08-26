@@ -1,4 +1,5 @@
 import Patch from '@patch-technology/patch';
+import { DateRangePicker } from 'components/DateRangePicker';
 import { useRouter } from 'next/router';
 import fetch from 'node-fetch';
 import React, { useEffect, useState } from 'react';
@@ -25,9 +26,6 @@ interface Contract {
   stats: ContractStats;
 }
 
-const convertISODateToUnixTimestamp = (date: string): number =>
-  new Date(date).getTime() / 1000;
-
 const getBlockNumberByTimestamp = async (
   timestamp: number,
 ): Promise<number> => {
@@ -52,8 +50,12 @@ const IndexPage = () => {
       stats: DEFAULT_STATS,
     },
   ]);
-  const [startDate, setStartDate] = useState<string>('2021-08-26T00:00:00Z');
-  const [endDate, setEndDate] = useState<string>('2021-08-26T00:10:00Z');
+  const [startDate, setStartDate] = useState<Date>(
+    new Date('2021-08-26T00:00:00Z'),
+  );
+  const [endDate, setEndDate] = useState<Date>(
+    new Date('2021-08-26T00:10:00Z'),
+  );
   const [startBlock, setStartBlock] = useState<number>();
   const [endBlock, setEndBlock] = useState<number>();
   useEffect(() => {
@@ -63,8 +65,8 @@ const IndexPage = () => {
   }, [router.pathname]);
 
   const setBlocks = async () => {
-    const startTimestamp = await convertISODateToUnixTimestamp(startDate);
-    const endTimestamp = await convertISODateToUnixTimestamp(endDate);
+    const startTimestamp = startDate.getTime();
+    const endTimestamp = endDate.getTime();
     const startBlock = await getBlockNumberByTimestamp(startTimestamp);
     const endBlock = await await getBlockNumberByTimestamp(endTimestamp);
     setStartBlock(startBlock);
@@ -88,7 +90,7 @@ const IndexPage = () => {
       }, 0);
       const co2Emissions = await patch.estimates.createEthereumEstimate({
         timestamp: startDate,
-        gasUsed: gasUsed,
+        gas_used: gasUsed,
       });
       const emissions = co2Emissions.data.mass_g;
       const newStats: ContractStats = {
@@ -132,16 +134,20 @@ const IndexPage = () => {
       contracts.forEach((contract) => updateStats(contract));
     }
   }, [startBlock, endBlock]);
-  console.log({ contracts });
-  return (
-    <div
-      className="w-full h-screen flex flex-col justify-center font-landing"
-      style={{ backgroundColor: '#F8F8FB' }}
-    >
-      <Toaster position="top-right" />
-      <div className="ml-8 w-full h-5/6">
-        <p>Smart Contract Carbon Emissions Dashboard</p>
 
+  const updateDates = (startDate: Date, endDate: Date): void => {
+    setStartDate(startDate);
+    setEndDate(endDate);
+  };
+
+  return (
+    <div>
+      <Toaster position="top-right" />
+      <div className="sm:flex sm:flex-col sm:align-center">
+        <h1 className="text-5xl font-extrabold text-gray-900 sm:text-center">
+          Smart Contract Carbon Emissions Dashboard
+        </h1>
+        <DateRangePicker updateDates={updateDates} />
         <table>
           <thead>
             <tr>
