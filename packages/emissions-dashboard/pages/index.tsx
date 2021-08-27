@@ -9,7 +9,7 @@ const patch = Patch(process.env.PATCH_API_KEY);
 const success = (msg: string) => toast.success(msg);
 const error = (msg: string) => toast.error(msg);
 
-const NUM_PERIODS = 12;
+const NUM_FULL_PERIODS = 12;
 
 const DEFAULT_STATS: ContractStats = {
   emissions: 0,
@@ -46,11 +46,11 @@ const IndexPage = () => {
       name: 'Uniswap V2',
       stats: DEFAULT_STATS,
     },
-    {
-      address: '0x6b3595068778dd592e39a122f4f5a5cf09c90fe2',
-      name: 'Sushi',
-      stats: DEFAULT_STATS,
-    },
+    // {
+    //   address: '0x6b3595068778dd592e39a122f4f5a5cf09c90fe2',
+    //   name: 'Sushi',
+    //   stats: DEFAULT_STATS,
+    // },
   ]);
   const [startDate, setStartDate] = useState<Date>(
     new Date('2021-08-26T00:00:00Z'),
@@ -60,6 +60,7 @@ const IndexPage = () => {
   );
   const [startBlock, setStartBlock] = useState<number>();
   const [endBlock, setEndBlock] = useState<number>();
+  const [blockRanges, setBlockRanges] = useState<number[][]>();
   useEffect(() => {
     if (typeof window !== 'undefined' && window.location.pathname !== '/') {
       router.replace(window.location.pathname);
@@ -69,59 +70,87 @@ const IndexPage = () => {
   const setBlocks = async () => {
     const startTimestamp = startDate.getTime() / 1000;
     const endTimestamp = endDate.getTime() / 1000;
-    const startBlock = await getBlockNumberByTimestamp(startTimestamp);
-    const endBlock = await await getBlockNumberByTimestamp(endTimestamp);
+    const startBlock = await Number(
+      await getBlockNumberByTimestamp(startTimestamp),
+    );
+    const endBlock = await Number(
+      await await getBlockNumberByTimestamp(endTimestamp),
+    );
     setStartBlock(startBlock);
     setEndBlock(endBlock);
-    var allBlocks = new Array(endBlock - startBlock)
-      .fill(undefined)
-      .map((x, i) => startBlock + i);
-    console.log({ allBlocks });
-    var arrays = [];
-    while (allBlocks.length > 0)
-      arrays.push(
-        allBlocks.splice(0, Math.floor(allBlocks.length / NUM_PERIODS)),
-      );
-    console.log({ arrays });
-    console.log({ endBlock, startBlock });
   };
 
-  const updateStats = async (contract: Contract) => {
+  const updateBlockRanges = async () => {
+    const numBlocks = endBlock - startBlock;
+    const numBlocksInPeriod = Math.floor(numBlocks / NUM_FULL_PERIODS);
+    let blockRanges = new Array(NUM_FULL_PERIODS)
+      .fill(undefined)
+      .map((x, i) => {
+        return [
+          startBlock + numBlocksInPeriod * i,
+          startBlock + numBlocksInPeriod * (i + 1) - 1,
+        ];
+      });
+    const lastEndBlock = blockRanges[blockRanges.length - 1][1];
+    if (lastEndBlock !== endBlock)
+      blockRanges.push([lastEndBlock + 1, endBlock]);
+    setBlockRanges(blockRanges);
+  };
+
+  const getTransactions = async (contract: Contract) => {
     const MAX_TRANSACTIONS = 10;
     const requestUrl = `https://api.etherscan.io/api?module=account&action=txlist&address=${contract.address}&startblock=${startBlock}&endblock=${endBlock}&sort=asc&offset=${MAX_TRANSACTIONS}&apikey=${process.env.ETHERSCAN_API_KEY}`;
-    const res = await fetch(requestUrl)
+    return await fetch(requestUrl)
       .then((res) => res.json())
       .then((json) => json.result)
       .catch((error) => console.log('error', error));
-    if (Array.isArray(res)) {
+  };
+
+  const updateStats = async (contract: Contract) => {
+    const transactions = await getTransactions(contract);
+    console.log({ transactions });
+    if (Array.isArray(transactions)) {
       success(
-        `Successfully got ${res.length} transactions for ${contract.name}`,
+        `Successfully got ${transactions.length} transactions for ${contract.name}`,
       );
-      const transactionVol = res.length;
-      const gasUsed = res.reduce((pr, cu) => {
-        return pr + Number(cu.gasUsed);
-      }, 0);
-      const co2Emissions = await patch.estimates.createEthereumEstimate({
-        timestamp: startDate,
-        gas_used: gasUsed,
+      // TODO: Group transactions into the block ranges
+      blockRanges.forEach(async (blockRange) => {
+        const start = blockRange[0];
+        const end = blockRange[1];
+        const transactionsForBlock = transactions.filter(
+          (transaction) =>
+            Number(transaction.blockNumber) >= start &&
+            Number(transaction.blockNumber) <= end,
+        );
+        const transactionVol = transactionsForBlock.length;
+        const gasUsed = transactionsForBlock.reduce((pr, cu) => {
+          return pr + Number(cu.gasUsed);
+        }, 0);
+        const co2Emissions = await patch.estimates.createEthereumEstimate({
+          timestamp: startDate,
+          gas_used: gasUsed,
+        });
+        const emissions = co2Emissions.data.mass_g;
+        const newStats: ContractStats = {
+          emissions,
+          gasUsed,
+          transactionVol,
+        };
+        const newContract: Contract = {
+          name: contract.name,
+          address: contract.address,
+          stats: newStats,
+        };
+        const newContracts = contracts
+          .filter((contract) => contract.address !== newContract.address)
+          .concat(newContract);
+
+        setContracts(newContracts);
       });
-      const emissions = co2Emissions.data.mass_g;
-      const newStats: ContractStats = {
-        emissions,
-        gasUsed,
-        transactionVol,
-      };
-      const newContract: Contract = {
-        name: contract.name,
-        address: contract.address,
-        stats: newStats,
-      };
-      const newContracts = contracts
-        .filter((contract) => contract.address !== newContract.address)
-        .concat(newContract);
-      setContracts(newContracts);
     } else {
-      error(`Failed to get transactions for ${contract.name} because ${res}`);
+      error(
+        `Failed to get transactions for ${contract.name} because ${transactions}`,
+      );
       const newContract: Contract = {
         name: contract.name,
         address: contract.address,
@@ -140,6 +169,7 @@ const IndexPage = () => {
 
   useEffect(() => {
     setBlocks();
+    updateBlockRanges();
   }, [endDate, startDate]);
 
   useEffect(() => {
