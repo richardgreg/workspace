@@ -1,6 +1,6 @@
 import { Dialog, Transition } from '@headlessui/react';
-import FacebookPixel from 'components/FacebookPixel';
 import { Rocket } from '@popcorn/ui/components/Rocket';
+import FacebookPixel from 'components/FacebookPixel';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { Fragment, useEffect, useState } from 'react';
@@ -47,6 +47,13 @@ const IndexPage = () => {
   return (
     <div className="font-landing">
       <FacebookPixel />
+      <img
+        height="1"
+        width="1"
+        style={{"display":"none"}}
+        alt=""
+        src="https://px.ads.linkedin.com/collect/?pid=3379538&conversionId=4820162&fmt=gif"
+      />
       {/* Modal to display signup form*/}
       <Transition.Root show={ctaModalVisible} as={Fragment}>
         <Dialog
@@ -165,7 +172,10 @@ const IndexPage = () => {
               </a>
             </Link>*/}
               <Link href="/docs/Popcorn_whitepaper_v1.pdf" passHref>
-                <a className="font-medium text-base hover:text-blue-600" target="_window">
+                <a
+                  className="font-medium text-base hover:text-blue-600"
+                  target="_window"
+                >
                   Whitepaper
                 </a>
               </Link>
@@ -601,7 +611,10 @@ const IndexPage = () => {
               </a>
             </Link>*/}
                 <Link href="/docs/Popcorn_whitepaper_v1.pdf" passHref>
-                  <a className="font-medium text-base hover:text-blue-600" target="_window">
+                  <a
+                    className="font-medium text-base hover:text-blue-600"
+                    target="_window"
+                  >
                     Whitepaper
                   </a>
                 </Link>
