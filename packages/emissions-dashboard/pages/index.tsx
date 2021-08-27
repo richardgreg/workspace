@@ -9,6 +9,8 @@ const patch = Patch(process.env.PATCH_API_KEY);
 const success = (msg: string) => toast.success(msg);
 const error = (msg: string) => toast.error(msg);
 
+const NUM_PERIODS = 12;
+
 const DEFAULT_STATS: ContractStats = {
   emissions: 0,
   gasUsed: 0,
@@ -65,12 +67,23 @@ const IndexPage = () => {
   }, [router.pathname]);
 
   const setBlocks = async () => {
-    const startTimestamp = startDate.getTime();
-    const endTimestamp = endDate.getTime();
+    const startTimestamp = startDate.getTime() / 1000;
+    const endTimestamp = endDate.getTime() / 1000;
     const startBlock = await getBlockNumberByTimestamp(startTimestamp);
     const endBlock = await await getBlockNumberByTimestamp(endTimestamp);
     setStartBlock(startBlock);
     setEndBlock(endBlock);
+    var allBlocks = new Array(endBlock - startBlock)
+      .fill(undefined)
+      .map((x, i) => startBlock + i);
+    console.log({ allBlocks });
+    var arrays = [];
+    while (allBlocks.length > 0)
+      arrays.push(
+        allBlocks.splice(0, Math.floor(allBlocks.length / NUM_PERIODS)),
+      );
+    console.log({ arrays });
+    console.log({ endBlock, startBlock });
   };
 
   const updateStats = async (contract: Contract) => {
