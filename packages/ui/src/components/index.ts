@@ -8,4 +8,5 @@ export * from "./Grid/FullHeightContainer";
 export * from "./Widget";
 export * from "./Icons";
 export * from "./Link";
+export * from "./CatPool";
 export * from "./Rocket";
