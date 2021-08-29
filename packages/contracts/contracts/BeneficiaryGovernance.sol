@@ -137,6 +137,19 @@ contract BeneficiaryGovernance is ParticipationReward {
   }
 
   /**
+   * @notice gets status
+   * @param  proposalId id of the proposal
+   * @return status of proposal
+   */
+  function getStatus(uint256 proposalId)
+    external
+    view
+    returns (ProposalStatus)
+  {
+    return proposals[proposalId].status;
+  }
+
+  /**
    * @notice checks if someone has voted to a specific proposal or not
    * @param  proposalId id of the proposal
    * @param  voter address opf voter
@@ -214,6 +227,15 @@ contract BeneficiaryGovernance is ParticipationReward {
     emit ProposalCreated(proposalId, msg.sender, _beneficiary, _applicationCid);
 
     return proposalId;
+  }
+
+  /**
+   * @notice refresh status
+   * @param  proposalId id of the proposal
+   */
+  function refreshState(uint256 proposalId) external {
+    Proposal storage proposal = proposals[proposalId];
+    _refreshState(proposal);
   }
 
   /**
