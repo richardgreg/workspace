@@ -173,7 +173,7 @@ async function prepareContracts(): Promise<void> {
   const currentTimestamp = await (
     await ethers.provider.getBlock(currentBlockNumber)
   ).timestamp;
-  await contracts.POP.mint(owner.address, parseEther("100000"));
+  await contracts.POP.mint(owner.address, parseEther("110000"));
   await contracts.TestERC20.mint(owner.address, parseEther("10000"));
   await contracts.POP.connect(owner).approve(
     contracts.UniswapRouter.address,
@@ -209,6 +209,14 @@ describe("Integration", function () {
     [owner, rewarder, nonOwner] = await ethers.getSigners();
     contracts = await deployContracts();
     await prepareContracts();
+    await contracts.POP.connect(owner).approve(
+      contracts.Staking.address,
+      parseEther("10000")
+    );
+    await contracts.Staking.connect(owner).stake(
+      parseEther("10000"),
+      126144000
+    );
   });
 
   describe("swapTokenForRewards", function () {
@@ -225,7 +233,7 @@ describe("Integration", function () {
         parseEther("10"),
         [contracts.TestERC20.address, contracts.POP.address]
       );
-      await contracts.RewardsManager.swapTokenForRewards(
+      await contracts.RewardsManager.connect(owner).swapTokenForRewards(
         [contracts.TestERC20.address, contracts.POP.address],
         amountOut[1]
       );
@@ -245,7 +253,7 @@ describe("Integration", function () {
     it("distribute rewards to contracts", async function () {
       await contracts.RewardsManager.distributeRewards();
       expect(await contracts.POP.balanceOf(contracts.Staking.address)).to.equal(
-        parseEther("32")
+        parseEther("10032")
       );
       expect(
         await contracts.POP.balanceOf(contracts.Treasury.address)
@@ -267,7 +275,7 @@ describe("Integration", function () {
       ]);
       await contracts.RewardsManager.distributeRewards();
       expect(await contracts.POP.balanceOf(contracts.Staking.address)).to.equal(
-        parseEther("20")
+        parseEther("10020")
       );
       expect(
         await contracts.POP.balanceOf(contracts.Treasury.address)
@@ -287,7 +295,7 @@ describe("Integration", function () {
 
       await contracts.RewardsManager.distributeRewards();
       expect(await contracts.POP.balanceOf(contracts.Staking.address)).to.equal(
-        parseEther("32")
+        parseEther("10032")
       );
       expect(
         await contracts.POP.balanceOf(contracts.Treasury.address)
@@ -320,7 +328,7 @@ describe("Integration", function () {
 
       await contracts.RewardsManager.distributeRewards();
       expect(await contracts.POP.balanceOf(contracts.Staking.address)).to.equal(
-        parseEther("32")
+        parseEther("10032")
       );
       expect(
         await contracts.POP.balanceOf(contracts.Treasury.address)
@@ -354,10 +362,15 @@ describe("Integration", function () {
         ).deploy(contracts.POP.address, contracts.RewardsEscrow.address)
       ).deployed();
       await newStaking.init(contracts.RewardsManager.address);
+      await contracts.POP.connect(owner).approve(
+        newStaking.address,
+        parseEther("10000")
+      );
+      await newStaking.connect(owner).stake(parseEther("10000"), 126144000);
 
       await contracts.RewardsManager.distributeRewards();
       expect(await contracts.POP.balanceOf(contracts.Staking.address)).to.equal(
-        parseEther("32")
+        parseEther("10032")
       );
       expect(
         await contracts.POP.balanceOf(contracts.Treasury.address)
@@ -377,10 +390,10 @@ describe("Integration", function () {
       await contracts.RewardsManager.setStaking(newStaking.address);
       await contracts.RewardsManager.distributeRewards();
       expect(await contracts.POP.balanceOf(contracts.Staking.address)).to.equal(
-        parseEther("32")
+        parseEther("10032")
       );
       expect(await contracts.POP.balanceOf(newStaking.address)).to.equal(
-        parseEther("32")
+        parseEther("10032")
       );
     });
 
@@ -400,7 +413,7 @@ describe("Integration", function () {
 
       await contracts.RewardsManager.distributeRewards();
       expect(await contracts.POP.balanceOf(contracts.Staking.address)).to.equal(
-        parseEther("32")
+        parseEther("10032")
       );
       expect(
         await contracts.POP.balanceOf(contracts.Treasury.address)
@@ -418,7 +431,7 @@ describe("Integration", function () {
     it("distribute rewards to contracts", async function () {
       const result = await contracts.RewardsManager.distributeRewards();
       expect(await contracts.POP.balanceOf(contracts.Staking.address)).to.equal(
-        parseEther("32")
+        parseEther("10032")
       );
       expect(result)
         .to.emit(contracts.Staking, "RewardAdded")

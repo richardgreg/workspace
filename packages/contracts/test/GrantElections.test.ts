@@ -312,8 +312,9 @@ describe("GrantElections", function () {
     it("should allow to fund incentives", async function () {
       await contracts.grantElections
         .connect(owner)
-        .fundKeeperIncentive(parseEther("4000"));
-      const incentiveBudget = await contracts.grantElections.incentiveBudget();
+        .fundFinalizationIncentive(parseEther("4000"));
+      const incentiveBudget =
+        await contracts.grantElections.finalizationIncentiveBudget();
       const balance = await contracts.mockPop.balanceOf(owner.address);
       expect(incentiveBudget).to.equal(parseEther("4000"));
       expect(balance).to.equal(parseEther("0"));
@@ -745,7 +746,7 @@ describe("GrantElections", function () {
           it("doesnt pays out incentive if the incentiveBudget is too low", async function () {
             await contracts.grantElections
               .connect(owner)
-              .fundKeeperIncentive(parseEther("1000"));
+              .fundFinalizationIncentive(parseEther("1000"));
             ethers.provider.send("evm_increaseTime", [30 * ONE_DAY]);
             ethers.provider.send("evm_mine", []);
             await contracts.grantElections.refreshElectionState(electionId);
@@ -757,14 +758,14 @@ describe("GrantElections", function () {
             );
             expect(balance1).to.equal(parseEther("500"));
             const incentiveBudget1 =
-              await contracts.grantElections.incentiveBudget();
+              await contracts.grantElections.finalizationIncentiveBudget();
             expect(incentiveBudget1).to.equal(parseEther("1000"));
           });
 
           it("pays out incentive", async function () {
             await contracts.grantElections
               .connect(owner)
-              .fundKeeperIncentive(parseEther("2000"));
+              .fundFinalizationIncentive(parseEther("2000"));
             ethers.provider.send("evm_increaseTime", [30 * ONE_DAY]);
             ethers.provider.send("evm_mine", []);
             await contracts.grantElections.refreshElectionState(electionId);
@@ -776,7 +777,7 @@ describe("GrantElections", function () {
             );
             expect(balance1).to.equal(parseEther("2500"));
             const incentiveBudget1 =
-              await contracts.grantElections.incentiveBudget();
+              await contracts.grantElections.finalizationIncentiveBudget();
             expect(incentiveBudget1).to.equal(0);
           });
 
@@ -784,7 +785,7 @@ describe("GrantElections", function () {
             //Enough pop to fund 2 incentives
             await contracts.grantElections
               .connect(owner)
-              .fundKeeperIncentive(parseEther("4000"));
+              .fundFinalizationIncentive(parseEther("4000"));
             ethers.provider.send("evm_increaseTime", [30 * ONE_DAY]);
             ethers.provider.send("evm_mine", []);
             await contracts.grantElections.refreshElectionState(electionId);
@@ -796,7 +797,7 @@ describe("GrantElections", function () {
             );
             expect(balance1).to.equal(parseEther("2500"));
             const incentiveBudget1 =
-              await contracts.grantElections.incentiveBudget();
+              await contracts.grantElections.finalizationIncentiveBudget();
             expect(incentiveBudget1).to.equal(parseEther("2000"));
 
             await contracts.grantElections
@@ -807,7 +808,7 @@ describe("GrantElections", function () {
             );
             expect(balance2).to.equal(parseEther("2500"));
             const incentiveBudget2 =
-              await contracts.grantElections.incentiveBudget();
+              await contracts.grantElections.finalizationIncentiveBudget();
             expect(incentiveBudget2).to.equal(parseEther("2000"));
           });
         });

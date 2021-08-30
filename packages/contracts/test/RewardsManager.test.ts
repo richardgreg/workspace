@@ -32,7 +32,7 @@ const RewardSplits = {
   Insurance: parseEther("2"),
   BeneficiaryVaults: parseEther("34"),
 };
-const OwnerInitial = parseEther("10");
+const OwnerInitial = parseEther("10010");
 const RewarderInitial = parseEther("5");
 
 let owner: SignerWithAddress,
@@ -140,6 +140,14 @@ describe("RewardsManager", function () {
   beforeEach(async function () {
     [owner, rewarder, nonOwner] = await ethers.getSigners();
     contracts = await deployContracts();
+    await contracts.POP.connect(owner).approve(
+      contracts.Staking.address,
+      parseEther("10000")
+    );
+    await contracts.Staking.connect(owner).stake(
+      parseEther("10000"),
+      126144000
+    );
   });
 
   it("should be constructed with correct addresses", async function () {
@@ -415,7 +423,7 @@ describe("RewardsManager", function () {
       it("Staking has expected balance", async function () {
         expect(
           await contracts.POP.balanceOf(contracts.Staking.address)
-        ).to.equal(stakingReward);
+        ).to.equal(stakingReward.add(parseEther("10000")));
       });
 
       it("Treasury has expected balance", async function () {
@@ -495,7 +503,9 @@ describe("RewardsManager", function () {
           it("Staking has expected balance", async function () {
             expect(
               await contracts.POP.balanceOf(contracts.Staking.address)
-            ).to.equal(stakingReward.add(stakingSecondReward));
+            ).to.equal(
+              stakingReward.add(stakingSecondReward).add(parseEther("10000"))
+            );
           });
 
           it("Treasury has expected balance", async function () {

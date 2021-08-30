@@ -82,7 +82,7 @@ contract GrantElections is ParticipationReward {
   Election[] public elections;
   mapping(bytes2 => uint256[3]) public activeElections;
   ElectionConfiguration[3] public electionDefaults;
-  uint256 public incentiveBudget;
+  uint256 public finalizationIncentiveBudget;
 
   /* ========== EVENTS ========== */
 
@@ -359,10 +359,10 @@ contract GrantElections is ParticipationReward {
     emit UserVoted(msg.sender, election.electionTerm);
   }
 
-  function fundKeeperIncentive(uint256 _amount) public {
+  function fundFinalizationIncentive(uint256 _amount) public {
     require(POP.balanceOf(msg.sender) >= _amount, "not enough pop");
     POP.safeTransferFrom(msg.sender, address(this), _amount);
-    incentiveBudget = incentiveBudget.add(_amount);
+    finalizationIncentiveBudget = finalizationIncentiveBudget.add(_amount);
   }
 
   function getRandomNumber(uint256 _electionId) public {
@@ -404,12 +404,14 @@ contract GrantElections is ParticipationReward {
     ].finalizationIncentive;
 
     if (
-      incentiveBudget >= finalizationIncentive &&
+      finalizationIncentiveBudget >= finalizationIncentive &&
       _election.electionState != ElectionState.FinalizationProposed
     ) {
       POP.approve(address(this), finalizationIncentive);
       POP.safeTransferFrom(address(this), msg.sender, finalizationIncentive);
-      incentiveBudget = incentiveBudget.sub(finalizationIncentive);
+      finalizationIncentiveBudget = finalizationIncentiveBudget.sub(
+        finalizationIncentive
+      );
     }
 
     _election.merkleRoot = _merkleRoot;

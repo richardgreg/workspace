@@ -4,8 +4,9 @@ import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 import "./Governed.sol";
 import "./IStaking.sol";
+import "./UsesPOP.sol";
 
-contract KeeperIncentive is Governed {
+contract KeeperIncentive is Governed, UsesPOP {
   using SafeMath for uint256;
   using SafeERC20 for IERC20;
 
@@ -17,7 +18,6 @@ contract KeeperIncentive is Governed {
 
   /* ========== STATE VARIABLES ========== */
 
-  IERC20 public immutable POP;
   Incentive[] public incentives;
   IStaking public staking;
   uint256 public incentiveBudget;
@@ -45,8 +45,7 @@ contract KeeperIncentive is Governed {
     address _governance,
     IERC20 _pop,
     IStaking _staking
-  ) public Governed(_governance) {
-    POP = _pop;
+  ) public Governed(_governance) UsesPOP(_pop) {
     staking = _staking;
     requiredVoiceCredits = 350000;
     createIncentive(10e18, true, false);
