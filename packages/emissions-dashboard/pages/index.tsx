@@ -4,8 +4,10 @@ import { useRouter } from 'next/router';
 import fetch from 'node-fetch';
 import React, { useEffect, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
+import { dummyEmissionsData } from '../dummyData';
 const patch = Patch(process.env.PATCH_API_KEY);
 
+// TODO: Call toast methods upon success/failure
 const success = (msg: string) => toast.success(msg);
 const error = (msg: string) => toast.error(msg);
 
@@ -23,6 +25,27 @@ interface EmissionStats {
 interface Contract {
   name: string;
   address: string;
+}
+
+interface Transaction {
+  blockNumber: string;
+  timeStamp: string;
+  hash: string;
+  nonce: string;
+  blockHash: string;
+  transactionIndex: string;
+  from: string;
+  to: string;
+  value: string;
+  gas: string;
+  gasPrice: string;
+  isError: string;
+  txreceipt_status: string;
+  input: string;
+  contractAddress: string;
+  cumulativeGasUsed: string;
+  gasUsed: string;
+  confirmations: string;
 }
 
 const getBlockNumberByTimestamp = async (
@@ -43,6 +66,7 @@ const getBlockTimestamp = async (blockNumber: number): Promise<number> => {
     .catch((error) => console.log('error', error));
   return result.timeStamp;
 };
+
 const IndexPage = () => {
   const router = useRouter();
   const [contracts, setContracts] = useState<Contract[]>([
@@ -55,7 +79,7 @@ const IndexPage = () => {
       name: 'Yearn ETH Vault',
     },
   ]);
-  const [emissionData, setEmissionData] = useState([]);
+
   const [startDate, setStartDate] = useState<Date>(
     new Date('2021-08-20T00:00:00Z'),
   );
@@ -65,13 +89,15 @@ const IndexPage = () => {
   const [startBlock, setStartBlock] = useState<number>();
   const [endBlock, setEndBlock] = useState<number>();
   const [blockRanges, setBlockRanges] = useState<number[][]>();
+  const [allTransactions, setAllTransactions] = useState<Transaction[]>([]);
+  const [emissionData, setEmissionData] = useState([]);
   useEffect(() => {
     if (typeof window !== 'undefined' && window.location.pathname !== '/') {
       router.replace(window.location.pathname);
     }
   }, [router.pathname]);
 
-  const setBlocks = async () => {
+  const updateBlocks = async () => {
     const startTimestamp = startDate.getTime() / 1000;
     const endTimestamp = endDate.getTime() / 1000;
     const startBlock = await Number(
@@ -80,11 +106,7 @@ const IndexPage = () => {
     const endBlock = await Number(
       await await getBlockNumberByTimestamp(endTimestamp),
     );
-    setStartBlock(startBlock);
-    setEndBlock(endBlock);
-  };
 
-  const updateBlockRanges = async () => {
     const numBlocks = endBlock - startBlock;
     const numBlocksInPeriod = Math.floor(numBlocks / NUM_FULL_PERIODS);
     let blockRanges = new Array(NUM_FULL_PERIODS)
@@ -98,47 +120,53 @@ const IndexPage = () => {
     const lastEndBlock = blockRanges[blockRanges.length - 1][1];
     if (lastEndBlock !== endBlock)
       blockRanges.push([lastEndBlock + 1, endBlock]);
-    console.log({ blockRanges });
+    setStartBlock(startBlock);
+    setEndBlock(endBlock);
     setBlockRanges(blockRanges);
   };
 
-  const getTransactions = async (contract: Contract) => {
-    const MAX_TRANSACTIONS = 10;
-    const requestUrl = `https://api.etherscan.io/api?module=account&action=txlist&address=${contract.address}&startblock=${startBlock}&endblock=${endBlock}&sort=asc&offset=${MAX_TRANSACTIONS}&apikey=${process.env.ETHERSCAN_API_KEY}`;
-    return await fetch(requestUrl)
-      .then((res) => res.json())
-      .then((json) => json.result)
-      .catch((error) => console.log('error', error));
+  const getAllTransactions = async () => {
+    const allTransactions = await (
+      await Promise.all(
+        contracts.map(async (contract) => {
+          const requestUrl = `https://api.etherscan.io/api?module=account&action=txlist&address=${contract.address}&startblock=${startBlock}&endblock=${endBlock}&sort=asc&apikey=${process.env.ETHERSCAN_API_KEY}`;
+          return await fetch(requestUrl)
+            .then((res) => res.json())
+            .then((json) => json.result)
+            .catch((error) => console.log('error', error));
+        }),
+      )
+    ).flat();
+    setAllTransactions(allTransactions);
   };
 
-  const updateStats = async () => {
-    const res = await Promise.all(
-      contracts.map(async (contract) => {
-        const transactions = await getTransactions(contract);
-        if (Array.isArray(transactions)) {
-          success(
-            `Successfully got ${transactions.length} transactions for ${contract.name}`,
-          );
+  const getEmissionsData = async () => {
+    const emissionsData = await (
+      await Promise.all(
+        contracts.map(async (contract) => {
           const emissionDataForContract = await Promise.all(
             blockRanges.map(async (blockRange) => {
               const start = blockRange[0];
               const end = blockRange[1];
-              const transactionsForBlock = transactions.filter(
-                (transaction) =>
-                  Number(transaction.blockNumber) >= start &&
-                  Number(transaction.blockNumber) <= end,
+              const transactionsForBlock = allTransactions.filter(
+                (transaction) => {
+                  return (
+                    Number(transaction.blockNumber) >= start &&
+                    Number(transaction.blockNumber) <= end &&
+                    transaction.to === contract.address
+                  );
+                },
               );
-              // const startBlockTimestamp = await getBlockTimestamp(start);
-              // const endBlockTimestamp = await getBlockTimestamp(end);
-              // console.log({ startBlockTimestamp, endBlockTimestamp });
               const transactionVol = transactionsForBlock.length;
+              const startBlockTimestamp = await getBlockTimestamp(start);
+
               const gasUsed = transactionsForBlock.reduce((pr, cu) => {
                 return pr + Number(cu.gasUsed);
               }, 0);
               const co2Emissions =
                 gasUsed > 0
                   ? await patch.estimates.createEthereumEstimate({
-                      timestamp: startDate,
+                      timestamp: startBlockTimestamp,
                       gas_used: gasUsed,
                     })
                   : 0;
@@ -153,32 +181,34 @@ const IndexPage = () => {
               };
             }),
           );
-          const newEmissionsData = emissionData.concat(emissionDataForContract);
-          return newEmissionsData;
-        } else {
-          error(
-            `Failed to get transactions for ${contract.name} because ${transactions}`,
-          );
-        }
-      }),
-    );
-    console.log(res.flat());
+          return emissionDataForContract;
+        }),
+      )
+    ).flat();
+    setEmissionData(emissionsData);
   };
 
-  useEffect(() => {
-    setBlocks();
-  }, []);
+  // NOTE: We are currently using dummy data previously sources from etherscan and patch.io for demo purposes
+  // TODO: Source data externally
+  // useEffect(() => {
+  //   updateBlocks();
+  // }, []);
 
-  useEffect(() => {
-    setBlocks();
-    updateBlockRanges();
-  }, [endDate, startDate]);
+  // useEffect(() => {
+  //   updateBlocks();
+  // }, [endDate, startDate]);
 
-  useEffect(() => {
-    if (startBlock && endBlock) {
-      updateStats();
-    }
-  }, [blockRanges]);
+  // useEffect(() => {
+  //   if (blockRanges) {
+  //     getAllTransactions();
+  //   }
+  // }, [blockRanges]);
+
+  // useEffect(() => {
+  //   if (allTransactions && blockRanges) {
+  //     getEmissionsData();
+  //   }
+  // }, [blockRanges]);
 
   const updateDates = (startDate: Date, endDate: Date): void => {
     setStartDate(startDate);
@@ -192,19 +222,41 @@ const IndexPage = () => {
           Smart Contract Carbon Emissions Dashboard
         </h1>
         <DateRangePicker updateDates={updateDates} />
-        <table>
-          <thead>
-            <tr>
-              <th>Address</th>
-              <th>Vol</th>
-              <th>Gas Used</th>
-              <th>Emissions</th>
-              <th>Start Block</th>
-              <th>End Block</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
+        {contracts.map((contract) => {
+          return (
+            <table>
+              <thead>
+                <tr>
+                  <th>Address</th>
+                  <th>Vol</th>
+                  <th>Gas Used</th>
+                  <th>Emissions</th>
+                  <th>Start Block</th>
+                  <th>End Block</th>
+                </tr>
+              </thead>
+              <tbody>
+                {dummyEmissionsData
+                  .filter(
+                    (emissionsData) =>
+                      contract.address === emissionsData.address,
+                  )
+                  .map((emissionsData) => {
+                    return (
+                      <tr>
+                        <td>{emissionsData.address}</td>
+                        <td>{emissionsData.transactionVol}</td>
+                        <td>{emissionsData.gasUsed}</td>
+                        <td>{emissionsData.emissions}</td>
+                        <td>{emissionsData.startBlock}</td>
+                        <td>{emissionsData.endBlock}</td>
+                      </tr>
+                    );
+                  })}
+              </tbody>
+            </table>
+          );
+        })}
       </div>
     </div>
   );
