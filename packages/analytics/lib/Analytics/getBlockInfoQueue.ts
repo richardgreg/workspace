@@ -1,5 +1,5 @@
 import fastq, { queueAsPromised } from "fastq";
-import { config } from "./config";
+import { config } from "./../../config";
 import { providers } from "./providers";
 
 let processedBlocks = 0;

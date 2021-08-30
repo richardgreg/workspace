@@ -1,5 +1,5 @@
 import cluster from "cluster";
-import { config } from "./config";
+import { config } from "./../../config";
 import { indexingQueue } from "./IndexQueue";
 import { providers } from "./providers";
 
@@ -51,7 +51,7 @@ export default async function main() {
       totalProcessedBlocks,
       totalIndexedTransactions,
     });
-  }, 10000);
+  }, 5000);
 
   for (const id in cluster.workers) {
     cluster.workers[id].on("message", messageHandler);

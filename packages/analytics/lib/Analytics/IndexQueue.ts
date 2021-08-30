@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
 import fastq, { queueAsPromised } from "fastq";
-import { config } from "./config";
+import { config } from "../../config";
 import { Indexer } from "@myelastic/indexer";
 
 const transactionsToIndex = [[]];
@@ -15,23 +15,35 @@ const indexToElasticSearch = async ({
   force,
 }: IndexingQueueArgs): Promise<void> => {
   return new Promise(async (resolve, reject) => {
-    let currentBatch = transactionsToIndex[currentIndexBatch];
-    if (currentBatch?.length) {
-      currentBatch = [...currentBatch, ...transactions];
+    if (transactionsToIndex[currentIndexBatch]?.length > 0) {
+      transactionsToIndex[currentIndexBatch] = [
+        ...transactionsToIndex[currentIndexBatch],
+        ...transactions,
+      ];
     } else {
-      currentBatch = transactions;
+      transactionsToIndex[currentIndexBatch] = transactions;
     }
-    console.log({ currentBatchLength: currentBatch.length });
+    console.log({
+      currentBatchLength: transactionsToIndex[currentIndexBatch].length,
+      currentIndexBatch,
+    });
 
-    if (currentBatch.length > config.indexBatchSize || force) {
-      console.log("Indexing batch of", currentBatch.length);
+    if (
+      transactionsToIndex[currentIndexBatch].length > config.indexBatchSize ||
+      force
+    ) {
+      console.log(
+        "Indexing batch of",
+        transactionsToIndex[currentIndexBatch].length
+      );
+      let batch = transactionsToIndex[currentIndexBatch];
       currentIndexBatch++;
 
       const indexer = await new Indexer({
         index: "eth_transactions",
         batchSize: config.indexBatchSize,
       })
-        .bulkIndex(currentBatch)
+        .bulkIndex(batch)
         .catch((e) => {
           reject(e);
         });
