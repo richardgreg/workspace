@@ -1,12 +1,11 @@
 pragma solidity >=0.7.0 <0.8.0;
 
 import "@openzeppelin/contracts/math/SafeMath.sol";
-import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "./Governed.sol";
 
 contract KeeperIncentive is Governed {
   using SafeMath for uint256;
-  using SafeERC20 for IERC20;
 
   struct Incentive {
     uint256 reward; //pop reward for calling the function
@@ -16,9 +15,12 @@ contract KeeperIncentive is Governed {
 
   /* ========== STATE VARIABLES ========== */
 
-  IERC20 public immutable POP;
+  ERC20 public immutable POP;
   Incentive[] public incentives;
   uint256 public incentiveBudget;
+  uint256 public burnRate;
+  address internal immutable burnAddress =
+    0x00000000219ab540356cBB839Cbe05303d7705Fa; //ETH2.0 Staking Contract
   mapping(address => bool) public approved;
 
   /* ========== EVENTS ========== */
@@ -30,11 +32,15 @@ contract KeeperIncentive is Governed {
   event RemovedApproval(address account);
   event ApprovalToggled(uint256 incentiveId, bool openToEveryone);
   event IncentiveToggled(uint256 incentiveId, bool enabled);
+  event BurnFundet(uint256 amount);
+  event Burned(uint256 amount);
+  event BurnRateChanged(uint256 oldRate, uint256 newRate);
 
   /* ========== CONSTRUCTOR ========== */
 
-  constructor(address _governance, IERC20 _pop) public Governed(_governance) {
+  constructor(address _governance, ERC20 _pop) public Governed(_governance) {
     POP = _pop;
+    burnRate = 25e16; // 25% of intentive.reward
     createIncentive(10e18, true, false);
   }
 
@@ -63,6 +69,15 @@ contract KeeperIncentive is Governed {
     );
     emit IncentiveCreated(incentives.length);
     return incentives.length;
+  }
+
+  /**
+   * @notice Sets the current burn rate as a percentage of the incentive reward.
+   * @param _burnRate Percentage in Mantissa. (1e14 = 1 Basis Point)
+   */
+  function setBurnRate(uint256 _burnRate) external onlyGovernance {
+    emit BurnRateChanged(burnRate, _burnRate);
+    burnRate = _burnRate;
   }
 
   /* ========== RESTRICTED FUNCTIONS ========== */
@@ -103,9 +118,14 @@ contract KeeperIncentive is Governed {
   }
 
   function fundIncentive(uint256 _amount) external {
-    POP.safeTransferFrom(msg.sender, address(this), _amount);
+    POP.transferFrom(msg.sender, address(this), _amount);
     incentiveBudget = incentiveBudget.add(_amount);
     emit IncentiveFunded(_amount);
+  }
+
+  function _burn(uint256 _amount) internal {
+    POP.transfer(burnAddress, _amount);
+    emit Burned(_amount);
   }
 
   /* ========== MODIFIER ========== */
@@ -122,8 +142,11 @@ contract KeeperIncentive is Governed {
       }
       if (incentive.reward <= incentiveBudget) {
         incentiveBudget = incentiveBudget.sub(incentive.reward);
-        POP.approve(address(this), incentive.reward);
-        POP.safeTransferFrom(address(this), msg.sender, incentive.reward);
+        uint256 amountToBurn = incentive.reward.mul(burnRate).div(1e18);
+        uint256 incentivePayout = incentive.reward.sub(amountToBurn);
+        POP.approve(address(this), incentivePayout);
+        POP.transferFrom(address(this), msg.sender, incentivePayout);
+        _burn(amountToBurn);
       }
     }
     _;
