@@ -4,7 +4,6 @@ import controller from "./lib/Analytics/controller";
 import worker from "./lib/Analytics/worker";
 
 
-console.log({ rpc: process.env.RPC_URL })
 async function main() {
   if (cluster.isMaster) {
     controller();
