@@ -1,4 +1,5 @@
 import Patch from '@patch-technology/patch';
+import { NavBar } from '@popcorn/ui/components/popcorn/emissions-dashboard/NavBar/index';
 import { DateRangePicker } from 'components/DateRangePicker';
 import { useRouter } from 'next/router';
 import fetch from 'node-fetch';
@@ -13,6 +14,20 @@ const error = (msg: string) => toast.error(msg);
 
 const NUM_FULL_PERIODS = 19;
 
+const user = {
+  name: 'Tom Cook',
+  email: 'tom@example.com',
+  imageUrl:
+    'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+};
+
+export const navigation = [{ name: 'Dashboard', href: '#', current: true }];
+
+export const userNavigation = [
+  { name: 'Your Profile', href: '#' },
+  { name: 'Settings', href: '#' },
+  { name: 'Sign out', href: '#' },
+];
 interface EmissionStats {
   transactionVol: number;
   gasUsed: number;
@@ -69,6 +84,7 @@ const getBlockTimestamp = async (blockNumber: number): Promise<number> => {
 
 const IndexPage = () => {
   const router = useRouter();
+  const [open, setOpen] = useState<boolean>(false);
   const [contracts, setContracts] = useState<Contract[]>([
     {
       address: '0xa258C4606Ca8206D8aA700cE2143D7db854D168c',
@@ -91,6 +107,7 @@ const IndexPage = () => {
   const [blockRanges, setBlockRanges] = useState<number[][]>();
   const [allTransactions, setAllTransactions] = useState<Transaction[]>([]);
   const [emissionData, setEmissionData] = useState([]);
+
   useEffect(() => {
     if (typeof window !== 'undefined' && window.location.pathname !== '/') {
       router.replace(window.location.pathname);
@@ -214,13 +231,30 @@ const IndexPage = () => {
     setStartDate(startDate);
     setEndDate(endDate);
   };
+
+  const handleAddContract = (contractAddress): void => {
+    if (localStorage.getItem('contracts')) {
+      const existingContracts = JSON.parse(localStorage.getItem('contracts'));
+      existingContracts.push(contractAddress);
+      localStorage.setItem('contracts', JSON.stringify(existingContracts));
+    } else {
+      localStorage.setItem('contracts', JSON.stringify([contractAddress]));
+    }
+    setOpen(false);
+  };
+
   return (
     <div>
+      <NavBar
+        title="Smart Contract Emissions Dashboard"
+        headerNavigation={navigation}
+        userNavigation={userNavigation}
+        user={user}
+        logo="/images/popcorn-logo.png"
+        contractProps={{ addContract: handleAddContract, open, setOpen }}
+      />
       <Toaster position="top-right" />
       <div className="sm:flex sm:flex-col sm:align-center">
-        <h1 className="text-5xl font-extrabold text-gray-900 sm:text-center">
-          Smart Contract Carbon Emissions Dashboard
-        </h1>
         <DateRangePicker updateDates={updateDates} />
         {contracts.map((contract) => {
           return (
