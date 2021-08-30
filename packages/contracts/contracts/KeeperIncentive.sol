@@ -1,12 +1,13 @@
 pragma solidity >=0.7.0 <0.8.0;
 
 import "@openzeppelin/contracts/math/SafeMath.sol";
+import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 import "./Governed.sol";
 import "./IStaking.sol";
-import "./UsesPOP.sol";
 
-contract KeeperIncentive is Governed, UsesPOP {
+contract KeeperIncentive is Governed {
   using SafeMath for uint256;
+  using SafeERC20 for IERC20;
 
   struct Incentive {
     uint256 reward; //pop reward for calling the function
@@ -16,9 +17,11 @@ contract KeeperIncentive is Governed, UsesPOP {
 
   /* ========== STATE VARIABLES ========== */
 
+  IERC20 public immutable POP;
   Incentive[] public incentives;
   IStaking public staking;
   uint256 public incentiveBudget;
+  uint256 public requiredVoiceCredits;
   mapping(address => bool) public approved;
 
   /* ========== EVENTS ========== */
@@ -31,16 +34,22 @@ contract KeeperIncentive is Governed, UsesPOP {
   event IncentiveToggled(uint256 incentiveId, bool enabled);
   event RemovedApproval(address account);
   event StakingChanged(IStaking from, IStaking to);
+  event RequiredVoiceCreditsChanged(
+    uint256 oldRequirement,
+    uint256 newRequirement
+  );
 
   /* ========== CONSTRUCTOR ========== */
 
-  constructor(address _governance, IStaking _staking)
-    public
-    Governed(_governance)
-    UsesPOP()
-  {
-    createIncentive(10e18, true, false);
+  constructor(
+    address _governance,
+    IERC20 _pop,
+    IStaking _staking
+  ) public Governed(_governance) {
+    POP = _pop;
     staking = _staking;
+    requiredVoiceCredits = 350000;
+    createIncentive(10e18, true, false);
   }
 
   /* ========== SETTER ========== */
@@ -75,11 +84,28 @@ contract KeeperIncentive is Governed, UsesPOP {
    * @param staking_ Address of new Staking contract
    * @dev Must implement IStaking and cannot be same as existing
    */
-  function setStaking(IStaking staking_) public {
+  function setStaking(IStaking staking_) external onlyGovernance {
     require(staking != staking_, "Same Staking");
     IStaking _previousStaking = staking;
     staking = staking_;
     emit StakingChanged(_previousStaking, staking);
+  }
+
+  /**
+   * @notice Sets the amount of voice credits required to call a keeper function
+   * @param requiredVoiceCredits_ Amount of voice credits a keeper has to have to call a keeper-function
+   * @dev In order to align interested with the eco system, we require our Keeper to have a stake of POP which we can check for...
+   * @dev ...via voice credits. This are determined by a combination of money locked * lock time.
+   */
+  function setRequiredVoiceCredits(uint256 requiredVoiceCredits_)
+    external
+    onlyGovernance
+  {
+    emit RequiredVoiceCreditsChanged(
+      requiredVoiceCredits,
+      requiredVoiceCredits_
+    );
+    requiredVoiceCredits = requiredVoiceCredits_;
   }
 
   /* ========== RESTRICTED FUNCTIONS ========== */
@@ -128,7 +154,8 @@ contract KeeperIncentive is Governed, UsesPOP {
   /* ========== MODIFIER ========== */
 
   modifier keeperIncentive(uint256 _incentiveId) {
-    uint256 _stakedVoiceCredits = staking.getVoiceCredits(msg.sender);
+    uint256 voiceCredits = staking.getVoiceCredits(msg.sender);
+    require(voiceCredits >= requiredVoiceCredits, "Insufficient voice credits");
     if (_incentiveId < incentives.length) {
       Incentive storage incentive = incentives[_incentiveId];
 
@@ -138,7 +165,6 @@ contract KeeperIncentive is Governed, UsesPOP {
           "you are not approved as a keeper"
         );
       }
-      require(_stakedVoiceCredits >= 350000, "Insufficient voice credits");
       if (incentive.reward <= incentiveBudget) {
         incentiveBudget = incentiveBudget.sub(incentive.reward);
         POP.approve(address(this), incentive.reward);

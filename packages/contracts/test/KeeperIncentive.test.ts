@@ -10,6 +10,7 @@ let owner: SignerWithAddress, nonOwner: SignerWithAddress;
 let mockPop: MockERC20;
 
 let keeperIncentiveHelper: KeeperIncentiveHelper;
+let mockStaking: MockContract;
 const dayInSec = 86400;
 const incentive = parseEther("10");
 
@@ -17,7 +18,7 @@ describe("Keeper incentives", function () {
   beforeEach(async function () {
     [owner, nonOwner] = await ethers.getSigners();
     const Staking = await ethers.getContractFactory("Staking");
-    const mockStaking: MockContract = await waffle.deployMockContract(
+    mockStaking = await waffle.deployMockContract(
       owner,
       Staking.interface.format() as any
     );
@@ -32,7 +33,7 @@ describe("Keeper incentives", function () {
     keeperIncentiveHelper = await (
       await (
         await ethers.getContractFactory("KeeperIncentiveHelper")
-      ).deploy(mockPop.address, mockStaking.addres)
+      ).deploy(mockPop.address, mockStaking.address)
     ).deployed();
   });
 
@@ -81,6 +82,18 @@ describe("Keeper incentives", function () {
     );
     await expect(
       keeperIncentiveHelper.connect(nonOwner).toggleIncentive(0)
+    ).to.be.revertedWith(
+      "Only the contract governance may perform this action"
+    );
+    await expect(
+      keeperIncentiveHelper
+        .connect(nonOwner)
+        .setStaking(keeperIncentiveHelper.address)
+    ).to.be.revertedWith(
+      "Only the contract governance may perform this action"
+    );
+    await expect(
+      keeperIncentiveHelper.connect(nonOwner).setRequiredVoiceCredits(0)
     ).to.be.revertedWith(
       "Only the contract governance may perform this action"
     );
@@ -189,6 +202,7 @@ describe("Keeper incentives", function () {
   });
   describe("call incentivized functions", function () {
     it("should pay out keeper incentive rewards", async function () {
+      await mockStaking.mock.getVoiceCredits.returns(350000);
       const oldBalance = await mockPop.balanceOf(owner.address);
 
       await mockPop
@@ -205,6 +219,7 @@ describe("Keeper incentives", function () {
       expect(newBalance).to.deep.equal(oldBalance.add(incentive));
     });
     it("should not pay out rewards if the incentive budget is not high enough", async function () {
+      await mockStaking.mock.getVoiceCredits.returns(350000);
       const oldBalance = await mockPop.balanceOf(owner.address);
       const result = await keeperIncentiveHelper
         .connect(owner)
@@ -212,13 +227,21 @@ describe("Keeper incentives", function () {
       const newBalance = await mockPop.balanceOf(owner.address);
       expect(newBalance).to.equal(oldBalance);
     });
+    it("should revert when the keeper doesnt have enough voice credits", async function () {
+      await mockStaking.mock.getVoiceCredits.returns(0);
+      await expect(
+        keeperIncentiveHelper.connect(owner).defaultIncentivisedFunction()
+      ).to.revertedWith("Insufficient voice credits");
+    });
     context("approval", function () {
       it("should not be callable for non approved addresses", async function () {
+        await mockStaking.mock.getVoiceCredits.returns(350000);
         await expect(
           keeperIncentiveHelper.connect(nonOwner).defaultIncentivisedFunction()
         ).to.revertedWith("you are not approved as a keeper");
       });
       it("should be callable for non approved addresses if the incentive is open to everyone", async function () {
+        await mockStaking.mock.getVoiceCredits.returns(350000);
         await keeperIncentiveHelper.connect(owner).toggleApproval(0);
         await mockPop
           .connect(owner)
@@ -241,6 +264,7 @@ describe("Keeper incentives", function () {
     });
     context("should not do anything ", function () {
       it("if the incentive for this function wasnt set yet", async function () {
+        await mockStaking.mock.getVoiceCredits.returns(350000);
         await mockPop
           .connect(nonOwner)
           .approve(keeperIncentiveHelper.address, incentive);

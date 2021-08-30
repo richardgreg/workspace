@@ -3,7 +3,6 @@ pragma experimental ABIEncoderV2;
 
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
-import "./KeeperIncentive.sol";
 import "./IStaking.sol";
 import "./IBeneficiaryRegistry.sol";
 import "./IRandomNumberConsumer.sol";
@@ -12,7 +11,7 @@ import "./Governed.sol";
 import "./IRegion.sol";
 import "./ParticipationReward.sol";
 
-contract GrantElections is ParticipationReward, KeeperIncentive {
+contract GrantElections is ParticipationReward {
   using SafeMath for uint256;
   using SafeERC20 for IERC20;
 
@@ -78,6 +77,7 @@ contract GrantElections is ParticipationReward, KeeperIncentive {
   IRegion internal region;
   IBeneficiaryRegistry internal beneficiaryRegistry;
   IRandomNumberConsumer internal randomNumberConsumer;
+  IStaking internal staking;
 
   Election[] public elections;
   mapping(bytes2 => uint256[3]) public activeElections;
@@ -105,10 +105,7 @@ contract GrantElections is ParticipationReward, KeeperIncentive {
     IERC20 _pop,
     IRegion _region,
     address _governance
-  )
-    ParticipationReward(_pop, _governance)
-    KeeperIncentive(msg.sender, _pop, _staking)
-  {
+  ) ParticipationReward(_pop, _governance) {
     staking = _staking;
     beneficiaryRegistry = _beneficiaryRegistry;
     randomNumberConsumer = _randomNumberConsumer;
@@ -191,10 +188,7 @@ contract GrantElections is ParticipationReward, KeeperIncentive {
 
   // todo: mint POP for caller to incentivize calling function
   // todo: use bonds to incentivize callers instead of minting
-  function initialize(ElectionTerm _grantTerm, bytes2 _region)
-    public
-    keeperIncentive(0)
-  {
+  function initialize(ElectionTerm _grantTerm, bytes2 _region) public {
     require(region.regionExists(_region), "region doesnt exist");
     uint8 _term = uint8(_grantTerm);
     if (elections.length != 0) {
