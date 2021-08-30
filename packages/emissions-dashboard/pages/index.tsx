@@ -1,5 +1,11 @@
+import {
+  CursorClickIcon,
+  MailOpenIcon,
+  UsersIcon,
+} from '@heroicons/react/solid';
 import Patch from '@patch-technology/patch';
 import { NavBar } from '@popcorn/ui/components/popcorn/emissions-dashboard/NavBar/index';
+import { ContractContainer } from 'components/ContractContainer';
 import { DateRangePicker } from 'components/DateRangePicker';
 import { useRouter } from 'next/router';
 import fetch from 'node-fetch';
@@ -11,6 +17,12 @@ const patch = Patch(process.env.PATCH_API_KEY);
 // TODO: Call toast methods upon success/failure
 const success = (msg: string) => toast.success(msg);
 const error = (msg: string) => toast.error(msg);
+
+interface ChartData {
+  date: string;
+  co2Emissions: number;
+  numTransactions: number;
+}
 
 const NUM_FULL_PERIODS = 19;
 
@@ -250,6 +262,59 @@ const IndexPage = () => {
     setOpen(false);
   };
 
+  const getStatsForContract = (contract: Contract) => {
+    const transactions = dummyEmissionsData.filter(
+      (emissionsData) => contract.address === emissionsData.address,
+    );
+    const totalEmissions = transactions.reduce((pr, cu) => {
+      return pr + cu.emissions;
+    }, 0);
+    const totalTransactionVol = transactions.reduce((pr, cu) => {
+      return pr + cu.transactionVol;
+    }, 0);
+    const averageGasPrice =
+      transactions.reduce((pr, cu) => {
+        return pr + cu.averageGasPrice;
+      }, 0) / transactions.length;
+    return [
+      {
+        id: 1,
+        name: 'CO2 Emissions (kg)',
+        stat: totalEmissions,
+        icon: UsersIcon,
+        change: '122',
+        changeType: 'increase',
+      },
+      {
+        id: 2,
+        name: 'Transactions',
+        stat: totalTransactionVol,
+        icon: MailOpenIcon,
+        change: '5.4%',
+        changeType: 'increase',
+      },
+      {
+        id: 3,
+        name: 'Average Gas Price',
+        stat: averageGasPrice,
+        icon: CursorClickIcon,
+        change: '3.2%',
+        changeType: 'decrease',
+      },
+    ];
+  };
+
+  const getDataForContract = (contract: Contract): ChartData[] => {
+    // TODO: Source data from transactions
+    return new Array(20).fill(undefined).map((x, i) => {
+      return {
+        date: `${i}/05/2021`,
+        co2Emissions: Math.floor(500 * Math.random()),
+        numTransactions: Math.floor(500 * Math.random()),
+      };
+    });
+  };
+
   return (
     <div>
       <NavBar
@@ -265,37 +330,11 @@ const IndexPage = () => {
         <DateRangePicker updateDates={updateDates} />
         {contracts.map((contract) => {
           return (
-            <table>
-              <thead>
-                <tr>
-                  <th>Address</th>
-                  <th>Vol</th>
-                  <th>Gas Used</th>
-                  <th>Emissions</th>
-                  <th>Start Block</th>
-                  <th>End Block</th>
-                </tr>
-              </thead>
-              <tbody>
-                {dummyEmissionsData
-                  .filter(
-                    (emissionsData) =>
-                      contract.address === emissionsData.address,
-                  )
-                  .map((emissionsData) => {
-                    return (
-                      <tr>
-                        <td>{emissionsData.address}</td>
-                        <td>{emissionsData.transactionVol}</td>
-                        <td>{emissionsData.gasUsed}</td>
-                        <td>{emissionsData.emissions}</td>
-                        <td>{emissionsData.startBlock}</td>
-                        <td>{emissionsData.endBlock}</td>
-                      </tr>
-                    );
-                  })}
-              </tbody>
-            </table>
+            <ContractContainer
+              emissionSummaryStats={getStatsForContract(contract)}
+              contract={contract}
+              data={getDataForContract(contract)}
+            />
           );
         })}
       </div>
