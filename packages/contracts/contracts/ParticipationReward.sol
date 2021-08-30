@@ -5,9 +5,8 @@ import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 import "./Governed.sol";
-import "./UsesPOP.sol";
 
-contract ParticipationReward is Governed, ReentrancyGuard, UsesPOP {
+contract ParticipationReward is Governed, ReentrancyGuard {
   using SafeMath for uint256;
   using SafeERC20 for IERC20;
 
@@ -25,6 +24,8 @@ contract ParticipationReward is Governed, ReentrancyGuard, UsesPOP {
     mapping(address => uint256) shareBalances;
     mapping(address => bool) claimed;
   }
+
+  IERC20 public immutable POP;
 
   uint256 public rewardBudget;
   uint256 public rewardBalance;
@@ -44,10 +45,9 @@ contract ParticipationReward is Governed, ReentrancyGuard, UsesPOP {
 
   /* ========== CONSTRUCTOR ========== */
 
-  constructor(IERC20 _pop, address _governance)
-    Governed(_governance)
-    UsesPOP(_pop)
-  {}
+  constructor(IERC20 _pop, address _governance) Governed(_governance) {
+    POP = _pop;
+  }
 
   /* ========== VIEWS ========== */
 
