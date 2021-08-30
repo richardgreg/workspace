@@ -2555,6 +2555,7 @@ export const dummyEmissionsData = [
     address: '0xa258C4606Ca8206D8aA700cE2143D7db854D168c',
     startBlock: 13058859,
     endBlock: 13060901,
+    averageGasPrice: 67000000000,
   },
   {
     emissions: 0,
@@ -2563,6 +2564,7 @@ export const dummyEmissionsData = [
     address: '0xa258C4606Ca8206D8aA700cE2143D7db854D168c',
     startBlock: 13060902,
     endBlock: 13062944,
+    averageGasPrice: 67000000000,
   },
   {
     emissions: 11877,
@@ -2571,6 +2573,7 @@ export const dummyEmissionsData = [
     address: '0xa258C4606Ca8206D8aA700cE2143D7db854D168c',
     startBlock: 13062945,
     endBlock: 13064987,
+    averageGasPrice: 67000000000,
   },
   {
     emissions: 35490,
@@ -2579,6 +2582,7 @@ export const dummyEmissionsData = [
     address: '0xa258C4606Ca8206D8aA700cE2143D7db854D168c',
     startBlock: 13064988,
     endBlock: 13067030,
+    averageGasPrice: 67000000000,
   },
   {
     emissions: 67018,
@@ -2587,6 +2591,7 @@ export const dummyEmissionsData = [
     address: '0xa258C4606Ca8206D8aA700cE2143D7db854D168c',
     startBlock: 13067031,
     endBlock: 13069073,
+    averageGasPrice: 67000000000,
   },
   {
     emissions: 82656,
@@ -2595,6 +2600,7 @@ export const dummyEmissionsData = [
     address: '0xa258C4606Ca8206D8aA700cE2143D7db854D168c',
     startBlock: 13069074,
     endBlock: 13071116,
+    averageGasPrice: 67000000000,
   },
   {
     emissions: 52394,
@@ -2603,6 +2609,7 @@ export const dummyEmissionsData = [
     address: '0xa258C4606Ca8206D8aA700cE2143D7db854D168c',
     startBlock: 13071117,
     endBlock: 13073159,
+    averageGasPrice: 67000000000,
   },
   {
     emissions: 35562,
@@ -2611,6 +2618,7 @@ export const dummyEmissionsData = [
     address: '0xa258C4606Ca8206D8aA700cE2143D7db854D168c',
     startBlock: 13073160,
     endBlock: 13075202,
+    averageGasPrice: 67000000000,
   },
   {
     emissions: 35426,
@@ -2619,6 +2627,7 @@ export const dummyEmissionsData = [
     address: '0xa258C4606Ca8206D8aA700cE2143D7db854D168c',
     startBlock: 13075203,
     endBlock: 13077245,
+    averageGasPrice: 67000000000,
   },
   {
     emissions: 11808,
@@ -2627,6 +2636,7 @@ export const dummyEmissionsData = [
     address: '0xa258C4606Ca8206D8aA700cE2143D7db854D168c',
     startBlock: 13077246,
     endBlock: 13079288,
+    averageGasPrice: 67000000000,
   },
   {
     emissions: 76919,
@@ -2635,6 +2645,7 @@ export const dummyEmissionsData = [
     address: '0xa258C4606Ca8206D8aA700cE2143D7db854D168c',
     startBlock: 13079289,
     endBlock: 13081331,
+    averageGasPrice: 67000000000,
   },
   {
     emissions: 11805,
@@ -2643,6 +2654,7 @@ export const dummyEmissionsData = [
     address: '0xa258C4606Ca8206D8aA700cE2143D7db854D168c',
     startBlock: 13081332,
     endBlock: 13083374,
+    averageGasPrice: 67000000000,
   },
   {
     emissions: 11805,
@@ -2651,6 +2663,7 @@ export const dummyEmissionsData = [
     address: '0xa258C4606Ca8206D8aA700cE2143D7db854D168c',
     startBlock: 13083375,
     endBlock: 13085417,
+    averageGasPrice: 67000000000,
   },
   {
     emissions: 23613,
@@ -2659,6 +2672,7 @@ export const dummyEmissionsData = [
     address: '0xa258C4606Ca8206D8aA700cE2143D7db854D168c',
     startBlock: 13085418,
     endBlock: 13087460,
+    averageGasPrice: 67000000000,
   },
   {
     emissions: 0,
@@ -2667,6 +2681,7 @@ export const dummyEmissionsData = [
     address: '0xa258C4606Ca8206D8aA700cE2143D7db854D168c',
     startBlock: 13087461,
     endBlock: 13089503,
+    averageGasPrice: 67000000000,
   },
   {
     emissions: 41809,
@@ -2675,6 +2690,7 @@ export const dummyEmissionsData = [
     address: '0xa258C4606Ca8206D8aA700cE2143D7db854D168c',
     startBlock: 13089504,
     endBlock: 13091546,
+    averageGasPrice: 67000000000,
   },
   {
     emissions: 56057,
@@ -2683,6 +2699,7 @@ export const dummyEmissionsData = [
     address: '0xa258C4606Ca8206D8aA700cE2143D7db854D168c',
     startBlock: 13091547,
     endBlock: 13093589,
+    averageGasPrice: 67000000000,
   },
   {
     emissions: 55779,
@@ -2691,6 +2708,7 @@ export const dummyEmissionsData = [
     address: '0xa258C4606Ca8206D8aA700cE2143D7db854D168c',
     startBlock: 13093590,
     endBlock: 13095632,
+    averageGasPrice: 67000000000,
   },
   {
     emissions: 11808,
@@ -2699,6 +2717,7 @@ export const dummyEmissionsData = [
     address: '0xa258C4606Ca8206D8aA700cE2143D7db854D168c',
     startBlock: 13095633,
     endBlock: 13097675,
+    averageGasPrice: 67000000000,
   },
   {
     emissions: 0,
@@ -2707,6 +2726,7 @@ export const dummyEmissionsData = [
     address: '0xa258C4606Ca8206D8aA700cE2143D7db854D168c',
     startBlock: 13097676,
     endBlock: 13097681,
+    averageGasPrice: 67000000000,
   },
   {
     emissions: 77177,
@@ -2715,6 +2735,7 @@ export const dummyEmissionsData = [
     address: '0xdA816459F1AB5631232FE5e97a05BBBb94970c95',
     startBlock: 13058859,
     endBlock: 13060901,
+    averageGasPrice: 67000000000,
   },
   {
     emissions: 22020,
@@ -2723,6 +2744,7 @@ export const dummyEmissionsData = [
     address: '0xdA816459F1AB5631232FE5e97a05BBBb94970c95',
     startBlock: 13060902,
     endBlock: 13062944,
+    averageGasPrice: 67000000000,
   },
   {
     emissions: 83206,
@@ -2731,6 +2753,7 @@ export const dummyEmissionsData = [
     address: '0xdA816459F1AB5631232FE5e97a05BBBb94970c95',
     startBlock: 13062945,
     endBlock: 13064987,
+    averageGasPrice: 67000000000,
   },
   {
     emissions: 68274,
@@ -2739,6 +2762,7 @@ export const dummyEmissionsData = [
     address: '0xdA816459F1AB5631232FE5e97a05BBBb94970c95',
     startBlock: 13064988,
     endBlock: 13067030,
+    averageGasPrice: 67000000000,
   },
   {
     emissions: 55316,
@@ -2747,6 +2771,7 @@ export const dummyEmissionsData = [
     address: '0xdA816459F1AB5631232FE5e97a05BBBb94970c95',
     startBlock: 13067031,
     endBlock: 13069073,
+    averageGasPrice: 67000000000,
   },
   {
     emissions: 74853,
@@ -2755,6 +2780,7 @@ export const dummyEmissionsData = [
     address: '0xdA816459F1AB5631232FE5e97a05BBBb94970c95',
     startBlock: 13069074,
     endBlock: 13071116,
+    averageGasPrice: 67000000000,
   },
   {
     emissions: 64168,
@@ -2763,6 +2789,7 @@ export const dummyEmissionsData = [
     address: '0xdA816459F1AB5631232FE5e97a05BBBb94970c95',
     startBlock: 13071117,
     endBlock: 13073159,
+    averageGasPrice: 67000000000,
   },
   {
     emissions: 128169,
@@ -2771,6 +2798,7 @@ export const dummyEmissionsData = [
     address: '0xdA816459F1AB5631232FE5e97a05BBBb94970c95',
     startBlock: 13073160,
     endBlock: 13075202,
+    averageGasPrice: 67000000000,
   },
   {
     emissions: 59763,
@@ -2779,6 +2807,7 @@ export const dummyEmissionsData = [
     address: '0xdA816459F1AB5631232FE5e97a05BBBb94970c95',
     startBlock: 13075203,
     endBlock: 13077245,
+    averageGasPrice: 67000000000,
   },
   {
     emissions: 57334,
@@ -2787,6 +2816,7 @@ export const dummyEmissionsData = [
     address: '0xdA816459F1AB5631232FE5e97a05BBBb94970c95',
     startBlock: 13077246,
     endBlock: 13079288,
+    averageGasPrice: 67000000000,
   },
   {
     emissions: 93465,
@@ -2795,6 +2825,7 @@ export const dummyEmissionsData = [
     address: '0xdA816459F1AB5631232FE5e97a05BBBb94970c95',
     startBlock: 13079289,
     endBlock: 13081331,
+    averageGasPrice: 67000000000,
   },
   {
     emissions: 73745,
@@ -2803,6 +2834,7 @@ export const dummyEmissionsData = [
     address: '0xdA816459F1AB5631232FE5e97a05BBBb94970c95',
     startBlock: 13081332,
     endBlock: 13083374,
+    averageGasPrice: 67000000000,
   },
   {
     emissions: 132850,
@@ -2811,6 +2843,7 @@ export const dummyEmissionsData = [
     address: '0xdA816459F1AB5631232FE5e97a05BBBb94970c95',
     startBlock: 13083375,
     endBlock: 13085417,
+    averageGasPrice: 67000000000,
   },
   {
     emissions: 193043,
@@ -2819,6 +2852,7 @@ export const dummyEmissionsData = [
     address: '0xdA816459F1AB5631232FE5e97a05BBBb94970c95',
     startBlock: 13085418,
     endBlock: 13087460,
+    averageGasPrice: 67000000000,
   },
   {
     emissions: 126550,
@@ -2827,6 +2861,7 @@ export const dummyEmissionsData = [
     address: '0xdA816459F1AB5631232FE5e97a05BBBb94970c95',
     startBlock: 13087461,
     endBlock: 13089503,
+    averageGasPrice: 67000000000,
   },
   {
     emissions: 82483,
@@ -2835,6 +2870,7 @@ export const dummyEmissionsData = [
     address: '0xdA816459F1AB5631232FE5e97a05BBBb94970c95',
     startBlock: 13089504,
     endBlock: 13091546,
+    averageGasPrice: 67000000000,
   },
   {
     emissions: 160691,
@@ -2843,6 +2879,7 @@ export const dummyEmissionsData = [
     address: '0xdA816459F1AB5631232FE5e97a05BBBb94970c95',
     startBlock: 13091547,
     endBlock: 13093589,
+    averageGasPrice: 67000000000,
   },
   {
     emissions: 35447,
@@ -2851,6 +2888,7 @@ export const dummyEmissionsData = [
     address: '0xdA816459F1AB5631232FE5e97a05BBBb94970c95',
     startBlock: 13093590,
     endBlock: 13095632,
+    averageGasPrice: 67000000000,
   },
   {
     emissions: 21457,
@@ -2859,6 +2897,7 @@ export const dummyEmissionsData = [
     address: '0xdA816459F1AB5631232FE5e97a05BBBb94970c95',
     startBlock: 13095633,
     endBlock: 13097675,
+    averageGasPrice: 67000000000,
   },
   {
     emissions: 0,
@@ -2867,6 +2906,7 @@ export const dummyEmissionsData = [
     address: '0xdA816459F1AB5631232FE5e97a05BBBb94970c95',
     startBlock: 13097676,
     endBlock: 13097681,
+    averageGasPrice: 67000000000,
   },
 ];
 

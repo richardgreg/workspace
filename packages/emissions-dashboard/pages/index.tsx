@@ -35,6 +35,7 @@ interface EmissionStats {
   address: string;
   startBlock: number;
   endBlock: number;
+  averageGasPrice: number;
 }
 
 interface Contract {
@@ -180,6 +181,11 @@ const IndexPage = () => {
               const gasUsed = transactionsForBlock.reduce((pr, cu) => {
                 return pr + Number(cu.gasUsed);
               }, 0);
+
+              const averageGasPrice =
+                transactionsForBlock.reduce((pr, cu) => {
+                  return pr + Number(cu.gasPrice);
+                }, 0) / transactionsForBlock.length;
               const co2Emissions =
                 gasUsed > 0
                   ? await patch.estimates.createEthereumEstimate({
@@ -195,6 +201,7 @@ const IndexPage = () => {
                 address: contract.address,
                 startBlock: start,
                 endBlock: end,
+                averageGasPrice,
               };
             }),
           );
