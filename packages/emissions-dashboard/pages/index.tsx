@@ -9,23 +9,20 @@ const patch = Patch(process.env.PATCH_API_KEY);
 const success = (msg: string) => toast.success(msg);
 const error = (msg: string) => toast.error(msg);
 
-const NUM_FULL_PERIODS = 12;
+const NUM_FULL_PERIODS = 19;
 
-const DEFAULT_STATS: ContractStats = {
-  emissions: 0,
-  gasUsed: 0,
-  transactionVol: 0,
-};
-interface ContractStats {
+interface EmissionStats {
   transactionVol: number;
   gasUsed: number;
   emissions: number;
+  address: string;
+  startBlock: number;
+  endBlock: number;
 }
 
 interface Contract {
   name: string;
   address: string;
-  stats: ContractStats;
 }
 
 const getBlockNumberByTimestamp = async (
@@ -38,22 +35,29 @@ const getBlockNumberByTimestamp = async (
     .catch((error) => console.log('error', error));
 };
 
+const getBlockTimestamp = async (blockNumber: number): Promise<number> => {
+  const requestUrl = `https://api.etherscan.io/api?module=block&action=getblockreward&blockno=${blockNumber}apikey=${process.env.ETHERSCAN_API_KEY}`;
+  const result = await fetch(requestUrl)
+    .then((res) => res.json())
+    .then((json) => json.result)
+    .catch((error) => console.log('error', error));
+  return result.timeStamp;
+};
 const IndexPage = () => {
   const router = useRouter();
   const [contracts, setContracts] = useState<Contract[]>([
     {
-      address: '0x7a250d5630b4cf539739df2c5dacb4c659f2488d',
-      name: 'Uniswap V2',
-      stats: DEFAULT_STATS,
+      address: '0xa258C4606Ca8206D8aA700cE2143D7db854D168c',
+      name: 'Yearn ETH Vault',
     },
-    // {
-    //   address: '0x6b3595068778dd592e39a122f4f5a5cf09c90fe2',
-    //   name: 'Sushi',
-    //   stats: DEFAULT_STATS,
-    // },
+    {
+      address: '0xdA816459F1AB5631232FE5e97a05BBBb94970c95',
+      name: 'Yearn ETH Vault',
+    },
   ]);
+  const [emissionData, setEmissionData] = useState([]);
   const [startDate, setStartDate] = useState<Date>(
-    new Date('2021-08-26T00:00:00Z'),
+    new Date('2021-08-20T00:00:00Z'),
   );
   const [endDate, setEndDate] = useState<Date>(
     new Date('2021-08-26T00:10:00Z'),
@@ -94,6 +98,7 @@ const IndexPage = () => {
     const lastEndBlock = blockRanges[blockRanges.length - 1][1];
     if (lastEndBlock !== endBlock)
       blockRanges.push([lastEndBlock + 1, endBlock]);
+    console.log({ blockRanges });
     setBlockRanges(blockRanges);
   };
 
@@ -106,61 +111,58 @@ const IndexPage = () => {
       .catch((error) => console.log('error', error));
   };
 
-  const updateStats = async (contract: Contract) => {
-    const transactions = await getTransactions(contract);
-    console.log({ transactions });
-    if (Array.isArray(transactions)) {
-      success(
-        `Successfully got ${transactions.length} transactions for ${contract.name}`,
-      );
-      // TODO: Group transactions into the block ranges
-      blockRanges.forEach(async (blockRange) => {
-        const start = blockRange[0];
-        const end = blockRange[1];
-        const transactionsForBlock = transactions.filter(
-          (transaction) =>
-            Number(transaction.blockNumber) >= start &&
-            Number(transaction.blockNumber) <= end,
-        );
-        const transactionVol = transactionsForBlock.length;
-        const gasUsed = transactionsForBlock.reduce((pr, cu) => {
-          return pr + Number(cu.gasUsed);
-        }, 0);
-        const co2Emissions = await patch.estimates.createEthereumEstimate({
-          timestamp: startDate,
-          gas_used: gasUsed,
-        });
-        const emissions = co2Emissions.data.mass_g;
-        const newStats: ContractStats = {
-          emissions,
-          gasUsed,
-          transactionVol,
-        };
-        const newContract: Contract = {
-          name: contract.name,
-          address: contract.address,
-          stats: newStats,
-        };
-        const newContracts = contracts
-          .filter((contract) => contract.address !== newContract.address)
-          .concat(newContract);
-
-        setContracts(newContracts);
-      });
-    } else {
-      error(
-        `Failed to get transactions for ${contract.name} because ${transactions}`,
-      );
-      const newContract: Contract = {
-        name: contract.name,
-        address: contract.address,
-        stats: DEFAULT_STATS,
-      };
-      const newContracts = contracts
-        .filter((contract) => contract.address !== newContract.address)
-        .concat(newContract);
-      setContracts(newContracts);
-    }
+  const updateStats = async () => {
+    const res = await Promise.all(
+      contracts.map(async (contract) => {
+        const transactions = await getTransactions(contract);
+        if (Array.isArray(transactions)) {
+          success(
+            `Successfully got ${transactions.length} transactions for ${contract.name}`,
+          );
+          const emissionDataForContract = await Promise.all(
+            blockRanges.map(async (blockRange) => {
+              const start = blockRange[0];
+              const end = blockRange[1];
+              const transactionsForBlock = transactions.filter(
+                (transaction) =>
+                  Number(transaction.blockNumber) >= start &&
+                  Number(transaction.blockNumber) <= end,
+              );
+              // const startBlockTimestamp = await getBlockTimestamp(start);
+              // const endBlockTimestamp = await getBlockTimestamp(end);
+              // console.log({ startBlockTimestamp, endBlockTimestamp });
+              const transactionVol = transactionsForBlock.length;
+              const gasUsed = transactionsForBlock.reduce((pr, cu) => {
+                return pr + Number(cu.gasUsed);
+              }, 0);
+              const co2Emissions =
+                gasUsed > 0
+                  ? await patch.estimates.createEthereumEstimate({
+                      timestamp: startDate,
+                      gas_used: gasUsed,
+                    })
+                  : 0;
+              const emissions = gasUsed > 0 ? co2Emissions.data.mass_g : 0;
+              return {
+                emissions,
+                gasUsed,
+                transactionVol,
+                address: contract.address,
+                startBlock: start,
+                endBlock: end,
+              };
+            }),
+          );
+          const newEmissionsData = emissionData.concat(emissionDataForContract);
+          return newEmissionsData;
+        } else {
+          error(
+            `Failed to get transactions for ${contract.name} because ${transactions}`,
+          );
+        }
+      }),
+    );
+    console.log(res.flat());
   };
 
   useEffect(() => {
@@ -173,16 +175,15 @@ const IndexPage = () => {
   }, [endDate, startDate]);
 
   useEffect(() => {
-    if (startBlock !== undefined && endBlock !== undefined) {
-      contracts.forEach((contract) => updateStats(contract));
+    if (startBlock && endBlock) {
+      updateStats();
     }
-  }, [startBlock, endBlock]);
+  }, [blockRanges]);
 
   const updateDates = (startDate: Date, endDate: Date): void => {
     setStartDate(startDate);
     setEndDate(endDate);
   };
-
   return (
     <div>
       <Toaster position="top-right" />
@@ -194,26 +195,15 @@ const IndexPage = () => {
         <table>
           <thead>
             <tr>
-              <th>Name</th>
               <th>Address</th>
               <th>Vol</th>
               <th>Gas Used</th>
               <th>Emissions</th>
+              <th>Start Block</th>
+              <th>End Block</th>
             </tr>
           </thead>
-          <tbody>
-            {contracts.map((contract) => {
-              return (
-                <tr>
-                  <td>{contract.name}</td>
-                  <td>{contract.address}</td>
-                  <td>{contract.stats.transactionVol}</td>
-                  <td>{contract.stats.gasUsed}</td>
-                  <td>{contract.stats.emissions}</td>
-                </tr>
-              );
-            })}
-          </tbody>
+          <tbody></tbody>
         </table>
       </div>
     </div>
