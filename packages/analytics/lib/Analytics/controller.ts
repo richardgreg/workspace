@@ -1,6 +1,5 @@
 import cluster from "cluster";
 import { config } from "./../../config";
-import { indexingQueue } from "./IndexQueue";
 import { providers } from "./providers";
 
 export default async function main() {
@@ -35,13 +34,6 @@ export default async function main() {
       const { processedBlocks, seenTransactions } = payload;
       totalProcessedBlocks += processedBlocks;
       totalSeenTransactions += seenTransactions;
-    }
-    if (cmd === "transactions") {
-      const { transactions, blockNumber } = payload;
-      indexingQueue.push({
-        transactions: transactions,
-        force: blockNumber === blockCeil,
-      });
     }
   };
 

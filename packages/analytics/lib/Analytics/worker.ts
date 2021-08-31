@@ -14,9 +14,13 @@ export default function main() {
   });
 
   for (let i = blockMin; i <= blockMax; i++) {
-    blockInfoQueue
-      .push({ blockNumber: i })
-      .catch((e) => console.error("error", console.log(e)));
+    blockInfoQueue.push({ blockNumber: i }).catch((e) => {
+      if (e.name == "RequestTimeoutError") {
+        console.log(e.name);
+      } else {
+        console.log(e);
+      }
+    });
   }
 
   const intId = setInterval(() => {

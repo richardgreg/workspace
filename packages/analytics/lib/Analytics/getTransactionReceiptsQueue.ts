@@ -1,12 +1,13 @@
 import fastq, { queueAsPromised } from "fastq";
-import { config } from "./../../config";
 import { providers } from "./providers";
-import { CircuitBreaker } from "./CircuitBreaker";
+import { BlockWithTransactions } from "@ethersproject/abstract-provider";
 import { retryHandler } from "./retryHandler";
-import { transactionReceiptQueue } from "./getTransactionReceiptsQueue";
+import { CircuitBreaker } from "./CircuitBreaker";
+import { indexingQueue } from "./IndexQueue";
+import { ethers } from "ethers";
 
-let processedBlocks = 0;
-let seenTransactions = 0;
+let processedTxReceipts = 0;
+let seenTxReceipts = 0;
 
 const queueConfig = {
   maximumBackoff: 64 * 1000, // 64 seconds
@@ -18,33 +19,36 @@ const queueConfig = {
 let circuitBreaker = undefined;
 
 interface Args {
-  blockNumber: number;
+  block: BlockWithTransactions;
+  transaction: ethers.providers.TransactionResponse;
   tries?: number;
 }
-const getBlock = async ({ blockNumber, tries }: Args): Promise<void> => {
+const getTransactionReceipt = async ({
+  transaction,
+  tries,
+  block,
+}: Args): Promise<void> => {
   return new Promise(async (resolve, reject) => {
     const shouldCancelRequest = retryHandler(
       { tries, reject, options: queueConfig },
       () => {
-        getBlock({ blockNumber, tries });
+        getTransactionReceipt({ transaction, tries, block });
       }
     );
 
-    const block = await providers[
+    seenTxReceipts++;
+
+    const receipt = await providers[
       Math.floor(Math.random() * providers.length)
-    ].getBlockWithTransactions(blockNumber);
+    ].getTransactionReceipt(transaction.hash);
+
+    indexingQueue.push({ receipt, transaction, block });
 
     if (shouldCancelRequest()) {
       return;
     }
 
-    block.transactions.map((transaction) => {
-      transactionReceiptQueue.push({ transaction, block });
-    });
-
-    seenTransactions += block.transactions.length;
-
-    processedBlocks++;
+    processedTxReceipts++;
     resolve();
   });
 };
@@ -52,7 +56,7 @@ const getBlock = async ({ blockNumber, tries }: Args): Promise<void> => {
 const getCircuitBreaker = (): CircuitBreaker => {
   if (!circuitBreaker) {
     circuitBreaker = new CircuitBreaker({
-      queue: blockInfoQueue,
+      queue: transactionReceiptQueue,
       config: queueConfig,
     });
   }
@@ -64,7 +68,7 @@ const withCircuitBreaker = (callback) => {
     return new Promise(async (resolve, reject) => {
       const breaker = getCircuitBreaker();
       if (!breaker.checkCircuit(args.tries)) {
-        blockInfoQueue.push(args);
+        transactionReceiptQueue.push(args);
         resolve(undefined);
         return;
       }
@@ -74,9 +78,10 @@ const withCircuitBreaker = (callback) => {
     });
   };
 };
-export { processedBlocks, seenTransactions };
 
-export const blockInfoQueue: queueAsPromised<Args> = fastq.promise(
-  withCircuitBreaker(getBlock),
-  config.concurrentBlockRequests
+export { processedTxReceipts, seenTxReceipts };
+
+export const transactionReceiptQueue: queueAsPromised<Args> = fastq.promise(
+  withCircuitBreaker(getTransactionReceipt),
+  queueConfig.concurrentRequests
 );

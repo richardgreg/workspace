@@ -2,11 +2,13 @@ import { cpus } from "os";
 const numCPUs = cpus().length;
 
 export const config: Config = {
-  indexBatchSize: 10000,
-  concurrentBlockRequests: 2, // per thread
-  concurrentIndexRequests: 5, 
-  threads: Math.floor(numCPUs / 2),
-  blocksToImport: 5000000, // from latest blocknumber
+  indexBatchSize: 25000,
+  concurrentBlockRequests: 1, // per thread
+  concurrentIndexRequests: 5,
+  threads: Math.floor(numCPUs / 3),
+  blocksToImport: 500000, // from latest blocknumber
+  // blockStart: '',
+  // blockEnd: '',
 };
 
 export interface Config {
