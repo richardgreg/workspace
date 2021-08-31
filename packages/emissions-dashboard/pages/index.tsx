@@ -1,3 +1,4 @@
+import { Web3Provider } from '@ethersproject/providers';
 import {
   CursorClickIcon,
   MailOpenIcon,
@@ -5,13 +6,17 @@ import {
 } from '@heroicons/react/solid';
 import Patch from '@patch-technology/patch';
 import { NavBar } from '@popcorn/ui/components/popcorn/emissions-dashboard/NavBar/index';
+import { useWeb3React } from '@web3-react/core';
 import { ContractContainer } from 'components/ContractContainer';
 import { DateRangePicker } from 'components/DateRangePicker';
 import { useRouter } from 'next/router';
 import fetch from 'node-fetch';
 import React, { useEffect, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
+import web3 from 'web3';
+import { connectors } from '../context/Web3/connectors';
 import { dummyEmissionsData } from '../dummyData';
+
 const patch = Patch(process.env.PATCH_API_KEY);
 
 // TODO: Call toast methods upon success/failure
@@ -96,9 +101,10 @@ const getBlockTimestamp = async (blockNumber: number): Promise<number> => {
   return result.timeStamp;
 };
 
-const IndexPage = () => {
+const IndexPage = (): JSX.Element => {
   const router = useRouter();
   const [open, setOpen] = useState<boolean>(false);
+
   const [contracts, setContracts] = useState<Contract[]>([
     {
       address: '0xa258C4606Ca8206D8aA700cE2143D7db854D168c',
@@ -121,6 +127,10 @@ const IndexPage = () => {
   const [blockRanges, setBlockRanges] = useState<number[][]>();
   const [allTransactions, setAllTransactions] = useState<Transaction[]>([]);
   const [emissionData, setEmissionData] = useState([]);
+
+  const [errorMessage, setErrorMessage] = useState<string>('');
+  const context = useWeb3React<Web3Provider>();
+  const { library, activate, active } = context;
 
   useEffect(() => {
     if (typeof window !== 'undefined' && window.location.pathname !== '/') {
@@ -258,9 +268,50 @@ const IndexPage = () => {
       const existingContracts = JSON.parse(localStorage.getItem('contracts'));
       existingContracts.push(contractAddress);
       localStorage.setItem('contracts', JSON.stringify(existingContracts));
-    } else {
-      localStorage.setItem('contracts', JSON.stringify([contractAddress]));
     }
+  };
+
+  useEffect(() => {
+    if (!active) {
+      activate(connectors.Network);
+    }
+  }, [active]);
+
+  const addContract = async (contractAddress: string): Promise<void> => {
+    const enterMessage: string = 'Please enter a valid address';
+    let message: string;
+    if (contractAddress) {
+      if (web3.utils.isAddress(contractAddress)) {
+        const code = await library.getCode(contractAddress);
+        const isConnected = !(code === '0x0' || code === '0x');
+        if (isConnected) {
+          if (localStorage.getItem('contracts')) {
+            const existingContracts = JSON.parse(
+              localStorage.getItem('contracts'),
+            );
+            if (!existingContracts.includes(contractAddress)) {
+              existingContracts.push(contractAddress);
+              localStorage.setItem(
+                'contracts',
+                JSON.stringify(existingContracts),
+              );
+            }
+          } else {
+            localStorage.setItem(
+              'contracts',
+              JSON.stringify([contractAddress]),
+            );
+          }
+        } else {
+          message = `The address you entered does not point to a valid Ethereum contract. ${enterMessage}`;
+        }
+      } else {
+        message = `The address you entered is not a valid Ethereum contract. ${enterMessage}`;
+      }
+    } else {
+      message = `No Contract Address was provided. ${enterMessage}`;
+    }
+    setErrorMessage(message);
     setOpen(false);
   };
 
@@ -316,6 +367,11 @@ const IndexPage = () => {
     });
   };
 
+  const openAddContractModal = (): void => {
+    setOpen(true);
+    setErrorMessage('');
+  };
+
   return (
     <div>
       <NavBar
@@ -324,7 +380,12 @@ const IndexPage = () => {
         userNavigation={userNavigation}
         user={user}
         logo="/images/popcorn-logo.png"
-        contractProps={{ addContract: handleAddContract, open, setOpen }}
+        contractProps={{ addContract, open, setOpen }}
+        contractErrorProps={{
+          openAddContractModal,
+          errorMessage,
+          setErrorMessage,
+        }}
       />
       <Toaster position="top-right" />
       <div className="sm:flex sm:flex-col sm:align-center">

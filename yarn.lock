@@ -4150,10 +4150,10 @@
   resolved "https://registry.yarnpkg.com/@openzeppelin/contracts/-/contracts-3.4.1.tgz#03c891fec7f93be0ae44ed74e57a122a38732ce7"
   integrity sha512-cUriqMauq1ylzP2TxePNdPqkwI7Le3Annh4K9rrpvKfSBB/bdW+Iu1ihBaTIABTAAJ85LmKL5SSPPL9ry8d1gQ==
 
-"@patch-technology/patch@^1.9.0":
-  version "1.9.0"
-  resolved "https://registry.yarnpkg.com/@patch-technology/patch/-/patch-1.9.0.tgz#1df6f4a62117f5457389eed1927e74e0d03e7a48"
-  integrity sha512-iR6DE3ad7vfDahIbIgTgYYNPNvZGTRkR3G8xoCUSZNQKSN3We2oO2zXD8XzkVSxZp1Obkg1UYqMevuPzDp86Jg==
+"@patch-technology/patch@^1.10.0":
+  version "1.10.0"
+  resolved "https://registry.yarnpkg.com/@patch-technology/patch/-/patch-1.10.0.tgz#4e2e85d13b0fffcedbc180f290ef5fe411c58b1b"
+  integrity sha512-h9PPziGgVvWivce7k0hEjJkewQbCKy0UvjvtxJWVanYFfoK+hgZGjA+lvKg4Zv3SqUkKP3fdZ1TJaTJhuKm/QQ==
   dependencies:
     query-string "^7.0.1"
     superagent "^5.3.1"
