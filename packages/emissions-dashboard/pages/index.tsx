@@ -9,6 +9,7 @@ import { NavBar } from '@popcorn/ui/components/popcorn/emissions-dashboard/NavBa
 import { useWeb3React } from '@web3-react/core';
 import { ContractContainer } from 'components/ContractContainer';
 import { DateRangePicker } from 'components/DateRangePicker';
+import { ChartData, Contract, Transaction } from 'interfaces';
 import { useRouter } from 'next/router';
 import fetch from 'node-fetch';
 import React, { useEffect, useState } from 'react';
@@ -22,12 +23,6 @@ const patch = Patch(process.env.PATCH_API_KEY);
 // TODO: Call toast methods upon success/failure
 const success = (msg: string) => toast.success(msg);
 const error = (msg: string) => toast.error(msg);
-
-interface ChartData {
-  date: string;
-  co2Emissions: number;
-  numTransactions: number;
-}
 
 const NUM_FULL_PERIODS = 19;
 
@@ -45,42 +40,6 @@ export const userNavigation = [
   { name: 'Settings', href: '#' },
   { name: 'Sign out', href: '#' },
 ];
-interface EmissionStats {
-  transactionVol: number;
-  gasUsed: number;
-  emissions: number;
-  address: string;
-  startBlock: number;
-  endBlock: number;
-  averageGasPrice: number;
-  blockStartDate: Date;
-}
-
-interface Contract {
-  name: string;
-  address: string;
-}
-
-interface Transaction {
-  blockNumber: string;
-  timeStamp: string;
-  hash: string;
-  nonce: string;
-  blockHash: string;
-  transactionIndex: string;
-  from: string;
-  to: string;
-  value: string;
-  gas: string;
-  gasPrice: string;
-  isError: string;
-  txreceipt_status: string;
-  input: string;
-  contractAddress: string;
-  cumulativeGasUsed: string;
-  gasUsed: string;
-  confirmations: string;
-}
 
 const getBlockNumberByTimestamp = async (
   timestamp: number,
@@ -147,7 +106,6 @@ const IndexPage = (): JSX.Element => {
     const endBlock = await Number(
       await await getBlockNumberByTimestamp(endTimestamp),
     );
-
     const numBlocks = endBlock - startBlock;
     const numBlocksInPeriod = Math.floor(numBlocks / NUM_FULL_PERIODS);
     let blockRanges = new Array(NUM_FULL_PERIODS)
@@ -166,19 +124,9 @@ const IndexPage = (): JSX.Element => {
     setBlockRanges(blockRanges);
   };
 
-  const getAllTransactions = async () => {
-    const allTransactions = await (
-      await Promise.all(
-        contracts.map(async (contract) => {
-          const requestUrl = `https://api.etherscan.io/api?module=account&action=txlist&address=${contract.address}&startblock=${startBlock}&endblock=${endBlock}&sort=asc&apikey=${process.env.ETHERSCAN_API_KEY}`;
-          return await fetch(requestUrl)
-            .then((res) => res.json())
-            .then((json) => json.result)
-            .catch((error) => console.log('error', error));
-        }),
-      )
-    ).flat();
-    setAllTransactions(allTransactions);
+  const getTransactions = async () => {
+    // TODO: Call netlify function which will then call the db
+    console.log('Getting transactions');
   };
 
   const getEmissionsData = async () => {
@@ -238,25 +186,25 @@ const IndexPage = (): JSX.Element => {
 
   // NOTE: We are currently using dummy data previously sources from etherscan and patch.io for demo purposes
   // TODO: Source data externally
-  // useEffect(() => {
-  //   updateBlocks();
-  // }, []);
+  useEffect(() => {
+    updateBlocks();
+  }, []);
 
-  // useEffect(() => {
-  //   updateBlocks();
-  // }, [endDate, startDate]);
+  useEffect(() => {
+    updateBlocks();
+  }, [endDate, startDate]);
 
-  // useEffect(() => {
-  //   if (blockRanges) {
-  //     getAllTransactions();
-  //   }
-  // }, [blockRanges]);
+  useEffect(() => {
+    if (blockRanges) {
+      getTransactions();
+    }
+  }, [blockRanges]);
 
-  // useEffect(() => {
-  //   if (allTransactions && blockRanges) {
-  //     getEmissionsData();
-  //   }
-  // }, [blockRanges]);
+  useEffect(() => {
+    if (allTransactions && blockRanges) {
+      getEmissionsData();
+    }
+  }, [blockRanges]);
 
   const updateDates = (startDate: Date, endDate: Date): void => {
     setStartDate(startDate);

@@ -14,6 +14,7 @@
     "@headlessui/react": "^1.0.0",
     "@heroicons/react": "^1.0.1",
     "@material-ui/core": "^4.12.3",
+    "@netlify/functions": "^0.7.2",
     "@patch-technology/patch": "^1.10.0",
     "@popcorn/app": "*",
     "@popcorn/contracts": "*",

@@ -9,14 +9,13 @@ async function run() {
   try {
     await client.connect();
     const database = client.db('emissions');
-    const movies = database.collection('transactions');
+    const collection = database.collection('transactions');
     const docs = transactions.transactions;
     // this option prevents additional documents from being inserted if one fails
     const options = { ordered: true };
-    const result = await movies.insertMany(docs, options);
+    const result = await collection.insertMany(docs, options);
     console.log(`${result.insertedCount} documents were inserted`);
   } finally {
     await client.close();
   }
 }
-run().catch(console.dir);
