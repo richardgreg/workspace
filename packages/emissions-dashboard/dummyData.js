@@ -2556,6 +2556,7 @@ export const dummyEmissionsData = [
     startBlock: 13058859,
     endBlock: 13060901,
     averageGasPrice: 67000000000,
+    blockStartDate: '2021-08-23T21:29:58.000Z',
   },
   {
     emissions: 0,
@@ -2565,6 +2566,7 @@ export const dummyEmissionsData = [
     startBlock: 13060902,
     endBlock: 13062944,
     averageGasPrice: 67000000000,
+    blockStartDate: '2021-08-24T21:29:58.000Z',
   },
   {
     emissions: 11877,
@@ -2574,6 +2576,7 @@ export const dummyEmissionsData = [
     startBlock: 13062945,
     endBlock: 13064987,
     averageGasPrice: 67000000000,
+    blockStartDate: '2021-08-25T21:29:58.000Z',
   },
   {
     emissions: 35490,
@@ -2583,6 +2586,7 @@ export const dummyEmissionsData = [
     startBlock: 13064988,
     endBlock: 13067030,
     averageGasPrice: 67000000000,
+    blockStartDate: '2021-08-26T21:29:58.000Z',
   },
   {
     emissions: 67018,
@@ -2592,6 +2596,7 @@ export const dummyEmissionsData = [
     startBlock: 13067031,
     endBlock: 13069073,
     averageGasPrice: 67000000000,
+    blockStartDate: '2021-08-27T21:29:58.000Z',
   },
   {
     emissions: 82656,
@@ -2601,6 +2606,7 @@ export const dummyEmissionsData = [
     startBlock: 13069074,
     endBlock: 13071116,
     averageGasPrice: 67000000000,
+    blockStartDate: '2021-08-28T21:29:58.000Z',
   },
   {
     emissions: 52394,
@@ -2610,6 +2616,7 @@ export const dummyEmissionsData = [
     startBlock: 13071117,
     endBlock: 13073159,
     averageGasPrice: 67000000000,
+    blockStartDate: '2021-08-29T21:29:58.000Z',
   },
   {
     emissions: 35562,
@@ -2619,6 +2626,7 @@ export const dummyEmissionsData = [
     startBlock: 13073160,
     endBlock: 13075202,
     averageGasPrice: 67000000000,
+    blockStartDate: '2021-08-30T21:29:58.000Z',
   },
   {
     emissions: 35426,
@@ -2628,6 +2636,7 @@ export const dummyEmissionsData = [
     startBlock: 13075203,
     endBlock: 13077245,
     averageGasPrice: 67000000000,
+    blockStartDate: '2021-08-31T21:29:58.000Z',
   },
   {
     emissions: 11808,
@@ -2637,6 +2646,7 @@ export const dummyEmissionsData = [
     startBlock: 13077246,
     endBlock: 13079288,
     averageGasPrice: 67000000000,
+    blockStartDate: '2021-09-01T21:29:58.000Z',
   },
   {
     emissions: 76919,
@@ -2646,6 +2656,7 @@ export const dummyEmissionsData = [
     startBlock: 13079289,
     endBlock: 13081331,
     averageGasPrice: 67000000000,
+    blockStartDate: '2021-09-02T21:29:58.000Z',
   },
   {
     emissions: 11805,
@@ -2655,6 +2666,7 @@ export const dummyEmissionsData = [
     startBlock: 13081332,
     endBlock: 13083374,
     averageGasPrice: 67000000000,
+    blockStartDate: '2021-09-03T21:29:58.000Z',
   },
   {
     emissions: 11805,
@@ -2664,6 +2676,7 @@ export const dummyEmissionsData = [
     startBlock: 13083375,
     endBlock: 13085417,
     averageGasPrice: 67000000000,
+    blockStartDate: '2021-09-04T21:29:58.000Z',
   },
   {
     emissions: 23613,
@@ -2673,6 +2686,7 @@ export const dummyEmissionsData = [
     startBlock: 13085418,
     endBlock: 13087460,
     averageGasPrice: 67000000000,
+    blockStartDate: '2021-09-05T21:29:58.000Z',
   },
   {
     emissions: 0,
@@ -2682,6 +2696,7 @@ export const dummyEmissionsData = [
     startBlock: 13087461,
     endBlock: 13089503,
     averageGasPrice: 67000000000,
+    blockStartDate: '2021-09-06T21:29:58.000Z',
   },
   {
     emissions: 41809,
@@ -2691,6 +2706,7 @@ export const dummyEmissionsData = [
     startBlock: 13089504,
     endBlock: 13091546,
     averageGasPrice: 67000000000,
+    blockStartDate: '2021-09-07T21:29:58.000Z',
   },
   {
     emissions: 56057,
@@ -2700,6 +2716,7 @@ export const dummyEmissionsData = [
     startBlock: 13091547,
     endBlock: 13093589,
     averageGasPrice: 67000000000,
+    blockStartDate: '2021-09-08T21:29:58.000Z',
   },
   {
     emissions: 55779,
@@ -2709,6 +2726,7 @@ export const dummyEmissionsData = [
     startBlock: 13093590,
     endBlock: 13095632,
     averageGasPrice: 67000000000,
+    blockStartDate: '2021-09-09T21:29:58.000Z',
   },
   {
     emissions: 11808,
@@ -2718,6 +2736,7 @@ export const dummyEmissionsData = [
     startBlock: 13095633,
     endBlock: 13097675,
     averageGasPrice: 67000000000,
+    blockStartDate: '2021-09-10T21:29:58.000Z',
   },
   {
     emissions: 0,
@@ -2727,6 +2746,7 @@ export const dummyEmissionsData = [
     startBlock: 13097676,
     endBlock: 13097681,
     averageGasPrice: 67000000000,
+    blockStartDate: '2021-09-11T21:29:58.000Z',
   },
   {
     emissions: 77177,
@@ -2736,6 +2756,7 @@ export const dummyEmissionsData = [
     startBlock: 13058859,
     endBlock: 13060901,
     averageGasPrice: 67000000000,
+    blockStartDate: '2021-09-12T21:29:58.000Z',
   },
   {
     emissions: 22020,
@@ -2745,6 +2766,7 @@ export const dummyEmissionsData = [
     startBlock: 13060902,
     endBlock: 13062944,
     averageGasPrice: 67000000000,
+    blockStartDate: '2021-09-13T21:29:58.000Z',
   },
   {
     emissions: 83206,
@@ -2754,6 +2776,7 @@ export const dummyEmissionsData = [
     startBlock: 13062945,
     endBlock: 13064987,
     averageGasPrice: 67000000000,
+    blockStartDate: '2021-09-14T21:29:58.000Z',
   },
   {
     emissions: 68274,
@@ -2763,6 +2786,7 @@ export const dummyEmissionsData = [
     startBlock: 13064988,
     endBlock: 13067030,
     averageGasPrice: 67000000000,
+    blockStartDate: '2021-09-15T21:29:58.000Z',
   },
   {
     emissions: 55316,
@@ -2772,6 +2796,7 @@ export const dummyEmissionsData = [
     startBlock: 13067031,
     endBlock: 13069073,
     averageGasPrice: 67000000000,
+    blockStartDate: '2021-09-16T21:29:58.000Z',
   },
   {
     emissions: 74853,
@@ -2781,6 +2806,7 @@ export const dummyEmissionsData = [
     startBlock: 13069074,
     endBlock: 13071116,
     averageGasPrice: 67000000000,
+    blockStartDate: '2021-09-17T21:29:58.000Z',
   },
   {
     emissions: 64168,
@@ -2790,6 +2816,7 @@ export const dummyEmissionsData = [
     startBlock: 13071117,
     endBlock: 13073159,
     averageGasPrice: 67000000000,
+    blockStartDate: '2021-09-18T21:29:58.000Z',
   },
   {
     emissions: 128169,
@@ -2799,6 +2826,7 @@ export const dummyEmissionsData = [
     startBlock: 13073160,
     endBlock: 13075202,
     averageGasPrice: 67000000000,
+    blockStartDate: '2021-09-19T21:29:58.000Z',
   },
   {
     emissions: 59763,
@@ -2808,6 +2836,7 @@ export const dummyEmissionsData = [
     startBlock: 13075203,
     endBlock: 13077245,
     averageGasPrice: 67000000000,
+    blockStartDate: '2021-09-20T21:29:58.000Z',
   },
   {
     emissions: 57334,
@@ -2817,6 +2846,7 @@ export const dummyEmissionsData = [
     startBlock: 13077246,
     endBlock: 13079288,
     averageGasPrice: 67000000000,
+    blockStartDate: '2021-09-21T21:29:58.000Z',
   },
   {
     emissions: 93465,
@@ -2826,6 +2856,7 @@ export const dummyEmissionsData = [
     startBlock: 13079289,
     endBlock: 13081331,
     averageGasPrice: 67000000000,
+    blockStartDate: '2021-09-22T21:29:58.000Z',
   },
   {
     emissions: 73745,
@@ -2835,6 +2866,7 @@ export const dummyEmissionsData = [
     startBlock: 13081332,
     endBlock: 13083374,
     averageGasPrice: 67000000000,
+    blockStartDate: '2021-09-23T21:29:58.000Z',
   },
   {
     emissions: 132850,
@@ -2844,6 +2876,7 @@ export const dummyEmissionsData = [
     startBlock: 13083375,
     endBlock: 13085417,
     averageGasPrice: 67000000000,
+    blockStartDate: '2021-09-24T21:29:58.000Z',
   },
   {
     emissions: 193043,
@@ -2853,6 +2886,7 @@ export const dummyEmissionsData = [
     startBlock: 13085418,
     endBlock: 13087460,
     averageGasPrice: 67000000000,
+    blockStartDate: '2021-09-25T21:29:58.000Z',
   },
   {
     emissions: 126550,
@@ -2862,6 +2896,7 @@ export const dummyEmissionsData = [
     startBlock: 13087461,
     endBlock: 13089503,
     averageGasPrice: 67000000000,
+    blockStartDate: '2021-09-26T21:29:58.000Z',
   },
   {
     emissions: 82483,
@@ -2871,6 +2906,7 @@ export const dummyEmissionsData = [
     startBlock: 13089504,
     endBlock: 13091546,
     averageGasPrice: 67000000000,
+    blockStartDate: '2021-09-27T21:29:58.000Z',
   },
   {
     emissions: 160691,
@@ -2880,6 +2916,7 @@ export const dummyEmissionsData = [
     startBlock: 13091547,
     endBlock: 13093589,
     averageGasPrice: 67000000000,
+    blockStartDate: '2021-09-28T21:29:58.000Z',
   },
   {
     emissions: 35447,
@@ -2889,6 +2926,7 @@ export const dummyEmissionsData = [
     startBlock: 13093590,
     endBlock: 13095632,
     averageGasPrice: 67000000000,
+    blockStartDate: '2021-09-29T21:29:58.000Z',
   },
   {
     emissions: 21457,
@@ -2898,6 +2936,7 @@ export const dummyEmissionsData = [
     startBlock: 13095633,
     endBlock: 13097675,
     averageGasPrice: 67000000000,
+    blockStartDate: '2021-09-30T21:29:58.000Z',
   },
   {
     emissions: 0,
@@ -2907,6 +2946,7 @@ export const dummyEmissionsData = [
     startBlock: 13097676,
     endBlock: 13097681,
     averageGasPrice: 67000000000,
+    blockStartDate: '2021-10-01T21:29:58.000Z',
   },
 ];
 

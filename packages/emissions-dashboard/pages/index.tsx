@@ -48,6 +48,7 @@ interface EmissionStats {
   startBlock: number;
   endBlock: number;
   averageGasPrice: number;
+  blockStartDate: Date;
 }
 
 interface Contract {
@@ -214,6 +215,7 @@ const IndexPage = () => {
                 startBlock: start,
                 endBlock: end,
                 averageGasPrice,
+                blockStartDate: new Date(startBlockTimestamp * 1000),
               };
             }),
           );
@@ -304,13 +306,12 @@ const IndexPage = () => {
     ];
   };
 
-  const getDataForContract = (contract: Contract): ChartData[] => {
-    // TODO: Source data from transactions
-    return new Array(20).fill(undefined).map((x, i) => {
+  const getDataForContract = (transactions): ChartData[] => {
+    return transactions.map((transaction) => {
       return {
-        date: `${i}/05/2021`,
-        co2Emissions: Math.floor(500 * Math.random()),
-        numTransactions: Math.floor(500 * Math.random()),
+        date: transaction.blockStartDate,
+        co2Emissions: transaction.emissions,
+        numTransactions: transaction.transactionVol,
       };
     });
   };
@@ -329,11 +330,14 @@ const IndexPage = () => {
       <div className="sm:flex sm:flex-col sm:align-center">
         <DateRangePicker updateDates={updateDates} />
         {contracts.map((contract) => {
+          const transactions = dummyEmissionsData.filter(
+            (emissionsData) => contract.address === emissionsData.address,
+          );
           return (
             <ContractContainer
               emissionSummaryStats={getStatsForContract(contract)}
               contract={contract}
-              data={getDataForContract(contract)}
+              data={getDataForContract(transactions)}
             />
           );
         })}
