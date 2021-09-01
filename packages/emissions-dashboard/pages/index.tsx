@@ -17,6 +17,8 @@ import toast, { Toaster } from 'react-hot-toast';
 import web3 from 'web3';
 import { connectors } from '../context/Web3/connectors';
 import { dummyEmissionsData } from '../dummyData';
+const transactionFixtures =
+  require('../fixtures/transactionFixtures').transactions;
 
 const patch = Patch(process.env.PATCH_API_KEY);
 
@@ -25,6 +27,8 @@ const success = (msg: string) => toast.success(msg);
 const error = (msg: string) => toast.error(msg);
 
 const NUM_FULL_PERIODS = 19;
+const START_BLOCK = 11565019;
+const END_BLOCK = 11565019;
 
 const user = {
   name: 'Tom Cook',
@@ -60,29 +64,54 @@ const getBlockTimestamp = async (blockNumber: number): Promise<number> => {
   return result.timeStamp;
 };
 
+const getBlockTimestampEstimate = (
+  i: number,
+  totalNumberOfBlocks: number,
+  startTimestamp: number,
+  endTimestamp: number,
+): string => {
+  const timestampEstimationUnixTime = Math.floor(
+    startTimestamp +
+      (i / totalNumberOfBlocks) * (endTimestamp - startTimestamp),
+  );
+  const timestampEstimateISOString = new Date(
+    timestampEstimationUnixTime * 1000,
+  ).toISOString();
+  return timestampEstimateISOString;
+};
+
 const IndexPage = (): JSX.Element => {
   const router = useRouter();
   const [open, setOpen] = useState<boolean>(false);
 
   const [contracts, setContracts] = useState<Contract[]>([
+    { name: 'POP', address: '0xd0cd466b34a24fcb2f87676278af2005ca8a78c4' },
     {
-      address: '0xa258C4606Ca8206D8aA700cE2143D7db854D168c',
-      name: 'Yearn ETH Vault',
+      name: 'yvCurve-USDN',
+      address: '0x3b96d491f067912d18563d56858ba7d6ec67a6fa',
     },
     {
-      address: '0xdA816459F1AB5631232FE5e97a05BBBb94970c95',
-      name: 'Yearn ETH Vault',
+      name: 'yvCurve-DUSD',
+      address: '0x30fcf7c6cdfc46ec237783d94fc78553e79d4e9c',
+    },
+    {
+      name: 'yvCurve-FRAX',
+      address: '0xb4ada607b9d6b2c9ee07a275e9616b84ac560139',
+    },
+    {
+      name: 'yvCurve-UST',
+      address: '0x1c6a9783f812b3af3abbf7de64c3cd7cc7d1af44',
     },
   ]);
 
   const [startDate, setStartDate] = useState<Date>(
-    new Date('2021-08-20T00:00:00Z'),
+    new Date('2021-01-01T00:00:00Z'),
   );
   const [endDate, setEndDate] = useState<Date>(
-    new Date('2021-08-26T00:10:00Z'),
+    new Date('2021-08-31T00:10:00Z'),
   );
-  const [startBlock, setStartBlock] = useState<number>();
-  const [endBlock, setEndBlock] = useState<number>();
+  const [startBlock, setStartBlock] = useState<number>(13133291);
+  const [endBlock, setEndBlock] = useState<number>(11564729);
   const [blockRanges, setBlockRanges] = useState<number[][]>();
   const [allTransactions, setAllTransactions] = useState<Transaction[]>([]);
   const [emissionData, setEmissionData] = useState([]);
@@ -128,12 +157,14 @@ const IndexPage = (): JSX.Element => {
     console.log(
       `Getting transactions between blocks ${startBlock} and ${endBlock}`,
     );
-    const requestUrl = `.netlify/functions/gettransactions?startBlock=${startBlock}&endBlock=${endBlock}`;
-    const allTransactions = await fetch(requestUrl)
-      .then((res) => res.json())
-      .then((json) => json.result)
-      .catch((error) => console.log('error', error));
-    setAllTransactions(allTransactions);
+
+    // const requestUrl = `.netlify/functions/gettransactions?startBlock=${startBlock}&endBlock=${endBlock}`;
+    // const allTransactions = await fetch(requestUrl)
+    //   .then((res) => res.json())
+    //   .then((json) => json.result)
+    //   .catch((error) => console.log('error', error));
+    // TODO: Using local fixtures
+    setAllTransactions(transactionFixtures);
   };
 
   const getEmissionsData = async () => {
@@ -141,7 +172,7 @@ const IndexPage = (): JSX.Element => {
       await Promise.all(
         contracts.map(async (contract) => {
           const emissionDataForContract = await Promise.all(
-            blockRanges.map(async (blockRange) => {
+            blockRanges.map(async (blockRange, i) => {
               const start = blockRange[0];
               const end = blockRange[1];
               const transactionsForBlock = allTransactions.filter(
@@ -154,8 +185,14 @@ const IndexPage = (): JSX.Element => {
                 },
               );
               const transactionVol = transactionsForBlock.length;
-              const startBlockTimestamp = await getBlockTimestamp(start);
-
+              // TODO: Due to API limits, we interpolate startBlockTimestamp
+              // const startBlockTimestamp = await getBlockTimestamp(start);
+              const startBlockTimestampEstimate = getBlockTimestampEstimate(
+                i,
+                NUM_FULL_PERIODS,
+                startDate.getTime() / 1000,
+                endDate.getTime() / 1000,
+              );
               const gasUsed = transactionsForBlock.reduce((pr, cu) => {
                 return pr + Number(cu.gasUsed);
               }, 0);
@@ -167,7 +204,7 @@ const IndexPage = (): JSX.Element => {
               const co2Emissions =
                 gasUsed > 0
                   ? await patch.estimates.createEthereumEstimate({
-                      timestamp: startBlockTimestamp,
+                      timestamp: startBlockTimestampEstimate, // Using interpolated estimate
                       gas_used: gasUsed,
                     })
                   : 0;
@@ -180,7 +217,7 @@ const IndexPage = (): JSX.Element => {
                 startBlock: start,
                 endBlock: end,
                 averageGasPrice,
-                blockStartDate: new Date(startBlockTimestamp * 1000),
+                blockStartDate: startBlockTimestampEstimate,
               };
             }),
           );
@@ -207,11 +244,11 @@ const IndexPage = (): JSX.Element => {
     }
   }, [blockRanges]);
 
-  // useEffect(() => {
-  //   if (allTransactions && blockRanges) {
-  //     getEmissionsData();
-  //   }
-  // }, [blockRanges]);
+  useEffect(() => {
+    if (allTransactions && blockRanges) {
+      getEmissionsData();
+    }
+  }, [blockRanges]);
 
   const updateDates = (startDate: Date, endDate: Date): void => {
     setStartDate(startDate);
@@ -346,8 +383,8 @@ const IndexPage = (): JSX.Element => {
       <div className="sm:flex sm:flex-col sm:align-center">
         <DateRangePicker updateDates={updateDates} />
         {contracts.map((contract) => {
-          const transactions = dummyEmissionsData.filter(
-            (emissionsData) => contract.address === emissionsData.address,
+          const transactions = emissionData.filter(
+            (data) => contract.address === data.address,
           );
           return (
             <ContractContainer
