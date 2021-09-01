@@ -16,7 +16,6 @@ import React, { useEffect, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import web3 from 'web3';
 import { connectors } from '../context/Web3/connectors';
-import { dummyEmissionsData } from '../dummyData';
 const transactionFixtures =
   require('../fixtures/transactionFixtures').transactions;
 
@@ -28,7 +27,26 @@ const error = (msg: string) => toast.error(msg);
 
 const NUM_FULL_PERIODS = 19;
 const START_BLOCK = 11565019;
-const END_BLOCK = 11565019;
+const END_BLOCK = 13130020;
+const DEFAULT_CONTRACTS = [
+  { name: 'POP', address: '0xd0cd466b34a24fcb2f87676278af2005ca8a78c4' },
+  {
+    name: 'yvCurve-USDN',
+    address: '0x3b96d491f067912d18563d56858ba7d6ec67a6fa',
+  },
+  {
+    name: 'yvCurve-DUSD',
+    address: '0x30fcf7c6cdfc46ec237783d94fc78553e79d4e9c',
+  },
+  {
+    name: 'yvCurve-FRAX',
+    address: '0xb4ada607b9d6b2c9ee07a275e9616b84ac560139',
+  },
+  {
+    name: 'yvCurve-UST',
+    address: '0x1c6a9783f812b3af3abbf7de64c3cd7cc7d1af44',
+  },
+];
 
 const user = {
   name: 'Tom Cook',
@@ -84,25 +102,7 @@ const IndexPage = (): JSX.Element => {
   const router = useRouter();
   const [open, setOpen] = useState<boolean>(false);
 
-  const [contracts, setContracts] = useState<Contract[]>([
-    { name: 'POP', address: '0xd0cd466b34a24fcb2f87676278af2005ca8a78c4' },
-    {
-      name: 'yvCurve-USDN',
-      address: '0x3b96d491f067912d18563d56858ba7d6ec67a6fa',
-    },
-    {
-      name: 'yvCurve-DUSD',
-      address: '0x30fcf7c6cdfc46ec237783d94fc78553e79d4e9c',
-    },
-    {
-      name: 'yvCurve-FRAX',
-      address: '0xb4ada607b9d6b2c9ee07a275e9616b84ac560139',
-    },
-    {
-      name: 'yvCurve-UST',
-      address: '0x1c6a9783f812b3af3abbf7de64c3cd7cc7d1af44',
-    },
-  ]);
+  const [contracts, setContracts] = useState<Contract[]>(DEFAULT_CONTRACTS);
 
   const [startDate, setStartDate] = useState<Date>(
     new Date('2021-01-01T00:00:00Z'),
@@ -184,8 +184,8 @@ const IndexPage = (): JSX.Element => {
                   );
                 },
               );
-              const transactionVol = transactionsForBlock.length;
-              // TODO: Due to API limits, we interpolate startBlockTimestamp
+              const numTransactions = transactionsForBlock.length;
+              // TODO: Remove block time interpolation
               // const startBlockTimestamp = await getBlockTimestamp(start);
               const startBlockTimestampEstimate = getBlockTimestampEstimate(
                 i,
@@ -196,11 +196,13 @@ const IndexPage = (): JSX.Element => {
               const gasUsed = transactionsForBlock.reduce((pr, cu) => {
                 return pr + Number(cu.gasUsed);
               }, 0);
-
+              const totalGasPrice = transactionsForBlock.reduce((pr, cu) => {
+                return pr + Number(cu.gasPrice);
+              }, 0);
               const averageGasPrice =
-                transactionsForBlock.reduce((pr, cu) => {
-                  return pr + Number(cu.gasPrice);
-                }, 0) / transactionsForBlock.length;
+                totalGasPrice === 0
+                  ? 0
+                  : totalGasPrice / transactionsForBlock.length;
               const co2Emissions =
                 gasUsed > 0
                   ? await patch.estimates.createEthereumEstimate({
@@ -208,11 +210,12 @@ const IndexPage = (): JSX.Element => {
                       gas_used: gasUsed,
                     })
                   : 0;
-              const emissions = gasUsed > 0 ? co2Emissions.data.mass_g : 0;
+              const emissions =
+                gasUsed > 0 ? co2Emissions.data.mass_g / 1000 : 0;
               return {
-                emissions,
+                co2Emissions: emissions,
                 gasUsed,
-                transactionVol,
+                numTransactions,
                 address: contract.address,
                 startBlock: start,
                 endBlock: end,
@@ -308,19 +311,20 @@ const IndexPage = (): JSX.Element => {
   };
 
   const getStatsForContract = (contract: Contract) => {
-    const transactions = dummyEmissionsData.filter(
-      (emissionsData) => contract.address === emissionsData.address,
+    const data = emissionData.filter(
+      (data) => contract.address === data.address,
     );
-    const totalEmissions = transactions.reduce((pr, cu) => {
-      return pr + cu.emissions;
+    const totalEmissions = data.reduce((pr, cu) => {
+      return pr + cu.co2Emissions;
     }, 0);
-    const totalTransactionVol = transactions.reduce((pr, cu) => {
-      return pr + cu.transactionVol;
+    const totalTransactionVol = data.reduce((pr, cu) => {
+      return pr + cu.numTransactions;
+    }, 0);
+    const totalGasPrice = data.reduce((pr, cu) => {
+      return pr + cu.averageGasPrice;
     }, 0);
     const averageGasPrice =
-      transactions.reduce((pr, cu) => {
-        return pr + cu.averageGasPrice;
-      }, 0) / transactions.length;
+      totalGasPrice === 0 ? 0 : Math.round(totalGasPrice / data.length);
     return [
       {
         id: 1,
@@ -349,13 +353,9 @@ const IndexPage = (): JSX.Element => {
     ];
   };
 
-  const getDataForContract = (transactions): ChartData[] => {
-    return transactions.map((transaction) => {
-      return {
-        date: transaction.blockStartDate,
-        co2Emissions: transaction.emissions,
-        numTransactions: transaction.transactionVol,
-      };
+  const getDataForContract = (contract: Contract): ChartData[] => {
+    return emissionData.filter((data) => {
+      return data.address === contract.address;
     });
   };
 
@@ -390,7 +390,7 @@ const IndexPage = (): JSX.Element => {
             <ContractContainer
               emissionSummaryStats={getStatsForContract(contract)}
               contract={contract}
-              data={getDataForContract(transactions)}
+              data={getDataForContract(contract)}
             />
           );
         })}

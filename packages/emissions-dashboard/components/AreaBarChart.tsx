@@ -35,7 +35,7 @@ export const AreaBarChart: React.FC<AreaChartProps> = ({
         height={height}
       >
         <ComposedChart data={data}>
-          <XAxis dataKey="date" scale="band" hide={true}></XAxis>
+          <XAxis dataKey="blockStartDate" scale="band" hide={true}></XAxis>
           <YAxis
             yAxisId="left"
             orientation="left"
