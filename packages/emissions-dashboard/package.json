@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "next -p 4005",
+    "netlify:dev": "netlify dev",
     "build": "yarn next build",
     "export": "yarn next export",
     "jest": "jest",

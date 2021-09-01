@@ -125,8 +125,15 @@ const IndexPage = (): JSX.Element => {
   };
 
   const getTransactions = async () => {
-    // TODO: Call netlify function which will then call the db
-    console.log('Getting transactions');
+    console.log(
+      `Getting transactions between blocks ${startBlock} and ${endBlock}`,
+    );
+    const requestUrl = `.netlify/functions/gettransactions?startBlock=${startBlock}&endBlock=${endBlock}`;
+    const allTransactions = await fetch(requestUrl)
+      .then((res) => res.json())
+      .then((json) => json.result)
+      .catch((error) => console.log('error', error));
+    setAllTransactions(allTransactions);
   };
 
   const getEmissionsData = async () => {
@@ -200,11 +207,11 @@ const IndexPage = (): JSX.Element => {
     }
   }, [blockRanges]);
 
-  useEffect(() => {
-    if (allTransactions && blockRanges) {
-      getEmissionsData();
-    }
-  }, [blockRanges]);
+  // useEffect(() => {
+  //   if (allTransactions && blockRanges) {
+  //     getEmissionsData();
+  //   }
+  // }, [blockRanges]);
 
   const updateDates = (startDate: Date, endDate: Date): void => {
     setStartDate(startDate);
