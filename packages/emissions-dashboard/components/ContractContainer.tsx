@@ -2,7 +2,12 @@ import React from 'react';
 import { AreaBarChart } from './AreaBarChart';
 import { StatsCards } from './StatsCard';
 
-export const ContractContainer = ({ emissionSummaryStats, contract, data }) => {
+export const ContractContainer = ({
+  emissionSummaryStats,
+  contract,
+  data,
+  startDate,
+}) => {
   return (
     <div className="py-10 mx-8">
       <div className="max-w-7xl">
@@ -13,7 +18,7 @@ export const ContractContainer = ({ emissionSummaryStats, contract, data }) => {
             </h1>
           </dt>
           <dd className=" text-base text-gray-500">
-            19 Aug 2021 - 09:12 (UTC)
+            {startDate.toDateString()}
           </dd>
         </div>
       </div>

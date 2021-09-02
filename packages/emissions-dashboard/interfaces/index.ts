@@ -9,6 +9,15 @@ export interface EmissionStats {
   blockStartDate: Date;
 }
 
+export interface StatCardProps {
+  id: number;
+  name: string;
+  stat: number;
+  icon: (props: React.ComponentProps<'svg'>) => JSX.Element;
+  change: string;
+  changeType: 'increase' | 'decrease';
+}
+
 export interface Contract {
   name: string;
   address: string;

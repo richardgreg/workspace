@@ -9,7 +9,7 @@ import { NavBar } from '@popcorn/ui/components/popcorn/emissions-dashboard/NavBa
 import { useWeb3React } from '@web3-react/core';
 import { ContractContainer } from 'components/ContractContainer';
 import { DateRangePicker } from 'components/DateRangePicker';
-import { ChartData, Contract, Transaction } from 'interfaces';
+import { ChartData, Contract, StatCardProps, Transaction } from 'interfaces';
 import { useRouter } from 'next/router';
 import fetch from 'node-fetch';
 import React, { useEffect, useState } from 'react';
@@ -115,8 +115,8 @@ const IndexPage = (): JSX.Element => {
   );
   const [previousPeriodStartBlock, setPreviousPeriodStartBlock] =
     useState<number>(9996167);
-  const [startBlock, setStartBlock] = useState<number>(13133291);
-  const [endBlock, setEndBlock] = useState<number>(11564729);
+  const [startBlock, setStartBlock] = useState<number>(11564729);
+  const [endBlock, setEndBlock] = useState<number>(13133291);
   const [blockRanges, setBlockRanges] = useState<number[][]>();
   const [transactionsPreviousPeriod, setTransactionsPreviousPeriod] = useState<
     Transaction[]
@@ -371,7 +371,7 @@ const IndexPage = (): JSX.Element => {
     setOpen(false);
   };
 
-  const getStatsForContract = (contract: Contract) => {
+  const getStatsForContract = (contract: Contract): StatCardProps[] => {
     const emissionsDataForContractCurrentPeriod = emissionData.filter(
       (data) => contract.address === data.address,
     );
@@ -433,7 +433,7 @@ const IndexPage = (): JSX.Element => {
         name: 'CO2 Emissions (kg)',
         stat: totalEmissionsCurrentPeriod,
         icon: UsersIcon,
-        change: emissionsChange,
+        change: `${emissionsChange / 1000}`,
         changeType: emissionsChange > 0 ? 'increase' : 'decrease',
       },
       {
@@ -468,6 +468,7 @@ const IndexPage = (): JSX.Element => {
 
   return (
     <div>
+      <Toaster position="top-right" />
       <NavBar
         title="Smart Contract Emissions Dashboard"
         headerNavigation={navigation}
@@ -481,18 +482,15 @@ const IndexPage = (): JSX.Element => {
           setErrorMessage,
         }}
       />
-      <Toaster position="top-right" />
       <div className="sm:flex sm:flex-col sm:align-center">
         <DateRangePicker updateDates={updateDates} />
         {contracts.map((contract) => {
-          const transactions = emissionData.filter(
-            (data) => contract.address === data.address,
-          );
           return (
             <ContractContainer
               emissionSummaryStats={getStatsForContract(contract)}
               contract={contract}
               data={getDataForContract(contract)}
+              startDate={startDate}
             />
           );
         })}

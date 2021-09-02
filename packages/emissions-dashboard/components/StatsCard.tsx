@@ -1,10 +1,10 @@
 import { ArrowSmDownIcon, ArrowSmUpIcon } from '@heroicons/react/solid';
-
+import { StatCardProps } from '../interfaces';
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
 
-export const StatsCards = ({ stats }) => {
+export const StatsCards = ({ stats }: { stats: StatCardProps[] }) => {
   return (
     <div className="w-screen grid justify-items-stretch">
       <dl className="justify-self-start mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
