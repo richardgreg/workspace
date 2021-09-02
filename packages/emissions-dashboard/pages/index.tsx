@@ -9,6 +9,7 @@ import { NavBar } from '@popcorn/ui/components/popcorn/emissions-dashboard/NavBa
 import { useWeb3React } from '@web3-react/core';
 import { ContractContainer } from 'components/ContractContainer';
 import { DateRangePicker } from 'components/DateRangePicker';
+import { TotalStats } from 'components/TotalStats';
 import { Contract, EmissionStats, StatCardData, Transaction } from 'interfaces';
 import { useRouter } from 'next/router';
 import fetch from 'node-fetch';
@@ -401,19 +402,69 @@ const IndexPage = (): JSX.Element => {
       emissionsDataForContractPreviousPeriod.reduce((pr, cu) => {
         return pr + cu.averageGasPrice;
       }, 0);
+
+    const emissionsChange =
+      totalEmissionsCurrentPeriod - totalEmissionsPreviousPeriod;
+    const transactionVolPercentChange = percentChange(
+      totalTransactionVolPreviousPeriod,
+      totalTransactionVolCurrentPeriod,
+    );
+
+    return [
+      {
+        id: 1,
+        name: 'CO2 Emissions (kg)',
+        stat: totalEmissionsCurrentPeriod,
+        icon: UsersIcon,
+        change: `${emissionsChange / 1000}`,
+        changeType: emissionsChange > 0 ? 'increase' : 'decrease',
+      },
+      {
+        id: 2,
+        name: 'Transactions',
+        stat: totalTransactionVolCurrentPeriod,
+        icon: MailOpenIcon,
+        change: `${transactionVolPercentChange}%`,
+        changeType: transactionVolPercentChange > 0 ? 'increase' : 'decrease',
+      },
+    ];
+  };
+
+  const getTotalStatCardData = (): StatCardData[] => {
+    const totalEmissionsCurrentPeriod = emissionData.reduce((pr, cu) => {
+      return pr + cu.co2Emissions;
+    }, 0);
+    const totalEmissionsPreviousPeriod = emissionsDataPreviousPeriod.reduce(
+      (pr, cu) => {
+        return pr + cu.co2Emissions;
+      },
+      0,
+    );
+    const totalTransactionVolCurrentPeriod = emissionData.reduce((pr, cu) => {
+      return pr + cu.numTransactions;
+    }, 0);
+    const totalTransactionVolPreviousPeriod =
+      emissionsDataPreviousPeriod.reduce((pr, cu) => {
+        return pr + cu.numTransactions;
+      }, 0);
+    const totalGasPriceCurrentPeriod = emissionData.reduce((pr, cu) => {
+      return pr + cu.averageGasPrice;
+    }, 0);
+    const totalGasPricePreviousPeriod = emissionsDataPreviousPeriod.reduce(
+      (pr, cu) => {
+        return pr + cu.averageGasPrice;
+      },
+      0,
+    );
     const averageGasPriceCurrentPeriod =
       totalGasPriceCurrentPeriod === 0
         ? 0
-        : Math.round(
-            totalGasPriceCurrentPeriod /
-              emissionsDataForContractCurrentPeriod.length,
-          );
+        : Math.round(totalGasPriceCurrentPeriod / emissionData.length);
     const averageGasPricePreviousPeriod =
       totalGasPriceCurrentPeriod === 0
         ? 0
         : Math.round(
-            totalGasPricePreviousPeriod /
-              emissionsDataForContractPreviousPeriod.length,
+            totalGasPricePreviousPeriod / emissionsDataPreviousPeriod.length,
           );
     const emissionsChange =
       totalEmissionsCurrentPeriod - totalEmissionsPreviousPeriod;
@@ -482,6 +533,11 @@ const IndexPage = (): JSX.Element => {
       />
       <div className="sm:flex sm:flex-col sm:align-center">
         <DateRangePicker updateDates={updateDates} />
+        <TotalStats
+          statCardData={getTotalStatCardData()}
+          data={emissionData}
+          startDate={startDate}
+        />
         {contracts.map((contract) => {
           return (
             <ContractContainer
