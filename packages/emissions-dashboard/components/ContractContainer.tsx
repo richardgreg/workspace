@@ -1,6 +1,6 @@
 import React from 'react';
 import { AreaBarChart } from './AreaBarChart';
-import { StatsRow } from './StatsRow';
+import { StatsCards } from './StatsCard';
 
 export const ContractContainer = ({ emissionSummaryStats, contract, data }) => {
   return (
@@ -27,7 +27,7 @@ export const ContractContainer = ({ emissionSummaryStats, contract, data }) => {
       </div>
 
       <div className="max-w-7xl">
-        <StatsRow stats={emissionSummaryStats} />
+        <StatsCards stats={emissionSummaryStats} />
       </div>
     </div>
   );
