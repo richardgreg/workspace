@@ -9,7 +9,7 @@ import { NavBar } from '@popcorn/ui/components/popcorn/emissions-dashboard/NavBa
 import { useWeb3React } from '@web3-react/core';
 import { ContractContainer } from 'components/ContractContainer';
 import { DateRangePicker } from 'components/DateRangePicker';
-import { ChartData, Contract, StatCardProps, Transaction } from 'interfaces';
+import { Contract, EmissionStats, StatCardData, Transaction } from 'interfaces';
 import { useRouter } from 'next/router';
 import fetch from 'node-fetch';
 import React, { useEffect, useState } from 'react';
@@ -125,9 +125,8 @@ const IndexPage = (): JSX.Element => {
     Transaction[]
   >([]);
   const [emissionsDataPreviousPeriod, setEmissionsDataPreviousPeriod] =
-    useState([]);
-  const [emissionData, setEmissionData] = useState([]);
-
+    useState<EmissionStats[]>([]);
+  const [emissionData, setEmissionData] = useState<EmissionStats[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>('');
   const context = useWeb3React<Web3Provider>();
   const { library, activate, active } = context;
@@ -259,15 +258,14 @@ const IndexPage = (): JSX.Element => {
                 totalGasPrice === 0
                   ? 0
                   : totalGasPrice / transactionsForBlock.length;
-              const co2Emissions =
+              let emissions =
                 gasUsed > 0
                   ? await patch.estimates.createEthereumEstimate({
                       timestamp: startBlockTimestampEstimate, // Using interpolated estimate
                       gas_used: gasUsed,
                     })
                   : 0;
-              const emissions =
-                gasUsed > 0 ? co2Emissions.data.mass_g / 1000 : 0;
+              emissions = gasUsed > 0 ? emissions.data.mass_g / 1000 : 0;
               return {
                 co2Emissions: emissions,
                 gasUsed,
@@ -371,7 +369,7 @@ const IndexPage = (): JSX.Element => {
     setOpen(false);
   };
 
-  const getStatsForContract = (contract: Contract): StatCardProps[] => {
+  const getStatCardDataForContract = (contract: Contract): StatCardData[] => {
     const emissionsDataForContractCurrentPeriod = emissionData.filter(
       (data) => contract.address === data.address,
     );
@@ -455,7 +453,7 @@ const IndexPage = (): JSX.Element => {
     ];
   };
 
-  const getDataForContract = (contract: Contract): ChartData[] => {
+  const getDataForContract = (contract: Contract): EmissionStats[] => {
     return emissionData.filter((data) => {
       return data.address === contract.address;
     });
@@ -487,7 +485,7 @@ const IndexPage = (): JSX.Element => {
         {contracts.map((contract) => {
           return (
             <ContractContainer
-              emissionSummaryStats={getStatsForContract(contract)}
+              statCardData={getStatCardDataForContract(contract)}
               contract={contract}
               data={getDataForContract(contract)}
               startDate={startDate}

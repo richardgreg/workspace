@@ -1,51 +1,45 @@
 export interface EmissionStats {
-  transactionVol: number;
-  gasUsed: number;
-  emissions: number;
   address: string;
-  startBlock: number;
-  endBlock: number;
   averageGasPrice: number;
   blockStartDate: Date;
+  co2Emissions: number;
+  endBlock: number;
+  gasUsed: number;
+  numTransactions: number;
+  startBlock: number;
 }
 
-export interface StatCardProps {
+export interface StatCardData {
+  change: string;
+  changeType: 'increase' | 'decrease';
+  icon: (props: React.ComponentProps<'svg'>) => JSX.Element;
   id: number;
   name: string;
   stat: number;
-  icon: (props: React.ComponentProps<'svg'>) => JSX.Element;
-  change: string;
-  changeType: 'increase' | 'decrease';
 }
 
 export interface Contract {
-  name: string;
   address: string;
+  name: string;
 }
 
 export interface Transaction {
-  blockNumber: string;
-  timeStamp: string;
-  hash: string;
-  nonce: string;
   blockHash: string;
-  transactionIndex: string;
-  from: string;
-  to: string;
-  value: string;
-  gas: string;
-  gasPrice: string;
-  isError: string;
-  txreceipt_status: string;
-  input: string;
+  blockNumber: string;
+  confirmations: string;
   contractAddress: string;
   cumulativeGasUsed: string;
+  from: string;
+  gas: string;
+  gasPrice: string;
   gasUsed: string;
-  confirmations: string;
-}
-
-export interface ChartData {
-  date: string;
-  co2Emissions: number;
-  numTransactions: number;
+  hash: string;
+  input: string;
+  isError: string;
+  nonce: string;
+  to: string;
+  transactionIndex: string;
+  txreceipt_status: string;
+  timeStamp: string;
+  value: string;
 }

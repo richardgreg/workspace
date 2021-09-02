@@ -1,3 +1,4 @@
+import { EmissionStats } from 'interfaces';
 import React from 'react';
 import {
   Area,
@@ -10,14 +11,8 @@ import {
   YAxis,
 } from 'recharts';
 
-interface ChartData {
-  date: string;
-  co2Emissions: number;
-  numTransactions: number;
-}
-
 export interface AreaChartProps {
-  data: ChartData[];
+  data: EmissionStats[];
   height?: number;
   width?: number;
 }

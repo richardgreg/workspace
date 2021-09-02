@@ -1,13 +1,21 @@
+import { Contract, EmissionStats, StatCardData } from 'interfaces';
 import React from 'react';
 import { AreaBarChart } from './AreaBarChart';
 import { StatsCards } from './StatsCard';
 
-export const ContractContainer = ({
-  emissionSummaryStats,
+interface ContractContainerProps {
+  statCardData: StatCardData[];
+  contract: Contract;
+  data: EmissionStats[];
+  startDate: Date;
+}
+
+export const ContractContainer: React.FC<ContractContainerProps> = ({
+  statCardData,
   contract,
   data,
   startDate,
-}) => {
+}): JSX.Element => {
   return (
     <div className="py-10 mx-8">
       <div className="max-w-7xl">
@@ -32,7 +40,7 @@ export const ContractContainer = ({
       </div>
 
       <div className="max-w-7xl">
-        <StatsCards stats={emissionSummaryStats} />
+        <StatsCards stats={statCardData} />
       </div>
     </div>
   );
