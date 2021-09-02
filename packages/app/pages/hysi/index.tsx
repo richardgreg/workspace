@@ -7,6 +7,12 @@ import { BigNumber } from 'ethers';
 import { parseEther } from 'ethers/lib/utils';
 import { useContext, useEffect, useState } from 'react';
 import { BatchHysiAdapter } from '../../../contracts';
+import { Batch } from '../../../contracts/adapters/BatchHysi/BatchHysiAdapter';
+
+enum BatchType {
+  Mint,
+  Redeem,
+}
 
 export default function BatchHysi(): JSX.Element {
   const context = useWeb3React<Web3Provider>();
@@ -17,6 +23,7 @@ export default function BatchHysi(): JSX.Element {
   const [hysiPrice, setHysiPrice] = useState<BigNumber>();
   const [threeCrvPrice, setThreeCrvPrice] = useState<BigNumber>();
   const [batchHysiAdapter, setBatchHysiAdapter] = useState<BatchHysiAdapter>();
+  const [batches, setBatches] = useState<Batch[]>();
 
   useEffect(() => {
     if (!library) {
@@ -51,22 +58,8 @@ export default function BatchHysi(): JSX.Element {
     }
     batchHysiAdapter.getHysiPrice().then((res) => setHysiPrice(res));
     batchHysiAdapter.getThreeCrvPrice().then((res) => setThreeCrvPrice(res));
+    batchHysiAdapter.getBatches(account).then((res) => setBatches(res));
   }, [batchHysiAdapter]);
-
-  const people = [
-    {
-      name: 'Jane Cooper',
-      title: 'Regional Paradigm Technician',
-      role: 'Admin',
-      email: 'jane.cooper@example.com',
-    },
-    {
-      name: 'Cody Fisher',
-      title: 'Product Directives Officer',
-      role: 'Owner',
-      email: 'cody.fisher@example.com',
-    },
-  ];
 
   return (
     <div>
@@ -233,13 +226,13 @@ export default function BatchHysi(): JSX.Element {
                             scope="col"
                             className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                           >
-                            Deposit
+                            Deposited Token
                           </th>
                           <th
                             scope="col"
                             className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                           >
-                            HYSI Token To Receive
+                            Claimable Token
                           </th>
                           <th
                             scope="col"
@@ -254,31 +247,34 @@ export default function BatchHysi(): JSX.Element {
                         </tr>
                       </thead>
                       <tbody>
-                        {people.map((person, personIdx) => (
+                        {batches.map((batch, id) => (
                           <tr
-                            key={person.email}
-                            className={
-                              personIdx % 2 === 0 ? 'bg-white' : 'bg-gray-50'
-                            }
+                            key={`"${batch.batchType}-${id}"`}
+                            className={id % 2 === 0 ? 'bg-white' : 'bg-gray-50'}
                           >
                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                              {person.name}
+                              {`${batch.deposited} ${
+                                batch.batchType === BatchType.Mint
+                                  ? '3CRV'
+                                  : 'HYSI'
+                              }`}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                              {person.title}
+                              {`${batch.claimableToken} ${
+                                batch.batchType === BatchType.Mint
+                                  ? 'HYSI'
+                                  : '3CRV'
+                              }`}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                              {person.email}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                              {person.role}
+                              {batch.claimable ? 'Claimable' : 'Not Claimable'}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                               <a
                                 href="#"
-                                className="text-indigo-600 hover:text-indigo-900"
+                                className="font-semibold text-indigo-600 hover:text-indigo-900"
                               >
-                                Edit
+                                Claim
                               </a>
                             </td>
                           </tr>

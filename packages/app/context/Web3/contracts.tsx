@@ -22,6 +22,8 @@ import {
   GrantElections__factory,
   HysiBatchInteraction,
   HysiBatchInteraction__factory,
+  ISetToken,
+  ISetToken__factory,
   RewardsManager,
   RewardsManager__factory,
   Staking,
@@ -44,7 +46,7 @@ export interface Contracts {
   uniswap: UniswapV2Router02;
   threeCrv: ERC20;
   beneficiaryGovernance: BeneficiaryGovernance;
-  hysi: ERC20;
+  hysi: ISetToken;
   batchHysi: HysiBatchInteraction;
 }
 
@@ -160,7 +162,7 @@ export default function ContractsWrapper({
         process.env.ADDR_BENEFICIARY_GOVERNANCE,
         library,
       ),
-      hysi: ERC20__factory.connect(process.env.ADDR_HYSI, library),
+      hysi: ISetToken__factory.connect(process.env.ADDR_HYSI, library),
       batchHysi: HysiBatchInteraction__factory.connect(
         process.env.ADDR_BATCH_HYSI,
         library,

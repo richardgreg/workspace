@@ -9,6 +9,7 @@ import getCreatedProposalId from "../adapters/GrantElection/getCreatedProposalId
 import GrantElectionAdapter, {
   ShareType,
 } from "../adapters/GrantElection/GrantElectionAdapter";
+import { HysiBatchInteraction, MockBasicIssuanceModule } from "../typechain";
 import * as addressCidMap from "./addressCidMap.json";
 
 const UniswapV2FactoryJSON = require("../artifactsUniswap/UniswapV2Factory.json");
@@ -82,10 +83,10 @@ export default async function deploy(ethers): Promise<void> {
   const deployContracts = async (): Promise<void> => {
     console.log("deploying contracts ...");
 
+    const MockERC20 = await ethers.getContractFactory("MockERC20");
+
     const mockPop = await (
-      await (
-        await ethers.getContractFactory("MockERC20")
-      ).deploy("TestPOP", "TPOP", 18)
+      await MockERC20.deploy("TestPOP", "TPOP", 18)
     ).deployed();
 
     const beneficiaryVaults = await (
@@ -107,14 +108,154 @@ export default async function deploy(ethers): Promise<void> {
     ).deployed();
 
     const mock3CRV = await (
-      await (
-        await ethers.getContractFactory("MockERC20")
-      ).deploy("3CURVE", "3CRV", 18)
+      await MockERC20.deploy("3CURVE", "3CRV", 18)
     ).deployed();
 
     const WETH = await (
       await (await ethers.getContractFactory("WETH9")).deploy()
     ).deployed();
+
+    const mockBasicCoin = await (
+      await MockERC20.deploy("Basic", "Basic", 18)
+    ).deployed();
+
+    const mockCrvDUSD = await (
+      await MockERC20.deploy("crvDUSD", "crvDUSD", 18)
+    ).deployed();
+
+    const mockCrvFRAX = await (
+      await MockERC20.deploy("crvFRAX", "crvFRAX", 18)
+    ).deployed();
+
+    const mockCrvUSDN = await (
+      await MockERC20.deploy("crvUSDN", "crvUSDN", 18)
+    ).deployed();
+
+    const mockCrvUST = await (
+      await MockERC20.deploy("crvUST", "crvUST", 18)
+    ).deployed();
+
+    const mockSetToken = await await MockERC20.deploy(
+      "setToken",
+      "setToken",
+      18
+    );
+
+    const MockYearnV2Vault = await ethers.getContractFactory(
+      "MockYearnV2Vault"
+    );
+    const mockYearnVaultDUSD = await (
+      await MockYearnV2Vault.deploy(mockCrvDUSD.address)
+    ).deployed();
+    const mockYearnVaultFRAX = await (
+      await MockYearnV2Vault.deploy(mockCrvFRAX.address)
+    ).deployed();
+    const mockYearnVaultUSDN = await (
+      await MockYearnV2Vault.deploy(mockCrvUSDN.address)
+    ).deployed();
+    const mockYearnVaultUST = await (
+      await MockYearnV2Vault.deploy(mockCrvUST.address)
+    ).deployed();
+
+    const MockCurveMetapool = await ethers.getContractFactory(
+      "MockCurveMetapool"
+    );
+
+    //Besides crvUSDX and 3Crv no coins are needed in this test which is why i used the same token in the other places
+    const mockCurveMetapoolDUSD = await (
+      await MockCurveMetapool.deploy(
+        mockBasicCoin.address,
+        mockCrvDUSD.address,
+        mock3CRV.address,
+        mockBasicCoin.address,
+        mockBasicCoin.address,
+        mockBasicCoin.address
+      )
+    ).deployed();
+
+    const mockCurveMetapoolFRAX = await (
+      await MockCurveMetapool.deploy(
+        mockBasicCoin.address,
+        mockCrvFRAX.address,
+        mock3CRV.address,
+        mockBasicCoin.address,
+        mockBasicCoin.address,
+        mockBasicCoin.address
+      )
+    ).deployed();
+
+    const mockCurveMetapoolUSDN = await (
+      await MockCurveMetapool.deploy(
+        mockBasicCoin.address,
+        mockCrvUSDN.address,
+        mock3CRV.address,
+        mockBasicCoin.address,
+        mockBasicCoin.address,
+        mockBasicCoin.address
+      )
+    ).deployed();
+
+    const mockCurveMetapoolUST = await (
+      await MockCurveMetapool.deploy(
+        mockBasicCoin.address,
+        mockCrvUST.address,
+        mock3CRV.address,
+        mockBasicCoin.address,
+        mockBasicCoin.address,
+        mockBasicCoin.address
+      )
+    ).deployed();
+
+    const mockBasicIssuanceModule = (await (
+      await (
+        await ethers.getContractFactory("MockBasicIssuanceModule")
+      ).deploy(
+        [
+          mockYearnVaultDUSD.address,
+          mockYearnVaultFRAX.address,
+          mockYearnVaultUSDN.address,
+          mockYearnVaultUST.address,
+        ],
+        [62.5, 62.5, 62.5, 62.5]
+      )
+    ).deployed()) as MockBasicIssuanceModule;
+
+    const hysiBatchInteraction = (await (
+      await (
+        await ethers.getContractFactory("HysiBatchInteraction")
+      ).deploy(
+        mock3CRV.address,
+        mockSetToken.address,
+        mockBasicIssuanceModule.address,
+        [
+          mockYearnVaultDUSD.address,
+          mockYearnVaultFRAX.address,
+          mockYearnVaultUSDN.address,
+          mockYearnVaultUST.address,
+        ],
+        [
+          {
+            curveMetaPool: mockCurveMetapoolDUSD.address,
+            crvLPToken: mockCrvDUSD.address,
+          },
+          {
+            curveMetaPool: mockCurveMetapoolFRAX.address,
+            crvLPToken: mockCrvFRAX.address,
+          },
+          {
+            curveMetaPool: mockCurveMetapoolUSDN.address,
+            crvLPToken: mockCrvUSDN.address,
+          },
+          {
+            curveMetaPool: mockCurveMetapoolUST.address,
+            crvLPToken: mockCrvUST.address,
+          },
+        ],
+        1800,
+        parseEther("20000"),
+        parseEther("200")
+      )
+    ).deployed()) as HysiBatchInteraction;
 
     const rewardsEscrow = await (
       await (

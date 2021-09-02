@@ -175,6 +175,7 @@ contract HysiBatchInteraction is Owned {
     )
   {
     Batch storage batch = batches[batchId];
+
     batchType = batch.batchType;
     claimable = batch.claimable;
     unclaimedShares = batch.unclaimedShares;

@@ -5,7 +5,7 @@ enum BatchType {
   Mint,
   Redeem,
 }
-interface Batch {
+export interface Batch {
   deposited: BigNumber;
   claimableToken: BigNumber;
   claimable: boolean;
@@ -80,16 +80,26 @@ export class BatchHysiAdapter {
   }
 
   public async getThreeCrvPrice(): Promise<BigNumber> {
-    return await this.triPool.virtualPrice();
+    return await this.triPool.get_virtual_price();
   }
 
-  public async getBatches(account: string): Promise<void> {
+  public async getBatches(account: string): Promise<Batch[]> {
     const batchIds = await this.batchHysi.getBatchesOfAccount(account);
-    const batches = Promise.all(
+    const batches = await Promise.all(
       batchIds.map(async (id) => {
-        return this.batchHysi.batches(id);
+        const res = await this.batchHysi.getBatch(account, id);
+        return {
+          deposited: res.shareBalance,
+          claimableToken: res.claimableToken
+            .mul(res.shareBalance)
+            .div(res.unclaimedShares),
+          claimable: res.claimable,
+          batchType: res.batchType,
+        };
       })
     );
+    return batches as Batch[];
   }
 }
+
 export default BatchHysiAdapter;
