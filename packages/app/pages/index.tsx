@@ -544,6 +544,9 @@ const IndexPage = () => {
               <Link href="https://medium.com/popcorndao" passHref>
                 <a className="hover:text-blue-600">Blog</a>
               </Link>
+              <Link href="https://etherscan.io/token/0xd0cd466b34a24fcb2f87676278af2005ca8a78c4" passHref>
+                <a className="hover:text-blue-600">Popcorn (POP) Token</a>
+              </Link>
             </div>
             <div className="flex flex-col space-y-3">
               <p className="font-medium text-base uppercase">Connect</p>
@@ -965,6 +968,9 @@ const IndexPage = () => {
                 </Link>*/}
                 <Link href="https://medium.com/popcorndao" passHref>
                   <a className="hover:text-blue-600">Blog</a>
+                </Link>
+                <Link href="https://etherscan.io/token/0xd0cd466b34a24fcb2f87676278af2005ca8a78c4" passHref>
+                  <a className="hover:text-blue-600">Popcorn (POP) Token</a>
                 </Link>
               </div>
               <div className="flex flex-col space-y-3 w-1/2">
