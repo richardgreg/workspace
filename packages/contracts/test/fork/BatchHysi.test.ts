@@ -57,7 +57,6 @@ const HYSI_TOKEN_ADDRESS = "0x8d1621a27bb8c84e59ca339cf9b21e15b907e408";
 
 const SET_BASIC_ISSUANCE_MODULE_ADDRESS =
   "0xd8EF3cACe8b4907117a45B0b125c68560532F94D";
-const SET_TOKEN_ADDRESS = "0x8d1621a27bb8c84e59ca339cf9b21e15b907e408";
 
 const THREE_CRV_TOKEN_ADDRESS = "0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490";
 
@@ -285,7 +284,7 @@ const getMinAmountOfHYSIToMint = async (): Promise<BigNumber> => {
   );
   const components =
     await contracts.basicIssuanceModule.getRequiredComponentUnitsForIssue(
-      SET_TOKEN_ADDRESS,
+      HYSI_TOKEN_ADDRESS,
       parseEther("1")
     );
   const componentAddresses = components[0];
@@ -331,7 +330,7 @@ const getMinAmountOf3CrvToReceive = async (
 
   const components =
     await contracts.basicIssuanceModule.getRequiredComponentUnitsForIssue(
-      SET_TOKEN_ADDRESS,
+      HYSI_TOKEN_ADDRESS,
       HYSIInBatch
     );
   const componentAddresses = components[0];

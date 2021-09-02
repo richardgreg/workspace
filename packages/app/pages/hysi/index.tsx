@@ -45,13 +45,13 @@ export default function BatchHysi(): JSX.Element {
     }
   }, [library, account]);
 
-  useEffect(() => {
-    if (!batchHysiAdapter) {
-      return;
-    }
-    batchHysiAdapter.getHysiPrice().then((res) => setHysiPrice(res));
-    batchHysiAdapter.getThreeCrvPrice().then((res) => setThreeCrvPrice(res));
-  }, [batchHysiAdapter]);
+  // useEffect(() => {
+  //   if (!batchHysiAdapter) {
+  //     return;
+  //   }
+  //   batchHysiAdapter.getHysiPrice().then((res) => setHysiPrice(res));
+  //   batchHysiAdapter.getThreeCrvPrice().then((res) => setThreeCrvPrice(res));
+  // }, [batchHysiAdapter]);
 
   const people = [
     {

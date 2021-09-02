@@ -7,15 +7,12 @@ import {
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import {
   BasicIssuanceModule,
-  BasicIssuanceModule__factory,
   BeneficiaryGovernance,
   BeneficiaryGovernance__factory,
   BeneficiaryRegistry,
   BeneficiaryRegistry__factory,
   Curve3Pool,
-  Curve3Pool__factory,
   CurveMetapool,
-  CurveMetapool__factory,
   ERC20,
   ERC20__factory,
   GrantElections,
@@ -29,7 +26,6 @@ import {
   UniswapV2Router02,
   UniswapV2Router02__factory,
   YearnVault,
-  YearnVault__factory,
 } from '../../../contracts/typechain';
 import { setSingleActionModal } from '../actions';
 import { store } from '../store';
@@ -166,33 +162,33 @@ export default function ContractsWrapper({
         library,
       ),
     });
-    setHysiDependencyContracts({
-      basicIssuanceModule: BasicIssuanceModule__factory.connect(
-        process.env.ADDR_BASIC_ISSUANCE_MODULE,
-        library,
-      ),
-      yDUSD: YearnVault__factory.connect(process.env.ADDR_YDUSD, library),
-      yFRAX: YearnVault__factory.connect(process.env.ADDR_YDUSD, library),
-      yUSDN: YearnVault__factory.connect(process.env.ADDR_YDUSD, library),
-      yUST: YearnVault__factory.connect(process.env.ADDR_YDUSD, library),
-      dusdMetapool: CurveMetapool__factory.connect(
-        process.env.ADDR_DUSD_METAPOOL,
-        library,
-      ),
-      fraxMetapool: CurveMetapool__factory.connect(
-        process.env.ADDR_FRAX_METAPOOL,
-        library,
-      ),
-      usdnMetapool: CurveMetapool__factory.connect(
-        process.env.ADDR_USDN_METAPOOL,
-        library,
-      ),
-      ustMetapool: CurveMetapool__factory.connect(
-        process.env.ADDR_UST_METAPOOL,
-        library,
-      ),
-      triPool: Curve3Pool__factory.connect(process.env.ADDR_TRI_POOL, library),
-    });
+    // setHysiDependencyContracts({
+    //   basicIssuanceModule: BasicIssuanceModule__factory.connect(
+    //     process.env.ADDR_BASIC_ISSUANCE_MODULE,
+    //     library,
+    //   ),
+    //   yDUSD: YearnVault__factory.connect(process.env.ADDR_YDUSD, library),
+    //   yFRAX: YearnVault__factory.connect(process.env.ADDR_YDUSD, library),
+    //   yUSDN: YearnVault__factory.connect(process.env.ADDR_YDUSD, library),
+    //   yUST: YearnVault__factory.connect(process.env.ADDR_YDUSD, library),
+    //   dusdMetapool: CurveMetapool__factory.connect(
+    //     process.env.ADDR_DUSD_METAPOOL,
+    //     library,
+    //   ),
+    //   fraxMetapool: CurveMetapool__factory.connect(
+    //     process.env.ADDR_FRAX_METAPOOL,
+    //     library,
+    //   ),
+    //   usdnMetapool: CurveMetapool__factory.connect(
+    //     process.env.ADDR_USDN_METAPOOL,
+    //     library,
+    //   ),
+    //   ustMetapool: CurveMetapool__factory.connect(
+    //     process.env.ADDR_UST_METAPOOL,
+    //     library,
+    //   ),
+    //   triPool: Curve3Pool__factory.connect(process.env.ADDR_TRI_POOL, library),
+    // });
   }, [library, active]);
 
   return (
