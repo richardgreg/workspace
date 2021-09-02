@@ -14,6 +14,7 @@ import { useRouter } from 'next/router';
 import fetch from 'node-fetch';
 import React, { useEffect, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
+import { percentChange } from 'utils/percentChange';
 import web3 from 'web3';
 import { connectors } from '../context/Web3/connectors';
 const transactionFixtures =
@@ -103,17 +104,28 @@ const IndexPage = (): JSX.Element => {
   const [open, setOpen] = useState<boolean>(false);
 
   const [contracts, setContracts] = useState<Contract[]>(DEFAULT_CONTRACTS);
-
+  const [previousPeriodStartDate, setPreviousPeriodStartDate] = useState<Date>(
+    new Date('2020-05-03T00:00:00Z'),
+  );
   const [startDate, setStartDate] = useState<Date>(
     new Date('2021-01-01T00:00:00Z'),
   );
   const [endDate, setEndDate] = useState<Date>(
     new Date('2021-08-31T00:10:00Z'),
   );
+  const [previousPeriodStartBlock, setPreviousPeriodStartBlock] =
+    useState<number>(9996167);
   const [startBlock, setStartBlock] = useState<number>(13133291);
   const [endBlock, setEndBlock] = useState<number>(11564729);
   const [blockRanges, setBlockRanges] = useState<number[][]>();
-  const [allTransactions, setAllTransactions] = useState<Transaction[]>([]);
+  const [transactionsPreviousPeriod, setTransactionsPreviousPeriod] = useState<
+    Transaction[]
+  >([]);
+  const [transactionsCurrentPeriod, setTransactionsCurrentPeriod] = useState<
+    Transaction[]
+  >([]);
+  const [emissionsDataPreviousPeriod, setEmissionsDataPreviousPeriod] =
+    useState([]);
   const [emissionData, setEmissionData] = useState([]);
 
   const [errorMessage, setErrorMessage] = useState<string>('');
@@ -148,26 +160,70 @@ const IndexPage = (): JSX.Element => {
     const lastEndBlock = blockRanges[blockRanges.length - 1][1];
     if (lastEndBlock !== endBlock)
       blockRanges.push([lastEndBlock + 1, endBlock]);
+    setPreviousPeriodStartBlock(startBlock - (endBlock - startBlock));
     setStartBlock(startBlock);
     setEndBlock(endBlock);
     setBlockRanges(blockRanges);
   };
 
   const getTransactions = async () => {
-    console.log(
-      `Getting transactions between blocks ${startBlock} and ${endBlock}`,
-    );
-
-    // const requestUrl = `.netlify/functions/gettransactions?startBlock=${startBlock}&endBlock=${endBlock}`;
-    // const allTransactions = await fetch(requestUrl)
+    // const transactionsPreviousPeriod = await fetch(`.netlify/functions/gettransactions?startBlock=${previousPeriodStartBlock}&endBlock=${startBlock - 1}`)
     //   .then((res) => res.json())
     //   .then((json) => json.result)
     //   .catch((error) => console.log('error', error));
+
+    // const allTransactions = await fetch(`.netlify/functions/gettransactions?startBlock=${startBlock}&endBlock=${endBlock}`)
+    //   .then((res) => res.json())
+    //   .then((json) => json.result)
+    //   .catch((error) => console.log('error', error));
+
+    // setTransactionsPreviousPeriod(transactionsPreviousPeriod)
+    // setTransactionsCurrentPeriod(allTransactions);
+
     // TODO: Using local fixtures
-    setAllTransactions(transactionFixtures);
+    setTransactionsCurrentPeriod(transactionFixtures);
   };
 
-  const getEmissionsData = async () => {
+  const getEmissionsDataPreviousPeriod = async () => {
+    const emissionsData = await (
+      await Promise.all(
+        contracts.map(async (contract) => {
+          const numTransactions = transactionsPreviousPeriod.length;
+          const gasUsed = transactionsPreviousPeriod.reduce((pr, cu) => {
+            return pr + Number(cu.gasUsed);
+          }, 0);
+          const totalGasPrice = transactionsPreviousPeriod.reduce((pr, cu) => {
+            return pr + Number(cu.gasPrice);
+          }, 0);
+          const averageGasPrice =
+            totalGasPrice === 0
+              ? 0
+              : totalGasPrice / transactionsPreviousPeriod.length;
+          const co2Emissions =
+            gasUsed > 0
+              ? await patch.estimates.createEthereumEstimate({
+                  timestamp: previousPeriodStartDate.getTime(),
+                  gas_used: gasUsed,
+                })
+              : 0;
+          const emissions = gasUsed > 0 ? co2Emissions.data.mass_g / 1000 : 0;
+          return {
+            co2Emissions: emissions,
+            gasUsed,
+            numTransactions,
+            address: contract.address,
+            startBlock: previousPeriodStartBlock,
+            endBlock: startBlock - 1,
+            averageGasPrice,
+            blockStartDate: previousPeriodStartDate.getTime(),
+          };
+        }),
+      )
+    ).flat();
+    setEmissionsDataPreviousPeriod(emissionsData);
+  };
+
+  const getEmissionsDataCurrentPeriod = async () => {
     const emissionsData = await (
       await Promise.all(
         contracts.map(async (contract) => {
@@ -175,7 +231,7 @@ const IndexPage = (): JSX.Element => {
             blockRanges.map(async (blockRange, i) => {
               const start = blockRange[0];
               const end = blockRange[1];
-              const transactionsForBlock = allTransactions.filter(
+              const transactionsForBlock = transactionsCurrentPeriod.filter(
                 (transaction) => {
                   return (
                     Number(transaction.blockNumber) >= start &&
@@ -248,12 +304,23 @@ const IndexPage = (): JSX.Element => {
   }, [blockRanges]);
 
   useEffect(() => {
-    if (allTransactions && blockRanges) {
-      getEmissionsData();
+    if (transactionsCurrentPeriod && blockRanges) {
+      getEmissionsDataCurrentPeriod();
+      getEmissionsDataPreviousPeriod();
     }
   }, [blockRanges]);
 
+  useEffect(() => {
+    if (!active) {
+      activate(connectors.Network);
+    }
+  }, [active]);
+
   const updateDates = (startDate: Date, endDate: Date): void => {
+    const previousPeriodStartDate = new Date(
+      startDate.getTime() - (endDate.getTime() - startDate.getTime()),
+    );
+    setPreviousPeriodStartDate(previousPeriodStartDate);
     setStartDate(startDate);
     setEndDate(endDate);
   };
@@ -265,12 +332,6 @@ const IndexPage = (): JSX.Element => {
       localStorage.setItem('contracts', JSON.stringify(existingContracts));
     }
   };
-
-  useEffect(() => {
-    if (!active) {
-      activate(connectors.Network);
-    }
-  }, [active]);
 
   const addContract = async (contractAddress: string): Promise<void> => {
     const enterMessage: string = 'Please enter a valid address';
@@ -311,44 +372,85 @@ const IndexPage = (): JSX.Element => {
   };
 
   const getStatsForContract = (contract: Contract) => {
-    const data = emissionData.filter(
+    const emissionsDataForContractCurrentPeriod = emissionData.filter(
       (data) => contract.address === data.address,
     );
-    const totalEmissions = data.reduce((pr, cu) => {
-      return pr + cu.co2Emissions;
-    }, 0);
-    const totalTransactionVol = data.reduce((pr, cu) => {
-      return pr + cu.numTransactions;
-    }, 0);
-    const totalGasPrice = data.reduce((pr, cu) => {
-      return pr + cu.averageGasPrice;
-    }, 0);
-    const averageGasPrice =
-      totalGasPrice === 0 ? 0 : Math.round(totalGasPrice / data.length);
+    const emissionsDataForContractPreviousPeriod =
+      emissionsDataPreviousPeriod.filter(
+        (data) => contract.address === data.address,
+      );
+    const totalEmissionsCurrentPeriod =
+      emissionsDataForContractCurrentPeriod.reduce((pr, cu) => {
+        return pr + cu.co2Emissions;
+      }, 0);
+    const totalEmissionsPreviousPeriod =
+      emissionsDataForContractPreviousPeriod.reduce((pr, cu) => {
+        return pr + cu.co2Emissions;
+      }, 0);
+    const totalTransactionVolCurrentPeriod =
+      emissionsDataForContractCurrentPeriod.reduce((pr, cu) => {
+        return pr + cu.numTransactions;
+      }, 0);
+    const totalTransactionVolPreviousPeriod =
+      emissionsDataForContractPreviousPeriod.reduce((pr, cu) => {
+        return pr + cu.numTransactions;
+      }, 0);
+    const totalGasPriceCurrentPeriod =
+      emissionsDataForContractCurrentPeriod.reduce((pr, cu) => {
+        return pr + cu.averageGasPrice;
+      }, 0);
+    const totalGasPricePreviousPeriod =
+      emissionsDataForContractPreviousPeriod.reduce((pr, cu) => {
+        return pr + cu.averageGasPrice;
+      }, 0);
+    const averageGasPriceCurrentPeriod =
+      totalGasPriceCurrentPeriod === 0
+        ? 0
+        : Math.round(
+            totalGasPriceCurrentPeriod /
+              emissionsDataForContractCurrentPeriod.length,
+          );
+    const averageGasPricePreviousPeriod =
+      totalGasPriceCurrentPeriod === 0
+        ? 0
+        : Math.round(
+            totalGasPricePreviousPeriod /
+              emissionsDataForContractPreviousPeriod.length,
+          );
+    const emissionsChange =
+      totalEmissionsCurrentPeriod - totalEmissionsPreviousPeriod;
+    const transactionVolPercentChange = percentChange(
+      totalTransactionVolPreviousPeriod,
+      totalTransactionVolCurrentPeriod,
+    );
+    const gasPricePercentChange = percentChange(
+      averageGasPricePreviousPeriod,
+      averageGasPriceCurrentPeriod,
+    );
     return [
       {
         id: 1,
         name: 'CO2 Emissions (kg)',
-        stat: totalEmissions,
+        stat: totalEmissionsCurrentPeriod,
         icon: UsersIcon,
-        change: '122',
-        changeType: 'increase',
+        change: emissionsChange,
+        changeType: emissionsChange > 0 ? 'increase' : 'decrease',
       },
       {
         id: 2,
         name: 'Transactions',
-        stat: totalTransactionVol,
+        stat: totalTransactionVolCurrentPeriod,
         icon: MailOpenIcon,
-        change: '5.4%',
-        changeType: 'increase',
+        change: `${transactionVolPercentChange}%`,
+        changeType: transactionVolPercentChange > 0 ? 'increase' : 'decrease',
       },
       {
         id: 3,
         name: 'Average Gas Price',
-        stat: averageGasPrice,
+        stat: averageGasPriceCurrentPeriod,
         icon: CursorClickIcon,
-        change: '3.2%',
-        changeType: 'decrease',
+        change: `${gasPricePercentChange}%`,
+        changeType: gasPricePercentChange > 0 ? 'increase' : 'decrease',
       },
     ];
   };
