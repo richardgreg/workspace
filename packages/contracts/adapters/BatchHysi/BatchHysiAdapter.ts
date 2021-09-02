@@ -1,6 +1,17 @@
 import { BigNumber, Contract } from "ethers";
 import { parseEther } from "ethers/lib/utils";
 
+enum BatchType {
+  Mint,
+  Redeem,
+}
+interface Batch {
+  deposited: BigNumber;
+  claimableToken: BigNumber;
+  claimable: boolean;
+  batchType: BatchType;
+}
+
 export class BatchHysiAdapter {
   constructor(
     private batchHysi: Contract,
@@ -70,6 +81,15 @@ export class BatchHysiAdapter {
 
   public async getThreeCrvPrice(): Promise<BigNumber> {
     return await this.triPool.virtualPrice();
+  }
+
+  public async getBatches(account: string): Promise<void> {
+    const batchIds = await this.batchHysi.getBatchesOfAccount(account);
+    const batches = Promise.all(
+      batchIds.map(async (id) => {
+        return this.batchHysi.batches(id);
+      })
+    );
   }
 }
 export default BatchHysiAdapter;

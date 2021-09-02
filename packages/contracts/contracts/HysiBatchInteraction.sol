@@ -157,6 +157,26 @@ contract HysiBatchInteraction is Owned {
     return batchesOfAccount[account];
   }
 
+  /**
+   * @notice Get a batch with the share balance of a user
+   * @param account The address for whom we want to retrieve batch
+   * @param batchId Id of batch which gets returned
+   */
+  function getBatch(address account, bytes32 batchId) external view returns (BatchType batchType,
+    bool claimable
+    uint256 unclaimedShares,
+    uint256 suppliedToken,
+    uint256 claimableToken,
+    uint256 shareBalance) {
+    Batch storage batch = batches[batchId];
+    batchType = batch.batchType;
+    claimable = batch.claimable;
+    unclaimedShares = batch.unclaimedShares;
+suppliedToken= batch.suppliedToken;
+claimableToken = batch.claimableToken;
+shareBalance = batch.shareBalance[msg.sender];
+  }
+
   /* ========== MUTATIVE FUNCTIONS ========== */
 
   /**
