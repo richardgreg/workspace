@@ -28,8 +28,6 @@ const success = (msg: string) => toast.success(msg);
 const error = (msg: string) => toast.error(msg);
 
 const NUM_FULL_PERIODS = 19;
-const START_BLOCK = 11565019;
-const END_BLOCK = 13130020;
 const DEFAULT_CONTRACTS = [
   { name: 'POP', address: '0xd0cd466b34a24fcb2f87676278af2005ca8a78c4' },
   {
@@ -106,17 +104,17 @@ const IndexPage = (): JSX.Element => {
 
   const [contracts, setContracts] = useState<Contract[]>(DEFAULT_CONTRACTS);
   const [previousPeriodStartDate, setPreviousPeriodStartDate] = useState<Date>(
-    new Date('2020-05-03T00:00:00Z'),
+    new Date('2020-01-01T00:00:00Z'),
   );
   const [startDate, setStartDate] = useState<Date>(
-    new Date('2021-01-01T00:00:00Z'),
+    new Date('2021-04-30T00:00:00Z'),
   );
   const [endDate, setEndDate] = useState<Date>(
-    new Date('2021-08-31T00:10:00Z'),
+    new Date('2021-08-31T00:00:00Z'),
   );
   const [previousPeriodStartBlock, setPreviousPeriodStartBlock] =
-    useState<number>(9996167);
-  const [startBlock, setStartBlock] = useState<number>(11564729);
+    useState<number>(11564729);
+  const [startBlock, setStartBlock] = useState<number>(12338493);
   const [endBlock, setEndBlock] = useState<number>(13133291);
   const [blockRanges, setBlockRanges] = useState<number[][]>();
   const [transactionsPreviousPeriod, setTransactionsPreviousPeriod] = useState<
@@ -181,7 +179,16 @@ const IndexPage = (): JSX.Element => {
     // setTransactionsCurrentPeriod(allTransactions);
 
     // TODO: Using local fixtures
-    setTransactionsCurrentPeriod(transactionFixtures);
+    setTransactionsPreviousPeriod(
+      transactionFixtures.filter(
+        (transaction) => Number(transaction.blockNumber) < startBlock,
+      ),
+    );
+    setTransactionsCurrentPeriod(
+      transactionFixtures.filter(
+        (transaction) => Number(transaction.blockNumber) > startBlock,
+      ),
+    );
   };
 
   const getEmissionsDataPreviousPeriod = async () => {
