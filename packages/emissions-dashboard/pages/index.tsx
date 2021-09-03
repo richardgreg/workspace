@@ -473,8 +473,10 @@ const IndexPage = (): JSX.Element => {
         : Math.round(
             totalGasPricePreviousPeriod / emissionsDataPreviousPeriod.length,
           );
-    const emissionsChange =
-      totalEmissionsCurrentPeriod - totalEmissionsPreviousPeriod;
+    const emissionsChangePercentChange = percentChange(
+      totalEmissionsPreviousPeriod / 1000,
+      totalEmissionsCurrentPeriod / 1000,
+    );
     const transactionVolPercentChange = percentChange(
       totalTransactionVolPreviousPeriod,
       totalTransactionVolCurrentPeriod,
@@ -487,10 +489,10 @@ const IndexPage = (): JSX.Element => {
       {
         id: 1,
         name: 'CO2 Emissions (kg)',
-        stat: totalEmissionsCurrentPeriod,
+        stat: totalEmissionsCurrentPeriod / 1000,
         icon: UsersIcon,
-        change: `${emissionsChange / 1000}`,
-        changeType: emissionsChange > 0 ? 'increase' : 'decrease',
+        change: `${Math.round(emissionsChangePercentChange)}%`,
+        changeType: emissionsChangePercentChange > 0 ? 'increase' : 'decrease',
       },
       {
         id: 2,

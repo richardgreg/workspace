@@ -29,7 +29,7 @@ export const StatsCards: React.FC<StatsCardProps> = ({
             </dt>
             <dd className="ml-16 pb-6 flex items-baseline sm:pb-7">
               <p className="text-2xl font-semibold text-gray-900">
-                {item.stat}
+                {Math.round(item.stat)}
               </p>
               <p
                 className={classNames(
