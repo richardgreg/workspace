@@ -209,8 +209,9 @@ const IndexPage = (): JSX.Element => {
           const co2Emissions =
             gasUsed > 0
               ? await patch.estimates.createEthereumEstimate({
-                  timestamp: previousPeriodStartDate.getTime(),
+                  create_order: false,
                   gas_used: gasUsed,
+                  timestamp: previousPeriodStartDate.getTime(),
                 })
               : 0;
           const emissions = gasUsed > 0 ? co2Emissions.data.mass_g / 1000 : 0;
@@ -269,8 +270,9 @@ const IndexPage = (): JSX.Element => {
               let emissions =
                 gasUsed > 0
                   ? await patch.estimates.createEthereumEstimate({
-                      timestamp: startBlockTimestampEstimate, // Using interpolated estimate
+                      create_order: false,
                       gas_used: gasUsed,
+                      timestamp: startBlockTimestampEstimate, // Using interpolated estimate
                     })
                   : 0;
               emissions = gasUsed > 0 ? emissions.data.mass_g / 1000 : 0;
@@ -318,8 +320,9 @@ const IndexPage = (): JSX.Element => {
       const emissionByDate = await Promise.all(
         datesToCache.map(async (date) => {
           const patchEstimate = await patch.estimates.createEthereumEstimate({
-            timestamp: date,
+            create_order: false,
             gas_used: GAS_USED,
+            timestamp: date,
           });
           return {
             date: date,
