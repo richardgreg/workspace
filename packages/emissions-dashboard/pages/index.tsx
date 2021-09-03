@@ -104,7 +104,7 @@ const IndexPage = (): JSX.Element => {
 
   const [contracts, setContracts] = useState<Contract[]>(DEFAULT_CONTRACTS);
   const [previousPeriodStartDate, setPreviousPeriodStartDate] = useState<Date>(
-    new Date('2020-01-01T00:00:00Z'),
+    new Date('2021-01-01T00:00:00Z'),
   );
   const [startDate, setStartDate] = useState<Date>(
     new Date('2021-04-30T00:00:00Z'),
@@ -307,24 +307,37 @@ const IndexPage = (): JSX.Element => {
   const cacheEmissionsData = async () => {
     const GAS_USED = 1000000;
     const dateArray = getDateArray(previousPeriodStartDate, endDate);
-    const emissionByDate = await Promise.all(
-      dateArray.map(async (date) => {
-        const patchEstimate = await patch.estimates.createEthereumEstimate({
-          timestamp: date,
-          gas_used: GAS_USED,
-        });
-        return {
-          date: date,
-          co2EmissionPerKg: patchEstimate.data.mass_g / 1000,
-        };
-      }),
-    );
-    localStorage.setItem('emissiondata', JSON.stringify(emissionByDate));
+    const cachedEmissionsData = localStorage.getItem('emissiondata');
+    const cachedDates = cachedEmissionsData
+      ? JSON.parse(cachedEmissionsData).map(({ date }) => date)
+      : [];
+    const datesToCache = dateArray.filter((date) => {
+      return !cachedDates.includes(date.toISOString());
+    });
+    if (datesToCache.length > 0) {
+      const emissionByDate = await Promise.all(
+        datesToCache.map(async (date) => {
+          const patchEstimate = await patch.estimates.createEthereumEstimate({
+            timestamp: date,
+            gas_used: GAS_USED,
+          });
+          return {
+            date: date,
+            co2EmissionPerKg: patchEstimate.data.mass_g / 1000,
+          };
+        }),
+      );
+      const emissionsToCache = cachedEmissionsData
+        ? JSON.stringify(JSON.parse(cachedEmissionsData).concat(emissionByDate))
+        : JSON.stringify(emissionByDate);
+      localStorage.setItem('emissiondata', emissionsToCache);
+    }
   };
 
   // NOTE: We are currently using dummy data previously sources from etherscan and patch.io for demo purposes
   // TODO: Source data externally
   useEffect(() => {
+    cacheEmissionsData();
     updateBlocks();
   }, []);
 
