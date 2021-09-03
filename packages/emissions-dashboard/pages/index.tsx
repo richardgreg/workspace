@@ -17,7 +17,6 @@ import React, { useEffect, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import { percentChange } from 'utils/percentChange';
 import web3 from 'web3';
-import { connectors } from '../context/Web3/connectors';
 const transactionFixtures =
   require('../fixtures/transactionFixtures').transactions;
 
@@ -327,6 +326,7 @@ const IndexPage = (): JSX.Element => {
           return {
             date: date,
             co2EmissionPerKg: patchEstimate.data.mass_g / 1000,
+            timestamp: date.getTime() / 1000,
           };
         }),
       );
