@@ -293,6 +293,35 @@ const IndexPage = (): JSX.Element => {
     setEmissionData(emissionsData);
   };
 
+  const getDateArray = function (start: Date, end: Date): Date[] {
+    for (
+      var arr = [], dt = new Date(start);
+      dt <= end;
+      dt.setDate(dt.getDate() + 1)
+    ) {
+      arr.push(new Date(dt));
+    }
+    return arr;
+  };
+
+  const cacheEmissionsData = async () => {
+    const GAS_USED = 1000000;
+    const dateArray = getDateArray(previousPeriodStartDate, endDate);
+    const emissionByDate = await Promise.all(
+      dateArray.map(async (date) => {
+        const patchEstimate = await patch.estimates.createEthereumEstimate({
+          timestamp: date,
+          gas_used: GAS_USED,
+        });
+        return {
+          date: date,
+          co2EmissionPerKg: patchEstimate.data.mass_g / 1000,
+        };
+      }),
+    );
+    localStorage.setItem('emissiondata', JSON.stringify(emissionByDate));
+  };
+
   // NOTE: We are currently using dummy data previously sources from etherscan and patch.io for demo purposes
   // TODO: Source data externally
   useEffect(() => {
@@ -300,6 +329,7 @@ const IndexPage = (): JSX.Element => {
   }, []);
 
   useEffect(() => {
+    cacheEmissionsData();
     updateBlocks();
   }, [endDate, startDate]);
 
