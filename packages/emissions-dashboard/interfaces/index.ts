@@ -42,4 +42,5 @@ export interface Transaction {
   txreceipt_status: string;
   timeStamp: string;
   value: string;
+  emissions?: number;
 }

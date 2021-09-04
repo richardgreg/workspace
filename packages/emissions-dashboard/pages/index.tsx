@@ -10,6 +10,7 @@ import { useWeb3React } from '@web3-react/core';
 import { ContractContainer } from 'components/ContractContainer';
 import { DateRangePicker } from 'components/DateRangePicker';
 import { TotalStats } from 'components/TotalStats';
+import { connectors } from 'context/Web3/connectors';
 import { Contract, EmissionStats, StatCardData, Transaction } from 'interfaces';
 import { useRouter } from 'next/router';
 import fetch from 'node-fetch';
@@ -122,12 +123,62 @@ const IndexPage = (): JSX.Element => {
   const [transactionsCurrentPeriod, setTransactionsCurrentPeriod] = useState<
     Transaction[]
   >([]);
+  const [
+    transactionsPreviousPeriodWithEmissions,
+    setTransactionsPreviousPeriodWithEmissions,
+  ] = useState<Transaction[]>([]);
+  const [
+    transactionsCurrentPeriodWithEmissions,
+    setTransactionsCurrentPeriodWithEmissions,
+  ] = useState<Transaction[]>([]);
   const [emissionsDataPreviousPeriod, setEmissionsDataPreviousPeriod] =
     useState<EmissionStats[]>([]);
   const [emissionData, setEmissionData] = useState<EmissionStats[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>('');
   const context = useWeb3React<Web3Provider>();
   const { library, activate, active } = context;
+
+  // NOTE: We are currently using dummy data previously sources from etherscan and patch.io for demo purposes
+  // TODO: Source data externally
+  useEffect(() => {
+    cacheEmissionsData();
+    updateBlocks();
+  }, []);
+
+  useEffect(() => {
+    cacheEmissionsData();
+    updateBlocks();
+  }, [endDate, startDate]);
+
+  useEffect(() => {
+    if (blockRanges) {
+      getTransactions();
+    }
+  }, [blockRanges]);
+
+  useEffect(() => {
+    addEmissionsDataToTransactions();
+  }, [transactionsCurrentPeriod, transactionsPreviousPeriod]);
+
+  useEffect(() => {
+    if (
+      transactionsPreviousPeriodWithEmissions.length > 0 &&
+      transactionsCurrentPeriodWithEmissions.length > 0 &&
+      blockRanges
+    ) {
+      getEmissionsDataCurrentPeriod();
+      getEmissionsDataPreviousPeriod();
+    }
+  }, [
+    transactionsPreviousPeriodWithEmissions,
+    transactionsCurrentPeriodWithEmissions,
+  ]);
+
+  useEffect(() => {
+    if (!active) {
+      activate(connectors.Network);
+    }
+  }, [active]);
 
   useEffect(() => {
     if (typeof window !== 'undefined' && window.location.pathname !== '/') {
@@ -185,7 +236,7 @@ const IndexPage = (): JSX.Element => {
     );
     setTransactionsCurrentPeriod(
       transactionFixtures.filter(
-        (transaction) => Number(transaction.blockNumber) > startBlock,
+        (transaction) => Number(transaction.blockNumber) >= startBlock,
       ),
     );
   };
@@ -194,26 +245,30 @@ const IndexPage = (): JSX.Element => {
     const emissionsData = await (
       await Promise.all(
         contracts.map(async (contract) => {
-          const numTransactions = transactionsPreviousPeriod.length;
-          const gasUsed = transactionsPreviousPeriod.reduce((pr, cu) => {
-            return pr + Number(cu.gasUsed);
-          }, 0);
-          const totalGasPrice = transactionsPreviousPeriod.reduce((pr, cu) => {
-            return pr + Number(cu.gasPrice);
-          }, 0);
+          const numTransactions =
+            transactionsPreviousPeriodWithEmissions.length;
+          const gasUsed = transactionsPreviousPeriodWithEmissions.reduce(
+            (pr, cu) => {
+              return pr + Number(cu.gasUsed);
+            },
+            0,
+          );
+          const totalGasPrice = transactionsPreviousPeriodWithEmissions.reduce(
+            (pr, cu) => {
+              return pr + Number(cu.gasPrice);
+            },
+            0,
+          );
           const averageGasPrice =
             totalGasPrice === 0
               ? 0
-              : totalGasPrice / transactionsPreviousPeriod.length;
-          const co2Emissions =
-            gasUsed > 0
-              ? await patch.estimates.createEthereumEstimate({
-                  create_order: false,
-                  gas_used: gasUsed,
-                  timestamp: previousPeriodStartDate.getTime(),
-                })
-              : 0;
-          const emissions = gasUsed > 0 ? co2Emissions.data.mass_g / 1000 : 0;
+              : totalGasPrice / transactionsPreviousPeriodWithEmissions.length;
+          const emissions = transactionsPreviousPeriodWithEmissions.reduce(
+            (pr, cu) => {
+              return pr + Number(cu.emissions);
+            },
+            0,
+          );
           return {
             co2Emissions: emissions,
             gasUsed,
@@ -234,7 +289,7 @@ const IndexPage = (): JSX.Element => {
     const emissionsData = await (
       await Promise.all(
         contracts.map(async (contract) => {
-          const emissionDataForContract = await Promise.all(
+          const emissionData = await Promise.all(
             blockRanges.map(async (blockRange, i) => {
               const start = blockRange[0];
               const end = blockRange[1];
@@ -266,15 +321,12 @@ const IndexPage = (): JSX.Element => {
                 totalGasPrice === 0
                   ? 0
                   : totalGasPrice / transactionsForBlock.length;
-              let emissions =
-                gasUsed > 0
-                  ? await patch.estimates.createEthereumEstimate({
-                      create_order: false,
-                      gas_used: gasUsed,
-                      timestamp: startBlockTimestampEstimate, // Using interpolated estimate
-                    })
-                  : 0;
-              emissions = gasUsed > 0 ? emissions.data.mass_g / 1000 : 0;
+              const emissions = transactionsPreviousPeriodWithEmissions.reduce(
+                (pr, cu) => {
+                  return pr + Number(cu.emissions);
+                },
+                0,
+              );
               return {
                 co2Emissions: emissions,
                 gasUsed,
@@ -337,36 +389,46 @@ const IndexPage = (): JSX.Element => {
     }
   };
 
-  // NOTE: We are currently using dummy data previously sources from etherscan and patch.io for demo purposes
-  // TODO: Source data externally
-  useEffect(() => {
-    cacheEmissionsData();
-    updateBlocks();
-  }, []);
+  const getEmissionDataForTransaction = (transaction, emissions) => {
+    const closestEmissions = emissions.reduce((prev, current) => {
+      return Math.abs(prev.timestamp - Number(transaction.timeStamp)) <
+        Math.abs(current.timestamp - Number(transaction.timeStamp))
+        ? prev
+        : current;
+    });
+    return closestEmissions;
+  };
 
-  useEffect(() => {
-    cacheEmissionsData();
-    updateBlocks();
-  }, [endDate, startDate]);
+  const addEmissionsDataToTransactions = () => {
+    const cachedEmissionsData = JSON.parse(
+      localStorage.getItem('emissiondata'),
+    );
+    setTransactionsCurrentPeriodWithEmissions(
+      transactionsCurrentPeriod.map((transaction) => {
+        const emissionsData = getEmissionDataForTransaction(
+          transaction,
+          cachedEmissionsData,
+        );
+        transaction.emissions =
+          (emissionsData.co2EmissionPerKg * Number(transaction.gasUsed)) /
+          1000000;
+        return transaction;
+      }),
+    );
 
-  useEffect(() => {
-    if (blockRanges) {
-      getTransactions();
-    }
-  }, [blockRanges]);
-
-  useEffect(() => {
-    if (transactionsCurrentPeriod && blockRanges) {
-      getEmissionsDataCurrentPeriod();
-      getEmissionsDataPreviousPeriod();
-    }
-  }, [blockRanges]);
-
-  useEffect(() => {
-    if (!active) {
-      activate(connectors.Network);
-    }
-  }, [active]);
+    setTransactionsPreviousPeriodWithEmissions(
+      transactionsPreviousPeriod.map((transaction) => {
+        const emissionsData = getEmissionDataForTransaction(
+          transaction,
+          cachedEmissionsData,
+        );
+        transaction.emissions =
+          (emissionsData.co2EmissionPerKg * Number(transaction.gasUsed)) /
+          1000000;
+        return transaction;
+      }),
+    );
+  };
 
   const updateDates = (startDate: Date, endDate: Date): void => {
     const previousPeriodStartDate = new Date(
