@@ -566,7 +566,7 @@ const IndexPage = () => {
                 </a>
               </Link>
               <Link href="https://discord.gg/w9zeRTSZsq" passHref>
-                <a className="hover:text-blue-600">Discord</a>
+                <a className="hover:text-blue-600" target="_window">Discord</a>
               </Link>
               <Link href="https://github.com/popcorndao" passHref>
                 <a className="hover:text-blue-600" target="_window">
@@ -1005,7 +1005,7 @@ const IndexPage = () => {
                   </a>
                 </Link>
                 <Link href="https://discord.gg/w9zeRTSZsq" passHref>
-                  <a className="hover:text-blue-600">Discord</a>
+                  <a className="hover:text-blue-600" target="_window">Discord</a>
                 </Link>
                 <Link href="https://github.com/popcorndao" passHref>
                   <a className="hover:text-blue-600" target="_window">
