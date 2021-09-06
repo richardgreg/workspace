@@ -1,5 +1,7 @@
 import { Dialog, Transition } from '@headlessui/react';
 import FacebookPixel from 'components/FacebookPixel';
+import { CatPool } from '@popcorn/ui/components/CatPool';
+import { Rocket } from '@popcorn/ui/components/Rocket';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { Fragment, useEffect, useState } from 'react';
@@ -248,8 +250,8 @@ const IndexPage = () => {
                 </div>
               </div>
               <div className="w-full lg:w-6/12 xl:w-7/12 order-1 lg:order-2 mb-8 lg:mb-0">
-                <img src="/images/catPool.svg" alt="pool" className=""></img>
-              </div>
+              <CatPool />
+             </div>
             </div>
             <div className="w-full h-24"></div>
           </div>
@@ -347,7 +349,7 @@ const IndexPage = () => {
               ></img>
             </div>
             <div className="w-6/12">
-              <img src="/images/rocket.svg" alt="rocket" className=""></img>
+              <Rocket />
             </div>
           </div>
         </section>
@@ -650,11 +652,7 @@ const IndexPage = () => {
             }}
           >
             <div className="w-10/12 mx-auto flex flex-col lg:flex-row justify-between pb-48 items-center text-center">
-              <img
-                src="/images/catPool.svg"
-                alt="pool"
-                className="w-full mb-8"
-              ></img>
+              <CatPool/>
               <h1 className="font-bold text-4xl leading-snug mb-8">
                 Start doing good with DeFi
               </h1>
@@ -777,7 +775,7 @@ const IndexPage = () => {
           </div>
         </section>
         <section className="w-10/12 h-full mx-auto">
-          <img src="/images/rocket.svg" alt="rocket" className=""></img>
+          <Rocket />
           <h2 className="font-bold text-3xl leading-snug mb-4 mt-12 text-center">
             Maximize your Crypto Portfolio
           </h2>
