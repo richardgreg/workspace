@@ -284,7 +284,7 @@ const IndexPage = (): JSX.Element => {
           transactionGroups: [
             {
               averageGasPrice,
-              blockStartDate: previousPeriodStartDate,
+              blockStartDate: previousPeriodStartDate.toLocaleDateString(),
               co2Emissions: emissions,
               endBlock: startBlock - 1,
               gasUsed,
@@ -340,7 +340,7 @@ const IndexPage = (): JSX.Element => {
             );
             return {
               averageGasPrice,
-              blockStartDate: startBlockDateEstimate,
+              blockStartDate: startBlockDateEstimate.toLocaleDateString(),
               co2Emissions: emissions,
               endBlock: end,
               gasUsed,
@@ -397,7 +397,7 @@ const IndexPage = (): JSX.Element => {
         );
         return {
           averageGasPrice,
-          blockStartDate: startBlockDateEstimate,
+          blockStartDate: startBlockDateEstimate.toLocaleDateString(),
           co2Emissions: emissions,
           endBlock: end,
           gasUsed,
@@ -752,7 +752,7 @@ const IndexPage = (): JSX.Element => {
           setErrorMessage,
         }}
       />
-      <div className="sm:flex sm:flex-col sm:align-center">
+      <div className="sm:flex sm:flex-col sm:align-center bg-gray-50">
         <DateRangePicker updateDates={updateDates} />
         <TotalStats
           statCardData={getTotalStatCardData()}

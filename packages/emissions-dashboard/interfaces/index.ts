@@ -46,7 +46,7 @@ export interface Transaction {
 }
 export interface TransactionGroup {
   averageGasPrice: number;
-  blockStartDate: Date;
+  blockStartDate: string;
   co2Emissions: number;
   endBlock: number;
   gasUsed: number;
