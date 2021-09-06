@@ -1,6 +1,6 @@
 import { StatCardData, TransactionGroup } from 'interfaces';
 import React from 'react';
-import { AreaBarChart } from './AreaBarChart';
+import { BiaxialLineChart } from './BiaxialLineChart';
 import { StatsCards } from './StatsCard';
 
 interface TotalStatsProps {
@@ -27,7 +27,7 @@ export const TotalStats: React.FC<TotalStatsProps> = ({
       <div className="max-w-7xl">
         <div className="grid grid-cols-1 gap-4 lg:col-span-2">
           <div className="rounded-lg bg-white overflow-hidden shadow py-6">
-            <AreaBarChart data={data} height={224} />
+            <BiaxialLineChart data={data} height={300} />
           </div>
         </div>
       </div>

@@ -47,6 +47,8 @@ export const AreaBarChart: React.FC<AreaChartProps> = ({
               dataKey="numTransactions"
               tick={false}
               hide={true}
+              type="number"
+              domain={[0, 200]}
             />
             <YAxis
               yAxisId="right"
@@ -54,6 +56,8 @@ export const AreaBarChart: React.FC<AreaChartProps> = ({
               dataKey="co2Emissions"
               tick={false}
               hide={true}
+              type="number"
+              domain={[0, 200]}
             />
             <Tooltip />
             <CartesianGrid stroke="#f5f5f5" />
