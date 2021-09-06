@@ -143,10 +143,10 @@ const IndexPage = (): JSX.Element => {
     useState<ContractEmissions[]>([]);
   const [transactionGroupsCurrentPeriod, setTransactionGroupsCurrentPeriod] =
     useState<ContractEmissions[]>([]);
-
   const [transactionTotals, setTransactionTotals] = useState<
     TransactionGroup[]
   >([]);
+
   const [errorMessage, setErrorMessage] = useState<string>('');
   const context = useWeb3React<Web3Provider>();
   const { library, activate, active } = context;
@@ -330,12 +330,9 @@ const IndexPage = (): JSX.Element => {
               totalGasPrice === 0
                 ? 0
                 : totalGasPrice / transactionsForBlock.length;
-            const emissions = transactionsPreviousPeriodWithEmissions.reduce(
-              (pr, cu) => {
-                return pr + Number(cu.emissions);
-              },
-              0,
-            );
+            const emissions = transactionsForBlock.reduce((pr, cu) => {
+              return pr + Number(cu.emissions);
+            }, 0);
             return {
               averageGasPrice,
               blockStartDate: startBlockDateEstimate,
@@ -353,6 +350,7 @@ const IndexPage = (): JSX.Element => {
         };
       }),
     );
+
     setTransactionGroupsCurrentPeriod(transactionGroups);
   };
 
