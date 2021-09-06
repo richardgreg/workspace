@@ -1,11 +1,11 @@
-import { EmissionStats, StatCardData } from 'interfaces';
+import { StatCardData, TransactionGroup } from 'interfaces';
 import React from 'react';
 import { AreaBarChart } from './AreaBarChart';
 import { StatsCards } from './StatsCard';
 
 interface TotalStatsProps {
   statCardData: StatCardData[];
-  data: EmissionStats[];
+  data: TransactionGroup[];
   startDate: Date;
 }
 

@@ -1,4 +1,4 @@
-import { EmissionStats } from 'interfaces';
+import { TransactionGroup } from 'interfaces';
 import React from 'react';
 import {
   Area,
@@ -12,7 +12,7 @@ import {
 } from 'recharts';
 
 export interface AreaChartProps {
-  data: EmissionStats[];
+  data: TransactionGroup[];
   height?: number;
   width?: number;
 }

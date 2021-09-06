@@ -14,9 +14,9 @@ import { connectors } from 'context/Web3/connectors';
 import {
   Contract,
   ContractEmissions,
-  EmissionStats,
   StatCardData,
   Transaction,
+  TransactionGroup,
 } from 'interfaces';
 import { useRouter } from 'next/router';
 import fetch from 'node-fetch';
@@ -129,6 +129,7 @@ const IndexPage = (): JSX.Element => {
   const [transactionsCurrentPeriod, setTransactionsCurrentPeriod] = useState<
     Transaction[]
   >([]);
+
   const [
     transactionsPreviousPeriodWithEmissions,
     setTransactionsPreviousPeriodWithEmissions,
@@ -137,12 +138,15 @@ const IndexPage = (): JSX.Element => {
     transactionsCurrentPeriodWithEmissions,
     setTransactionsCurrentPeriodWithEmissions,
   ] = useState<Transaction[]>([]);
-  const [emissionsDataPreviousPeriod, setEmissionsDataPreviousPeriod] =
+
+  const [transactionGroupsPreviousPeriod, setTransactionGroupsPreviousPeriod] =
     useState<ContractEmissions[]>([]);
-  const [emissionData, setEmissionData] = useState<ContractEmissions[]>([]);
-  const [emissionDataTotals, setEmissionDataTotals] = useState<EmissionStats[]>(
-    [],
-  );
+  const [transactionGroupsCurrentPeriod, setTransactionGroupsCurrentPeriod] =
+    useState<ContractEmissions[]>([]);
+
+  const [transactionTotals, setTransactionTotals] = useState<
+    TransactionGroup[]
+  >([]);
   const [errorMessage, setErrorMessage] = useState<string>('');
   const context = useWeb3React<Web3Provider>();
   const { library, activate, active } = context;
@@ -175,9 +179,9 @@ const IndexPage = (): JSX.Element => {
       transactionsCurrentPeriodWithEmissions.length > 0 &&
       blockRanges
     ) {
-      getEmissionsDataCurrentPeriod();
-      getTotalEmissionsDataCurrentPeriod();
-      getEmissionsDataPreviousPeriod();
+      groupTransactionsPreviousPeriod();
+      groupTransactionsCurrentPeriod();
+      groupTransactionsForTotals();
     }
   }, [
     transactionsPreviousPeriodWithEmissions,
@@ -251,8 +255,8 @@ const IndexPage = (): JSX.Element => {
     );
   };
 
-  const getEmissionsDataPreviousPeriod = async () => {
-    const emissionsData = await await Promise.all(
+  const groupTransactionsPreviousPeriod = async () => {
+    const transactionGroups = await await Promise.all(
       contracts.map(async (contract) => {
         const transactionsForContract =
           transactionsPreviousPeriodWithEmissions.filter((transaction) => {
@@ -274,7 +278,7 @@ const IndexPage = (): JSX.Element => {
         }, 0);
         return {
           contractAddress: contract.address,
-          emissionStats: [
+          transactionGroups: [
             {
               averageGasPrice,
               blockStartDate: previousPeriodStartDate,
@@ -288,13 +292,13 @@ const IndexPage = (): JSX.Element => {
         };
       }),
     );
-    setEmissionsDataPreviousPeriod(emissionsData);
+    setTransactionGroupsPreviousPeriod(transactionGroups);
   };
 
-  const getEmissionsDataCurrentPeriod = async () => {
-    const emissionsData = await await Promise.all(
+  const groupTransactionsCurrentPeriod = async () => {
+    const transactionGroups = await await Promise.all(
       contracts.map(async (contract) => {
-        const emissionStats = await Promise.all(
+        const transactionGroups = await Promise.all(
           blockRanges.map(async (blockRange, i) => {
             const start = blockRange[0];
             const end = blockRange[1];
@@ -345,15 +349,15 @@ const IndexPage = (): JSX.Element => {
         );
         return {
           contractAddress: contract.address,
-          emissionStats: emissionStats,
+          transactionGroups: transactionGroups,
         };
       }),
     );
-    setEmissionData(emissionsData);
+    setTransactionGroupsCurrentPeriod(transactionGroups);
   };
 
-  const getTotalEmissionsDataCurrentPeriod = async () => {
-    const emissionStats = await Promise.all(
+  const groupTransactionsForTotals = async () => {
+    const transactionGroups = await Promise.all(
       blockRanges.map(async (blockRange, i) => {
         const start = blockRange[0];
         const end = blockRange[1];
@@ -399,7 +403,7 @@ const IndexPage = (): JSX.Element => {
         };
       }),
     );
-    setEmissionDataTotals(emissionStats);
+    setTransactionTotals(transactionGroups);
   };
 
   const getDateArray = function (start: Date, end: Date): Date[] {
@@ -465,9 +469,10 @@ const IndexPage = (): JSX.Element => {
           transaction,
           cachedEmissionsData,
         );
-        transaction.emissions =
+        const emissions =
           (emissionsData.co2EmissionPerKg * Number(transaction.gasUsed)) /
           1000000;
+        transaction.emissions = emissions;
         return transaction;
       }),
     );
@@ -542,7 +547,7 @@ const IndexPage = (): JSX.Element => {
   };
 
   const getStatCardDataForContract = (contract: Contract): StatCardData[] => {
-    if (emissionData.length === 0)
+    if (transactionGroupsCurrentPeriod.length === 0)
       return [
         {
           id: 1,
@@ -561,15 +566,16 @@ const IndexPage = (): JSX.Element => {
           changeType: 'increase',
         },
       ];
-    const emissionsDataForContractCurrentPeriod = emissionData.filter(
-      (contractEmissions) =>
-        contractEmissions.contractAddress === contract.address,
-    )[0].emissionStats;
-    const emissionsDataForContractPreviousPeriod =
-      emissionsDataPreviousPeriod.filter(
+    const emissionsDataForContractCurrentPeriod =
+      transactionGroupsCurrentPeriod.filter(
         (contractEmissions) =>
           contractEmissions.contractAddress === contract.address,
-      )[0].emissionStats;
+      )[0].transactionGroups;
+    const emissionsDataForContractPreviousPeriod =
+      transactionGroupsPreviousPeriod.filter(
+        (contractEmissions) =>
+          contractEmissions.contractAddress === contract.address,
+      )[0].transactionGroups;
     const totalEmissionsCurrentPeriod =
       emissionsDataForContractCurrentPeriod.reduce((pr, cu) => {
         return pr + cu.co2Emissions;
@@ -586,8 +592,9 @@ const IndexPage = (): JSX.Element => {
       emissionsDataForContractPreviousPeriod.reduce((pr, cu) => {
         return pr + cu.numTransactions;
       }, 0);
-    const emissionsChange =
-      totalEmissionsCurrentPeriod - totalEmissionsPreviousPeriod;
+    const emissionsChange = Math.round(
+      totalEmissionsCurrentPeriod - totalEmissionsPreviousPeriod,
+    );
     const transactionVolPercentChange = percentChange(
       totalTransactionVolPreviousPeriod,
       totalTransactionVolCurrentPeriod,
@@ -598,7 +605,7 @@ const IndexPage = (): JSX.Element => {
         name: 'CO2 Emissions (kg)',
         stat: totalEmissionsCurrentPeriod,
         icon: UsersIcon,
-        change: `${emissionsChange / 1000}`,
+        change: `${emissionsChange}`,
         changeType: emissionsChange > 0 ? 'increase' : 'decrease',
       },
       {
@@ -613,55 +620,65 @@ const IndexPage = (): JSX.Element => {
   };
 
   const getTotalStatCardData = (): StatCardData[] => {
-    const totalEmissionsCurrentPeriod = emissionData.reduce((pr, cu) => {
-      return (
-        pr +
-        cu.emissionStats.reduce((pr, cu) => {
-          return pr + cu.co2Emissions;
-        }, 0)
-      );
-    }, 0);
-    const totalEmissionsPreviousPeriod = emissionsDataPreviousPeriod.reduce(
+    const totalEmissionsCurrentPeriod = transactionGroupsCurrentPeriod.reduce(
       (pr, cu) => {
-        return pr + cu.emissionStats[0].co2Emissions;
+        return (
+          pr +
+          cu.transactionGroups.reduce((pr, cu) => {
+            return pr + cu.co2Emissions;
+          }, 0)
+        );
       },
       0,
     );
-    const totalTransactionVolCurrentPeriod = emissionData.reduce((pr, cu) => {
-      return (
-        pr +
-        cu.emissionStats.reduce((pr, cu) => {
-          return pr + cu.numTransactions;
-        }, 0)
-      );
-    }, 0);
-    const totalTransactionVolPreviousPeriod =
-      emissionsDataPreviousPeriod.reduce((pr, cu) => {
-        return pr + cu.emissionStats[0].numTransactions;
-      }, 0);
-    const totalGasPriceCurrentPeriod = emissionData.reduce((pr, cu) => {
-      return (
-        pr +
-        cu.emissionStats.reduce((pr, cu) => {
-          return pr + cu.averageGasPrice;
-        }, 0)
-      );
-    }, 0);
-    const totalGasPricePreviousPeriod = emissionsDataPreviousPeriod.reduce(
+    const totalEmissionsPreviousPeriod = transactionGroupsPreviousPeriod.reduce(
       (pr, cu) => {
-        return pr + cu.emissionStats[0].averageGasPrice;
+        return pr + cu.transactionGroups[0].co2Emissions;
+      },
+      0,
+    );
+    const totalTransactionVolCurrentPeriod =
+      transactionGroupsCurrentPeriod.reduce((pr, cu) => {
+        return (
+          pr +
+          cu.transactionGroups.reduce((pr, cu) => {
+            return pr + cu.numTransactions;
+          }, 0)
+        );
+      }, 0);
+    const totalTransactionVolPreviousPeriod =
+      transactionGroupsPreviousPeriod.reduce((pr, cu) => {
+        return pr + cu.transactionGroups[0].numTransactions;
+      }, 0);
+    const totalGasPriceCurrentPeriod = transactionGroupsCurrentPeriod.reduce(
+      (pr, cu) => {
+        return (
+          pr +
+          cu.transactionGroups.reduce((pr, cu) => {
+            return pr + cu.averageGasPrice;
+          }, 0)
+        );
+      },
+      0,
+    );
+    const totalGasPricePreviousPeriod = transactionGroupsPreviousPeriod.reduce(
+      (pr, cu) => {
+        return pr + cu.transactionGroups[0].averageGasPrice;
       },
       0,
     );
     const averageGasPriceCurrentPeriod =
       totalGasPriceCurrentPeriod === 0
         ? 0
-        : Math.round(totalGasPriceCurrentPeriod / emissionData.length);
+        : Math.round(
+            totalGasPriceCurrentPeriod / transactionGroupsCurrentPeriod.length,
+          );
     const averageGasPricePreviousPeriod =
       totalGasPriceCurrentPeriod === 0
         ? 0
         : Math.round(
-            totalGasPricePreviousPeriod / emissionsDataPreviousPeriod.length,
+            totalGasPricePreviousPeriod /
+              transactionGroupsPreviousPeriod.length,
           );
     const emissionsChangePercentChange = percentChange(
       totalEmissionsPreviousPeriod / 1000,
@@ -703,12 +720,12 @@ const IndexPage = (): JSX.Element => {
     ];
   };
 
-  const getDataForContract = (contract: Contract): EmissionStats[] => {
-    if (emissionData.length === 0) return [];
-    return emissionData.filter(
+  const getDataForContract = (contract: Contract): TransactionGroup[] => {
+    if (transactionGroupsCurrentPeriod.length === 0) return [];
+    return transactionGroupsCurrentPeriod.filter(
       (contractEmissions) =>
         contractEmissions.contractAddress === contract.address,
-    )[0].emissionStats;
+    )[0].transactionGroups;
   };
 
   const openAddContractModal = (): void => {
@@ -735,7 +752,7 @@ const IndexPage = (): JSX.Element => {
         <DateRangePicker updateDates={updateDates} />
         <TotalStats
           statCardData={getTotalStatCardData()}
-          data={emissionDataTotals}
+          data={transactionTotals}
           startDate={startDate}
         />
         {contracts.map((contract) => {

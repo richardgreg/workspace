@@ -1,9 +1,9 @@
 export interface ContractEmissions {
   contractAddress: string;
-  emissionStats: EmissionStats[];
+  transactionGroups: TransactionGroup[];
 }
 
-export interface EmissionStats {
+export interface TransactionGroup {
   averageGasPrice: number;
   blockStartDate: Date;
   co2Emissions: number;
@@ -48,4 +48,3 @@ export interface Transaction {
   value: string;
   emissions?: number;
 }
-  

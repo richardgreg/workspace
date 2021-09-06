@@ -1,4 +1,4 @@
-import { Contract, EmissionStats, StatCardData } from 'interfaces';
+import { Contract, StatCardData, TransactionGroup } from 'interfaces';
 import React from 'react';
 import { AreaBarChart } from './AreaBarChart';
 import { StatsCards } from './StatsCard';
@@ -6,7 +6,7 @@ import { StatsCards } from './StatsCard';
 interface ContractContainerProps {
   statCardData: StatCardData[];
   contract: Contract;
-  data: EmissionStats[];
+  data: TransactionGroup[];
   startDate: Date;
 }
 
