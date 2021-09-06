@@ -524,7 +524,7 @@ const IndexPage = () => {
                 <Link href="https://twitter.com/Popcorn_DAO" passHref>
                   <Twitter className="hover:text-blue-600 cursor-pointer" />
                 </Link>
-                <Link href="https://discord.gg/wzm9BHWq" passHref>
+                <Link href="https://discord.gg/w9zeRTSZsq" passHref>
                   <img
                     src="/images/discord.svg"
                     alt="discord"
@@ -550,7 +550,7 @@ const IndexPage = () => {
               <Link href="https://twitter.com/Popcorn_DAO" passHref>
                 <a className="hover:text-blue-600">Twitter</a>
               </Link>
-              <Link href="https://discord.gg/wzm9BHWq" passHref>
+              <Link href="https://discord.gg/w9zeRTSZsq" passHref>
                 <a className="hover:text-blue-600">Discord</a>
               </Link>
               <Link href="https://github.com/popcorndao" passHref>
@@ -946,7 +946,7 @@ const IndexPage = () => {
               <Link href="https://twitter.com/Popcorn_DAO" passHref>
                 <Twitter className="hover:text-blue-600 cursor-pointer" />
               </Link>
-              <Link href="https://discord.gg/wzm9BHWq" passHref>
+              <Link href="https://discord.gg/w9zeRTSZsq" passHref>
                 <img
                   src="/images/discord.svg"
                   alt="discord"
@@ -972,7 +972,7 @@ const IndexPage = () => {
                 <Link href="https://twitter.com/Popcorn_DAO" passHref>
                   <a className="hover:text-blue-600">Twitter</a>
                 </Link>
-                <Link href="https://discord.gg/wzm9BHWq" passHref>
+                <Link href="https://discord.gg/w9zeRTSZsq" passHref>
                   <a className="hover:text-blue-600">Discord</a>
                 </Link>
                 <Link href="https://github.com/popcorndao" passHref>
