@@ -527,7 +527,7 @@ const IndexPage = () => {
                 <Link href="https://twitter.com/Popcorn_DAO" passHref>
                   <Twitter className="hover:text-blue-600 cursor-pointer" />
                 </Link>
-                <Link href="https://discord.gg/wzm9BHWq" passHref>
+                <Link href="https://discord.gg/w9zeRTSZsq" passHref>
                   <img
                     src="/images/discord.svg"
                     alt="discord"
@@ -565,10 +565,8 @@ const IndexPage = () => {
                   Twitter
                 </a>
               </Link>
-              <Link href="https://discord.gg/wzm9BHWq" passHref>
-                <a className="hover:text-blue-600" target="_window">
-                  Discord
-                </a>
+              <Link href="https://discord.gg/w9zeRTSZsq" passHref>
+                <a className="hover:text-blue-600">Discord</a>
               </Link>
               <Link href="https://github.com/popcorndao" passHref>
                 <a className="hover:text-blue-600" target="_window">
@@ -968,7 +966,7 @@ const IndexPage = () => {
               <Link href="https://twitter.com/Popcorn_DAO" passHref>
                 <Twitter className="hover:text-blue-600 cursor-pointer" />
               </Link>
-              <Link href="https://discord.gg/wzm9BHWq" passHref>
+              <Link href="https://discord.gg/w9zeRTSZsq" passHref>
                 <img
                   src="/images/discord.svg"
                   alt="discord"
@@ -1006,10 +1004,8 @@ const IndexPage = () => {
                     Twitter
                   </a>
                 </Link>
-                <Link href="https://discord.gg/wzm9BHWq" passHref>
-                  <a className="hover:text-blue-600" target="_window">
-                    Discord
-                  </a>
+                <Link href="https://discord.gg/w9zeRTSZsq" passHref>
+                  <a className="hover:text-blue-600">Discord</a>
                 </Link>
                 <Link href="https://github.com/popcorndao" passHref>
                   <a className="hover:text-blue-600" target="_window">
