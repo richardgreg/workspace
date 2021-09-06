@@ -14,6 +14,7 @@ import { connectors } from 'context/Web3/connectors';
 import {
   Contract,
   ContractEmissions,
+  EmissionEstimate,
   StatCardData,
   Transaction,
   TransactionGroup,
@@ -120,6 +121,8 @@ const IndexPage = (): JSX.Element => {
   );
   const [previousPeriodStartBlock, setPreviousPeriodStartBlock] =
     useState<number>(11564729);
+  const [emissionEstimates, setEmissionsEstimates] =
+    useState<EmissionEstimate[]>();
   const [startBlock, setStartBlock] = useState<number>(12338493);
   const [endBlock, setEndBlock] = useState<number>(13133291);
   const [blockRanges, setBlockRanges] = useState<number[][]>();
@@ -157,6 +160,13 @@ const IndexPage = (): JSX.Element => {
     cacheEmissionsData();
     updateBlocks();
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem(
+      'emissionEstimates',
+      JSON.stringify(emissionEstimates),
+    );
+  }, [emissionEstimates]);
 
   useEffect(() => {
     cacheEmissionsData();
@@ -418,17 +428,19 @@ const IndexPage = (): JSX.Element => {
   };
 
   const cacheEmissionsData = async () => {
+    const emissionEstimates = localStorage.getItem('emissionEstimates');
+    if (emissionEstimates !== null)
+      setEmissionsEstimates(JSON.parse(emissionEstimates));
     const GAS_USED = 1000000;
     const dateArray = getDateArray(previousPeriodStartDate, endDate);
-    const cachedEmissionsData = localStorage.getItem('emissiondata');
-    const cachedDates = cachedEmissionsData
-      ? JSON.parse(cachedEmissionsData).map(({ date }) => date)
+    const cachedDates = emissionEstimates
+      ? JSON.parse(emissionEstimates).map(({ date }) => date)
       : [];
     const datesToCache = dateArray.filter((date) => {
       return !cachedDates.includes(date.toISOString());
     });
     if (datesToCache.length > 0) {
-      const emissionByDate = await Promise.all(
+      const emissionEstimatesByDate = await Promise.all(
         datesToCache.map(async (date) => {
           const patchEstimate = await patch.estimates.createEthereumEstimate({
             create_order: false,
@@ -436,21 +448,23 @@ const IndexPage = (): JSX.Element => {
             timestamp: date,
           });
           return {
-            date: date,
             co2EmissionPerKg: patchEstimate.data.mass_g / 1000,
+            date: date,
             timestamp: date.getTime() / 1000,
           };
         }),
       );
-      const emissionsToCache = cachedEmissionsData
-        ? JSON.stringify(JSON.parse(cachedEmissionsData).concat(emissionByDate))
-        : JSON.stringify(emissionByDate);
-      localStorage.setItem('emissiondata', emissionsToCache);
+      const emissionsToCache = emissionEstimates
+        ? JSON.stringify(
+            JSON.parse(emissionEstimates).concat(emissionEstimatesByDate),
+          )
+        : JSON.stringify(emissionEstimatesByDate);
+      localStorage.setItem('emissionEstimates', emissionsToCache);
     }
   };
 
-  const getEmissionDataForTransaction = (transaction, emissions) => {
-    const closestEmissions = emissions.reduce((prev, current) => {
+  const getEmissionDataForTransaction = (transaction) => {
+    const closestEmissions = emissionEstimates.reduce((prev, current) => {
       return Math.abs(prev.timestamp - Number(transaction.timeStamp)) <
         Math.abs(current.timestamp - Number(transaction.timeStamp))
         ? prev
@@ -460,15 +474,9 @@ const IndexPage = (): JSX.Element => {
   };
 
   const addEmissionsDataToTransactions = () => {
-    const cachedEmissionsData = JSON.parse(
-      localStorage.getItem('emissiondata'),
-    );
     setTransactionsCurrentPeriodWithEmissions(
       transactionsCurrentPeriod.map((transaction) => {
-        const emissionsData = getEmissionDataForTransaction(
-          transaction,
-          cachedEmissionsData,
-        );
+        const emissionsData = getEmissionDataForTransaction(transaction);
         const emissions =
           (emissionsData.co2EmissionPerKg * Number(transaction.gasUsed)) /
           1000000;
@@ -479,10 +487,7 @@ const IndexPage = (): JSX.Element => {
 
     setTransactionsPreviousPeriodWithEmissions(
       transactionsPreviousPeriod.map((transaction) => {
-        const emissionsData = getEmissionDataForTransaction(
-          transaction,
-          cachedEmissionsData,
-        );
+        const emissionsData = getEmissionDataForTransaction(transaction);
         transaction.emissions =
           (emissionsData.co2EmissionPerKg * Number(transaction.gasUsed)) /
           1000000;

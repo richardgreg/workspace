@@ -1,16 +1,17 @@
+export interface Contract {
+  address: string;
+  name: string;
+}
+
 export interface ContractEmissions {
   contractAddress: string;
   transactionGroups: TransactionGroup[];
 }
 
-export interface TransactionGroup {
-  averageGasPrice: number;
-  blockStartDate: Date;
-  co2Emissions: number;
-  endBlock: number;
-  gasUsed: number;
-  numTransactions: number;
-  startBlock: number;
+export interface EmissionEstimate {
+  co2EmissionPerKg: number;
+  date: Date;
+  timestamp: number;
 }
 
 export interface StatCardData {
@@ -20,11 +21,6 @@ export interface StatCardData {
   id: number;
   name: string;
   stat: number;
-}
-
-export interface Contract {
-  address: string;
-  name: string;
 }
 
 export interface Transaction {
@@ -47,4 +43,13 @@ export interface Transaction {
   timeStamp: string;
   value: string;
   emissions?: number;
+}
+export interface TransactionGroup {
+  averageGasPrice: number;
+  blockStartDate: Date;
+  co2Emissions: number;
+  endBlock: number;
+  gasUsed: number;
+  numTransactions: number;
+  startBlock: number;
 }
