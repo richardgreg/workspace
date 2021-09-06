@@ -389,11 +389,10 @@ const IndexPage = (): JSX.Element => {
         }, 0);
         const averageGasPrice =
           totalGasPrice === 0 ? 0 : totalGasPrice / transactionsForBlock.length;
-        const emissions = transactionsPreviousPeriodWithEmissions.reduce(
-          (pr, cu) => {
+        const emissions = Math.round(
+          transactionsForBlock.reduce((pr, cu) => {
             return pr + Number(cu.emissions);
-          },
-          0,
+          }, 0),
         );
         return {
           averageGasPrice,
