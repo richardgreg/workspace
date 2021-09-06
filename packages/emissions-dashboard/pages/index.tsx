@@ -111,13 +111,13 @@ const IndexPage = (): JSX.Element => {
 
   const [contracts, setContracts] = useState<Contract[]>(DEFAULT_CONTRACTS);
   const [previousPeriodStartDate, setPreviousPeriodStartDate] = useState<Date>(
-    new Date('2021-01-01T00:00:00Z'),
+    new Date('2021-06-01T00:00:00Z'),
   );
   const [startDate, setStartDate] = useState<Date>(
-    new Date('2021-04-30T00:00:00Z'),
+    new Date('2021-07-01T00:00:00Z'),
   );
   const [endDate, setEndDate] = useState<Date>(
-    new Date('2021-08-31T00:00:00Z'),
+    new Date('2021-08-01T00:00:00Z'),
   );
   const [previousPeriodStartBlock, setPreviousPeriodStartBlock] =
     useState<number>(11564729);
@@ -162,13 +162,6 @@ const IndexPage = (): JSX.Element => {
   }, []);
 
   useEffect(() => {
-    localStorage.setItem(
-      'emissionEstimates',
-      JSON.stringify(emissionEstimates),
-    );
-  }, [emissionEstimates]);
-
-  useEffect(() => {
     cacheEmissionsData();
     updateBlocks();
   }, [endDate, startDate]);
@@ -180,7 +173,7 @@ const IndexPage = (): JSX.Element => {
   }, [blockRanges]);
 
   useEffect(() => {
-    addEmissionsDataToTransactions();
+    if (emissionEstimates) addEmissionsDataToTransactions();
   }, [transactionsCurrentPeriod, transactionsPreviousPeriod]);
 
   useEffect(() => {
@@ -428,17 +421,20 @@ const IndexPage = (): JSX.Element => {
   };
 
   const cacheEmissionsData = async () => {
-    const emissionEstimates = localStorage.getItem('emissionEstimates');
-    if (emissionEstimates !== null)
-      setEmissionsEstimates(JSON.parse(emissionEstimates));
+    let cachedEmissionsData = JSON.parse(
+      localStorage.getItem('emissionEstimates'),
+    );
+
     const GAS_USED = 1000000;
     const dateArray = getDateArray(previousPeriodStartDate, endDate);
-    const cachedDates = emissionEstimates
-      ? JSON.parse(emissionEstimates).map(({ date }) => date)
-      : [];
+    const cachedDates =
+      cachedEmissionsData !== null
+        ? cachedEmissionsData.map(({ date }) => date)
+        : [];
     const datesToCache = dateArray.filter((date) => {
       return !cachedDates.includes(date.toISOString());
     });
+
     if (datesToCache.length > 0) {
       const emissionEstimatesByDate = await Promise.all(
         datesToCache.map(async (date) => {
@@ -454,12 +450,15 @@ const IndexPage = (): JSX.Element => {
           };
         }),
       );
-      const emissionsToCache = emissionEstimates
-        ? JSON.stringify(
-            JSON.parse(emissionEstimates).concat(emissionEstimatesByDate),
-          )
-        : JSON.stringify(emissionEstimatesByDate);
+
+      const emissionsToCache =
+        cachedEmissionsData === null || cachedEmissionsData === 'undefined'
+          ? JSON.stringify(emissionEstimatesByDate)
+          : JSON.stringify(cachedEmissionsData.concat(emissionEstimatesByDate));
+      setEmissionsEstimates(JSON.parse(emissionsToCache));
       localStorage.setItem('emissionEstimates', emissionsToCache);
+    } else {
+      setEmissionsEstimates(cachedEmissionsData);
     }
   };
 
