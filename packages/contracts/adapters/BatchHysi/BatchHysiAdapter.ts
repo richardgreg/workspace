@@ -98,7 +98,16 @@ export class BatchHysiAdapter {
         };
       })
     );
-    return batches as Batch[];
+    return (batches as Batch[]).filter(
+      (batch) => batch.deposited > BigNumber.from("0")
+    );
+  }
+
+  public async getBatchCooldowns(): Promise<BigNumber[]> {
+    const lastMintedAt = await this.batchHysi.lastMintedAt();
+    const lastRedeemedAt = await this.batchHysi.lastRedeemedAt();
+    const cooldown = await this.batchHysi.batchCooldown();
+    return [lastMintedAt.add(cooldown), lastRedeemedAt.add(cooldown)];
   }
 }
 

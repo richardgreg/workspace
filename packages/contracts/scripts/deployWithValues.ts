@@ -37,6 +37,18 @@ interface Contracts {
   uniswapPair: Contract;
   beneficiaryGovernance: Contract;
   region: Contract;
+  mockSetToken: Contract;
+  mockCurveMetapoolDUSD: Contract;
+  mockCurveMetapoolFRAX: Contract;
+  mockCurveMetapoolUSDN: Contract;
+  mockCurveMetapoolUST: Contract;
+  mockYearnVaultDUSD: Contract;
+  mockYearnVaultFRAX: Contract;
+  mockYearnVaultUSDN: Contract;
+  mockYearnVaultUST: Contract;
+  mockBasicIssuanceModule: Contract;
+  hysiBatchInteraction: Contract;
+  mockTriPool: Contract;
 }
 
 enum Vote {
@@ -206,6 +218,17 @@ export default async function deploy(ethers): Promise<void> {
       )
     ).deployed();
 
+    const mockTriPool = await (
+      await MockCurveMetapool.deploy(
+        mockBasicCoin.address,
+        mockBasicCoin.address,
+        mock3CRV.address,
+        mockBasicCoin.address,
+        mockBasicCoin.address,
+        mockBasicCoin.address
+      )
+    ).deployed();
+
     const mockBasicIssuanceModule = (await (
       await (
         await ethers.getContractFactory("MockBasicIssuanceModule")
@@ -357,6 +380,18 @@ export default async function deploy(ethers): Promise<void> {
       uniswapPair,
       beneficiaryGovernance,
       region,
+      mockSetToken,
+      mockCurveMetapoolDUSD,
+      mockCurveMetapoolFRAX,
+      mockCurveMetapoolUSDN,
+      mockCurveMetapoolUST,
+      mockYearnVaultDUSD,
+      mockYearnVaultFRAX,
+      mockYearnVaultUSDN,
+      mockYearnVaultUST,
+      mockBasicIssuanceModule,
+      hysiBatchInteraction,
+      mockTriPool,
     };
   };
 
@@ -1044,6 +1079,18 @@ ADDR_BENEFICIARY_VAULT=${contracts.beneficiaryVaults.address}
 ADDR_REWARDS_MANAGER=${contracts.rewardsManager.address}
 ADDR_UNISWAP_ROUTER=${contracts.uniswapRouter.address}
 ADDR_3CRV=${contracts.mock3CRV.address}
+ADDR_BATCH_HYSI=${contracts.hysiBatchInteraction.address}
+ADDR_HYSI=${contracts.mockSetToken.address}
+ADDR_BASIC_ISSUANCE_MODULE=${contracts.mockBasicIssuanceModule.address}
+ADDR_TRI_POOL=${contracts.mockTriPool.address}
+ADDR_DUSD_METAPOOL=${contracts.mockCurveMetapoolDUSD.address}
+ADDR_FRAX_METAPOOL=${contracts.mockCurveMetapoolFRAX.address}
+ADDR_USDN_METAPOOL=${contracts.mockCurveMetapoolUSDN.address}
+ADDR_UST_METAPOOL=${contracts.mockCurveMetapoolUST.address}
+ADDR_YDUSD=${contracts.mockYearnVaultDUSD.address}
+ADDR_YFRAX=${contracts.mockYearnVaultFRAX.address}
+ADDR_YUSDN=${contracts.mockYearnVaultUSDN.address}
+ADDR_YUST=${contracts.mockYearnVaultUST.address}
     `);
   };
 
