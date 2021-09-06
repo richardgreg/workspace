@@ -33,7 +33,7 @@ export const BiaxialLineChart: React.FC<AreaChartProps> = ({
     }, 0) > 0;
   return (
     <ResponsiveContainer
-      className="justify-self-start ml-3"
+      className="justify-self-center"
       width="100%"
       height={height}
     >
@@ -43,7 +43,7 @@ export const BiaxialLineChart: React.FC<AreaChartProps> = ({
           margin={{
             top: 5,
             right: 30,
-            left: 20,
+            left: 30,
             bottom: 5,
           }}
         >
@@ -73,9 +73,16 @@ export const BiaxialLineChart: React.FC<AreaChartProps> = ({
           <Tooltip />
         </LineChart>
       ) : (
-        <ComposedChart data={[]}>
-          <XAxis dataKey="blockStartDate" scale="band" hide={true}></XAxis>
-          <CartesianGrid stroke={gridColor} />
+        <ComposedChart
+          data={[]}
+          margin={{
+            top: 5,
+            right: 30,
+            left: 30,
+            bottom: 5,
+          }}
+        >
+          <CartesianGrid stroke="#f5f5f5" />
           <text x="50%" fill="#D0D0D0" text-anchor="middle" dy="50%">
             `No trades were made under this contract in the date range provided`
           </text>

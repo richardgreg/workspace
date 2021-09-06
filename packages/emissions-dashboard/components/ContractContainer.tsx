@@ -17,7 +17,7 @@ export const ContractContainer: React.FC<ContractContainerProps> = ({
   startDate,
 }): JSX.Element => {
   return (
-    <div className="mb-5 mt-12 mx-8">
+    <div className="mb-5 mt-12 mx-8 self-center">
       <div className="max-w-7xl">
         <h1 className="text-3xl font-bold leading-tight text-gray-900">
           {contract.name}

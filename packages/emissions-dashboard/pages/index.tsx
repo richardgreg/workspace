@@ -1,9 +1,5 @@
 import { Web3Provider } from '@ethersproject/providers';
-import {
-  CursorClickIcon,
-  MailOpenIcon,
-  UsersIcon,
-} from '@heroicons/react/solid';
+import { CursorClickIcon, MailOpenIcon } from '@heroicons/react/solid';
 import Patch from '@patch-technology/patch';
 import { NavBar } from '@popcorn/ui/components/popcorn/emissions-dashboard/NavBar/index';
 import { useWeb3React } from '@web3-react/core';
@@ -25,6 +21,7 @@ import React, { useEffect, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import { percentChange } from 'utils/percentChange';
 import web3 from 'web3';
+import { CloudIcon } from '../../ui/node_modules/@heroicons/react/outline';
 const transactionFixtures =
   require('../fixtures/transactionFixtures').transactions;
 
@@ -556,7 +553,7 @@ const IndexPage = (): JSX.Element => {
           id: 1,
           name: 'CO2 Emissions (kg)',
           stat: 0,
-          icon: UsersIcon,
+          icon: CloudIcon,
           change: ``,
           changeType: 'increase',
         },
@@ -607,7 +604,7 @@ const IndexPage = (): JSX.Element => {
         id: 1,
         name: 'CO2 Emissions (kg)',
         stat: totalEmissionsCurrentPeriod,
-        icon: UsersIcon,
+        icon: CloudIcon,
         change: `${emissionsChange}`,
         changeType: emissionsChange > 0 ? 'increase' : 'decrease',
       },
@@ -700,7 +697,7 @@ const IndexPage = (): JSX.Element => {
         id: 1,
         name: 'CO2 Emissions (kg)',
         stat: totalEmissionsCurrentPeriod / 1000,
-        icon: UsersIcon,
+        icon: CloudIcon,
         change: `${Math.round(emissionsChangePercentChange)}%`,
         changeType: emissionsChangePercentChange > 0 ? 'increase' : 'decrease',
       },
