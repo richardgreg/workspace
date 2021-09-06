@@ -330,9 +330,11 @@ const IndexPage = (): JSX.Element => {
               totalGasPrice === 0
                 ? 0
                 : totalGasPrice / transactionsForBlock.length;
-            const emissions = transactionsForBlock.reduce((pr, cu) => {
-              return pr + Number(cu.emissions);
-            }, 0);
+            const emissions = Math.round(
+              transactionsForBlock.reduce((pr, cu) => {
+                return pr + Number(cu.emissions);
+              }, 0),
+            );
             return {
               averageGasPrice,
               blockStartDate: startBlockDateEstimate,
