@@ -166,7 +166,10 @@ const IndexPage = () => {
               </a>
             </Link>*/}
               <Link href="/docs/Popcorn_whitepaper_v1.pdf" passHref>
-                <a className="font-medium text-base hover:text-blue-600" target="_window">
+                <a
+                  className="font-medium text-base hover:text-blue-600"
+                  target="_window"
+                >
                   Whitepaper
                 </a>
               </Link>
@@ -250,8 +253,8 @@ const IndexPage = () => {
                 </div>
               </div>
               <div className="w-full lg:w-6/12 xl:w-7/12 order-1 lg:order-2 mb-8 lg:mb-0">
-              <CatPool />
-             </div>
+                <CatPool />
+              </div>
             </div>
             <div className="w-full h-24"></div>
           </div>
@@ -542,19 +545,33 @@ const IndexPage = () => {
                 <a className="hover:text-blue-600">About us</a>
               </Link>*/}
               <Link href="https://medium.com/popcorndao" passHref>
-                <a className="hover:text-blue-600">Blog</a>
+                <a className="hover:text-blue-600" target="_window">
+                  Blog
+                </a>
+              </Link>
+              <Link
+                href="https://etherscan.io/token/0xd0cd466b34a24fcb2f87676278af2005ca8a78c4"
+                passHref
+              >
+                <a className="hover:text-blue-600" target="_window">
+                  Popcorn (POP) Token
+                </a>
               </Link>
             </div>
             <div className="flex flex-col space-y-3">
               <p className="font-medium text-base uppercase">Connect</p>
               <Link href="https://twitter.com/Popcorn_DAO" passHref>
-                <a className="hover:text-blue-600">Twitter</a>
+                <a className="hover:text-blue-600" target="_window">
+                  Twitter
+                </a>
               </Link>
               <Link href="https://discord.gg/w9zeRTSZsq" passHref>
-                <a className="hover:text-blue-600">Discord</a>
+                <a className="hover:text-blue-600" target="_window">Discord</a>
               </Link>
               <Link href="https://github.com/popcorndao" passHref>
-                <a className="hover:text-blue-600">Github</a>
+                <a className="hover:text-blue-600" target="_window">
+                  Github
+                </a>
               </Link>
             </div>
             {/*<div className="flex flex-col space-y-3">
@@ -602,7 +619,10 @@ const IndexPage = () => {
               </a>
             </Link>*/}
                 <Link href="/docs/Popcorn_whitepaper_v1.pdf" passHref>
-                  <a className="font-medium text-base hover:text-blue-600" target="_window">
+                  <a
+                    className="font-medium text-base hover:text-blue-600"
+                    target="_window"
+                  >
                     Whitepaper
                   </a>
                 </Link>
@@ -964,19 +984,33 @@ const IndexPage = () => {
                   <a className="hover:text-blue-600">About us</a>
                 </Link>*/}
                 <Link href="https://medium.com/popcorndao" passHref>
-                  <a className="hover:text-blue-600">Blog</a>
+                  <a className="hover:text-blue-600" target="_window">
+                    Blog
+                  </a>
+                </Link>
+                <Link
+                  href="https://etherscan.io/token/0xd0cd466b34a24fcb2f87676278af2005ca8a78c4"
+                  passHref
+                >
+                  <a className="hover:text-blue-600" target="_window">
+                    Popcorn (POP) Token
+                  </a>
                 </Link>
               </div>
               <div className="flex flex-col space-y-3 w-1/2">
                 <p className="font-medium text-base uppercase">Connect</p>
                 <Link href="https://twitter.com/Popcorn_DAO" passHref>
-                  <a className="hover:text-blue-600">Twitter</a>
+                  <a className="hover:text-blue-600" target="_window">
+                    Twitter
+                  </a>
                 </Link>
                 <Link href="https://discord.gg/w9zeRTSZsq" passHref>
-                  <a className="hover:text-blue-600">Discord</a>
+                  <a className="hover:text-blue-600" target="_window">Discord</a>
                 </Link>
                 <Link href="https://github.com/popcorndao" passHref>
-                  <a className="hover:text-blue-600">Github</a>
+                  <a className="hover:text-blue-600" target="_window">
+                    Github
+                  </a>
                 </Link>
               </div>
             </div>
