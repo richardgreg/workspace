@@ -1,6 +1,9 @@
 # Dependency directories
 node_modules/
 
+# netlify build output
+.netlify
+
 # next.js build output
 .next
 
