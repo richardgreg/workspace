@@ -105,6 +105,9 @@ const getBlockDateEstimate = (
 const IndexPage = (): JSX.Element => {
   const router = useRouter();
   const [open, setOpen] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>('');
+  const context = useWeb3React<Web3Provider>();
+  const { library, activate, active } = context;
 
   const [contracts, setContracts] = useState<Contract[]>(DEFAULT_CONTRACTS);
   const [previousPeriodStartDate, setPreviousPeriodStartDate] = useState<Date>(
