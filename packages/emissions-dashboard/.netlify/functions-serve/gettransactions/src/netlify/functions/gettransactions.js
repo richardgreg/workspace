@@ -24415,7 +24415,7 @@ var require_lib3 = __commonJS({
   }
 });
 
-// netlify/functions/gettransactions.ts
+// netlify/functions/getTransactions.ts
 var import_mongodb = __toModule(require_lib3());
 exports.handler = async (event, context) => {
   try {
@@ -24448,4 +24448,4 @@ exports.handler = async (event, context) => {
     };
   }
 };
-//# sourceMappingURL=gettransactions.js.map
+//# sourceMappingURL=getTransactions.js.map

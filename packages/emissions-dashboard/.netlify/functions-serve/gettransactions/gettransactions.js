@@ -1,1 +1,1 @@
-module.exports = require('./src/netlify/functions/gettransactions.js')
+module.exports = require('./src/netlify/functions/getTransactions.js')
