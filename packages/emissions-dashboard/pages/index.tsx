@@ -22,9 +22,6 @@ import toast, { Toaster } from 'react-hot-toast';
 import { percentChange } from 'utils/percentChange';
 import web3 from 'web3';
 
-const transactionFixtures =
-  require('../fixtures/transactionFixtures').transactions;
-
 const patch = Patch(process.env.PATCH_API_KEY);
 
 // TODO: Call toast methods upon success/failure
@@ -119,10 +116,11 @@ const IndexPage = (): JSX.Element => {
   const [endDate, setEndDate] = useState<Date>(
     new Date('2021-08-01T00:00:00Z'),
   );
-  const [previousPeriodStartBlock, setPreviousPeriodStartBlock] =
-    useState<number>(11564729);
+
   const [emissionEstimates, setEmissionsEstimates] =
     useState<EmissionEstimate[]>();
+  const [previousPeriodStartBlock, setPreviousPeriodStartBlock] =
+    useState<number>(11564729);
   const [startBlock, setStartBlock] = useState<number>(12338493);
   const [endBlock, setEndBlock] = useState<number>(13133291);
   const [blockRanges, setBlockRanges] = useState<number[][]>();
@@ -223,30 +221,18 @@ const IndexPage = (): JSX.Element => {
 
   const getTransactions = async () => {
     const transactionsPreviousPeriod = await fetch(
-      `.netlify/functions/gettransactions?startBlock=0&endBlock=10000000000000`,
+      `.netlify/functions/gettransactions?startBlock=${previousPeriodStartBlock}&endBlock=${startBlock}`,
     )
       .then((res) => res.json())
       .catch((error) => console.log('error', error));
-    console.log({ transactionsPreviousPeriod });
-    // const allTransactions = await fetch(`.netlify/functions/gettransactions?startBlock=${startBlock}&endBlock=${endBlock}`)
-    //   .then((res) => res.json())
-    //   .then((json) => json.result)
-    //   .catch((error) => console.log('error', error));
 
-    // setTransactionsPreviousPeriod(transactionsPreviousPeriod)
-    // setTransactionsCurrentPeriod(allTransactions);
-
-    // TODO: Using local fixtures
-    setTransactionsPreviousPeriod(
-      transactionFixtures.filter(
-        (transaction) => Number(transaction.blockNumber) < startBlock,
-      ),
-    );
-    setTransactionsCurrentPeriod(
-      transactionFixtures.filter(
-        (transaction) => Number(transaction.blockNumber) >= startBlock,
-      ),
-    );
+    const transactionsCurrentPeriod = await fetch(
+      `.netlify/functions/gettransactions?startBlock=${startBlock}&endBlock=${endBlock}`,
+    )
+      .then((res) => res.json())
+      .catch((error) => console.log('error', error));
+    setTransactionsPreviousPeriod(transactionsPreviousPeriod);
+    setTransactionsCurrentPeriod(transactionsCurrentPeriod);
   };
 
   const groupTransactionsPreviousPeriod = async () => {
