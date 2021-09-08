@@ -21,7 +21,6 @@ export interface BiaxialLineChartProps {
 }
 
 const CustomTooltip = ({ active, payload, label }) => {
-  console.log({ active, payload, label });
   if (active && payload && payload.length) {
     return (
       <div className="bg-gray-50 p-1">

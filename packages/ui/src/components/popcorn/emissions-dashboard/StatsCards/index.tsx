@@ -16,7 +16,7 @@ export const StatsCards: React.FC<StatsCardProps> = ({
       <dl className="justify-self-start mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {stats.map((item) => (
           <div
-            key={item.id}
+            key={item.name}
             className="relative h-24 w-64 bg-white pt-5 px-4 pb-12 sm:pt-6 sm:px-6 shadow rounded-lg overflow-hidden"
           >
             <dt>

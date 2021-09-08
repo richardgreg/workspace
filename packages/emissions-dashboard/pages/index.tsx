@@ -6,7 +6,6 @@ import { DateRangePicker } from '@popcorn/ui/components/popcorn/emissions-dashbo
 import { NavBar } from '@popcorn/ui/components/popcorn/emissions-dashboard/NavBar/index';
 import { TotalStats } from '@popcorn/ui/components/popcorn/emissions-dashboard/TotalStats/index';
 import { useWeb3React } from '@web3-react/core';
-import { connectors } from 'context/Web3/connectors';
 import {
   Contract,
   ContractEmissions,
@@ -22,6 +21,7 @@ import { Globe, Wind } from 'react-feather';
 import toast, { Toaster } from 'react-hot-toast';
 import { percentChange } from 'utils/percentChange';
 import web3 from 'web3';
+
 const transactionFixtures =
   require('../fixtures/transactionFixtures').transactions;
 
@@ -188,12 +188,6 @@ const IndexPage = (): JSX.Element => {
   ]);
 
   useEffect(() => {
-    if (!active) {
-      activate(connectors.Network);
-    }
-  }, [active]);
-
-  useEffect(() => {
     if (typeof window !== 'undefined' && window.location.pathname !== '/') {
       router.replace(window.location.pathname);
     }
@@ -228,11 +222,12 @@ const IndexPage = (): JSX.Element => {
   };
 
   const getTransactions = async () => {
-    // const transactionsPreviousPeriod = await fetch(`.netlify/functions/gettransactions?startBlock=${previousPeriodStartBlock}&endBlock=${startBlock - 1}`)
-    //   .then((res) => res.json())
-    //   .then((json) => json.result)
-    //   .catch((error) => console.log('error', error));
-
+    const transactionsPreviousPeriod = await fetch(
+      `.netlify/functions/gettransactions?startBlock=0&endBlock=10000000000000`,
+    )
+      .then((res) => res.json())
+      .catch((error) => console.log('error', error));
+    console.log({ transactionsPreviousPeriod });
     // const allTransactions = await fetch(`.netlify/functions/gettransactions?startBlock=${startBlock}&endBlock=${endBlock}`)
     //   .then((res) => res.json())
     //   .then((json) => json.result)
