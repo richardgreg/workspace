@@ -1,4 +1,3 @@
-import { TransactionGroup } from 'interfaces';
 import React from 'react';
 import {
   CartesianGrid,
@@ -10,8 +9,9 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
+import { TransactionGroup } from '../../interfaces';
 
-export interface AreaChartProps {
+export interface BiaxialLineChartProps {
   data: TransactionGroup[];
   height?: number;
   width?: number;
@@ -20,7 +20,7 @@ export interface AreaChartProps {
   gridColor?: string;
 }
 
-export const BiaxialLineChart: React.FC<AreaChartProps> = ({
+export const BiaxialLineChart: React.FC<BiaxialLineChartProps> = ({
   data,
   height,
   areaColor = '#C7D2FE',

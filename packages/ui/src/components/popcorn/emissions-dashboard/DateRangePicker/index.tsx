@@ -1,5 +1,6 @@
 import { DateTime } from 'luxon';
 import React, { useEffect, useRef, useState } from 'react';
+import { CalendarInputProps, DateTimePickerProps } from '../interfaces';
 
 const MONTH_LIST: String[] = [
   'January',
@@ -20,15 +21,6 @@ const ESCAPE_KEY: Number = 27;
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
-}
-
-interface CalendarInputProps {
-  label: string;
-  defaultDate?: Date;
-  minDate?: Date;
-  maxDate?: Date;
-  isStartInput?: Boolean;
-  onChange?: (selectedDate: Date) => void;
 }
 
 export const CalendarInput: React.FC<CalendarInputProps> = ({
@@ -349,12 +341,13 @@ export const CalendarInput: React.FC<CalendarInputProps> = ({
   );
 };
 
-export const DateRangePicker = () => {
-  const [selectedStartDate, setSelectedStartDate] = useState(
-    new Date('03/04/2021'),
-  );
+export const DateRangePicker: React.FC<DateTimePickerProps> = ({
+  updateDates,
+  startDate,
+  endDate,
+}): JSX.Element => {
+  const [selectedStartDate, setSelectedStartDate] = useState(null);
   const [selectedEndDate, setSelectedEndDate] = useState(null);
-
   return (
     <div className="grid justify-items-stretch md:mr-24">
       <div className="md:flex md:items-center md:justify-between justify-self-end">
@@ -362,13 +355,14 @@ export const DateRangePicker = () => {
           <CalendarInput
             label="Start Date"
             isStartInput
-            defaultDate={selectedStartDate}
+            defaultDate={startDate}
             onChange={(selected) => setSelectedStartDate(selected)}
             maxDate={selectedEndDate ? selectedEndDate : new Date()}
           />
           <CalendarInput
             label="End Date"
             minDate={selectedStartDate}
+            defaultDate={endDate}
             onChange={(selected) => setSelectedEndDate(selected)}
             maxDate={new Date()}
             isStartInput={false}
@@ -376,8 +370,9 @@ export const DateRangePicker = () => {
           <button
             type="button"
             className="ml-2 inline-flex items-center px-2.5 py-1.5 border-8 border-transparent text-xs font-bold rounded shadow-sm text-indigo-600 bg-indigo-100 hover:text-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 h-10 self-end mb-2.5"
+            onClick={() => updateDates(selectedStartDate, selectedEndDate)}
           >
-            Filter
+            Update
           </button>
         </div>
       </div>

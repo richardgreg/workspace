@@ -7,7 +7,7 @@ import {
 import { Meta, Story } from '@storybook/react/types-6-0';
 import React from 'react';
 import { EmissionSummaryStats } from '../../../../interfaces/index';
-import { StatsRow } from './index';
+import { StatsCards } from './index';
 
 const dummyItem: EmissionSummaryStats = {
   id: 1,
@@ -19,8 +19,8 @@ const dummyItem: EmissionSummaryStats = {
 };
 
 export default {
-  title: 'Emissions Dashboard / Components / StatsRow',
-  component: StatsRow,
+  title: 'Emissions Dashboard / Components / StatsCards',
+  component: StatsCards,
   decorators: [
     (Story) => (
       <div className="flex flex-row justify-center">
@@ -30,7 +30,7 @@ export default {
   ],
 } as Meta;
 
-const Template: Story = (args) => <StatsRow {...args} />;
+const Template: Story = (args) => <StatsCards {...args} />;
 
 export const Primary = Template.bind({});
 Primary.args = {
@@ -38,7 +38,7 @@ Primary.args = {
     {
       id: 1,
       name: 'CO2 Emissions (kg)',
-      stat: '71,897',
+      stat: 71897,
       icon: UsersIcon,
       change: '122',
       changeType: 'increase',
@@ -46,7 +46,7 @@ Primary.args = {
     {
       id: 2,
       name: 'Transactions',
-      stat: '58.16%',
+      stat: 12,
       icon: MailOpenIcon,
       change: '5.4%',
       changeType: 'increase',
@@ -54,7 +54,7 @@ Primary.args = {
     {
       id: 3,
       name: 'Average Gas Price',
-      stat: '24.57%',
+      stat: 34,
       icon: CursorClickIcon,
       change: '3.2%',
       changeType: 'decrease',

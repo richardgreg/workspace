@@ -1,11 +1,11 @@
 import { Web3Provider } from '@ethersproject/providers';
 import { CursorClickIcon, MailOpenIcon } from '@heroicons/react/solid';
 import Patch from '@patch-technology/patch';
+import { ContractContainer } from '@popcorn/ui/components/popcorn/emissions-dashboard/ContractContainer/index';
+import { DateRangePicker } from '@popcorn/ui/components/popcorn/emissions-dashboard/DateRangePicker';
 import { NavBar } from '@popcorn/ui/components/popcorn/emissions-dashboard/NavBar/index';
+import { TotalStats } from '@popcorn/ui/components/popcorn/emissions-dashboard/TotalStats/index';
 import { useWeb3React } from '@web3-react/core';
-import { ContractContainer } from 'components/ContractContainer';
-import { DateRangePicker } from 'components/DateRangePicker';
-import { TotalStats } from 'components/TotalStats';
 import { connectors } from 'context/Web3/connectors';
 import {
   Contract,
@@ -22,6 +22,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import { percentChange } from 'utils/percentChange';
 import web3 from 'web3';
 import { CloudIcon } from '../../ui/node_modules/@heroicons/react/outline';
+
 const transactionFixtures =
   require('../fixtures/transactionFixtures').transactions;
 
@@ -764,7 +765,6 @@ const IndexPage = (): JSX.Element => {
               statCardData={getStatCardDataForContract(contract)}
               contract={contract}
               data={getDataForContract(contract)}
-              startDate={startDate}
             />
           );
         })}

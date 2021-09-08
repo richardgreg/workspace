@@ -1,7 +1,7 @@
 import React from 'react';
+import { getDummyEmissionData } from '../dummyEmissionsData';
 import { AreaBarChart } from '../recharts/AreaBarChart';
-import { getDummyEmissionData } from '../recharts/dummyEmissionsData';
-import { StatsRow } from '../StatsRow/index';
+import { StatsCards } from '../StatsCards/index';
 
 export const TotalsContainer = ({ emissionSummaryStats }) => {
   return (
@@ -28,7 +28,7 @@ export const TotalsContainer = ({ emissionSummaryStats }) => {
       </div>
 
       <div className="max-w-7xl">
-        <StatsRow stats={emissionSummaryStats} />
+        <StatsCards stats={emissionSummaryStats} />
       </div>
     </div>
   );

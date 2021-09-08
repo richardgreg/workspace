@@ -1,7 +1,7 @@
-import { StatCardData, TransactionGroup } from 'interfaces';
 import React from 'react';
-import { BiaxialLineChart } from './BiaxialLineChart';
-import { StatsCards } from './StatsCard';
+import { StatCardData, TransactionGroup } from '../interfaces';
+import { BiaxialLineChart } from '../recharts/BiaxialLineChart';
+import { StatsCards } from '../StatsCards';
 
 interface TotalStatsProps {
   statCardData: StatCardData[];

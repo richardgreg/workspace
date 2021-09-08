@@ -1,15 +1,17 @@
-import { CloudIcon, TrendingUpIcon } from '@heroicons/react/outline';
+import {
+  CloudIcon,
+  CursorClickIcon,
+  TrendingUpIcon,
+} from '@heroicons/react/outline';
 import { Meta, Story } from '@storybook/react/types-6-0';
 import React from 'react';
 import { EmissionSummaryStats } from '../../../../interfaces/index';
 import { getDummyEmissionData } from '../dummyEmissionsData';
-import { Contract } from '../interfaces';
-import { ContractContainer } from './index';
-
+import { TotalStats } from './index';
 const statCardData: EmissionSummaryStats[] = [
   {
     id: 1,
-    name: 'CO2 Emissions (kg)',
+    name: 'co2Emissions',
     stat: '71',
     icon: CloudIcon,
     change: '12.38%',
@@ -23,16 +25,19 @@ const statCardData: EmissionSummaryStats[] = [
     change: '5.4%',
     changeType: 'increase',
   },
+  {
+    id: 3,
+    name: 'Average Gas Price',
+    stat: '45',
+    icon: CursorClickIcon,
+    change: '3.2%',
+    changeType: 'decrease',
+  },
 ];
 
-const contract: Contract = {
-  name: 'Popcorn HYSI Staking Pool',
-  address: '0xd0cd466b34a24fcb2f87676278af2005ca8a78c4',
-};
-
 export default {
-  title: 'Emissions Dashboard / Components / ContractContainer',
-  component: ContractContainer,
+  title: 'Emissions Dashboard / Components / TotalStats',
+  component: TotalStats,
   decorators: [
     (Story) => (
       <div className="flex flex-row justify-center ">
@@ -42,10 +47,10 @@ export default {
   ],
 } as Meta;
 
-const Template: Story = (args) => <ContractContainer {...args} />;
+const Template: Story = (args) => <TotalStats {...args} />;
 export const Primary = Template.bind({});
 Primary.args = {
   statCardData,
-  contract,
+  startDate: new Date(),
   data: getDummyEmissionData(),
 };

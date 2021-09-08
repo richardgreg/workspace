@@ -1,10 +1,9 @@
 import { Meta, Story } from '@storybook/react/types-6-0';
 import { getDummyEmissionData } from '../../dummyEmissionsData';
-import { AreaBarChart } from './index';
-
+import { BiaxialLineChart } from './index';
 export default {
-  title: 'Emissions Dashboard / Components / Charts / AreaBarChart',
-  component: AreaBarChart,
+  title: 'Emissions Dashboard / Components / Charts / BiaxialLineChart',
+  component: BiaxialLineChart,
   decorators: [
     (Story) => (
       <div className="flex flex-row justify-center">
@@ -14,7 +13,7 @@ export default {
   ],
 } as Meta;
 
-const Template: Story = (args) => <AreaBarChart {...args} />;
+const Template: Story = (args) => <BiaxialLineChart {...args} />;
 
 export const ChartWithData = Template.bind({});
 ChartWithData.args = {
