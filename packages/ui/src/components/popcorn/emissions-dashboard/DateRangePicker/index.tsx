@@ -120,7 +120,7 @@ export const CalendarInput: React.FC<CalendarInputProps> = ({
     let daysInMonth = new Date(year, month, 0).getDate();
 
     // Find where to start calendar day of week
-    let dayOfWeek = new Date(year, month).getDay();
+    let dayOfWeek = new Date(year, month - 1).getDay();
     let blankDays = [];
     for (var i = 1; i <= dayOfWeek; i++) {
       blankDays.push(i);
