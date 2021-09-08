@@ -1,21 +1,19 @@
-import {
-  CloudIcon,
-  CursorClickIcon,
-  TrendingUpIcon,
-} from '@heroicons/react/outline';
+import { CloudIcon, TrendingUpIcon } from '@heroicons/react/outline';
 import { Meta, Story } from '@storybook/react/types-6-0';
 import React from 'react';
 import { ContractContainer } from '../../ContractContainer';
 import { DateRangePicker } from '../../DateRangePicker';
 import { Divider } from '../../Divider';
+import { getDummyEmissionData } from '../../dummyEmissionsData';
+import { Contract, StatCardData } from '../../interfaces';
 import { NavBar } from '../../NavBar';
-import { TotalsContainer } from '../../TotalsContainer';
+import { TotalStats } from '../../TotalStats';
 
-const totalStatsEmissionsData = [
+const statCardData: StatCardData[] = [
   {
     id: 1,
-    name: 'co2Emissions',
-    stat: '71kg',
+    name: 'CO2 Emissions (kg)',
+    stat: 71,
     icon: CloudIcon,
     change: '12.38%',
     changeType: 'increase',
@@ -23,39 +21,17 @@ const totalStatsEmissionsData = [
   {
     id: 2,
     name: 'Transactions',
-    stat: '23',
+    stat: 23,
     icon: TrendingUpIcon,
     change: '5.4%',
     changeType: 'increase',
-  },
-  {
-    id: 3,
-    name: 'Average Gas Price',
-    stat: '45',
-    icon: CursorClickIcon,
-    change: '3.2%',
-    changeType: 'decrease',
   },
 ];
 
-const contractStats = [
-  {
-    id: 1,
-    name: 'co2Emissions',
-    stat: '71kg',
-    icon: CloudIcon,
-    change: '12.38%',
-    changeType: 'increase',
-  },
-  {
-    id: 2,
-    name: 'Transactions',
-    stat: '23',
-    icon: TrendingUpIcon,
-    change: '5.4%',
-    changeType: 'increase',
-  },
-];
+const contract: Contract = {
+  name: 'Popcorn HYSI Staking Pool',
+  address: '0xd0cd466b34a24fcb2f87676278af2005ca8a78c4',
+};
 
 const user = {
   name: 'Tom Cook',
@@ -65,10 +41,10 @@ const user = {
 };
 
 const navigation = [
-    { name: 'Dashboard', href: '#', current: true },
-    { name: 'Team', href: '#', current: false },
-    { name: 'Projects', href: '#', current: false },
-    { name: 'Calendar', href: '#', current: false },
+  { name: 'Dashboard', href: '#', current: true },
+  { name: 'Team', href: '#', current: false },
+  { name: 'Projects', href: '#', current: false },
+  { name: 'Calendar', href: '#', current: false },
 ];
 
 const userNavigation = [
@@ -77,17 +53,28 @@ const userNavigation = [
   { name: 'Sign out', href: '#' },
 ];
 
+const updateDates = (startDate: Date, endDate: Date): void => {};
+
 const EmissionsDashboardPage = () => {
   return (
     <div className="bg-gray-50">
-      <DateRangePicker />
-      <TotalsContainer emissionSummaryStats={totalStatsEmissionsData} />
+      <DateRangePicker
+        updateDates={updateDates}
+        startDate={new Date()}
+        endDate={new Date()}
+      />
+      <TotalStats
+        statCardData={statCardData}
+        startDate={new Date()}
+        data={getDummyEmissionData()}
+      />
       <Divider />
       {new Array(4).fill(undefined).map((x) => {
         return (
           <ContractContainer
-            emissionSummaryStats={contractStats}
-            contractName={'Popcorn HYSI Staking Pool'}
+            statCardData={statCardData}
+            contract={contract}
+            data={getDummyEmissionData()}
           />
         );
       })}
@@ -102,25 +89,21 @@ export default {
     (Story) => (
       <>
         <NavBar
-        title='Smart Contract Emissions Dashboard'
-        headerNavigation={navigation}
-        userNavigation={userNavigation}
-        user={user}
-        logo='https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg'
-        contractProps={
-          {
-            open:false,
+          title="Smart Contract Emissions Dashboard"
+          headerNavigation={navigation}
+          userNavigation={userNavigation}
+          user={user}
+          logo="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
+          contractProps={{
+            open: false,
             setOpen: () => {},
             addContract: () => {},
-          }
-        }
-        contractErrorProps={
-          {
+          }}
+          contractErrorProps={{
             errorMessage: 'Fatal error, run your life',
             setErrorMessage: () => {},
             openAddContractModal: () => {},
-          }
-        }
+          }}
         />
         <Story />
       </>
@@ -132,8 +115,8 @@ const Template: Story = (args) => <EmissionsDashboardPage {...args} />;
 
 export const Primary = Template.bind({});
 Primary.args = {
-  contractProps:{
-    open:false,
+  contractProps: {
+    open: false,
     setOpen: () => {},
     addContract: () => {},
   },
@@ -141,5 +124,5 @@ Primary.args = {
     errorMessage: 'Fatal error, run your life',
     setErrorMessage: () => {},
     openAddContractModal: () => {},
-  }
+  },
 };
