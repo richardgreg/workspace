@@ -1,35 +1,31 @@
-import {
-  CloudIcon,
-  CursorClickIcon,
-  TrendingUpIcon,
-} from '@heroicons/react/outline';
+import { CloudIcon } from '@heroicons/react/outline';
 import { Meta, Story } from '@storybook/react/types-6-0';
 import React from 'react';
-import { EmissionSummaryStats } from '../../../../interfaces/index';
+import { Globe, Wind } from 'react-feather';
 import { getDummyEmissionData } from '../dummyEmissionsData';
 import { TotalStats } from './index';
-const statCardData: EmissionSummaryStats[] = [
+const statCardData = [
   {
     id: 1,
-    name: 'co2Emissions',
-    stat: '71',
+    name: 'CO2 Emissions (kg)',
+    stat: 71897,
     icon: CloudIcon,
-    change: '12.38%',
+    change: '122',
     changeType: 'increase',
   },
   {
     id: 2,
     name: 'Transactions',
-    stat: '23',
-    icon: TrendingUpIcon,
+    stat: 12,
+    icon: Globe,
     change: '5.4%',
     changeType: 'increase',
   },
   {
     id: 3,
     name: 'Average Gas Price',
-    stat: '45',
-    icon: CursorClickIcon,
+    stat: 34,
+    icon: Wind,
     change: '3.2%',
     changeType: 'decrease',
   },

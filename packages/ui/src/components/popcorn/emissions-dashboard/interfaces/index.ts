@@ -1,3 +1,5 @@
+import { SVGProps } from 'react';
+
 export interface Contract {
   address: string;
   name: string;
@@ -17,7 +19,9 @@ export interface EmissionEstimate {
 export interface StatCardData {
   change: string;
   changeType: 'increase' | 'decrease';
-  icon: (props: React.ComponentProps<'svg'>) => JSX.Element;
+  icon: (
+    props: React.ComponentProps<'svg'>,
+  ) => JSX.Element | SVGProps<SVGSVGElement>;
   id: number;
   name: string;
   stat: number;

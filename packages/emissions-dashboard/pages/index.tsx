@@ -1,5 +1,5 @@
 import { Web3Provider } from '@ethersproject/providers';
-import { CursorClickIcon, MailOpenIcon } from '@heroicons/react/solid';
+import { CloudIcon } from '@heroicons/react/outline';
 import Patch from '@patch-technology/patch';
 import { ContractContainer } from '@popcorn/ui/components/popcorn/emissions-dashboard/ContractContainer/index';
 import { DateRangePicker } from '@popcorn/ui/components/popcorn/emissions-dashboard/DateRangePicker';
@@ -18,11 +18,10 @@ import {
 import { useRouter } from 'next/router';
 import fetch from 'node-fetch';
 import React, { useEffect, useState } from 'react';
+import { Globe, Wind } from 'react-feather';
 import toast, { Toaster } from 'react-hot-toast';
 import { percentChange } from 'utils/percentChange';
 import web3 from 'web3';
-import { CloudIcon } from '../../ui/node_modules/@heroicons/react/outline';
-
 const transactionFixtures =
   require('../fixtures/transactionFixtures').transactions;
 
@@ -561,7 +560,7 @@ const IndexPage = (): JSX.Element => {
           id: 2,
           name: 'Transactions',
           stat: 0,
-          icon: MailOpenIcon,
+          icon: Globe,
           change: ``,
           changeType: 'increase',
         },
@@ -612,7 +611,7 @@ const IndexPage = (): JSX.Element => {
         id: 2,
         name: 'Transactions',
         stat: totalTransactionVolCurrentPeriod,
-        icon: MailOpenIcon,
+        icon: Globe,
         change: `${transactionVolPercentChange}%`,
         changeType: transactionVolPercentChange > 0 ? 'increase' : 'decrease',
       },
@@ -705,7 +704,7 @@ const IndexPage = (): JSX.Element => {
         id: 2,
         name: 'Transactions',
         stat: totalTransactionVolCurrentPeriod,
-        icon: MailOpenIcon,
+        icon: Globe,
         change: `${transactionVolPercentChange}%`,
         changeType: transactionVolPercentChange > 0 ? 'increase' : 'decrease',
       },
@@ -713,7 +712,7 @@ const IndexPage = (): JSX.Element => {
         id: 3,
         name: 'Average Gas Price',
         stat: averageGasPriceCurrentPeriod,
-        icon: CursorClickIcon,
+        icon: Wind,
         change: `${gasPricePercentChange}%`,
         changeType: gasPricePercentChange > 0 ? 'increase' : 'decrease',
       },

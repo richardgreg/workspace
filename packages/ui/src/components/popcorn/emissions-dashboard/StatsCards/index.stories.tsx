@@ -1,11 +1,7 @@
-import {
-  CloudIcon,
-  CursorClickIcon,
-  MailOpenIcon,
-  UsersIcon,
-} from '@heroicons/react/solid';
+import { CloudIcon } from '@heroicons/react/outline';
 import { Meta, Story } from '@storybook/react/types-6-0';
 import React from 'react';
+import { Globe, Wind } from 'react-feather';
 import { EmissionSummaryStats } from '../../../../interfaces/index';
 import { StatsCards } from './index';
 
@@ -39,7 +35,7 @@ Primary.args = {
       id: 1,
       name: 'CO2 Emissions (kg)',
       stat: 71897,
-      icon: UsersIcon,
+      icon: CloudIcon,
       change: '122',
       changeType: 'increase',
     },
@@ -47,7 +43,7 @@ Primary.args = {
       id: 2,
       name: 'Transactions',
       stat: 12,
-      icon: MailOpenIcon,
+      icon: Globe,
       change: '5.4%',
       changeType: 'increase',
     },
@@ -55,7 +51,7 @@ Primary.args = {
       id: 3,
       name: 'Average Gas Price',
       stat: 34,
-      icon: CursorClickIcon,
+      icon: Wind,
       change: '3.2%',
       changeType: 'decrease',
     },
