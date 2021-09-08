@@ -20,6 +20,21 @@ export interface BiaxialLineChartProps {
   gridColor?: string;
 }
 
+const CustomTooltip = ({ active, payload, label }) => {
+  console.log({ active, payload, label });
+  if (active && payload && payload.length) {
+    return (
+      <div className="bg-gray-50 p-1">
+        <p className="text-xs ">{`${label}`}</p>
+        <p className="text-xs text-indigo-500">{`Transaction Volume: ${payload[0].value}`}</p>
+        <p className="text-xs text-green-500">{`CO2 Emissions (kg): ${payload[1].value}`}</p>
+      </div>
+    );
+  }
+
+  return null;
+};
+
 export const BiaxialLineChart: React.FC<BiaxialLineChartProps> = ({
   data,
   height,
@@ -61,16 +76,16 @@ export const BiaxialLineChart: React.FC<BiaxialLineChartProps> = ({
             yAxisId="left"
             type="monotone"
             dataKey="numTransactions"
-            stroke="#8884d8"
+            stroke="#7c3aed" // indigo-500
             activeDot={{ r: 8 }}
           />
           <Line
             yAxisId="right"
             type="monotone"
             dataKey="co2Emissions"
-            fill="#82ca9d"
+            fill="#10b981" // green-500
           />
-          <Tooltip />
+          <Tooltip content={<CustomTooltip />} />
         </LineChart>
       ) : (
         <ComposedChart
