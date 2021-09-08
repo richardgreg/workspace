@@ -17,9 +17,16 @@ export const TotalStats: React.FC<TotalStatsProps> = ({
   return (
     <div className="py-10 mx-8 self-center">
       <div className="max-w-7xl">
-        <h1 className="text-3xl font-bold leading-tight text-gray-900">
-          Total Stats
-        </h1>
+        <div className="mt-2 mb-5">
+          <dt>
+            <h1 className="text-3xl font-bold leading-tight text-gray-900">
+              Total Stats
+            </h1>
+          </dt>
+          <dd className=" text-base text-gray-500">
+            ({startDate.toUTCString()})
+          </dd>
+        </div>
       </div>
       <div className="max-w-7xl mb-5">
         <StatsCards stats={statCardData} />
