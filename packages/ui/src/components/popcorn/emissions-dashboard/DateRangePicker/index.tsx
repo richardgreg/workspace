@@ -187,7 +187,7 @@ export const CalendarInput: React.FC<CalendarInputProps> = ({
             onKeyDown={(event) => handleKeyDown(event)}
             defaultValue={defaultDate && defaultValue.toFormat('yyyy/MM/dd')}
             ref={dateRef}
-            className="w-full pl-4 pr-10 py-3 leading-none rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-500 font-light"
+            className="w-full pl-4 pr-10 py-3 leading-none rounded-lg border-gray-50 shadow-sm focus:outline-none focus:shadow-outline text-gray-500 font-light"
             placeholder="Select date"
           />
 

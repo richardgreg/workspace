@@ -21,7 +21,11 @@ const ESCAPE_KEY: Number = 27;
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
-
+interface DateTimePickerProps {
+  updateDates: (startDate: Date, endDate: Date) => void;
+  endDate: Date;
+  startDate: Date;
+}
 interface CalendarInputProps {
   label: string;
   defaultDate?: Date;
@@ -187,7 +191,7 @@ export const CalendarInput: React.FC<CalendarInputProps> = ({
             onKeyDown={(event) => handleKeyDown(event)}
             defaultValue={defaultDate && defaultValue.toFormat('yyyy/MM/dd')}
             ref={dateRef}
-            className="w-full pl-4 pr-10 py-3 leading-none rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-500 font-light"
+            className="w-full pl-4 pr-10 py-3 leading-none rounded-lg border-gray-50 shadow-sm focus:outline-none focus:shadow-outline text-gray-500 font-light"
             placeholder="Select date"
           />
 
@@ -349,10 +353,13 @@ export const CalendarInput: React.FC<CalendarInputProps> = ({
   );
 };
 
-export const DateRangePicker = ({ updateDates }) => {
+export const DateRangePicker: React.FC<DateTimePickerProps> = ({
+  updateDates,
+  startDate,
+  endDate,
+}): JSX.Element => {
   const [selectedStartDate, setSelectedStartDate] = useState(null);
   const [selectedEndDate, setSelectedEndDate] = useState(null);
-
   return (
     <div className="grid justify-items-stretch md:mr-24">
       <div className="md:flex md:items-center md:justify-between justify-self-end">
@@ -360,12 +367,14 @@ export const DateRangePicker = ({ updateDates }) => {
           <CalendarInput
             label="Start Date"
             isStartInput
+            defaultDate={startDate}
             onChange={(selected) => setSelectedStartDate(selected)}
             maxDate={selectedEndDate ? selectedEndDate : new Date()}
           />
           <CalendarInput
             label="End Date"
             minDate={selectedStartDate}
+            defaultDate={endDate}
             onChange={(selected) => setSelectedEndDate(selected)}
             maxDate={new Date()}
             isStartInput={false}

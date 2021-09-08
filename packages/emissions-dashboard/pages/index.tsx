@@ -111,10 +111,10 @@ const IndexPage = (): JSX.Element => {
 
   const [contracts, setContracts] = useState<Contract[]>(DEFAULT_CONTRACTS);
   const [previousPeriodStartDate, setPreviousPeriodStartDate] = useState<Date>(
-    new Date('2021-06-01T00:00:00Z'),
+    new Date('2021-05-01T00:00:00Z'),
   );
   const [startDate, setStartDate] = useState<Date>(
-    new Date('2021-07-01T00:00:00Z'),
+    new Date('2021-06-15T00:00:00Z'),
   );
   const [endDate, setEndDate] = useState<Date>(
     new Date('2021-08-01T00:00:00Z'),
@@ -149,10 +149,6 @@ const IndexPage = (): JSX.Element => {
   const [transactionTotals, setTransactionTotals] = useState<
     TransactionGroup[]
   >([]);
-
-  const [errorMessage, setErrorMessage] = useState<string>('');
-  const context = useWeb3React<Web3Provider>();
-  const { library, activate, active } = context;
 
   // NOTE: We are currently using dummy data previously sources from etherscan and patch.io for demo purposes
   // TODO: Source data externally
@@ -752,7 +748,11 @@ const IndexPage = (): JSX.Element => {
         }}
       />
       <div className="sm:flex sm:flex-col sm:align-center bg-gray-50">
-        <DateRangePicker updateDates={updateDates} />
+        <DateRangePicker
+          updateDates={updateDates}
+          startDate={startDate}
+          endDate={endDate}
+        />
         <TotalStats
           statCardData={getTotalStatCardData()}
           data={transactionTotals}
