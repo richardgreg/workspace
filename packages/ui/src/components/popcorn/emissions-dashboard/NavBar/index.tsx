@@ -3,7 +3,6 @@ import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline';
 import { PlusIcon } from '@heroicons/react/solid';
 import React, { Fragment } from 'react';
-
 import { NavBarProps } from '../../../../interfaces/index';
 import { AddContractModal } from '../AddContractModal';
 import { ContractErrorModal } from '../ContractErrorModal';
@@ -185,10 +184,10 @@ export const NavBar: React.FC<NavBarProps> = ({
           </>
         )}
       </Disclosure>
-      <div className="py-10">
+      <div className="py-5">
         <header>
           <div className="px-4 sm:px-6 lg:px-8">
-            <h1 className="text-3xl text-center font-medium leading-tight text-gray-700">
+            <h1 className="text-5xl text-center font-medium leading-tight text-black">
               {title}
             </h1>
           </div>
