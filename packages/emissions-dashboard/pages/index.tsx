@@ -280,7 +280,7 @@ const IndexPage = (): JSX.Element => {
           transactionGroups: [
             {
               averageGasPrice,
-              blockStartDate: previousPeriodStartDate.toLocaleDateString(),
+              blockStartDate: previousPeriodStartDate.toLocaleString(),
               co2Emissions: emissions,
               endBlock: startBlock - 1,
               gasUsed,
@@ -336,7 +336,7 @@ const IndexPage = (): JSX.Element => {
             );
             return {
               averageGasPrice,
-              blockStartDate: startBlockDateEstimate.toLocaleDateString(),
+              blockStartDate: startBlockDateEstimate.toLocaleString(),
               co2Emissions: emissions,
               endBlock: end,
               gasUsed,
@@ -392,7 +392,7 @@ const IndexPage = (): JSX.Element => {
         );
         return {
           averageGasPrice,
-          blockStartDate: startBlockDateEstimate.toLocaleDateString(),
+          blockStartDate: startBlockDateEstimate.toLocaleString(),
           co2Emissions: emissions,
           endBlock: end,
           gasUsed,
