@@ -660,7 +660,7 @@ const IndexPage = () => {
             <Menu onClick={(e) => toggleMenu(true)} />
           </nav>
         </header>
-        <section className="max-h-screen min-h-full">
+        <section className="min-h-full">
           <div className="bg-primary w-full h-12"></div>
           <div
             className="bg-hero-pattern flex-shrink-0 flex-grow-0 w-full h-full"
