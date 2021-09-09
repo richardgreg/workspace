@@ -168,7 +168,11 @@ const IndexPage = (): JSX.Element => {
 
   useEffect(() => {
     if (emissionEstimates) addEmissionsDataToTransactions();
-  }, [transactionsCurrentPeriod, transactionsPreviousPeriod]);
+  }, [
+    transactionsCurrentPeriod,
+    transactionsPreviousPeriod,
+    emissionEstimates,
+  ]);
 
   useEffect(() => {
     if (
