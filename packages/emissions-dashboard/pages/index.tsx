@@ -29,8 +29,8 @@ const MICROGRAM_GRAM_CONVERTER = Math.pow(10, 6);
 
 // TODO: Call toast methods upon success/failure
 const success = (msg: string) => toast.success(msg);
+const loading = (msg: string) => toast.loading(msg);
 const error = (msg: string) => toast.error(msg);
-
 const NUM_FULL_PERIODS = 19;
 const DEFAULT_CONTRACTS = [
   { name: 'POP', address: '0xd0cd466b34a24fcb2f87676278af2005ca8a78c4' },
@@ -248,16 +248,33 @@ const IndexPage = (): JSX.Element => {
   };
 
   const getTransactions = async () => {
+    loading('Loading transactions...');
     const transactionsPreviousPeriod = await fetch(
       `.netlify/functions/loadtransactions?startBlock=${previousPeriodStartBlock}&endBlock=${startBlock}`,
     )
-      .then((res) => res.json())
-      .catch((error) => console.log('error', error));
+      .then((res) => {
+        toast.dismiss();
+        success('Loaded transactions for previous period ');
+        return res.json();
+      })
+      .catch((err) => {
+        toast.dismiss();
+        error('Error loading transactions for previous period');
+        console.log('error', error);
+      });
     const transactionsCurrentPeriod = await fetch(
       `.netlify/functions/loadtransactions?startBlock=${startBlock}&endBlock=${endBlock}`,
     )
-      .then((res) => res.json())
-      .catch((error) => console.log('error', error));
+      .then((res) => {
+        toast.dismiss();
+        success('Loaded transactions for current period ');
+        return res.json();
+      })
+      .catch((err) => {
+        toast.dismiss();
+        error('Error loading transactions for current period');
+        console.log('error', error);
+      });
     setTransactionsPreviousPeriod(transactionsPreviousPeriod);
     setTransactionsCurrentPeriod(transactionsCurrentPeriod);
   };
@@ -399,11 +416,14 @@ const IndexPage = (): JSX.Element => {
     if (datesToCache.length > 0) {
       const emissionEstimatesByDate = await Promise.all(
         datesToCache.map(async (date) => {
+          loading('Sourcing emission estimates...');
           const patchEstimate = await patch.estimates.createEthereumEstimate({
             create_order: false,
             gas_used: GWEI_ETH_MULTIPLIER, // 1 ETH
             timestamp: date,
           });
+          toast.dismiss();
+          success('Loaded emission estimates');
           return {
             emissionsGpEth: patchEstimate.data.mass_g,
             date: date,
