@@ -52,6 +52,25 @@ const DEFAULT_CONTRACTS = [
   },
 ];
 
+const EMPTY_STAT_CARDS: StatCardData[] = [
+  {
+    id: 1,
+    name: 'CO2 Emissions (µg)',
+    stat: 0,
+    icon: CloudIcon,
+    change: '0',
+    changeType: 'increase',
+  },
+  {
+    id: 2,
+    name: 'Transactions',
+    stat: 0,
+    icon: Globe,
+    change: '0',
+    changeType: 'increase',
+  },
+];
+
 const user = {
   name: 'Tom Cook',
   email: 'tom@example.com',
@@ -170,7 +189,9 @@ const IndexPage = (): JSX.Element => {
   }, [blockRanges]);
 
   useEffect(() => {
-    if (emissionEstimates) addEmissionsDataToTransactions();
+    if (emissionEstimates) {
+      addEmissionsDataToTransactions();
+    }
   }, [
     transactionsCurrentPeriod,
     transactionsPreviousPeriod,
@@ -242,6 +263,47 @@ const IndexPage = (): JSX.Element => {
     setTransactionsCurrentPeriod(transactionsCurrentPeriod);
   };
 
+  const getTransactionBlock = (
+    transactions: Transaction[],
+    start,
+    end,
+    blockIndex,
+  ): TransactionGroup => {
+    const numTransactions = transactions.length;
+    // TODO: Remove block time interpolation
+    // const startBlockTimestamp = await getBlockTimestamp(start);
+    const startBlockDateEstimate = getBlockDateEstimate(
+      blockIndex,
+      NUM_FULL_PERIODS,
+      startDate.getTime() / 1000,
+      endDate.getTime() / 1000,
+    );
+    const gasUsed = transactions.reduce((pr, cu) => {
+      return pr + Number(cu.gasUsed);
+    }, 0);
+    const totalGasPrice = transactions.reduce((pr, cu) => {
+      return pr + Number(cu.gasPrice) / GWEI_ETH_MULTIPLIER;
+    }, 0);
+
+    const averageGasPrice =
+      totalGasPrice === 0 ? 0 : Math.round(totalGasPrice / numTransactions);
+
+    const emissions = Math.round(
+      transactions.reduce((pr, cu) => {
+        return pr + Number(cu.emissions);
+      }, 0),
+    );
+    return {
+      averageGasPrice,
+      blockStartDate: startBlockDateEstimate.toLocaleString(),
+      co2Emissions: emissions,
+      endBlock: end,
+      gasUsed,
+      numTransactions,
+      startBlock: start,
+    };
+  };
+
   const groupTransactionsPreviousPeriod = async () => {
     const transactionGroups = await await Promise.all(
       contracts.map(async (contract) => {
@@ -249,31 +311,15 @@ const IndexPage = (): JSX.Element => {
           transactionsPreviousPeriodWithEmissions.filter((transaction) => {
             return transaction.to === contract.address;
           });
-        const numTransactions = transactionsForContract.length;
-        const gasUsed = transactionsForContract.reduce((pr, cu) => {
-          return pr + Number(cu.gasUsed);
-        }, 0);
-        const totalGasPrice = transactionsForContract.reduce((pr, cu) => {
-          return pr + Number(cu.gasPrice) / GWEI_ETH_MULTIPLIER;
-        }, 0);
-        const averageGasPrice =
-          totalGasPrice === 0 ? 0 : Math.round(totalGasPrice / numTransactions);
-        const emissions = transactionsForContract.reduce((pr, cu) => {
-          return pr + Number(cu.emissions);
-        }, 0);
+        const transactionBlock = getTransactionBlock(
+          transactionsForContract,
+          previousPeriodStartBlock,
+          startBlock - 1,
+          0,
+        );
         return {
           contractAddress: contract.address,
-          transactionGroups: [
-            {
-              averageGasPrice,
-              blockStartDate: previousPeriodStartDate.toLocaleString(),
-              co2Emissions: emissions,
-              endBlock: startBlock - 1,
-              gasUsed,
-              numTransactions,
-              startBlock: previousPeriodStartBlock,
-            },
-          ],
+          transactionGroups: [transactionBlock],
         };
       }),
     );
@@ -296,41 +342,7 @@ const IndexPage = (): JSX.Element => {
                 );
               },
             );
-            const numTransactions = transactionsForBlock.length;
-            // TODO: Remove block time interpolation
-            // const startBlockTimestamp = await getBlockTimestamp(start);
-            const startBlockDateEstimate = getBlockDateEstimate(
-              i,
-              NUM_FULL_PERIODS,
-              startDate.getTime() / 1000,
-              endDate.getTime() / 1000,
-            );
-            const gasUsed = transactionsForBlock.reduce((pr, cu) => {
-              return pr + Number(cu.gasUsed);
-            }, 0);
-            const totalGasPrice = transactionsForBlock.reduce((pr, cu) => {
-              return pr + Number(cu.gasPrice) / GWEI_ETH_MULTIPLIER;
-            }, 0);
-
-            const averageGasPrice =
-              totalGasPrice === 0
-                ? 0
-                : Math.round(totalGasPrice / numTransactions);
-
-            const emissions = Math.round(
-              transactionsForBlock.reduce((pr, cu) => {
-                return pr + Number(cu.emissions);
-              }, 0),
-            );
-            return {
-              averageGasPrice,
-              blockStartDate: startBlockDateEstimate.toLocaleString(),
-              co2Emissions: emissions,
-              endBlock: end,
-              gasUsed,
-              numTransactions,
-              startBlock: start,
-            };
+            return getTransactionBlock(transactionsForBlock, start, end, i);
           }),
         );
         return {
@@ -339,7 +351,6 @@ const IndexPage = (): JSX.Element => {
         };
       }),
     );
-
     setTransactionGroupsCurrentPeriod(transactionGroups);
   };
 
@@ -356,37 +367,7 @@ const IndexPage = (): JSX.Element => {
             );
           },
         );
-        const numTransactions = transactionsForBlock.length;
-        // TODO: Remove block time interpolation
-        // const startBlockTimestamp = await getBlockTimestamp(start);
-        const startBlockDateEstimate = getBlockDateEstimate(
-          i,
-          NUM_FULL_PERIODS,
-          startDate.getTime() / 1000,
-          endDate.getTime() / 1000,
-        );
-        const gasUsed = transactionsForBlock.reduce((pr, cu) => {
-          return pr + Number(cu.gasUsed);
-        }, 0);
-        const totalGasPrice = transactionsForBlock.reduce((pr, cu) => {
-          return pr + Number(cu.gasPrice);
-        }, 0);
-        const averageGasPrice =
-          totalGasPrice === 0 ? 0 : totalGasPrice / transactionsForBlock.length;
-        const emissions = Math.round(
-          transactionsForBlock.reduce((pr, cu) => {
-            return pr + Number(cu.emissions);
-          }, 0),
-        );
-        return {
-          averageGasPrice,
-          blockStartDate: startBlockDateEstimate.toLocaleString(),
-          co2Emissions: emissions,
-          endBlock: end,
-          gasUsed,
-          numTransactions,
-          startBlock: start,
-        };
+        return getTransactionBlock(transactionsForBlock, start, end, i);
       }),
     );
     setTransactionTotals(transactionGroups);
@@ -444,7 +425,9 @@ const IndexPage = (): JSX.Element => {
     }
   };
 
-  const getEmissionDataForTransaction = (transaction) => {
+  const getEmissionDataForTransaction = (
+    transaction: Transaction,
+  ): EmissionEstimate => {
     const closestEmissions = emissionEstimates.reduce((prev, current) => {
       return Math.abs(prev.timestamp - Number(transaction.timeStamp)) <
         Math.abs(current.timestamp - Number(transaction.timeStamp))
@@ -454,29 +437,24 @@ const IndexPage = (): JSX.Element => {
     return closestEmissions;
   };
 
+  const addEmissionDataToSingleTransaction = (
+    transaction: Transaction,
+  ): Transaction => {
+    const emissionsData = getEmissionDataForTransaction(transaction);
+    transaction.emissions =
+      ((emissionsData.emissionsGpEth * Number(transaction.gasUsed)) /
+        WEI_ETH_MULTIPLIER) *
+      MICROGRAM_GRAM_CONVERTER;
+    return transaction;
+  };
+
   const addEmissionsDataToTransactions = () => {
     setTransactionsCurrentPeriodWithEmissions(
-      transactionsCurrentPeriod.map((transaction) => {
-        const emissionsData = getEmissionDataForTransaction(transaction);
-        const emissions =
-          ((emissionsData.emissionsGpEth * Number(transaction.gasUsed)) /
-            WEI_ETH_MULTIPLIER) *
-          MICROGRAM_GRAM_CONVERTER;
-
-        transaction.emissions = emissions;
-        return transaction;
-      }),
+      transactionsCurrentPeriod.map(addEmissionDataToSingleTransaction),
     );
 
     setTransactionsPreviousPeriodWithEmissions(
-      transactionsPreviousPeriod.map((transaction) => {
-        const emissionsData = getEmissionDataForTransaction(transaction);
-        transaction.emissions =
-          ((emissionsData.emissionsGpEth * Number(transaction.gasUsed)) /
-            WEI_ETH_MULTIPLIER) *
-          MICROGRAM_GRAM_CONVERTER;
-        return transaction;
-      }),
+      transactionsPreviousPeriod.map(addEmissionDataToSingleTransaction),
     );
   };
 
@@ -536,25 +514,10 @@ const IndexPage = (): JSX.Element => {
   };
 
   const getStatCardDataForContract = (contract: Contract): StatCardData[] => {
-    if (transactionGroupsCurrentPeriod.length === 0)
-      return [
-        {
-          id: 1,
-          name: 'CO2 Emissions (µg)',
-          stat: 0,
-          icon: CloudIcon,
-          change: ``,
-          changeType: 'increase',
-        },
-        {
-          id: 2,
-          name: 'Transactions',
-          stat: 0,
-          icon: Globe,
-          change: ``,
-          changeType: 'increase',
-        },
-      ];
+    if (transactionGroupsCurrentPeriod.length === 0) {
+      return EMPTY_STAT_CARDS;
+    }
+
     const emissionsDataForContractCurrentPeriod =
       transactionGroupsCurrentPeriod.filter(
         (contractEmissions) =>
@@ -565,6 +528,7 @@ const IndexPage = (): JSX.Element => {
         (contractEmissions) =>
           contractEmissions.contractAddress === contract.address,
       )[0].transactionGroups;
+
     const totalEmissionsCurrentPeriod =
       emissionsDataForContractCurrentPeriod.reduce((pr, cu) => {
         return pr + cu.co2Emissions;
@@ -577,13 +541,14 @@ const IndexPage = (): JSX.Element => {
       emissionsDataForContractCurrentPeriod.reduce((pr, cu) => {
         return pr + cu.numTransactions;
       }, 0);
+    const emissionsChange = Math.round(
+      totalEmissionsCurrentPeriod - totalEmissionsPreviousPeriod,
+    );
     const totalTransactionVolPreviousPeriod =
       emissionsDataForContractPreviousPeriod.reduce((pr, cu) => {
         return pr + cu.numTransactions;
       }, 0);
-    const emissionsChange = Math.round(
-      totalEmissionsCurrentPeriod - totalEmissionsPreviousPeriod,
-    );
+
     const transactionVolPercentChange = percentChange(
       totalTransactionVolPreviousPeriod,
       totalTransactionVolCurrentPeriod,
@@ -626,6 +591,11 @@ const IndexPage = (): JSX.Element => {
       },
       0,
     );
+    const emissionsChangePercentChange = percentChange(
+      totalEmissionsPreviousPeriod,
+      totalEmissionsCurrentPeriod,
+    );
+
     const totalTransactionVolCurrentPeriod =
       transactionGroupsCurrentPeriod.reduce((pr, cu) => {
         return (
@@ -639,6 +609,10 @@ const IndexPage = (): JSX.Element => {
       transactionGroupsPreviousPeriod.reduce((pr, cu) => {
         return pr + cu.transactionGroups[0].numTransactions;
       }, 0);
+    const transactionVolPercentChange = percentChange(
+      totalTransactionVolPreviousPeriod,
+      totalTransactionVolCurrentPeriod,
+    );
 
     const totalGasPriceCurrentPeriod = transactionGroupsCurrentPeriod.reduce(
       (pr, cu) => {
@@ -669,14 +643,7 @@ const IndexPage = (): JSX.Element => {
             totalGasPricePreviousPeriod /
               transactionGroupsPreviousPeriod.length,
           );
-    const emissionsChangePercentChange = percentChange(
-      totalEmissionsPreviousPeriod / 1000,
-      totalEmissionsCurrentPeriod / 1000,
-    );
-    const transactionVolPercentChange = percentChange(
-      totalTransactionVolPreviousPeriod,
-      totalTransactionVolCurrentPeriod,
-    );
+
     const gasPricePercentChange = percentChange(
       averageGasPricePreviousPeriod,
       averageGasPriceCurrentPeriod,
