@@ -1,11 +1,14 @@
 import React from 'react';
-import { StatCardData, TransactionGroup } from '../interfaces';
+import {
+  StatCardData,
+  TransactionGroupSummary,
+} from '../../../../interfaces/emissions-dashboard';
 import { BiaxialLineChart } from '../recharts/BiaxialLineChart';
 import { StatsCards } from '../StatsCards';
 
 interface TotalStatsProps {
   statCardData: StatCardData[];
-  data: TransactionGroup[];
+  data: TransactionGroupSummary[];
   startDate: Date;
 }
 

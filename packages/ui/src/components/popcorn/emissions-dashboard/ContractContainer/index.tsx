@@ -1,12 +1,16 @@
 import React from 'react';
-import { Contract, StatCardData, TransactionGroup } from '../interfaces';
+import {
+  Contract,
+  StatCardData,
+  TransactionGroupSummary,
+} from '../../../../interfaces/emissions-dashboard';
 import { BiaxialLineChart } from '../recharts/BiaxialLineChart';
 import { StatsCards } from '../StatsCards';
 
 interface ContractContainerProps {
   statCardData: StatCardData[];
   contract: Contract;
-  data: TransactionGroup[];
+  data: TransactionGroupSummary[];
 }
 
 export const ContractContainer: React.FC<ContractContainerProps> = ({

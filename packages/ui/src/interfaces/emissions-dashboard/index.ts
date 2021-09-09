@@ -1,12 +1,8 @@
 import { Icon } from 'react-feather';
+
 export interface Contract {
   address: string;
   name: string;
-}
-
-export interface ContractEmissions {
-  contractAddress: string;
-  transactionGroups: TransactionGroup[];
 }
 
 export interface EmissionEstimate {
@@ -45,7 +41,7 @@ export interface Transaction {
   value: string;
   emissions?: number;
 }
-export interface TransactionGroup {
+export interface TransactionGroupSummary {
   averageGasPrice: number;
   blockStartDate: string;
   co2Emissions: number;
@@ -53,4 +49,24 @@ export interface TransactionGroup {
   gasUsed: number;
   numTransactions: number;
   startBlock: number;
+}
+
+export interface ContractEmissions {
+  contractAddress: string;
+  transactionGroupSummaries: TransactionGroupSummary[];
+}
+
+export interface DateTimePickerProps {
+  updateDates: (startDate: Date, endDate: Date) => void;
+  endDate: Date;
+  startDate: Date;
+}
+
+export interface CalendarInputProps {
+  label: string;
+  defaultDate?: Date;
+  minDate?: Date;
+  maxDate?: Date;
+  isStartInput?: Boolean;
+  onChange?: (selectedDate: Date) => void;
 }

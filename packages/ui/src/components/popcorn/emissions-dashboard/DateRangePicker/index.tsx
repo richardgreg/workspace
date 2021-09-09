@@ -1,6 +1,9 @@
 import { DateTime } from 'luxon';
 import React, { useEffect, useRef, useState } from 'react';
-import { CalendarInputProps, DateTimePickerProps } from '../interfaces';
+import {
+  CalendarInputProps,
+  DateTimePickerProps,
+} from '../../../../interfaces/emissions-dashboard';
 
 const MONTH_LIST: String[] = [
   'January',

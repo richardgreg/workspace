@@ -1,6 +1,6 @@
 import { ArrowSmDownIcon, ArrowSmUpIcon } from '@heroicons/react/solid';
 import React from 'react';
-import { StatCardData } from '../interfaces';
+import { StatCardData } from '../../../../interfaces/emissions-dashboard';
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }

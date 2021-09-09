@@ -9,10 +9,10 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
-import { TransactionGroup } from '../../interfaces';
+import { TransactionGroupSummary } from '../../../../../interfaces/emissions-dashboard';
 
 export interface BiaxialLineChartProps {
-  data: TransactionGroup[];
+  data: TransactionGroupSummary[];
   height?: number;
   width?: number;
   areaColor?: string;
