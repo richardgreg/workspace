@@ -47,7 +47,7 @@ const lightBlueCatRise = keyframes`{
 const StyledCatPool = styled(CatPoolSvg)`
   position: relative;
   width: 100%;
-  height: 93.39752407%;
+  height: auto;
   *{
     margin:0;
     padding:0;
