@@ -11,7 +11,7 @@ export interface ContractEmissions {
 }
 
 export interface EmissionEstimate {
-  co2EmissionPerKg: number;
+  emissionsKGpEth: number;
   date: Date;
   timestamp: number;
 }

@@ -2,7 +2,7 @@ import { MongoClient } from 'mongodb';
 
 exports.handler = async (event, context) => {
   try {
-    const uri = `mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@cluster0.mcgwt.mongodb.net`;
+    const uri = 'mongodb://localhost:27017';
     const client = new MongoClient(uri);
     const startBlock = Number(event.queryStringParameters.startBlock);
     const endBlock = Number(event.queryStringParameters.endBlock);

@@ -23,6 +23,8 @@ import { percentChange } from 'utils/percentChange';
 import web3 from 'web3';
 
 const patch = Patch(process.env.PATCH_API_KEY);
+const GWEI_ETH_MULTIPLIER = Math.pow(10, 9);
+const WEI_ETH_MULTIPLIER = Math.pow(10, 18);
 
 // TODO: Call toast methods upon success/failure
 const success = (msg: string) => toast.success(msg);
@@ -251,12 +253,10 @@ const IndexPage = (): JSX.Element => {
           return pr + Number(cu.gasUsed);
         }, 0);
         const totalGasPrice = transactionsForContract.reduce((pr, cu) => {
-          return pr + Number(cu.gasPrice);
+          return pr + Number(cu.gasPrice) / GWEI_ETH_MULTIPLIER;
         }, 0);
         const averageGasPrice =
-          totalGasPrice === 0
-            ? 0
-            : totalGasPrice / transactionsForContract.length;
+          totalGasPrice === 0 ? 0 : Math.round(totalGasPrice / numTransactions);
         const emissions = transactionsForContract.reduce((pr, cu) => {
           return pr + Number(cu.emissions);
         }, 0);
@@ -308,12 +308,14 @@ const IndexPage = (): JSX.Element => {
               return pr + Number(cu.gasUsed);
             }, 0);
             const totalGasPrice = transactionsForBlock.reduce((pr, cu) => {
-              return pr + Number(cu.gasPrice);
+              return pr + Number(cu.gasPrice) / GWEI_ETH_MULTIPLIER;
             }, 0);
+
             const averageGasPrice =
               totalGasPrice === 0
                 ? 0
-                : totalGasPrice / transactionsForBlock.length;
+                : Math.round(totalGasPrice / numTransactions);
+
             const emissions = Math.round(
               transactionsForBlock.reduce((pr, cu) => {
                 return pr + Number(cu.emissions);
@@ -405,7 +407,6 @@ const IndexPage = (): JSX.Element => {
       localStorage.getItem('emissionEstimates'),
     );
 
-    const GAS_USED = 1000000;
     const dateArray = getDateArray(previousPeriodStartDate, endDate);
     const cachedDates =
       cachedEmissionsData !== null
@@ -420,11 +421,11 @@ const IndexPage = (): JSX.Element => {
         datesToCache.map(async (date) => {
           const patchEstimate = await patch.estimates.createEthereumEstimate({
             create_order: false,
-            gas_used: GAS_USED,
+            gas_used: GWEI_ETH_MULTIPLIER, // 1 ETH
             timestamp: date,
           });
           return {
-            co2EmissionPerKg: patchEstimate.data.mass_g / 1000,
+            emissionsKGpEth: patchEstimate.data.mass_g / 1000,
             date: date,
             timestamp: date.getTime() / 1000,
           };
@@ -457,8 +458,8 @@ const IndexPage = (): JSX.Element => {
       transactionsCurrentPeriod.map((transaction) => {
         const emissionsData = getEmissionDataForTransaction(transaction);
         const emissions =
-          (emissionsData.co2EmissionPerKg * Number(transaction.gasUsed)) /
-          1000000;
+          (emissionsData.emissionsKGpEth * Number(transaction.gasUsed)) /
+          WEI_ETH_MULTIPLIER;
         transaction.emissions = emissions;
         return transaction;
       }),
@@ -468,8 +469,8 @@ const IndexPage = (): JSX.Element => {
       transactionsPreviousPeriod.map((transaction) => {
         const emissionsData = getEmissionDataForTransaction(transaction);
         transaction.emissions =
-          (emissionsData.co2EmissionPerKg * Number(transaction.gasUsed)) /
-          1000000;
+          (emissionsData.emissionsKGpEth * Number(transaction.gasUsed)) /
+          WEI_ETH_MULTIPLIER;
         return transaction;
       }),
     );
@@ -634,23 +635,23 @@ const IndexPage = (): JSX.Element => {
       transactionGroupsPreviousPeriod.reduce((pr, cu) => {
         return pr + cu.transactionGroups[0].numTransactions;
       }, 0);
+
     const totalGasPriceCurrentPeriod = transactionGroupsCurrentPeriod.reduce(
       (pr, cu) => {
         return (
           pr +
           cu.transactionGroups.reduce((pr, cu) => {
             return pr + cu.averageGasPrice;
-          }, 0)
+          }, 0) /
+            cu.transactionGroups.length
         );
       },
       0,
     );
-    const totalGasPricePreviousPeriod = transactionGroupsPreviousPeriod.reduce(
-      (pr, cu) => {
+    const totalGasPricePreviousPeriod =
+      transactionGroupsPreviousPeriod.reduce((pr, cu) => {
         return pr + cu.transactionGroups[0].averageGasPrice;
-      },
-      0,
-    );
+      }, 0) / transactionGroupsPreviousPeriod.length;
     const averageGasPriceCurrentPeriod =
       totalGasPriceCurrentPeriod === 0
         ? 0
