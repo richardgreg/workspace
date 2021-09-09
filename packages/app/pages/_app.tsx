@@ -15,6 +15,10 @@ import SwapChainModal from 'app/SwapChainModal';
 import ElectionsProvider from '../app/elections';
 import { SingleActionModalContainer } from 'components/Modal/SingleActionModalContainer';
 import { DualActionModalContainer } from 'components/Modal/DualActionModalContainer';
+import TagManager from 'react-gtm-module'
+
+
+
 
 function getLibrary(provider: any): Web3Provider {
   const library = new Web3Provider(provider);
@@ -25,6 +29,14 @@ function getLibrary(provider: any): Web3Provider {
 export default function MyApp(props) {
   const { Component, pageProps } = props;
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (process.env.NEXT_PUBLIC_GTM_ID) {
+      TagManager.initialize({
+        gtmId: process.env.NEXT_PUBLIC_GTM_ID
+      });
+    }
+  }, []);
 
   useEffect(() => {
     Router.events.on('routeChangeStart', () => {
@@ -49,6 +61,7 @@ export default function MyApp(props) {
   return (
     <React.Fragment>
       <Head>
+
         <title>Popcorn - DeFi for the People</title>
         <meta
           name="viewport"
