@@ -74,8 +74,6 @@ const getAllTransactions = async (
     .catch((error) => console.log('error', error));
 };
 
-run().catch((err) => console.log(err));
-
 export async function run(): Promise<void> {
   const startBlock = await getBlockNumberByTimestamp(TIMESTAMP_AT_010121);
   const endBlock = await getBlockNumberByTimestamp(CURRENT_TIMESTAMP);
@@ -91,3 +89,5 @@ export async function run(): Promise<void> {
   ).flat();
   return transactions;
 }
+
+run().catch((err) => console.log(err));

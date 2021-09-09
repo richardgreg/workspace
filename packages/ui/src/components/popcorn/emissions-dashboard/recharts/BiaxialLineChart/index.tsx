@@ -84,7 +84,15 @@ export const BiaxialLineChart: React.FC<BiaxialLineChartProps> = ({
             dataKey="co2Emissions"
             fill="#10b981" // green-500
           />
-          <Tooltip content={<CustomTooltip />} />
+          <Tooltip
+            content={
+              <CustomTooltip
+                active={undefined}
+                payload={undefined}
+                label={undefined}
+              />
+            }
+          />
         </LineChart>
       ) : (
         <ComposedChart

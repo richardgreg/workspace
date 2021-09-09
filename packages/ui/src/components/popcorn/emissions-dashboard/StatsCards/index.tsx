@@ -1,4 +1,5 @@
 import { ArrowSmDownIcon, ArrowSmUpIcon } from '@heroicons/react/solid';
+import React from 'react';
 import { StatCardData } from '../interfaces';
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
