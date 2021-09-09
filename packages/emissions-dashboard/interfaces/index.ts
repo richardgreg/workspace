@@ -1,3 +1,4 @@
+import { Icon } from 'react-feather';
 export interface Contract {
   address: string;
   name: string;
@@ -17,7 +18,7 @@ export interface EmissionEstimate {
 export interface StatCardData {
   change: string;
   changeType: 'increase' | 'decrease';
-  icon: (props: React.ComponentProps<'svg'>) => JSX.Element;
+  icon: Icon | ((props: React.ComponentProps<'svg'>) => JSX.Element);
   id: number;
   name: string;
   stat: number;

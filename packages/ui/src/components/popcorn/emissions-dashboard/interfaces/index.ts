@@ -1,4 +1,4 @@
-import { SVGProps } from 'react';
+import { Icon } from 'react-feather';
 
 export interface Contract {
   address: string;
@@ -19,9 +19,7 @@ export interface EmissionEstimate {
 export interface StatCardData {
   change: string;
   changeType: 'increase' | 'decrease';
-  icon: (
-    props: React.ComponentProps<'svg'>,
-  ) => JSX.Element | SVGProps<SVGSVGElement>;
+  icon: Icon | ((props: React.ComponentProps<'svg'>) => JSX.Element);
   id: number;
   name: string;
   stat: number;
