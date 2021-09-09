@@ -26,7 +26,7 @@ const CustomTooltip = ({ active, payload, label }) => {
       <div className="bg-gray-50 p-1">
         <p className="text-xs ">{`${label}`}</p>
         <p className="text-xs text-indigo-500">{`Transaction Volume: ${payload[0].value}`}</p>
-        <p className="text-xs text-green-500">{`CO2 Emissions (kg): ${payload[1].value}`}</p>
+        <p className="text-xs text-green-500">{`CO2 Emissions (µg): ${payload[1].value}`}</p>
       </div>
     );
   }

@@ -25,6 +25,7 @@ import web3 from 'web3';
 const patch = Patch(process.env.PATCH_API_KEY);
 const GWEI_ETH_MULTIPLIER = Math.pow(10, 9);
 const WEI_ETH_MULTIPLIER = Math.pow(10, 18);
+const MICROGRAM_GRAM_CONVERTER = Math.pow(10, 6);
 
 // TODO: Call toast methods upon success/failure
 const success = (msg: string) => toast.success(msg);
@@ -425,7 +426,7 @@ const IndexPage = (): JSX.Element => {
             timestamp: date,
           });
           return {
-            emissionsKGpEth: patchEstimate.data.mass_g / 1000,
+            emissionsGpEth: patchEstimate.data.mass_g,
             date: date,
             timestamp: date.getTime() / 1000,
           };
@@ -458,8 +459,10 @@ const IndexPage = (): JSX.Element => {
       transactionsCurrentPeriod.map((transaction) => {
         const emissionsData = getEmissionDataForTransaction(transaction);
         const emissions =
-          (emissionsData.emissionsKGpEth * Number(transaction.gasUsed)) /
-          WEI_ETH_MULTIPLIER;
+          ((emissionsData.emissionsGpEth * Number(transaction.gasUsed)) /
+            WEI_ETH_MULTIPLIER) *
+          MICROGRAM_GRAM_CONVERTER;
+
         transaction.emissions = emissions;
         return transaction;
       }),
@@ -469,8 +472,9 @@ const IndexPage = (): JSX.Element => {
       transactionsPreviousPeriod.map((transaction) => {
         const emissionsData = getEmissionDataForTransaction(transaction);
         transaction.emissions =
-          (emissionsData.emissionsKGpEth * Number(transaction.gasUsed)) /
-          WEI_ETH_MULTIPLIER;
+          ((emissionsData.emissionsGpEth * Number(transaction.gasUsed)) /
+            WEI_ETH_MULTIPLIER) *
+          MICROGRAM_GRAM_CONVERTER;
         return transaction;
       }),
     );
@@ -536,7 +540,7 @@ const IndexPage = (): JSX.Element => {
       return [
         {
           id: 1,
-          name: 'CO2 Emissions (kg)',
+          name: 'CO2 Emissions (µg)',
           stat: 0,
           icon: CloudIcon,
           change: ``,
@@ -587,7 +591,7 @@ const IndexPage = (): JSX.Element => {
     return [
       {
         id: 1,
-        name: 'CO2 Emissions (kg)',
+        name: 'CO2 Emissions (µg)',
         stat: totalEmissionsCurrentPeriod,
         icon: CloudIcon,
         change: `${emissionsChange}`,
@@ -680,8 +684,8 @@ const IndexPage = (): JSX.Element => {
     return [
       {
         id: 1,
-        name: 'CO2 Emissions (kg)',
-        stat: totalEmissionsCurrentPeriod / 1000,
+        name: 'CO2 Emissions (µg)',
+        stat: totalEmissionsCurrentPeriod,
         icon: CloudIcon,
         change: `${Math.round(emissionsChangePercentChange)}%`,
         changeType: emissionsChangePercentChange > 0 ? 'increase' : 'decrease',

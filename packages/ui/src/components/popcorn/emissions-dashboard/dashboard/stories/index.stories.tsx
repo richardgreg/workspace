@@ -12,7 +12,7 @@ import { TotalStats } from '../../TotalStats';
 const statCardData: StatCardData[] = [
   {
     id: 1,
-    name: 'CO2 Emissions (kg)',
+    name: 'CO2 Emissions (µg)',
     stat: 71,
     icon: CloudIcon,
     change: '12.38%',

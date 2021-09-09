@@ -9,7 +9,7 @@ import { ContractContainer } from './index';
 const statCardData: EmissionSummaryStats[] = [
   {
     id: 1,
-    name: 'CO2 Emissions (kg)',
+    name: 'CO2 Emissions (µg)',
     stat: '71',
     icon: CloudIcon,
     change: '12.38%',

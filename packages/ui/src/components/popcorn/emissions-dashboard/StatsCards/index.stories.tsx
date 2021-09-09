@@ -33,7 +33,7 @@ Primary.args = {
   stats: [
     {
       id: 1,
-      name: 'CO2 Emissions (kg)',
+      name: 'CO2 Emissions (µg)',
       stat: 71897,
       icon: CloudIcon,
       change: '122',

@@ -9,7 +9,7 @@ export interface ContractEmissions {
 }
 
 export interface EmissionEstimate {
-  emissionsKGpEth: number;
+  emissionsGpEth: number;
   date: Date;
   timestamp: number;
 }
