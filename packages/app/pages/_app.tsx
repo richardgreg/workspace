@@ -4,6 +4,7 @@ import '../styles/globals.css';
 import Router from 'next/router';
 import { StateProvider } from '../context/store';
 import { Web3ReactProvider } from '@web3-react/core';
+import { ChainId, DAppProvider, Config } from '@usedapp/core'
 import { Web3Provider } from '@ethersproject/providers';
 import ContractsWrapper from '../context/Web3/contracts';
 import SwapChainModal from 'components/SwapChainModal';
@@ -18,6 +19,13 @@ function getLibrary(provider: any): Web3Provider {
   const library = new Web3Provider(provider);
   library.pollingInterval = 12000;
   return library;
+}
+
+const config: Config = {
+  readOnlyChainId: Number(process.env.CHAIN_ID),
+  readOnlyUrls: {
+    [process.env.CHAIN_ID]: process.env.RPC_URL,
+  },
 }
 
 export default function MyApp(props) {
@@ -59,6 +67,7 @@ export default function MyApp(props) {
           rel="stylesheet"
         ></link>
       </Head>
+      <DAppProvider config={config}>
       <Web3ReactProvider getLibrary={getLibrary}>
         <StateProvider>
           <ContractsWrapper>
@@ -74,6 +83,7 @@ export default function MyApp(props) {
           </ContractsWrapper>
         </StateProvider>
       </Web3ReactProvider>
+        </DAppProvider>
     </React.Fragment>
   );
 }

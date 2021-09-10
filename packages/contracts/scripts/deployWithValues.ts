@@ -128,12 +128,12 @@ export default async function deploy(ethers): Promise<void> {
       ).deploy(mockPop.address, rewardsEscrow.address)
     ).deployed();
 
-    const uniswapFactory = await deployContract(
+    const uniswapFactory: any = await deployContract(
       accounts[0],
       UniswapV2FactoryJSON,
       [accounts[0].address]
     );
-    const uniswapRouter = await deployContract(
+    const uniswapRouter: any = await deployContract(
       accounts[0],
       UniswapV2Router02JSON,
       [uniswapFactory.address, WETH.address],

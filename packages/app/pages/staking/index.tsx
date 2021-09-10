@@ -10,6 +10,8 @@ import toast, { Toaster } from 'react-hot-toast';
 import NavBar from '../../components/NavBar/NavBar';
 import { connectors } from '../../context/Web3/connectors';
 import { ContractsContext } from '../../context/Web3/contracts';
+// import { useContractFunction } from '../../hooks/useContractFunction'
+import { useContractFunction as DappsUseContractFunction } from '@usedapp/core';
 
 const ONE_WEEK = 604800;
 const lockPeriods = [
@@ -61,21 +63,25 @@ export default function LockPop() {
     }
   }, [contracts]);
 
-  async function lockPop(): Promise<void> {
-    setWait(true);
-    toast.loading('Staking POP...');
-    const lockedPopInEth = utils.parseEther(popToLock.toString());
-    const signer = library.getSigner();
-    const connectedStaking = await contracts.staking.connect(signer);
-    await connectedStaking
-      .stake(lockedPopInEth, lockDuration)
-      .then((res) => {
-        toast.success('POP staked!');
-      })
-      .catch((err) => {
-        toast.error(err.data.message.split("'")[1]);
-      });
-    setWait(false);
+  function lockPops() {
+    // setWait(true);
+    // toast.loading('Staking POP...');
+    // const lockedPopInEth = utils.parseEther(popToLock.toString());
+    // const signer = library.getSigner();
+    // const connectedStaking = contracts.staking.connect(signer);
+    // const { send } = useContractFunction(connectedStaking, 'stake');
+    // send(lockedPopInEth, lockDuration)
+    const data = DappsUseContractFunction(contracts.staking, 'approve', library as any);
+    console.log('data   ', data);
+    // await connectedStaking
+    //   .stake(lockedPopInEth, lockDuration)
+    //   .then((res) => {
+    //     toast.success('POP staked!');
+    //   })
+    //   .catch((err) => {
+    //     toast.error(err.data.message.split("'")[1]);
+    //   });
+    // setWait(false);
   }
 
   async function approve(): Promise<void> {
@@ -208,7 +214,7 @@ export default function LockPop() {
                         {account && approved >= popToLock && (
                           <MainActionButton
                             label={'Stake POP'}
-                            handleClick={lockPop}
+                            handleClick={lockPops}
                             disabled={wait || popToLock === 0}
                           />
                         )}
