@@ -1,0 +1,215 @@
+import {IController} from "@setprotocol/set-protocol-v2/contracts/interfaces/IController.sol";
+import {Invoke} from "@setprotocol/set-protocol-v2/contracts/protocol/lib/Invoke.sol";
+import {ISetToken} from "@setprotocol/set-protocol-v2/contracts/interfaces/ISetToken.sol";
+import {ModuleBase} from "@setprotocol/set-protocol-v2/contracts/protocol/lib/ModuleBase.sol";
+import {Position} from "@setprotocol/set-protocol-v2/contracts/protocol/lib/Position.sol";
+import {PreciseUnitMath} from "@setprotocol/set-protocol-v2/contracts/lib/PreciseUnitMath.sol";
+
+/**
+ * @title BasicIssuanceModule
+ * @author Set Protocol
+ *
+ * Module that enables issuance and redemption functionality on a SetToken. This is a module that is
+ * required to bring the totalSupply of a Set above 0.
+ */
+contract BasicIssuanceModule {
+  using Invoke for ISetToken;
+  using Position for ISetToken.Position;
+  using Position for ISetToken;
+  using PreciseUnitMath for uint256;
+  using SafeMath for uint256;
+  using SafeCast for int256;
+
+  /* ============ Events ============ */
+
+  /* ============ State Variables ============ */
+
+  // Mapping of SetToken to Issuance hook configurations
+  mapping(ISetToken => IManagerIssuanceHook) public managerIssuanceHook;
+
+  /* ============ Constructor ============ */
+
+  /**
+   * Set state controller state variable
+   *
+   * @param _controller             Address of controller contract
+   */
+  constructor(IController _controller) public ModuleBase(_controller) {}
+
+  /* ============ External Functions ============ */
+
+  /**
+   * Deposits the SetToken's position components into the SetToken and mints the SetToken of the given quantity
+   * to the specified _to address. This function only handles Default Positions (positionState = 0).
+   *
+   * @param _setToken             Instance of the SetToken contract
+   * @param _quantity             Quantity of the SetToken to mint
+   * @param _to                   Address to mint SetToken to
+   */
+  function rebalance(
+    ISetToken _setToken,
+    uint256 _quantity,
+    address _to
+  ) external nonReentrant onlyValidAndInitializedSet(_setToken) {
+    require(_quantity > 0, "Issue quantity must be > 0");
+
+    address hookContract = _callPreIssueHooks(
+      _setToken,
+      _quantity,
+      msg.sender,
+      _to
+    );
+
+    (
+      address[] memory components,
+      uint256[] memory componentQuantities
+    ) = getRequiredComponentUnitsForIssue(_setToken, _quantity);
+
+    // For each position, transfer the required underlying to this contract for rebalancing
+    for (uint256 i = 0; i < components.length; i++) {
+      // Transfer the component to the SetToken
+      uint256 amountToTransfer = IERC20(components[i]).balanceOf(
+        address(_setToken)
+      );
+
+      _setToken.invokeApprove(components[i], address(this), 2**256 - 1);
+      _setToken.invokeTransfer(components[i], address(this), amountToTransfer);
+    }
+
+    // Mint the SetToken
+    _setToken.mint(_to, _quantity);
+
+    emit SetTokenIssued(
+      address(_setToken),
+      msg.sender,
+      _to,
+      hookContract,
+      _quantity
+    );
+  }
+
+  /**
+   * Redeems the SetToken's positions and sends the components of the given
+   * quantity to the caller. This function only handles Default Positions (positionState = 0).
+   *
+   * @param _setToken             Instance of the SetToken contract
+   * @param _quantity             Quantity of the SetToken to redeem
+   * @param _to                   Address to send component assets to
+   */
+  function redeem(
+    ISetToken _setToken,
+    uint256 _quantity,
+    address _to
+  ) external nonReentrant onlyValidAndInitializedSet(_setToken) {
+    require(_quantity > 0, "Redeem quantity must be > 0");
+
+    // Burn the SetToken - ERC20's internal burn already checks that the user has enough balance
+    _setToken.burn(msg.sender, _quantity);
+
+    // For each position, invoke the SetToken to transfer the tokens to the user
+    address[] memory components = _setToken.getComponents();
+    for (uint256 i = 0; i < components.length; i++) {
+      address component = components[i];
+      require(
+        !_setToken.hasExternalPosition(component),
+        "Only default positions are supported"
+      );
+
+      uint256 unit = _setToken
+        .getDefaultPositionRealUnit(component)
+        .toUint256();
+
+      // Use preciseMul to round down to ensure overcollateration when small redeem quantities are provided
+      uint256 componentQuantity = _quantity.preciseMul(unit);
+
+      // Instruct the SetToken to transfer the component to the user
+      _setToken.strictInvokeTransfer(component, _to, componentQuantity);
+    }
+
+    emit SetTokenRedeemed(address(_setToken), msg.sender, _to, _quantity);
+  }
+
+  /**
+   * Initializes this module to the SetToken with issuance-related hooks. Only callable by the SetToken's manager.
+   * Hook addresses are optional. Address(0) means that no hook will be called
+   *
+   * @param _setToken             Instance of the SetToken to issue
+   * @param _preIssueHook         Instance of the Manager Contract with the Pre-Issuance Hook function
+   */
+  function initialize(ISetToken _setToken, IManagerIssuanceHook _preIssueHook)
+    external
+    onlySetManager(_setToken, msg.sender)
+    onlyValidAndPendingSet(_setToken)
+  {
+    managerIssuanceHook[_setToken] = _preIssueHook;
+
+    _setToken.initializeModule();
+  }
+
+  /**
+   * Reverts as this module should not be removable after added. Users should always
+   * have a way to redeem their Sets
+   */
+  function removeModule() external override {
+    revert("The BasicIssuanceModule module cannot be removed");
+  }
+
+  /* ============ External Getter Functions ============ */
+
+  /**
+   * Retrieves the addresses and units required to mint a particular quantity of SetToken.
+   *
+   * @param _setToken             Instance of the SetToken to issue
+   * @param _quantity             Quantity of SetToken to issue
+   * @return address[]            List of component addresses
+   * @return uint256[]            List of component units required to issue the quantity of SetTokens
+   */
+  function getRequiredComponentUnitsForIssue(
+    ISetToken _setToken,
+    uint256 _quantity
+  )
+    public
+    view
+    onlyValidAndInitializedSet(_setToken)
+    returns (address[] memory, uint256[] memory)
+  {
+    address[] memory components = _setToken.getComponents();
+
+    uint256[] memory notionalUnits = new uint256[](components.length);
+
+    for (uint256 i = 0; i < components.length; i++) {
+      require(
+        !_setToken.hasExternalPosition(components[i]),
+        "Only default positions are supported"
+      );
+
+      notionalUnits[i] = _setToken
+        .getDefaultPositionRealUnit(components[i])
+        .toUint256()
+        .preciseMulCeil(_quantity);
+    }
+
+    return (components, notionalUnits);
+  }
+
+  /* ============ Internal Functions ============ */
+
+  /**
+   * If a pre-issue hook has been configured, call the external-protocol contract. Pre-issue hook logic
+   * can contain arbitrary logic including validations, external function calls, etc.
+   */
+  function _callPreIssueHooks(
+    ISetToken _setToken,
+    uint256 _quantity,
+    address _caller,
+    address _to
+  ) internal returns (address) {
+    IManagerIssuanceHook preIssueHook = managerIssuanceHook[_setToken];
+    if (address(preIssueHook) != address(0)) {
+      preIssueHook.invokePreIssueHook(_setToken, _quantity, _caller, _to);
+      return address(preIssueHook);
+    }
+
+    return address(0);
+  }
+}
