@@ -310,7 +310,8 @@ describe("Staking", function () {
       const afterVoiceCredits = await staking
         .connect(owner)
         .voiceCredits(owner.address);
-      expect(afterVoiceCredits.gt(userVoiceCreditsBefore)).to.be.true;
+      const totalVoiceCreditsAfter = await staking.totalVoiceCredits();
+      expect(totalVoiceCreditsAfter.gt(totalVoiceCreditsBefore)).to.be.true;
     });
     it("should update total voice credits", async () => {
       expect((await staking.totalVoiceCredits()).gt(totalVoiceCreditsBefore));
@@ -529,5 +530,25 @@ describe("Staking", function () {
         staking.updatePeriodFinish(currentBlock.timestamp)
       ).to.revertedWith("timestamp cant be in the past");
     });
+  });
+
+  describe("totalVoiceCredits", function () {
+    let userVoiceCreditsBefore;
+    let totalVoiceCreditsBefore;
+    beforeEach(async () => {
+      userVoiceCreditsBefore = await staking
+        .connect(owner)
+        .getVoiceCredits(owner.address);
+      totalVoiceCreditsBefore = await staking.totalVoiceCredits();
+      await staking.connect(owner).stake(parseEther("1"), 7 * DAY);
+    });
+
+    it("increments on stake");
+    it("increments on increaseTimeLock");
+    it("increments on increaseStake");
+    it("decrements on withdraw");
+    it(
+      "decrements on increaseStake if enough time has passed since voice credits had been recalculated and the amount of increased is too little to increment it"
+    );
   });
 });

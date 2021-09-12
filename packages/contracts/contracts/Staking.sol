@@ -58,7 +58,7 @@ contract Staking is IStaking, Owned, ReentrancyGuard, Defended {
   /* ========== VIEWS ========== */
 
   /**
-   * @notice this returns the current voice credit balance of an address. voice credits decays over time. the amount returned is up to date, whereas the amount stored in `public voiceCredits` is saved only during some checkpoints.
+   * @notice this returns the current (virtual) voice credit balance of an address. voice credits decays over time. the amount returned is up to date, whereas the amount stored in `public voiceCredits` is saved only during some checkpoints.
    * @dev todo - check if multiplier is needed for calculating square root of smaller balances
    * @param _address address to get voice credits for
    */
