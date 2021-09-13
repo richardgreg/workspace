@@ -1,15 +1,22 @@
+import { Web3Provider } from "@ethersproject/providers";
 import { BigNumber, Contract } from "ethers";
 import { parseEther } from "ethers/lib/utils";
 
-enum BatchType {
+export enum BatchType {
   Mint,
   Redeem,
 }
 export interface Batch {
+  batchId: string;
   deposited: BigNumber;
   claimableToken: BigNumber;
   claimable: boolean;
   batchType: BatchType;
+}
+
+export interface TimeTillBatchProcessing {
+  timeTillProcessing: Date;
+  progressPercentage: number;
 }
 
 export class BatchHysiAdapter {
@@ -108,6 +115,33 @@ export class BatchHysiAdapter {
     const lastRedeemedAt = await this.batchHysi.lastRedeemedAt();
     const cooldown = await this.batchHysi.batchCooldown();
     return [lastMintedAt.add(cooldown), lastRedeemedAt.add(cooldown)];
+  }
+
+  public async calcBatchTimes(
+    library: Web3Provider
+  ): Promise<TimeTillBatchProcessing[]> {
+    const cooldowns = await this.getBatchCooldowns();
+    const currentBlockTime = await (await library.getBlock("latest")).timestamp;
+    const secondsTillMint = new Date(
+      (currentBlockTime / Number(cooldowns[0].toString())) * 1000
+    );
+    const secondsTillRedeem = new Date(
+      (currentBlockTime / Number(cooldowns[1].toString())) * 1000
+    );
+    const percentageTillMint =
+      currentBlockTime / Number(cooldowns[0].toString());
+    const percentageTillRedeem =
+      (currentBlockTime / Number(cooldowns[1].toString())) * 100;
+    return [
+      {
+        timeTillProcessing: secondsTillMint,
+        progressPercentage: percentageTillMint,
+      },
+      {
+        timeTillProcessing: secondsTillRedeem,
+        progressPercentage: percentageTillRedeem,
+      },
+    ];
   }
 }
 
