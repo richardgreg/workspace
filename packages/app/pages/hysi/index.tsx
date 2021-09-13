@@ -6,12 +6,45 @@ import { ContractsContext } from 'context/Web3/contracts';
 import { BigNumber } from 'ethers';
 import { parseEther } from 'ethers/lib/utils';
 import { useContext, useEffect, useState } from 'react';
+import CircularProgressbar from 'react-circular-progressbar';
 import { BatchHysiAdapter } from '../../../contracts';
 import { Batch } from '../../../contracts/adapters/BatchHysi/BatchHysiAdapter';
 
 enum BatchType {
   Mint,
   Redeem,
+}
+
+interface TimeTillBatchProcessing {
+  timeTillProcessing: Date;
+  progressPercentage: number;
+}
+
+async function calcBatchTimes(
+  batchHysiAdapter: BatchHysiAdapter,
+  library: Web3Provider,
+): Promise<TimeTillBatchProcessing[]> {
+  const cooldowns = await batchHysiAdapter.getBatchCooldowns();
+  const currentBlockTime = await (await library.getBlock('latest')).timestamp;
+  const secondsTillMint = new Date(
+    (currentBlockTime / Number(cooldowns[0].toString())) * 1000,
+  );
+  const secondsTillRedeem = new Date(
+    (currentBlockTime / Number(cooldowns[1].toString())) * 1000,
+  );
+  const percentageTillMint = currentBlockTime / Number(cooldowns[0].toString());
+  const percentageTillRedeem =
+    (currentBlockTime / Number(cooldowns[1].toString())) * 100;
+  return [
+    {
+      timeTillProcessing: secondsTillMint,
+      progressPercentage: percentageTillMint,
+    },
+    {
+      timeTillProcessing: secondsTillRedeem,
+      progressPercentage: percentageTillRedeem,
+    },
+  ];
 }
 
 export default function BatchHysi(): JSX.Element {
@@ -24,9 +57,11 @@ export default function BatchHysi(): JSX.Element {
   const [threeCrvPrice, setThreeCrvPrice] = useState<BigNumber>();
   const [batchHysiAdapter, setBatchHysiAdapter] = useState<BatchHysiAdapter>();
   const [batches, setBatches] = useState<Batch[]>();
+  const [timeTillBatchProcessing, setTimeTillBatchProcessing] =
+    useState<TimeTillBatchProcessing[]>();
 
   useEffect(() => {
-    if (!library) {
+    if (!library || !contracts) {
       return;
     }
     setBatchHysiAdapter(
@@ -59,6 +94,9 @@ export default function BatchHysi(): JSX.Element {
     batchHysiAdapter.getHysiPrice().then((res) => setHysiPrice(res));
     batchHysiAdapter.getThreeCrvPrice().then((res) => setThreeCrvPrice(res));
     batchHysiAdapter.getBatches(account).then((res) => setBatches(res));
+    calcBatchTimes(batchHysiAdapter, library).then((res) =>
+      setTimeTillBatchProcessing(res),
+    );
   }, [batchHysiAdapter]);
 
   return (
@@ -201,19 +239,53 @@ export default function BatchHysi(): JSX.Element {
               </div>
             </div>
           </div>
-          <div className="bg-white rounded-lg shadow px-5 py-6 mt-16">
-            <div></div>
-            <div>
-              <p>
-                We reduce your gas fee/transaction with doing deposit in batch.
-                This batch will automatically submitted after reach our
-                schedule. When the batch is completed you can claim the HYSI
-                token to be displayed on your wallet
-              </p>
+          <div className="bg-white rounded-lg shadow px-5 py-6 mt-16 flex flex-row">
+            <div className="w-2/3 flex flex-row">
+              <div className="w-24 h-24 flex-shrink-0 flex-grow-0 mr-4">
+                {timeTillBatchProcessing && (
+                  <CircularProgressbar
+                    percentage={timeTillBatchProcessing[0].progressPercentage}
+                    initialAnimation={true}
+                    styles={{
+                      // Customize the root svg element
+                      root: {},
+                      // Customize the path, i.e. the "completed progress"
+                      path: {
+                        stroke: `rgba(62, 152, 199, ${60 / 100})`,
+                        strokeLinecap: 'butt',
+                        // Customize transition animation
+                        transition: 'stroke-dashoffset 0.5s ease 0s',
+                      },
+                      trail: {
+                        stroke: '#d6d6d6',
+                      },
+                    }}
+                  />
+                )}
+              </div>
+              <div>
+                {timeTillBatchProcessing && (
+                  <h2 className="font-semibold text-base text-gray-900 mb-2">
+                    {`${timeTillBatchProcessing[0].timeTillProcessing.getUTCHours()} Hours
+                  ${timeTillBatchProcessing[0].timeTillProcessing.getUTCMinutes()} Minutes
+                  ${timeTillBatchProcessing[0].timeTillProcessing.getUTCSeconds()} Seconds left`}
+                  </h2>
+                )}
+                <p>
+                  We reduce your gas fee/transaction with doing deposit in
+                  batch. This batch will automatically submitted after reach our
+                  schedule. When the batch is completed you can claim the HYSI
+                  token to be displayed on your wallet
+                </p>
+              </div>
             </div>
-            <div></div>
+            <div className="w-1/3 flex justify-end">
+              <button className="px-3 h-12 rounded-lg font-semibold bg-blue-100 text-blue-600 hover:bg-blue-200 hover:text-blue-700">
+                See History
+              </button>
+            </div>
           </div>
-          <div>
+          <div className="mt-16">
             <h2></h2>
             <div className="flex flex-col">
               <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -247,7 +319,7 @@ export default function BatchHysi(): JSX.Element {
                         </tr>
                       </thead>
                       <tbody>
-                        {batches.map((batch, id) => (
+                        {batches?.map((batch, id) => (
                           <tr
                             key={`"${batch.batchType}-${id}"`}
                             className={id % 2 === 0 ? 'bg-white' : 'bg-gray-50'}

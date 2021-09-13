@@ -28,19 +28,19 @@ export class BatchHysiAdapter {
   ) {}
 
   componentMap = {
-    [process.env.ADDR_YDUSD]: {
+    [process.env.ADDR_YDUSD.toLowerCase()]: {
       metaPool: this.dusdMetapool,
       yPool: this.yDUSD,
     },
-    [process.env.ADDR_FRAX]: {
+    [process.env.ADDR_YFRAX.toLowerCase()]: {
       metaPool: this.fraxMetapool,
       yPool: this.yFRAX,
     },
-    [process.env.ADDR_YUSDN]: {
+    [process.env.ADDR_YUSDN.toLowerCase()]: {
       metaPool: this.usdnMetapool,
       yPool: this.yUSDN,
     },
-    [process.env.ADDR_YUST]: {
+    [process.env.ADDR_YUST.toLowerCase()]: {
       metaPool: this.ustMetapool,
       yPool: this.yUST,
     },
@@ -56,9 +56,9 @@ export class BatchHysiAdapter {
     const componentAmounts = components[1];
 
     const componentVirtualPrices = await Promise.all(
-      componentAddresses.map(async (component) => {
-        const metapool = this.componentMap[component.toLowerCase()].metaPool;
-        const yPool = this.componentMap[component.toLowerCase()].yPool;
+      componentAddresses.map(async (address) => {
+        const metapool = this.componentMap[address.toLowerCase()].metaPool;
+        const yPool = this.componentMap[address.toLowerCase()].yPool;
         const yPoolPricePerShare = await yPool.pricePerShare();
         const metapoolPrice = await metapool.get_virtual_price();
         return yPoolPricePerShare
