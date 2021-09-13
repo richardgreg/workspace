@@ -17,11 +17,14 @@ const tailJump = keyframes`
 `;
 
 const redcatfall = keyframes`
-  from{
+  0%{
     transform: translate(-50px, -50px);
   }
-  to{
+  50%{
     transform: translate(35px, 25px);
+  }
+  100%{
+    transform: translate(-50px, -50px);
   }
 `;
 
@@ -35,12 +38,16 @@ const snowFall = keyframes`
 `;
 
 const lightBlueCatRise = keyframes`{
-  from{
+  0%{
     transform: translate(0px,0px) rotateZ(0deg);
      
   }
-  to{
+  50%{
       transform: translate(-20px,-20px) rotateZ(-20deg);
+  }
+  100%{
+    transform: translate(0px,0px) rotateZ(0deg);
+     
   }
 `;
 
