@@ -71,7 +71,7 @@ const StyledCatPool = styled(CatPoolSvg)`
     transform-origin: bottom;
 }
   #svg-id-redcat{
-    animation: ${redcatfall} 12s forwards;
+    animation: ${redcatfall} 12s infinite forwards;
     transform-origin: top;
 }
   #svg-id-popcorn {
@@ -80,7 +80,7 @@ const StyledCatPool = styled(CatPoolSvg)`
     transform-box: fill-box;
   }
   #svg-id-lightbluecat{
-    animation: ${lightBlueCatRise}  12s forwards;
+    animation: ${lightBlueCatRise} 12s infinite forwards;
      transform-origin: center;
      transform-box: fill-box;
  }
