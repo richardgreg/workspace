@@ -17,14 +17,11 @@ const tailJump = keyframes`
 `;
 
 const redcatfall = keyframes`
-  0%{
+  from{
     transform: translate(-50px, -50px);
   }
-  50%{
+  to{
     transform: translate(35px, 25px);
-  }
-  100%{
-    transform: translate(-50px, -50px);
   }
 `;
 
@@ -37,17 +34,12 @@ const snowFall = keyframes`
   }
 `;
 
-const lightBlueCatRise = keyframes`{
-  0%{
-    transform: translate(0px,0px) rotateZ(0deg);
-     
+const lightBlueCatRise = keyframes`
+  from{
+    transform: translate(0px,0px) rotateZ(0deg); 
   }
-  50%{
+  to{
       transform: translate(-20px,-20px) rotateZ(-20deg);
-  }
-  100%{
-    transform: translate(0px,0px) rotateZ(0deg);
-     
   }
 `;
 
@@ -78,7 +70,7 @@ const StyledCatPool = styled(CatPoolSvg)`
     transform-origin: bottom;
 }
   #svg-id-redcat{
-    animation: ${redcatfall} 12s infinite forwards;
+    animation: ${redcatfall} 12s forwards;
     transform-origin: top;
 }
   #svg-id-popcorn {
@@ -87,7 +79,7 @@ const StyledCatPool = styled(CatPoolSvg)`
     transform-box: fill-box;
   }
   #svg-id-lightbluecat{
-    animation: ${lightBlueCatRise} 12s infinite forwards;
+    animation: ${lightBlueCatRise} 12s forwards;
      transform-origin: center;
      transform-box: fill-box;
  }
