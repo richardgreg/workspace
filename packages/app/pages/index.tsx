@@ -745,7 +745,7 @@ const IndexPage = () => {
                   className="mx-auto mb-1"
                 ></img>
               </div>
-              <h3 className="font-medium text-2xl py-8">Connect</h3>
+              <h3 className="font-medium text-2xl pt-8 py-4">Connect</h3>
               <p className="w-3/4 text-center text-lg text-gray-500">
                 Connect your Metamask wallet with Popcorn
               </p>
@@ -759,7 +759,7 @@ const IndexPage = () => {
                   className="mx-auto mb-2"
                 ></img>
               </div>
-              <h3 className="font-medium text-2xl py-8">Deposit</h3>
+              <h3 className="font-medium text-2xl pt-8 py-4">Deposit</h3>
               <p className="w-3/4 text-center text-lg text-gray-500">
                 Deposit your crypto and choose a product or strategy
               </p>
@@ -772,7 +772,7 @@ const IndexPage = () => {
                   className="mx-auto mt-2"
                 ></img>
               </div>
-              <h3 className="font-medium text-2xl py-8">Do well</h3>
+              <h3 className="font-medium text-2xl pt-8 py-4">Do well</h3>
               <p className="w-3/4 text-center text-lg text-gray-500">
                 Earn competitive returns on your crypto assets
               </p>
@@ -786,7 +786,7 @@ const IndexPage = () => {
                   className="mx-auto mb-1"
                 ></img>
               </div>
-              <h3 className="font-medium text-2xl py-8">Do good</h3>
+              <h3 className="font-medium text-2xl pt-8 py-4">Do good</h3>
               <p className="w-3/4 text-center text-lg text-gray-500">
                 Choose which social impact organization you’d like to help
               </p>
