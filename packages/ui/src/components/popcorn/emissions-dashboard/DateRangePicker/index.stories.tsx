@@ -13,4 +13,8 @@ const Template: Story = (args) => <DateRangePicker {...args} />;
 const updateDates = (startDate: Date, endDate: Date): void => {};
 
 export const Primary = Template.bind({});
-Primary.args = { updateDates, startDate: new Date(), endDate: new Date() };
+Primary.args = {
+  updateDates,
+  startDate: new Date('2021/06/15'),
+  endDate: new Date(),
+};
