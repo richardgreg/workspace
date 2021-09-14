@@ -356,21 +356,19 @@ export const DateRangePicker: React.FC<DateTimePickerProps> = ({
       <div className="md:flex md:items-center md:justify-between justify-self-end">
         <div className="mt-4 flex md:mt-0 md:ml-4">
           <CalendarInput
-            label="Start Date"
-            isStartInput
             defaultDate={startDate}
-            onChange={(selected) => setSelectedStartDate(selected)}
+            isStartInput
+            label="Start Date"
             maxDate={selectedEndDate}
+            onChange={(selected) => setSelectedStartDate(selected)}
           />
           <CalendarInput
-            label="End Date"
-            minDate={
-              selectedStartDate ? selectedStartDate : new Date('31/12/2020')
-            }
             defaultDate={endDate}
-            onChange={(selected) => setSelectedEndDate(selected)}
-            maxDate={new Date()}
             isStartInput={false}
+            label="End Date"
+            maxDate={new Date()}
+            minDate={selectedStartDate}
+            onChange={(selected) => setSelectedEndDate(selected)}
           />
           <button
             type="button"
