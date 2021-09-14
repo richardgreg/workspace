@@ -29,7 +29,6 @@ interface Contracts {
   randomNumberConsumer: Contract;
   grantElections: Contract;
   beneficiaryVaults: Contract;
-  rewardsEscrow: Contract;
   rewardsManager: Contract;
   mock3CRV: Contract;
   uniswapFactory: Contract;
@@ -37,6 +36,7 @@ interface Contracts {
   uniswapPair: Contract;
   beneficiaryGovernance: Contract;
   region: Contract;
+  rewardsEscrow: Contract;
   mockCrvDUSD: Contract;
   mockCrvFRAX: Contract;
   mockCrvUSDN: Contract;
@@ -1190,6 +1190,9 @@ ADDR_3CRV=${contracts.mock3CRV.address}
 ADDR_BATCH_HYSI=${contracts.hysiBatchInteraction.address}
 ADDR_HYSI=${contracts.mockHYSI.address}
 ADDR_BASIC_ISSUANCE_MODULE=${contracts.mockBasicIssuanceModule.address}
+ADDR_REGION=${contracts.region.address}
+ADDR_REWARDS_ESCROW=${contracts.rewardsEscrow.address}
+
 ADDR_TRI_POOL=${contracts.mockTriPool.address}
 ADDR_DUSD_METAPOOL=${contracts.mockCurveMetapoolDUSD.address}
 ADDR_FRAX_METAPOOL=${contracts.mockCurveMetapoolFRAX.address}
@@ -1199,6 +1202,7 @@ ADDR_YDUSD=${contracts.mockYearnVaultDUSD.address}
 ADDR_YFRAX=${contracts.mockYearnVaultFRAX.address}
 ADDR_YUSDN=${contracts.mockYearnVaultUSDN.address}
 ADDR_YUST=${contracts.mockYearnVaultUST.address}
+
     `);
   };
 

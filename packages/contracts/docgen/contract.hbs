@@ -37,7 +37,7 @@
 
 {{#if (or (eq visibility "public") (eq visibility "external"))}}
 
-### {{name}}()
+### <a name="{{anchor}}"></a> {{name}}() 
 
 ```
 {{name}}({{args}}) {{visibility}} {{#if outputs}} returns ({{outputs}}){{/if}}
@@ -71,7 +71,7 @@
 
 ## Events
 {{#ownEvents}}
-### {{name}}
+### <a name="{{anchor}}"></a> {{name}}
 ```
 {{name}}({{args}})
 ```
@@ -93,7 +93,7 @@
 {{#if ownModifiers}}
 ## Modifiers
 {{#ownModifiers}}
-### `{{name}}()`
+### <a name="{{anchor}}"></a> `{{name}}()`
 ```
 {{name}}({{args}})
 ```
