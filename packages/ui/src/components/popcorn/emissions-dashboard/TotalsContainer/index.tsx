@@ -1,6 +1,6 @@
 import React from 'react';
 import { getDummyEmissionData } from '../dummyEmissionsData';
-import { AreaBarChart } from '../recharts/AreaBarChart';
+import { BiaxialLineChart } from '../recharts/BiaxialLineChart';
 import { StatsCards } from '../StatsCards/index';
 
 export const TotalsContainer = ({ emissionSummaryStats }) => {
@@ -22,7 +22,7 @@ export const TotalsContainer = ({ emissionSummaryStats }) => {
       <div className="max-w-7xl">
         <div className="grid grid-cols-1 gap-4 lg:col-span-2">
           <div className="rounded-lg bg-white overflow-hidden shadow py-6">
-            <AreaBarChart data={getDummyEmissionData()} height={224} />
+            <BiaxialLineChart data={getDummyEmissionData()} height={224} />
           </div>
         </div>
       </div>

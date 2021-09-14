@@ -34,39 +34,46 @@ const CustomTooltip = ({ active, payload, label }) => {
   return null;
 };
 
+const ChartContentWrapper: React.FC<{ height: number; children: JSX.Element }> =
+  (props) => {
+    return (
+      <div
+        className="w-full flex flex-wrap content-center border-2 border-gray-50 justify-center "
+        style={{
+          objectFit: 'cover',
+          height: props.height,
+          marginTop: 5,
+          marginRight: 30,
+          marginLeft: 30,
+          marginBottom: 5,
+        }}
+      >
+        {props.children}
+      </div>
+    );
+  };
+
 export const ChartLoading: React.FC<{ height: number }> = ({ height }) => {
   return (
-    <div
-      className="w-full flex flex-wrap content-center border-2 border-gray-50 "
-      style={{
-        objectFit: 'cover',
-        height: height,
-        marginTop: 5,
-        marginRight: 30,
-        marginLeft: 30,
-        marginBottom: 5,
-      }}
-    >
+    <ChartContentWrapper height={height}>
       <Spinner />
-    </div>
+    </ChartContentWrapper>
   );
 };
 
 export const ChartError: React.FC<{ height: number }> = ({ height }) => {
   return (
-    <div
-      className="w-full flex flex-wrap content-center border-2 border-gray-50 justify-center "
-      style={{
-        objectFit: 'cover',
-        height: height,
-        marginTop: 5,
-        marginRight: 30,
-        marginLeft: 30,
-        marginBottom: 5,
-      }}
-    >
+    <ChartContentWrapper height={height}>
       <p className="text-lg text-gray-500">Error loading transactions</p>
-    </div>
+    </ChartContentWrapper>
+  );
+};
+
+export const ChartEmpty: React.FC<{ height: number }> = ({ height }) => {
+  return (
+    <ChartContentWrapper height={height}>
+      <p className="text-lg text-gray-500">No transactions were made</p>
+    </ChartContentWrapper>
   );
 };
 
@@ -131,18 +138,6 @@ export const BiaxialLineChart: React.FC<BiaxialLineChartProps> = ({
       </LineChart>
     </ResponsiveContainer>
   ) : (
-    <div
-      className="w-full flex flex-wrap content-center border-2 border-gray-50 justify-center "
-      style={{
-        objectFit: 'cover',
-        height: height,
-        marginTop: 5,
-        marginRight: 30,
-        marginLeft: 30,
-        marginBottom: 5,
-      }}
-    >
-      <p className="text-lg text-gray-500">No transactions were made</p>
-    </div>
+    <ChartEmpty height={height} />
   );
 };
