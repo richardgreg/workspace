@@ -181,7 +181,7 @@ contract HysiBatchInteraction is Owned {
     unclaimedShares = batch.unclaimedShares;
     suppliedToken = batch.suppliedToken;
     claimableToken = batch.claimableToken;
-    shareBalance = batch.shareBalance[msg.sender];
+    shareBalance = batch.shareBalance[account];
   }
 
   /* ========== MUTATIVE FUNCTIONS ========== */
@@ -241,6 +241,7 @@ contract HysiBatchInteraction is Owned {
     require(batch.claimable, "not yet claimable");
 
     uint256 shares = batch.shareBalance[msg.sender];
+    require(shares > 0, "requires shares");
     require(shares <= batch.unclaimedShares, "claiming too many shares");
 
     //Calculate how many token will be claimed

@@ -21,8 +21,6 @@ const MintRedeemInterface: React.FC<MintRedeemInterfaceProps> = ({
   deposit,
   depositDisabled,
 }) => {
-  console.log('MintRedeemInterface', depositAmount);
-
   return (
     <div className="bg-white rounded-lg shadow px-5 py-6 sm:px-6">
       <div className="flex flex-row">
@@ -44,7 +42,9 @@ const MintRedeemInterface: React.FC<MintRedeemInterfaceProps> = ({
           />
           <div className="w-full text-center mt-10">
             <button
-              className="bg-blue-600 px-12 py-3 text-white rounded-xl hover:bg-blue-700"
+              className={`bg-blue-600 px-12 py-3 text-white rounded-xl disabled:opacity-75 ${
+                depositDisabled ? 'hover:bg-blue-700' : ''
+              }`}
               onClick={(e) =>
                 deposit(
                   depositAmount,

@@ -1,10 +1,6 @@
 import { BigNumber } from '@ethersproject/bignumber';
-import { parseEther } from '@ethersproject/units';
-import {
-  formatAndRoundBigNumber,
-  scaleNumberToBigNumber,
-} from '@popcorn/utils';
-import { Dispatch } from 'react';
+import { bigNumberToNumber, scaleNumberToBigNumber } from '@popcorn/utils';
+import { Dispatch, useEffect, useState } from 'react';
 
 export interface TokenInputProps {
   threeCrvBalance: BigNumber;
@@ -27,7 +23,56 @@ const TokenInput: React.FC<TokenInputProps> = ({
   depositAmount,
   setDepositAmount,
 }) => {
-  console.log('TokenInput', depositAmount);
+  const [estimatedAmount, setEstimatedAmount] = useState<number>(0);
+  const [validInputAmount, setValidInputAmount] = useState<Boolean>(true);
+
+  useEffect(() => {
+    if (depositAmount.toString() !== '0') {
+      calcOutputAmountsFromInput(depositAmount, withdrawl);
+    }
+  }, []);
+
+  useEffect(() => {
+    setValidInputAmount(
+      withdrawl
+        ? depositAmount <= hysiBalance
+        : depositAmount <= threeCrvBalance,
+    );
+  }, [depositAmount]);
+
+  function updateWithOuputAmounts(value: number, withdrawl): void {
+    setEstimatedAmount(value);
+    if (withdrawl) {
+      setDepositAmount(
+        scaleNumberToBigNumber(value).mul(threeCrvPrice).div(hysiPrice),
+      );
+    } else {
+      setDepositAmount(
+        scaleNumberToBigNumber(value).mul(hysiPrice).div(threeCrvPrice),
+      );
+    }
+  }
+
+  function updateWithInputAmounts(value: number, withdrawl: Boolean): void {
+    const raisedValue = scaleNumberToBigNumber(value);
+    setDepositAmount(raisedValue);
+    calcOutputAmountsFromInput(raisedValue, withdrawl);
+  }
+
+  function calcOutputAmountsFromInput(
+    value: BigNumber,
+    withdrawl: Boolean,
+  ): void {
+    if (withdrawl) {
+      setEstimatedAmount(
+        bigNumberToNumber(value.mul(hysiPrice).div(threeCrvPrice)),
+      );
+    } else {
+      setEstimatedAmount(
+        bigNumberToNumber(value.mul(threeCrvPrice).div(hysiPrice)),
+      );
+    }
+  }
 
   return (
     <>
@@ -35,14 +80,18 @@ const TokenInput: React.FC<TokenInputProps> = ({
         <p className="font-semibold text-sm text-gray-900 mb-1">
           Deposit Amount
         </p>
-        <div className="rounded-md border border-gray-200 px-2 py-3">
+        <div
+          className={`rounded-md border  px-2 py-3 ${
+            validInputAmount ? 'border-gray-200' : 'border-red-600'
+          }`}
+        >
           <div className="flex flex-row justify-between items-center">
             <input
               className="w-96"
               placeholder="-"
-              value={formatAndRoundBigNumber(depositAmount)}
+              value={bigNumberToNumber(depositAmount)}
               onChange={(e) =>
-                setDepositAmount(scaleNumberToBigNumber(Number(e.target.value)))
+                updateWithInputAmounts(Number(e.target.value), withdrawl)
               }
             />
             <div className="flex flex-row items-center">
@@ -58,6 +107,9 @@ const TokenInput: React.FC<TokenInputProps> = ({
             </div>
           </div>
         </div>
+        {!validInputAmount && (
+          <p className="text-red-600">Insufficient Balance</p>
+        )}
       </div>
       <div className="relative">
         <div className="absolute inset-0 flex items-center" aria-hidden="true">
@@ -87,27 +139,9 @@ const TokenInput: React.FC<TokenInputProps> = ({
             <input
               className="w-96"
               placeholder="-"
-              value={
-                depositAmount.toString() === '0'
-                  ? 0
-                  : withdrawl
-                  ? formatAndRoundBigNumber(
-                      depositAmount.mul(hysiPrice).div(threeCrvPrice),
-                    )
-                  : formatAndRoundBigNumber(
-                      depositAmount.mul(threeCrvPrice).div(hysiPrice),
-                    )
-              }
+              value={estimatedAmount}
               onChange={(e) =>
-                withdrawl
-                  ? setDepositAmount(
-                      scaleNumberToBigNumber(Number(e.target.value)),
-                    )
-                  : setDepositAmount(
-                      scaleNumberToBigNumber(Number(e.target.value))
-                        .mul(hysiPrice)
-                        .div(parseEther('1')),
-                    )
+                updateWithOuputAmounts(Number(e.target.value), withdrawl)
               }
             />
             <p className="text-gray-700">{withdrawl ? '3CRV' : 'HYSI'}</p>

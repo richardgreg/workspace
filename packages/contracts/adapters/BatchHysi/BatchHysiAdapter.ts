@@ -96,6 +96,7 @@ export class BatchHysiAdapter {
       batchIds.map(async (id) => {
         const res = await this.batchHysi.getBatch(account, id);
         return {
+          batchId: id,
           deposited: res.shareBalance,
           claimableToken: res.claimableToken
             .mul(res.shareBalance)

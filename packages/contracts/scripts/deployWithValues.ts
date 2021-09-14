@@ -484,7 +484,7 @@ export default async function deploy(ethers): Promise<void> {
     await bluebird.map(
       accounts,
       async (account) => {
-        await contracts.mock3CRV.mint(account.address, parseEther("1000"));
+        await contracts.mock3CRV.mint(account.address, parseEther("1250"));
       },
       { concurrency: 1 }
     );
@@ -495,7 +495,7 @@ export default async function deploy(ethers): Promise<void> {
     await bluebird.map(
       accounts,
       async (account) => {
-        await contracts.mockHYSI.mint(account.address, parseEther("10"));
+        await contracts.mockHYSI.mint(account.address, parseEther("11"));
       },
       { concurrency: 1 }
     );
@@ -600,6 +600,45 @@ export default async function deploy(ethers): Promise<void> {
         .connect(voter)
         .stake(utils.parseEther("1000"), 86400 * 365 * 4);
     });
+  };
+
+  const createMintBatches = async (): Promise<void> => {
+    console.log("creating hysi mint batches");
+    await bluebird.map(accounts, async (account: SignerWithAddress) => {
+      await contracts.mock3CRV
+        .connect(account)
+        .approve(
+          contracts.hysiBatchInteraction.address,
+          utils.parseEther("250")
+        );
+    });
+    await bluebird.map(accounts, async (account: SignerWithAddress) => {
+      await contracts.hysiBatchInteraction
+        .connect(account)
+        .depositForMint(utils.parseEther("250"));
+    });
+    await ethers.provider.send("evm_increaseTime", [1800]);
+    await ethers.provider.send("evm_mine", []);
+
+    await contracts.hysiBatchInteraction.connect(accounts[0]).batchMint(0);
+  };
+
+  const createRedeemBatches = async (): Promise<void> => {
+    console.log("creating hysi redeem batches");
+    await bluebird.map(accounts, async (account: SignerWithAddress) => {
+      await contracts.mockHYSI
+        .connect(account)
+        .approve(contracts.hysiBatchInteraction.address, utils.parseEther("1"));
+    });
+    await bluebird.map(accounts, async (account: SignerWithAddress) => {
+      await contracts.hysiBatchInteraction
+        .connect(account)
+        .depositForRedeem(utils.parseEther("1"));
+    });
+
+    await ethers.provider.send("evm_increaseTime", [1800]);
+    await ethers.provider.send("evm_mine", []);
+    await contracts.hysiBatchInteraction.connect(accounts[0]).batchRedeem(0);
   };
 
   const transferBeneficiaryRegistryOwnership = async (): Promise<void> => {
@@ -1185,6 +1224,8 @@ ADDR_YUST=${contracts.mockYearnVaultUST.address}
   await fundYearnVaults();
   await fundRewardsManager();
   await stakePOP();
+  await createMintBatches();
+  await createRedeemBatches();
   await transferBeneficiaryRegistryOwnership();
   await updateProposalSettings();
   await addFinalizedProposalsAndBeneficiariesToRegistry();

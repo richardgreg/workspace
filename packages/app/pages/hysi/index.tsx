@@ -1,11 +1,12 @@
 import { Web3Provider } from '@ethersproject/providers';
+import { parseEther } from '@ethersproject/units';
 import { useWeb3React } from '@web3-react/core';
 import BatchProcessingInfo from 'components/BatchHysi/BatchProcessingInfo';
 import ClaimableBatches from 'components/BatchHysi/ClaimableBatches';
 import MintRedeemInterface from 'components/BatchHysi/MintRedeemInterface';
 import Navbar from 'components/NavBar/NavBar';
 import { ContractsContext } from 'context/Web3/contracts';
-import { BigNumber, utils } from 'ethers';
+import { BigNumber, Contract, utils } from 'ethers';
 import { useContext, useEffect, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import { BatchHysiAdapter } from '../../../contracts';
@@ -77,85 +78,117 @@ export default function BatchHysi(): JSX.Element {
     batchType: BatchType,
   ): Promise<void> {
     setWait(true);
+    console.log(
+      'deposit amount',
+      depositAmount.div(parseEther('1')).toString(),
+    );
     if (batchType === BatchType.Mint) {
-      const approved =
-        (await contracts.threeCrv.allowance(
-          account,
-          contracts.batchHysi.address,
-        )) >= depositAmount;
-      if (approved) {
+      const allowance = await contracts.threeCrv.allowance(
+        account,
+        contracts.batchHysi.address,
+      );
+      console.log('mint allowance', allowance.toString());
+      if (allowance >= depositAmount) {
         toast.loading('Depositing 3CRV...');
-        await contracts.batchHysi
+        const res = await contracts.batchHysi
           .connect(library.getSigner())
           .depositForMint(depositAmount)
           .then((res) => {
-            toast.success('3CRV deposited!');
+            res.wait().then((res) => {
+              toast.dismiss();
+              toast.success('3CRV deposited!');
+            });
           })
           .catch((err) => {
-            toast.error(err.data.message.split("'")[1]);
+            toast.dismiss();
+            if (err.data === undefined) {
+              toast.error('An error occured');
+            } else {
+              toast.error(err.data.message.split("'")[1]);
+            }
           });
       } else {
-        toast.loading('Approving 3CRV...');
-        await contracts.threeCrv
-          .connect(library.getSigner())
-          .approve(process.env.ADDR_STAKING, utils.parseEther('100000000'))
-          .then((res) => toast.success('3CRV approved!'))
-          .catch((err) => toast.error(err.data.message.split("'")[1]));
-        setWait(false);
+        approve(contracts.threeCrv);
       }
     } else {
-      const approved =
-        (await contracts.hysi.allowance(
-          account,
-          contracts.batchHysi.address,
-        )) >= depositAmount;
-      if (approved) {
+      const allowance = await contracts.hysi.allowance(
+        account,
+        contracts.batchHysi.address,
+      );
+      console.log('redeem allowance', allowance.toString());
+      if (allowance >= depositAmount) {
         toast.loading('Depositing HYSI...');
         await contracts.batchHysi
           .connect(library.getSigner())
           .depositForRedeem(depositAmount)
           .then((res) => {
-            toast.success('HYSI deposited!');
+            res.wait().then((res) => {
+              toast.dismiss();
+              toast.success('HYSI deposited!');
+            });
           })
           .catch((err) => {
-            toast.error(err.data.message.split("'")[1]);
+            toast.dismiss();
+            if (err.data === undefined) {
+              toast.error('An error occured');
+            } else {
+              toast.error(err.data.message.split("'")[1]);
+            }
           });
       } else {
-        toast.loading('Approving HYSI...');
-        await contracts.hysi
-          .connect(library.getSigner())
-          .approve(process.env.ADDR_STAKING, utils.parseEther('100000000'))
-          .then((res) => toast.success('HYSI approved!'))
-          .catch((err) => toast.error(err.data.message.split("'")[1]));
-        setWait(false);
+        approve(contracts.hysi);
       }
     }
     setWait(false);
   }
 
   async function claim(batchId: string): Promise<void> {
+    console.log(await (await contracts.batchHysi.batches(batchId)).toString());
+    console.log(
+      await (await contracts.batchHysi.getBatch(account, batchId)).toString(),
+    );
     toast.loading('Claiming Batch...');
     await contracts.batchHysi
       .connect(library.getSigner())
       .claim(batchId)
       .then((res) => {
-        toast.success('Batch claimed!');
+        res.wait().then((res) => {
+          toast.dismiss();
+          toast.success('Batch claimed!');
+        });
+        batchHysiAdapter.getBatches(account).then((res) => setBatches(res));
       })
       .catch((err) => {
-        toast.error(err.data.message.split("'")[1]);
+        toast.dismiss();
+        if (err.data === undefined) {
+          toast.error('An error occured');
+        } else {
+          toast.error(err.data.message.split("'")[1]);
+        }
       });
   }
 
-  async function approve(): Promise<void> {
+  async function approve(contract: Contract): Promise<void> {
     setWait(true);
-    toast.loading('Approving POP for staking...');
+    toast.loading('Approving Token...');
+    await contract
+      .connect(library.getSigner())
+      .approve(contracts.batchHysi.address, utils.parseEther('100000000'))
+      .then((res) => {
+        res.wait().then((res) => {
+          toast.dismiss();
+          toast.success('Token approved!');
+        });
+      })
+      .catch((err) => {
+        toast.dismiss();
+        if (err.data === undefined) {
+          toast.error('An error occured');
+        } else {
+          toast.error(err.data.message.split("'")[1]);
+        }
+      });
 
-    const lockedPopInEth = utils.parseEther('100000000');
-    const connected = await contracts.pop.connect(library.getSigner());
-    await connected
-      .approve(process.env.ADDR_STAKING, lockedPopInEth)
-      .then((res) => toast.success('POP approved!'))
-      .catch((err) => toast.error(err.data.message.split("'")[1]));
     setWait(false);
   }
 
@@ -195,18 +228,20 @@ export default function BatchHysi(): JSX.Element {
           <BatchProcessingInfo
             timeTillBatchProcessing={timeTillBatchProcessing}
           />
-          <div className="mt-16">
-            <h2></h2>
-            <div className="flex flex-col">
-              <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-                  <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-                    <ClaimableBatches batches={batches} claim={claim} />
+          {batches?.length > 0 && (
+            <div className="mt-16">
+              <h2></h2>
+              <div className="flex flex-col">
+                <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                  <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+                    <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+                      <ClaimableBatches batches={batches} claim={claim} />
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
       </main>
     </div>

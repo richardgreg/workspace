@@ -40,7 +40,12 @@ const ClaimableBatches: React.FC<ClaimableBatchesProps> = ({
       </thead>
       <tbody>
         {batches?.map((batch, i) => (
-          <ClaimableBatch batch={batch} index={i} claim={claim} />
+          <ClaimableBatch
+            batch={batch}
+            index={i}
+            claim={claim}
+            key={batch.batchId}
+          />
         ))}
       </tbody>
     </table>
