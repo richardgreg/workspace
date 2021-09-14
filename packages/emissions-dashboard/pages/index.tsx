@@ -496,37 +496,34 @@ const IndexPage = (): JSX.Element => {
   const addContract = async (contractAddress: string): Promise<void> => {
     const enterMessage: string = 'Please enter a valid address';
     let message: string;
-    if (contractAddress) {
-      if (web3.utils.isAddress(contractAddress)) {
-        const code = await library.getCode(contractAddress);
-        const isConnected = !(code === '0x0' || code === '0x');
-        if (isConnected) {
-          if (localStorage.getItem('contracts')) {
-            const existingContracts = JSON.parse(
-              localStorage.getItem('contracts'),
-            );
-            if (!existingContracts.includes(contractAddress)) {
-              existingContracts.push(contractAddress);
-              localStorage.setItem(
-                'contracts',
-                JSON.stringify(existingContracts),
-              );
-            }
-          } else {
+
+    if (!contractAddress) {
+      message = `No Contract Address was provided. ${enterMessage}`;
+    } else if (!web3.utils.isAddress(contractAddress)) {
+      message = `The address is not a valid Ethereum address. ${enterMessage}`;
+    } else {
+      const code = await library.getCode(contractAddress);
+      const isConnected = !(code === '0x0' || code === '0x');
+      if (!isConnected) {
+        message = `The address does not point to a valid Ethereum contract. ${enterMessage}`;
+      } else {
+        if (localStorage.getItem('contracts')) {
+          const existingContracts = JSON.parse(
+            localStorage.getItem('contracts'),
+          );
+          if (!existingContracts.includes(contractAddress)) {
+            existingContracts.push(contractAddress);
             localStorage.setItem(
               'contracts',
-              JSON.stringify([contractAddress]),
+              JSON.stringify(existingContracts),
             );
           }
         } else {
-          message = `The address you entered does not point to a valid Ethereum contract. ${enterMessage}`;
+          localStorage.setItem('contracts', JSON.stringify([contractAddress]));
         }
-      } else {
-        message = `The address you entered is not a valid Ethereum contract. ${enterMessage}`;
       }
-    } else {
-      message = `No Contract Address was provided. ${enterMessage}`;
     }
+
     setErrorMessage(message);
     setOpen(false);
   };
