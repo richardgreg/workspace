@@ -1,8 +1,8 @@
-const MongoClient = require('mongodb').MongoClient;
+import { MongoClient } from 'mongodb';
 const transactions = require('./transactionFixtures.json');
-require('@popcorn/utils/src/envLoader');
+require('dotenv').config();
 
-const uri = `mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@cluster0.mcgwt.mongodb.net`;
+const uri = process.env.DB_URI;
 
 const client = new MongoClient(uri);
 
