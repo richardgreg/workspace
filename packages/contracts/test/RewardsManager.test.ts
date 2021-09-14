@@ -630,7 +630,7 @@ describe("RewardsManager", function () {
 
       await contracts.RewardsManager.connect(owner).distributeRewards();
       expect(await contracts.POP.balanceOf(owner.address)).to.equal(
-        parseEther("30")
+        parseEther("25")
       );
     });
   });
