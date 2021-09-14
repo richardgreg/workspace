@@ -331,7 +331,7 @@ const getMinAmountOf3CrvToReceive = async (
 
   // get expected units of HYSI given 3crv amount:
   const HYSIInBatch = (await contracts.hysiBatchInteraction.batches(batchId))
-    .suppliedToken;
+    .suppliedTokenBalance;
 
   const components =
     await contracts.basicIssuanceModule.getRequiredComponentUnitsForIssue(

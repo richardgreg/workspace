@@ -184,9 +184,9 @@ contract HysiBatchInteraction is Owned {
     batchType = batch.batchType;
     claimable = batch.claimable;
     unclaimedShares = batch.unclaimedShares;
-    suppliedToken = batch.suppliedToken;
-    claimableToken = batch.claimableToken;
-    shareBalance = batch.shareBalance[account];
+    suppliedToken = batch.suppliedTokenBalance;
+    claimableToken = batch.claimableTokenBalance;
+    shareBalance = accountBalances[batchId][account];
   }
 
   /* ========== MUTATIVE FUNCTIONS ========== */
