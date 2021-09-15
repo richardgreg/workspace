@@ -35,7 +35,7 @@ contract BeneficiaryVaults is IBeneficiaryVaults, Ownable, ReentrancyGuard {
   IERC20 public immutable pop;
   IBeneficiaryRegistry public beneficiaryRegistry;
   uint256 public totalDistributedBalance = 0;
-  Vault[3] public vaults;
+  mapping(bytes32 => Vault) public vaults;
 
   /* ========== EVENTS ========== */
 
@@ -56,7 +56,7 @@ contract BeneficiaryVaults is IBeneficiaryVaults, Ownable, ReentrancyGuard {
 
   /* ========== VIEWS ========== */
 
-  function getVault(uint8 vaultId_)
+  function getVault(bytes32 vaultId_)
     public
     view
     _vaultExists(vaultId_)
@@ -76,7 +76,7 @@ contract BeneficiaryVaults is IBeneficiaryVaults, Ownable, ReentrancyGuard {
     status = vault.status;
   }
 
-  function hasClaimed(uint8 vaultId_, address beneficiary_)
+  function hasClaimed(bytes32 vaultId_, address beneficiary_)
     public
     view
     _vaultExists(vaultId_)
@@ -85,7 +85,7 @@ contract BeneficiaryVaults is IBeneficiaryVaults, Ownable, ReentrancyGuard {
     return vaults[vaultId_].claimed[beneficiary_];
   }
 
-  function vaultExists(uint8 vaultId_) public view override returns (bool) {
+  function vaultExists(bytes32 vaultId_) public view override returns (bool) {
     return vaultId_ < 3 && vaults[vaultId_].merkleRoot != "";
   }
 
@@ -97,7 +97,7 @@ contract BeneficiaryVaults is IBeneficiaryVaults, Ownable, ReentrancyGuard {
    * @param merkleRoot_ Merkle root to support claims
    * @dev Vault cannot be initialized if it is currently in an open state, otherwise existing data is reset*
    */
-  function openVault(uint8 vaultId_, bytes32 merkleRoot_)
+  function openVault(bytes32 vaultId_, bytes32 merkleRoot_)
     public
     override
     onlyOwner
@@ -125,7 +125,7 @@ contract BeneficiaryVaults is IBeneficiaryVaults, Ownable, ReentrancyGuard {
    * @dev Vault must be in an open state
    * @param vaultId_ Vault ID in range 0-2
    */
-  function closeVault(uint8 vaultId_)
+  function closeVault(bytes32 vaultId_)
     public
     override
     onlyOwner
@@ -156,7 +156,7 @@ contract BeneficiaryVaults is IBeneficiaryVaults, Ownable, ReentrancyGuard {
    * @return Returns boolean true or false if claim is valid
    */
   function verifyClaim(
-    uint8 vaultId_,
+    bytes32 vaultId_,
     bytes32[] memory proof_,
     address beneficiary_,
     uint256 share_
@@ -185,7 +185,7 @@ contract BeneficiaryVaults is IBeneficiaryVaults, Ownable, ReentrancyGuard {
    * @param share_ Beneficiary expected share encoded in leaf element
    */
   function claimReward(
-    uint8 vaultId_,
+    bytes32 vaultId_,
     bytes32[] memory proof_,
     address beneficiary_,
     uint256 share_
@@ -281,7 +281,7 @@ contract BeneficiaryVaults is IBeneficiaryVaults, Ownable, ReentrancyGuard {
 
   /* ========== MODIFIERS ========== */
 
-  modifier _vaultExists(uint8 vaultId_) {
+  modifier _vaultExists(bytes32 vaultId_) {
     require(vaultExists(vaultId_), "vault must exist");
     _;
   }
