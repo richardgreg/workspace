@@ -349,26 +349,26 @@ export const DateRangePicker: React.FC<DateTimePickerProps> = ({
   startDate,
   endDate,
 }): JSX.Element => {
-  const [selectedStartDate, setSelectedStartDate] = useState(null);
-  const [selectedEndDate, setSelectedEndDate] = useState(null);
+  const [selectedStartDate, setSelectedStartDate] = useState(startDate);
+  const [selectedEndDate, setSelectedEndDate] = useState(endDate);
   return (
     <div className="grid justify-items-stretch md:mr-24">
       <div className="md:flex md:items-center md:justify-between justify-self-end">
         <div className="mt-4 flex md:mt-0 md:ml-4">
           <CalendarInput
-            label="Start Date"
-            isStartInput
             defaultDate={startDate}
+            isStartInput
+            label="Start Date"
+            maxDate={selectedEndDate}
             onChange={(selected) => setSelectedStartDate(selected)}
-            maxDate={selectedEndDate ? selectedEndDate : new Date()}
           />
           <CalendarInput
-            label="End Date"
-            minDate={selectedStartDate}
             defaultDate={endDate}
-            onChange={(selected) => setSelectedEndDate(selected)}
-            maxDate={new Date()}
             isStartInput={false}
+            label="End Date"
+            maxDate={new Date()}
+            minDate={selectedStartDate}
+            onChange={(selected) => setSelectedEndDate(selected)}
           />
           <button
             type="button"
