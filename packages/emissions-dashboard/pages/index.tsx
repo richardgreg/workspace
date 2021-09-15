@@ -115,15 +115,8 @@ const IndexPage = (): JSX.Element => {
   const { library, activate, active } = context;
 
   const [contracts, setContracts] = useState<Contract[]>(DEFAULT_CONTRACTS);
-  const [previousPeriodStartDate, setPreviousPeriodStartDate] = useState<Date>(
-    new Date('2021-05-01T00:00:00Z'),
-  );
-  const [startDate, setStartDate] = useState<Date>(
-    new Date('2021-06-15T00:00:00Z'),
-  );
-  const [endDate, setEndDate] = useState<Date>(
-    new Date('2021-08-01T00:00:00Z'),
-  );
+  const [startDate, setStartDate] = useState<Date>(new Date('2021-06-15'));
+  const [endDate, setEndDate] = useState<Date>(new Date('2021-08-01'));
 
   const [previousPeriodStartBlock, setPreviousPeriodStartBlock] =
     useState<number>(11564729);
@@ -148,18 +141,13 @@ const IndexPage = (): JSX.Element => {
   const [transactionTotals, setTransactionTotals] = useState<
     TransactionGroupSummary[]
   >([]);
-  useEffect(() => {
-    updateBlocks();
-  }, []);
 
   useEffect(() => {
     updateBlocks();
   }, [endDate, startDate]);
 
   useEffect(() => {
-    if (blockRanges) {
-      getTransactions();
-    }
+    if (blockRanges) getTransactions();
   }, [blockRanges]);
 
   useEffect(() => {
@@ -357,10 +345,6 @@ const IndexPage = (): JSX.Element => {
   };
 
   const updateDates = (startDate: Date, endDate: Date): void => {
-    const previousPeriodStartDate = new Date(
-      startDate.getTime() - (endDate.getTime() - startDate.getTime()),
-    );
-    setPreviousPeriodStartDate(previousPeriodStartDate);
     setStartDate(startDate);
     setEndDate(endDate);
   };
