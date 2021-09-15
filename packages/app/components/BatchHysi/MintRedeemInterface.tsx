@@ -14,8 +14,8 @@ const MintRedeemInterface: React.FC<MintRedeemInterfaceProps> = ({
   threeCrvPrice,
   hysiBalance,
   hysiPrice,
-  withdrawl,
-  setWithdrawl,
+  withdrawal,
+  setwithdrawal,
   depositAmount,
   setDepositAmount,
   deposit,
@@ -27,16 +27,16 @@ const MintRedeemInterface: React.FC<MintRedeemInterfaceProps> = ({
         <AccountValue hysiBalance={hysiBalance} hysiPrice={hysiPrice} />
         <div className="w-1/2 px-6 py-6">
           <DepositWithdrawToggle
-            withdrawl={withdrawl}
-            setWithdrawl={setWithdrawl}
+            withdrawal={withdrawal}
+            setwithdrawal={setwithdrawal}
           />
           <TokenInput
             threeCrvBalance={threeCrvBalance}
             threeCrvPrice={threeCrvPrice}
             hysiBalance={hysiBalance}
             hysiPrice={hysiPrice}
-            withdrawl={withdrawl}
-            setWithdrawl={setWithdrawl}
+            withdrawal={withdrawal}
+            setwithdrawal={setwithdrawal}
             depositAmount={depositAmount}
             setDepositAmount={setDepositAmount}
           />
@@ -48,7 +48,7 @@ const MintRedeemInterface: React.FC<MintRedeemInterfaceProps> = ({
               onClick={(e) =>
                 deposit(
                   depositAmount,
-                  withdrawl ? BatchType.Redeem : BatchType.Mint,
+                  withdrawal ? BatchType.Redeem : BatchType.Mint,
                 )
               }
               disabled={depositDisabled}

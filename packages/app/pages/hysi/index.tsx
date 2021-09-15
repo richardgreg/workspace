@@ -1,5 +1,8 @@
 import { Web3Provider } from '@ethersproject/providers';
-import { BatchType } from '@popcorn/contracts/adapters/HYSIBatchInteraction/HYSIBatchInteractionAdapter';
+import {
+  AccountBatch,
+  BatchType,
+} from '@popcorn/contracts/adapters/HYSIBatchInteraction/HYSIBatchInteractionAdapter';
 import { useWeb3React } from '@web3-react/core';
 import BatchProcessingInfo from 'components/BatchHysi/BatchProcessingInfo';
 import ClaimableBatches from 'components/BatchHysi/ClaimableBatches';
@@ -10,7 +13,6 @@ import { BigNumber, Contract, utils } from 'ethers';
 import { useContext, useEffect, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import {
-  Batch,
   ComponentMap,
   HYSIBatchInteractionAdapter,
   TimeTillBatchProcessing,
@@ -27,11 +29,11 @@ export default function BatchHysi(): JSX.Element {
   const [depositAmount, setDepositAmount] = useState<BigNumber>(
     BigNumber.from('0'),
   );
-  const [withdrawl, setWithdrawl] = useState<Boolean>(false);
+  const [withdrawal, setwithdrawal] = useState<Boolean>(false);
   const [wait, setWait] = useState<Boolean>(false);
   const [batchHysiAdapter, setBatchHysiAdapter] =
     useState<HYSIBatchInteractionAdapter>();
-  const [batches, setBatches] = useState<Batch[]>();
+  const [batches, setBatches] = useState<AccountBatch[]>();
   const [timeTillBatchProcessing, setTimeTillBatchProcessing] =
     useState<TimeTillBatchProcessing[]>();
 
@@ -214,13 +216,13 @@ export default function BatchHysi(): JSX.Element {
               threeCrvPrice={threeCrvPrice}
               hysiBalance={hysiBalance}
               hysiPrice={hysiPrice}
-              withdrawl={withdrawl}
-              setWithdrawl={setWithdrawl}
+              withdrawal={withdrawal}
+              setwithdrawal={setwithdrawal}
               depositAmount={depositAmount}
               setDepositAmount={setDepositAmount}
               deposit={deposit}
               depositDisabled={
-                withdrawl
+                withdrawal
                   ? depositAmount > hysiBalance && !wait
                   : depositAmount > threeCrvBalance && !wait
               }

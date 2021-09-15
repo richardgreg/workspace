@@ -1,9 +1,11 @@
-import { Batch } from '@popcorn/contracts';
-import { BatchType } from '@popcorn/contracts/adapters/HYSIBatchInteraction/HYSIBatchInteractionAdapter';
+import {
+  AccountBatch,
+  BatchType,
+} from '@popcorn/contracts/adapters/HYSIBatchInteraction/HYSIBatchInteractionAdapter';
 import { bigNumberToNumber } from '@popcorn/utils';
 
 interface BatchProps {
-  batch: Batch;
+  batch: AccountBatch;
   index: number;
   claim: (batchId: string) => Promise<void>;
 }

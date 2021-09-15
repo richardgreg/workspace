@@ -10,14 +10,14 @@ import HysiBatchInteractionAdapter, {
 import CurveMetapoolAbi from "../../lib/Curve/CurveMetapoolAbi.json";
 import BasicIssuanceModuleAbi from "../../lib/SetToken/vendor/set-protocol/artifacts/BasicIssuanceModule.json";
 import SetTokenAbi from "../../lib/SetToken/vendor/set-protocol/artifacts/SetToken.json";
-import { BasicIssuanceModule } from "../../lib/SetToken/vendor/set-protocol/types/BasicIssuanceModule";
-import { SetToken } from "../../lib/SetToken/vendor/set-protocol/types/SetToken";
 import {
+  BasicIssuanceModule,
   CurveMetapool,
   ERC20,
   Faucet,
   HysiBatchInteraction,
   MockYearnV2Vault,
+  SetToken,
 } from "../../typechain";
 
 const provider = waffle.provider;
@@ -88,22 +88,18 @@ const CURVE_FACTORY_METAPOOL_DEPOSIT_ZAP_ADDRESS =
 
 const componentMap: ComponentMap = {
   [YDUSD_TOKEN_ADDRESS]: {
-    name: "yDUSD",
     metaPool: undefined,
     yPool: undefined,
   },
   [YFRAX_TOKEN_ADDRESS]: {
-    name: "yFRAX",
     metaPool: undefined,
     yPool: undefined,
   },
   [YUSDN_TOKEN_ADDRESS]: {
-    name: "yUSDN",
     metaPool: undefined,
     yPool: undefined,
   },
   [YUST_TOKEN_ADDRESS]: {
-    name: "yUST",
     metaPool: undefined,
     yPool: undefined,
   },
@@ -1012,7 +1008,11 @@ describe("HysiBatchInteraction Network Test", function () {
           const minAmount =
             await HysiBatchInteractionAdapter.getMinAmountOf3CrvToReceiveForBatchRedeem(
               0.0001,
-              contracts,
+              {
+                hysiBatchInteraction: contracts.hysiBatchInteraction,
+                basicIssuanceModule: contracts.basicIssuanceModule,
+                setToken: contracts.hysi,
+              },
               componentMap
             );
 
@@ -1037,7 +1037,11 @@ describe("HysiBatchInteraction Network Test", function () {
           const min3Crv =
             await HysiBatchInteractionAdapter.getMinAmountOf3CrvToReceiveForBatchRedeem(
               0.0046,
-              contracts,
+              {
+                hysiBatchInteraction: contracts.hysiBatchInteraction,
+                basicIssuanceModule: contracts.basicIssuanceModule,
+                setToken: contracts.hysi,
+              },
               componentMap
             );
           const result = await contracts.hysiBatchInteraction
@@ -1064,7 +1068,11 @@ describe("HysiBatchInteraction Network Test", function () {
           const min3Crv =
             await HysiBatchInteractionAdapter.getMinAmountOf3CrvToReceiveForBatchRedeem(
               0.0046,
-              contracts,
+              {
+                hysiBatchInteraction: contracts.hysiBatchInteraction,
+                basicIssuanceModule: contracts.basicIssuanceModule,
+                setToken: contracts.hysi,
+              },
               componentMap
             );
 
@@ -1095,7 +1103,11 @@ describe("HysiBatchInteraction Network Test", function () {
           const min3Crv =
             await HysiBatchInteractionAdapter.getMinAmountOf3CrvToReceiveForBatchRedeem(
               0.0046,
-              contracts,
+              {
+                hysiBatchInteraction: contracts.hysiBatchInteraction,
+                basicIssuanceModule: contracts.basicIssuanceModule,
+                setToken: contracts.hysi,
+              },
               componentMap
             );
 
@@ -1127,7 +1139,11 @@ describe("HysiBatchInteraction Network Test", function () {
           const min3Crv =
             await HysiBatchInteractionAdapter.getMinAmountOf3CrvToReceiveForBatchRedeem(
               0.0046,
-              contracts,
+              {
+                hysiBatchInteraction: contracts.hysiBatchInteraction,
+                basicIssuanceModule: contracts.basicIssuanceModule,
+                setToken: contracts.hysi,
+              },
               componentMap
             );
 

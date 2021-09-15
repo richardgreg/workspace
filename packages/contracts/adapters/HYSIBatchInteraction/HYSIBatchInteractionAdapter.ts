@@ -6,8 +6,8 @@ import {
   Curve3Pool,
   CurveMetapool,
   MockYearnV2Vault,
+  SetToken,
 } from "packages/contracts/typechain";
-import { SetToken } from "../../lib/SetToken/vendor/set-protocol/types/SetToken";
 import { HysiBatchInteraction } from "../../typechain/HysiBatchInteraction";
 
 export enum BatchType {
@@ -28,6 +28,11 @@ export interface Batch {
   claimableTokenBalance: BigNumber;
   suppliedTokenAddress: string;
   claimableTokenAddress: string;
+}
+
+export interface AccountBatch extends Batch {
+  accountSuppliedTokenBalance: BigNumber;
+  accountClaimableTokenBalance: BigNumber;
 }
 
 export interface ComponentMap {
@@ -164,28 +169,23 @@ class HysiBatchInteractionAdapter {
     return await contract.get_virtual_price();
   }
 
-  public async getBatches(account: string): Promise<Batch[]> {
+  public async getBatches(account: string): Promise<AccountBatch[]> {
     const batchIds = await this.contract.getAccountBatches(account);
     const batches = await Promise.all(
       batchIds.map(async (id) => {
         const batch = await this.contract.batches(id);
         const shares = await this.contract.accountBalances(id, account);
         return {
-          batchType: batch.batchType,
-          batchId: batch.batchId,
-          claimable: batch.claimable,
-          unclaimedShares: batch.unclaimedShares,
-          suppliedTokenBalance: shares,
-          claimableTokenBalance: batch.claimableTokenBalance
+          ...batch,
+          accountSuppliedTokenBalance: shares,
+          accountClaimableTokenBalance: batch.claimableTokenBalance
             .mul(shares)
             .div(batch.unclaimedShares),
-          suppliedTokenAddress: batch.suppliedTokenAddress,
-          claimableTokenAddress: batch.claimableTokenAddress,
         };
       })
     );
-    return (batches as Batch[]).filter(
-      (batch) => batch.suppliedTokenBalance > BigNumber.from("0")
+    return (batches as AccountBatch[]).filter(
+      (batch) => batch.accountSuppliedTokenBalance > BigNumber.from("0")
     );
   }
 

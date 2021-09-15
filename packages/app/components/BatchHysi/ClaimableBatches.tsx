@@ -1,8 +1,8 @@
-import { Batch } from '@popcorn/contracts';
+import { AccountBatch } from '@popcorn/contracts/adapters/HYSIBatchInteraction/HYSIBatchInteractionAdapter';
 import ClaimableBatch from './ClaimableBatch';
 
 interface ClaimableBatchesProps {
-  batches: Batch[];
+  batches: AccountBatch[];
   claim: (batchId: string) => Promise<void>;
 }
 
