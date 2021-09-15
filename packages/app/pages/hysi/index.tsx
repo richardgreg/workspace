@@ -1,5 +1,5 @@
 import { Web3Provider } from '@ethersproject/providers';
-import { parseEther } from '@ethersproject/units';
+import { BatchType } from '@popcorn/contracts/adapters/HYSIBatchInteraction/HYSIBatchInteractionAdapter';
 import { useWeb3React } from '@web3-react/core';
 import BatchProcessingInfo from 'components/BatchHysi/BatchProcessingInfo';
 import ClaimableBatches from 'components/BatchHysi/ClaimableBatches';
@@ -9,12 +9,12 @@ import { ContractsContext } from 'context/Web3/contracts';
 import { BigNumber, Contract, utils } from 'ethers';
 import { useContext, useEffect, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
-import { BatchHysiAdapter } from '../../../contracts';
 import {
   Batch,
-  BatchType,
+  ComponentMap,
+  HYSIBatchInteractionAdapter,
   TimeTillBatchProcessing,
-} from '../../../contracts/adapters/BatchHysi/BatchHysiAdapter';
+} from '../../../contracts';
 
 export default function BatchHysi(): JSX.Element {
   const context = useWeb3React<Web3Provider>();
@@ -29,7 +29,8 @@ export default function BatchHysi(): JSX.Element {
   );
   const [withdrawl, setWithdrawl] = useState<Boolean>(false);
   const [wait, setWait] = useState<Boolean>(false);
-  const [batchHysiAdapter, setBatchHysiAdapter] = useState<BatchHysiAdapter>();
+  const [batchHysiAdapter, setBatchHysiAdapter] =
+    useState<HYSIBatchInteractionAdapter>();
   const [batches, setBatches] = useState<Batch[]>();
   const [timeTillBatchProcessing, setTimeTillBatchProcessing] =
     useState<TimeTillBatchProcessing[]>();
@@ -38,21 +39,7 @@ export default function BatchHysi(): JSX.Element {
     if (!library || !contracts) {
       return;
     }
-    setBatchHysiAdapter(
-      new BatchHysiAdapter(
-        contracts.batchHysi,
-        hysiDependencyContracts.basicIssuanceModule,
-        hysiDependencyContracts.yDUSD,
-        hysiDependencyContracts.yFRAX,
-        hysiDependencyContracts.yUSDN,
-        hysiDependencyContracts.yUST,
-        hysiDependencyContracts.dusdMetapool,
-        hysiDependencyContracts.fraxMetapool,
-        hysiDependencyContracts.usdnMetapool,
-        hysiDependencyContracts.ustMetapool,
-        hysiDependencyContracts.triPool,
-      ),
-    );
+    setBatchHysiAdapter(new HYSIBatchInteractionAdapter(contracts.batchHysi));
     if (account) {
       contracts.hysi.balanceOf(account).then((res) => setHysiBalance(res));
       contracts.threeCrv
@@ -65,8 +52,30 @@ export default function BatchHysi(): JSX.Element {
     if (!batchHysiAdapter) {
       return;
     }
-    batchHysiAdapter.getHysiPrice().then((res) => setHysiPrice(res));
-    batchHysiAdapter.getThreeCrvPrice().then((res) => setThreeCrvPrice(res));
+    batchHysiAdapter
+      .getHysiPrice(hysiDependencyContracts.basicIssuanceModule, {
+        [hysiDependencyContracts.yDUSD.address.toLowerCase()]: {
+          metaPool: hysiDependencyContracts.dusdMetapool,
+          yPool: hysiDependencyContracts.yDUSD,
+        },
+        [hysiDependencyContracts.yFRAX.address.toLowerCase()]: {
+          metaPool: hysiDependencyContracts.fraxMetapool,
+          yPool: hysiDependencyContracts.yFRAX,
+        },
+        [hysiDependencyContracts.yUSDN.address.toLowerCase()]: {
+          metaPool: hysiDependencyContracts.usdnMetapool,
+          yPool: hysiDependencyContracts.yUSDN,
+        },
+        [hysiDependencyContracts.yUST.address.toLowerCase()]: {
+          metaPool: hysiDependencyContracts.ustMetapool,
+          yPool: hysiDependencyContracts.yUST,
+        },
+      } as ComponentMap)
+      .then((res) => setHysiPrice(res));
+
+    batchHysiAdapter
+      .getThreeCrvPrice(hysiDependencyContracts.triPool)
+      .then((res) => setThreeCrvPrice(res));
     batchHysiAdapter.getBatches(account).then((res) => setBatches(res));
     batchHysiAdapter
       .calcBatchTimes(library)
@@ -78,10 +87,6 @@ export default function BatchHysi(): JSX.Element {
     batchType: BatchType,
   ): Promise<void> {
     setWait(true);
-    console.log(
-      'deposit amount',
-      depositAmount.div(parseEther('1')).toString(),
-    );
     if (batchType === BatchType.Mint) {
       const allowance = await contracts.threeCrv.allowance(
         account,
@@ -143,10 +148,6 @@ export default function BatchHysi(): JSX.Element {
   }
 
   async function claim(batchId: string): Promise<void> {
-    console.log(await (await contracts.batchHysi.batches(batchId)).toString());
-    console.log(
-      await (await contracts.batchHysi.getBatch(account, batchId)).toString(),
-    );
     toast.loading('Claiming Batch...');
     await contracts.batchHysi
       .connect(library.getSigner())

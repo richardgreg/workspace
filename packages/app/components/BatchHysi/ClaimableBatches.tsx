@@ -1,4 +1,4 @@
-import { Batch } from '@popcorn/contracts/adapters/BatchHysi/BatchHysiAdapter';
+import { Batch } from '@popcorn/contracts';
 import ClaimableBatch from './ClaimableBatch';
 
 interface ClaimableBatchesProps {

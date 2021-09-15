@@ -174,9 +174,9 @@ export default function ContractsWrapper({
         library,
       ),
       yDUSD: YearnVault__factory.connect(process.env.ADDR_YDUSD, library),
-      yFRAX: YearnVault__factory.connect(process.env.ADDR_YDUSD, library),
-      yUSDN: YearnVault__factory.connect(process.env.ADDR_YDUSD, library),
-      yUST: YearnVault__factory.connect(process.env.ADDR_YDUSD, library),
+      yFRAX: YearnVault__factory.connect(process.env.ADDR_YFRAX, library),
+      yUSDN: YearnVault__factory.connect(process.env.ADDR_YUSDN, library),
+      yUST: YearnVault__factory.connect(process.env.ADDR_YUST, library),
       dusdMetapool: CurveMetapool__factory.connect(
         process.env.ADDR_DUSD_METAPOOL,
         library,

@@ -1,7 +1,5 @@
-import {
-  Batch,
-  BatchType,
-} from '@popcorn/contracts/adapters/BatchHysi/BatchHysiAdapter';
+import { Batch } from '@popcorn/contracts';
+import { BatchType } from '@popcorn/contracts/adapters/HYSIBatchInteraction/HYSIBatchInteractionAdapter';
 import { bigNumberToNumber } from '@popcorn/utils';
 
 interface BatchProps {
@@ -17,12 +15,12 @@ const ClaimableBatch: React.FC<BatchProps> = ({ batch, index, claim }) => {
       className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}
     >
       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-        {`${bigNumberToNumber(batch.deposited)} ${
+        {`${bigNumberToNumber(batch.suppliedTokenBalance)} ${
           batch.batchType === BatchType.Mint ? '3CRV' : 'HYSI'
         }`}
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-        {`${bigNumberToNumber(batch.claimableToken)} ${
+        {`${bigNumberToNumber(batch.claimableTokenBalance)} ${
           batch.batchType === BatchType.Mint ? 'HYSI' : '3CRV'
         }`}
       </td>

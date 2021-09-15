@@ -1,4 +1,8 @@
-export { default as BatchHysiAdapter } from "./BatchHysi/BatchHysiAdapter";
+export type {
+  Batch,
+  ComponentMap,
+  TimeTillBatchProcessing,
+} from ".//HYSIBatchInteraction/HYSIBatchInteractionAdapter";
 export {
   BeneficiaryGovernanceAdapter,
   ProposalStatus,
@@ -17,3 +21,4 @@ export {
   ElectionTermIntToName,
 } from "./GrantElection/GrantElectionAdapter";
 export type { ElectionMetadata } from "./GrantElection/GrantElectionAdapter";
+export { default as HYSIBatchInteractionAdapter } from "./HYSIBatchInteraction/HYSIBatchInteractionAdapter";
