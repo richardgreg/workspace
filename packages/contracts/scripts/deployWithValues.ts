@@ -9,7 +9,6 @@ import getCreatedProposalId from "../adapters/GrantElection/getCreatedProposalId
 import GrantElectionAdapter, {
   ShareType,
 } from "../adapters/GrantElection/GrantElectionAdapter";
-import { MockBasicIssuanceModule } from "../typechain";
 import * as addressCidMap from "./addressCidMap.json";
 
 const UniswapV2FactoryJSON = require("../artifactsUniswap/UniswapV2Factory.json");
@@ -229,7 +228,7 @@ export default async function deploy(ethers): Promise<void> {
       )
     ).deployed();
 
-    const mockBasicIssuanceModule = (await (
+    const mockBasicIssuanceModule = await (
       await (
         await ethers.getContractFactory("MockBasicIssuanceModule")
       ).deploy(
@@ -241,7 +240,7 @@ export default async function deploy(ethers): Promise<void> {
         ],
         [62, 62, 62, 62]
       )
-    ).deployed()) as MockBasicIssuanceModule;
+    ).deployed();
 
     const hysiBatchInteraction = await (
       await (
