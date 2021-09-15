@@ -591,6 +591,7 @@ const IndexPage = () => {
         {menuVisible && (
           <div className="absolute z-10 w-screen">
             <div className="relative mx-auto mt-4 w-11/12 rounded-lg shadow-md bg-white px-4 pt-4 pb-6">
+
               <div className="flex flex-row justify-between items-center">
                 <Link href="/" passHref>
                   <a>
@@ -607,7 +608,7 @@ const IndexPage = () => {
                   onClick={(e) => toggleMenu(false)}
                 />
               </div>
-              <div className="flex flex-col space-y-4 mt-8">
+              <div className="flex flex-col space-y-4 mt-4">
                 {/*<Link href="/" passHref>
               <a className="font-medium text-base hover:text-blue-600">
                 About us
@@ -661,10 +662,10 @@ const IndexPage = () => {
             <Menu onClick={(e) => toggleMenu(true)} />
           </nav>
         </header>
-        <section className="min-h-full">
+        <section className="max-h-screen min-h-full">
           <div className="bg-primary w-full h-12"></div>
           <div
-            className="bg-hero-pattern flex-shrink-0 flex-grow-0 w-full h-full"
+            className="bg-hero-pattern flex-shrink-0 flex-grow-0 w-full h-full pt-6 md:pt-10"
             style={{
               backgroundRepeat: 'no-repeat',
               backgroundSize: 'cover',
