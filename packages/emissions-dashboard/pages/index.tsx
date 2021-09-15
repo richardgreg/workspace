@@ -96,15 +96,6 @@ const getBlockNumberByTimestamp = async (
     .catch((error) => console.log('error', error));
 };
 
-const getBlockTimestamp = async (blockNumber: number): Promise<number> => {
-  const requestUrl = `https://api.etherscan.io/api?module=block&action=getblockreward&blockno=${blockNumber}apikey=${process.env.ETHERSCAN_API_KEY}`;
-  const result = await fetch(requestUrl)
-    .then((res) => res.json())
-    .then((json) => json.result)
-    .catch((error) => console.log('error', error));
-  return result.timeStamp;
-};
-
 const getBlockDateEstimate = (
   i: number,
   totalNumberOfBlocks: number,

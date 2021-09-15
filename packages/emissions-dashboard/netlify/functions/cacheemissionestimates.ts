@@ -9,33 +9,38 @@ exports.handler = async (event, context) => {
     const uri = process.env.DB_URI;
     const client = new MongoClient(uri);
     const patch = Patch(process.env.PATCH_API_KEY);
-    // NOTE: Static date
-    const date = new Date('2021/09/11');
+    var date = new Date();
+    date.setUTCHours(0, 0, 0, 0);
     const patchEstimate = await patch.estimates.createEthereumEstimate({
       create_order: false,
       gas_used: GWEI_ETH_MULTIPLIER, // 1 ETH
       timestamp: date,
     });
-    const res = {
+    const doc = {
       emissionsGpEth: patchEstimate.data.mass_g,
       date: date,
       timestamp: date.getTime() / 1000,
     };
-    console.log({ res });
     await client.connect();
     const database = client.db('emissions');
-    const query = { timestamp: res.timestamp };
-    const update = { $set: res };
+    const query = { timestamp: doc.timestamp };
+    const update = { $set: doc };
     const options = { upsert: true };
     const dbRes = await database
       .collection('patch-estimates')
       .updateOne(query, update, options);
-    return { statusCode: 200, body: JSON.stringify(res) };
+    console.log({ dbRes });
+    return {
+      statusCode: 200,
+      body: `Successfully cached patch estimate for ${date.toDateString()}`,
+    };
   } catch (error) {
     console.log(error);
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: 'Failed to fetch patch estimate' }),
+      body: JSON.stringify({
+        error: `Failed to cache patch estimate for ${date.toDateString()}`,
+      }),
     };
   }
 };
