@@ -91,7 +91,6 @@ exports.handler = async (event, context) => {
       .aggregate([{ $group: { _id: null, max: { $max: '$blockNumber' } } }])
       .toArray();
     const startBlock = Number(mostRecentTxBlock[0].max) + 1;
-    console.log({ mostRecentTxBlock });
     const startTimestamp = await getBlockTimestamp(startBlock);
     const endBlock = await getCurrentBlockNumber();
     // Get transactions between a) and b) from etherscan api

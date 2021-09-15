@@ -1,6 +1,5 @@
 import { Web3Provider } from '@ethersproject/providers';
 import { CloudIcon } from '@heroicons/react/outline';
-import Patch from '@patch-technology/patch';
 import { ContractContainer } from '@popcorn/ui/components/popcorn/emissions-dashboard/ContractContainer/index';
 import { DateRangePicker } from '@popcorn/ui/components/popcorn/emissions-dashboard/DateRangePicker';
 import { NavBar } from '@popcorn/ui/components/popcorn/emissions-dashboard/NavBar/index';
@@ -8,7 +7,6 @@ import { TotalStats } from '@popcorn/ui/components/popcorn/emissions-dashboard/T
 import {
   Contract,
   ContractEmissions,
-  EmissionEstimate,
   StatCardData,
   Transaction,
   TransactionGroupSummary,
@@ -22,10 +20,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import { percentChange } from 'utils/percentChange';
 import web3 from 'web3';
 
-const patch = Patch(process.env.PATCH_API_KEY);
-const GWEI_ETH_MULTIPLIER = Math.pow(10, 9);
-const WEI_ETH_MULTIPLIER = Math.pow(10, 18);
-const MICROGRAM_GRAM_CONVERTER = Math.pow(10, 6);
+const GWEI_TO_ETH = Math.pow(10, 9);
 
 // TODO: Call toast methods upon success/failure
 const success = (msg: string) => toast.success(msg);
@@ -130,8 +125,6 @@ const IndexPage = (): JSX.Element => {
     new Date('2021-08-01T00:00:00Z'),
   );
 
-  const [emissionEstimates, setEmissionsEstimates] =
-    useState<EmissionEstimate[]>();
   const [previousPeriodStartBlock, setPreviousPeriodStartBlock] =
     useState<number>(11564729);
   const [startBlock, setStartBlock] = useState<number>(12338493);
@@ -143,14 +136,6 @@ const IndexPage = (): JSX.Element => {
   const [transactionsCurrentPeriod, setTransactionsCurrentPeriod] = useState<
     Transaction[]
   >([]);
-  const [
-    transactionsPreviousPeriodWithEmissions,
-    setTransactionsPreviousPeriodWithEmissions,
-  ] = useState<Transaction[]>([]);
-  const [
-    transactionsCurrentPeriodWithEmissions,
-    setTransactionsCurrentPeriodWithEmissions,
-  ] = useState<Transaction[]>([]);
 
   const [
     transactionGroupSummariesPreviousPeriod,
@@ -164,12 +149,10 @@ const IndexPage = (): JSX.Element => {
     TransactionGroupSummary[]
   >([]);
   useEffect(() => {
-    cacheEmissionsData();
     updateBlocks();
   }, []);
 
   useEffect(() => {
-    cacheEmissionsData();
     updateBlocks();
   }, [endDate, startDate]);
 
@@ -180,29 +163,12 @@ const IndexPage = (): JSX.Element => {
   }, [blockRanges]);
 
   useEffect(() => {
-    if (emissionEstimates) {
-      addEmissionsDataToTransactions();
-    }
-  }, [
-    transactionsCurrentPeriod,
-    transactionsPreviousPeriod,
-    emissionEstimates,
-  ]);
-
-  useEffect(() => {
-    if (
-      transactionsPreviousPeriodWithEmissions.length > 0 &&
-      transactionsCurrentPeriodWithEmissions.length > 0 &&
-      blockRanges
-    ) {
+    if (blockRanges) {
       groupTransactionsPreviousPeriod();
       groupTransactionsCurrentPeriod();
       groupTransactionsTotalStats();
     }
-  }, [
-    transactionsPreviousPeriodWithEmissions,
-    transactionsCurrentPeriodWithEmissions,
-  ]);
+  }, [transactionsPreviousPeriod, transactionsCurrentPeriod]);
 
   useEffect(() => {
     if (typeof window !== 'undefined' && window.location.pathname !== '/') {
@@ -289,7 +255,7 @@ const IndexPage = (): JSX.Element => {
       return pr + Number(cu.gasUsed);
     }, 0);
     const totalGasPrice = transactions.reduce((pr, cu) => {
-      return pr + Number(cu.gasPrice) / GWEI_ETH_MULTIPLIER;
+      return pr + Number(cu.gasPrice) / GWEI_TO_ETH;
     }, 0);
 
     const averageGasPrice =
@@ -314,7 +280,7 @@ const IndexPage = (): JSX.Element => {
   const groupTransactionsPreviousPeriod = async () => {
     const transactionGroupSummaries = await await Promise.all(
       contracts.map(async (contract) => {
-        const transactions = transactionsPreviousPeriodWithEmissions.filter(
+        const transactions = transactionsPreviousPeriod.filter(
           (transaction) => {
             return transaction.to === contract.address;
           },
@@ -388,83 +354,6 @@ const IndexPage = (): JSX.Element => {
       arr.push(new Date(dt));
     }
     return arr;
-  };
-
-  const cacheEmissionsData = async () => {
-    let cachedEmissionsData = JSON.parse(
-      localStorage.getItem('emissionEstimates'),
-    );
-
-    const dateArray = getDateArray(previousPeriodStartDate, endDate);
-    const cachedDates =
-      cachedEmissionsData !== null
-        ? cachedEmissionsData.map(({ date }) => date)
-        : [];
-    const datesToCache = dateArray.filter((date) => {
-      return !cachedDates.includes(date.toISOString());
-    });
-
-    if (datesToCache.length > 0) {
-      const emissionEstimatesByDate = await Promise.all(
-        datesToCache.map(async (date) => {
-          loading('Sourcing emission estimates...');
-          const patchEstimate = await patch.estimates.createEthereumEstimate({
-            create_order: false,
-            gas_used: GWEI_ETH_MULTIPLIER, // 1 ETH
-            timestamp: date,
-          });
-          toast.dismiss();
-          success('Loaded emission estimates');
-          return {
-            emissionsGpEth: patchEstimate.data.mass_g,
-            date: date,
-            timestamp: date.getTime() / 1000,
-          };
-        }),
-      );
-
-      const emissionsToCache =
-        cachedEmissionsData === null || cachedEmissionsData === 'undefined'
-          ? JSON.stringify(emissionEstimatesByDate)
-          : JSON.stringify(cachedEmissionsData.concat(emissionEstimatesByDate));
-      setEmissionsEstimates(JSON.parse(emissionsToCache));
-      localStorage.setItem('emissionEstimates', emissionsToCache);
-    } else {
-      setEmissionsEstimates(cachedEmissionsData);
-    }
-  };
-
-  const getEmissionDataForTransaction = (
-    transaction: Transaction,
-  ): EmissionEstimate => {
-    const closestEmissions = emissionEstimates.reduce((prev, current) => {
-      return Math.abs(prev.timestamp - Number(transaction.timeStamp)) <
-        Math.abs(current.timestamp - Number(transaction.timeStamp))
-        ? prev
-        : current;
-    });
-    return closestEmissions;
-  };
-
-  const addEmissionDataToSingleTransaction = (
-    transaction: Transaction,
-  ): Transaction => {
-    const emissionsData = getEmissionDataForTransaction(transaction);
-    transaction.emissions =
-      ((emissionsData.emissionsGpEth * Number(transaction.gasUsed)) /
-        WEI_ETH_MULTIPLIER) *
-      MICROGRAM_GRAM_CONVERTER;
-    return transaction;
-  };
-
-  const addEmissionsDataToTransactions = () => {
-    setTransactionsCurrentPeriodWithEmissions(
-      transactionsCurrentPeriod.map(addEmissionDataToSingleTransaction),
-    );
-
-    setTransactionsPreviousPeriodWithEmissions(
-      transactionsPreviousPeriod.map(addEmissionDataToSingleTransaction),
-    );
   };
 
   const updateDates = (startDate: Date, endDate: Date): void => {
