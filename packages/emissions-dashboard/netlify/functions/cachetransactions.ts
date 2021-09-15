@@ -86,7 +86,6 @@ const addDateToTransaction = (transaction: Transaction): Transaction => {
 
 exports.handler = async (event, context) => {
   try {
-    // Connect to db
     const uri = process.env.DB_URI;
     const client = new MongoClient(uri);
     await client.connect();
@@ -98,7 +97,6 @@ exports.handler = async (event, context) => {
     const startBlock = Number(mostRecentTxBlock[0].max) + 1;
     const startTimestamp = await getBlockTimestamp(startBlock);
     const endBlock = await getCurrentBlockNumber();
-    // Get transactions between a) and b) from etherscan api
     const transactions = await (
       await bluebird.map(
         CONTRACTS,
@@ -117,7 +115,6 @@ exports.handler = async (event, context) => {
         .find({ timestamp: { $gt: startTimestamp } })
         .toArray()) as EmissionEstimate[];
       console.log(`Retrieved ${emissionEstimates.length} emission estimates`);
-      // Add estimates to transactions
       const transactionsWithEstimateAndDate = transactions
         .map((transaction) => {
           return addEmissionDataToSingleTransaction(
