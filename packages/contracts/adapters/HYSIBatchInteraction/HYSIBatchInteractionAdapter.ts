@@ -70,10 +70,15 @@ class HysiBatchInteractionAdapter {
       batchId,
       address
     );
-    const amountToReceive = claimableTokenBalance
-      .mul(accountBalance)
-      .div(unclaimedShares);
-    return amountToReceive;
+    if (
+      claimableTokenBalance === BigNumber.from("0") ||
+      accountBalance === BigNumber.from("0") ||
+      unclaimedShares === BigNumber.from("0")
+    ) {
+      return BigNumber.from("0");
+    }
+
+    return claimableTokenBalance.mul(accountBalance).div(unclaimedShares);
   }
 
   static async getMinAmountOf3CrvToReceiveForBatchRedeem(
