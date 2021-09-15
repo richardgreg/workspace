@@ -40,6 +40,7 @@ export interface Transaction {
   timeStamp: string;
   value: string;
   emissions?: number;
+  date?: Date;
 }
 export interface TransactionGroupSummary {
   averageGasPrice: number;

@@ -79,6 +79,11 @@ const addEmissionDataToSingleTransaction = (
   return transaction;
 };
 
+const addDateToTransaction = (transaction: Transaction): Transaction => {
+  transaction.date = new Date(Number(transaction.timeStamp) * 1000);
+  return transaction;
+};
+
 exports.handler = async (event, context) => {
   try {
     // Connect to db
@@ -113,24 +118,28 @@ exports.handler = async (event, context) => {
         .toArray()) as EmissionEstimate[];
       console.log(`Retrieved ${emissionEstimates.length} emission estimates`);
       // Add estimates to transactions
-      const transactionsWithEstimates = transactions.map((transaction) => {
-        return addEmissionDataToSingleTransaction(
-          transaction,
-          emissionEstimates,
-        );
-      });
+      const transactionsWithEstimateAndDate = transactions
+        .map((transaction) => {
+          return addEmissionDataToSingleTransaction(
+            transaction,
+            emissionEstimates,
+          );
+        })
+        .map(addDateToTransaction);
       console.log(
-        `Added emission data to ${transactionsWithEstimates.length} transactions across ${CONTRACTS.length} contracts`,
+        `Added emission data to ${transactionsWithEstimateAndDate.length} transactions across ${CONTRACTS.length} contracts`,
       );
-      const bulkUpdateOps = transactionsWithEstimates.map((transaction) => {
-        return {
-          updateOne: {
-            filter: { hash: transaction.hash },
-            update: { $set: transaction },
-            upsert: true,
-          },
-        };
-      });
+      const bulkUpdateOps = transactionsWithEstimateAndDate.map(
+        (transaction) => {
+          return {
+            updateOne: {
+              filter: { hash: transaction.hash },
+              update: { $set: transaction },
+              upsert: true,
+            },
+          };
+        },
+      );
 
       const res = await database
         .collection('transactions')
