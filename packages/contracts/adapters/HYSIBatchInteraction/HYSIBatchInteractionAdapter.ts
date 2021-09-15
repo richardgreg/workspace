@@ -70,9 +70,9 @@ class HysiBatchInteractionAdapter {
       batchId,
       address
     );
-    const amountToReceive = accountBalance
-      .div(unclaimedShares)
-      .mul(claimableTokenBalance);
+    const amountToReceive = claimableTokenBalance
+      .mul(accountBalance)
+      .div(unclaimedShares);
     return amountToReceive;
   }
 
