@@ -10,8 +10,10 @@ import toast, { Toaster } from 'react-hot-toast';
 import NavBar from '../../components/NavBar/NavBar';
 import { connectors } from '../../context/Web3/connectors';
 import { ContractsContext } from '../../context/Web3/contracts';
-// import { useContractFunction } from '../../hooks/useContractFunction'
-import { useContractFunction as DappsUseContractFunction } from '@usedapp/core';
+import { useContractFunction } from '../../hooks/useContractFunction'
+import {
+  Staking__factory,
+} from '../../../contracts/typechain';
 
 const ONE_WEEK = 604800;
 const lockPeriods = [
@@ -34,10 +36,16 @@ export default function LockPop() {
   const [voiceCredits, setVoiceCredits] = useState<number>(0);
   const [approved, setApproval] = useState<number>(0);
   const [wait, setWait] = useState<boolean>(false);
+  const pop = Staking__factory.connect(process.env.ADDR_STAKING, library);
+  const data = pop && useContractFunction(pop, 'stake');
 
   useEffect(() => {
     setVoiceCredits(popToLock * (lockDuration / (ONE_WEEK * 52 * 4)));
   }, [lockDuration, popToLock]);
+
+  useEffect(() => {
+    console.log("data ", data);
+  }, [data.state]);
 
   useEffect(() => {
     if (!account) {
@@ -63,16 +71,16 @@ export default function LockPop() {
     }
   }, [contracts]);
 
-  function lockPops() {
+  function lockPop() {
+    const lockedPopInEth = utils.parseEther("100");
+    console.log('data ', data);
+    data.send(lockedPopInEth, lockDuration)
     // setWait(true);
     // toast.loading('Staking POP...');
     // const lockedPopInEth = utils.parseEther(popToLock.toString());
     // const signer = library.getSigner();
     // const connectedStaking = contracts.staking.connect(signer);
     // const { send } = useContractFunction(connectedStaking, 'stake');
-    // send(lockedPopInEth, lockDuration)
-    const data = DappsUseContractFunction(contracts.staking, 'approve', library as any);
-    console.log('data   ', data);
     // await connectedStaking
     //   .stake(lockedPopInEth, lockDuration)
     //   .then((res) => {
@@ -214,7 +222,7 @@ export default function LockPop() {
                         {account && approved >= popToLock && (
                           <MainActionButton
                             label={'Stake POP'}
-                            handleClick={lockPops}
+                            handleClick={lockPop}
                             disabled={wait || popToLock === 0}
                           />
                         )}
