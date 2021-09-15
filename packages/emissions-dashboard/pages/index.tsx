@@ -71,21 +71,6 @@ const EMPTY_STAT_CARDS: StatCardData[] = [
   },
 ];
 
-const user = {
-  name: 'Tom Cook',
-  email: 'tom@example.com',
-  imageUrl:
-    'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-};
-
-export const navigation = [{ name: 'Dashboard', href: '#', current: true }];
-
-export const userNavigation = [
-  { name: 'Your Profile', href: '#' },
-  { name: 'Settings', href: '#' },
-  { name: 'Sign out', href: '#' },
-];
-
 const getBlockNumberByTimestamp = async (
   timestamp: number,
 ): Promise<number> => {
@@ -721,9 +706,6 @@ const IndexPage = (): JSX.Element => {
       <Toaster position="top-right" />
       <NavBar
         title="Smart Contract Emissions Dashboard"
-        headerNavigation={navigation}
-        userNavigation={userNavigation}
-        user={user}
         logo="/images/popcorn-logo.png"
         contractProps={{ addContract, open, setOpen }}
         contractErrorProps={{
