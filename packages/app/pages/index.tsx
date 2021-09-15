@@ -566,7 +566,9 @@ const IndexPage = () => {
                 </a>
               </Link>
               <Link href="https://discord.gg/w9zeRTSZsq" passHref>
-                <a className="hover:text-blue-600" target="_window">Discord</a>
+                <a className="hover:text-blue-600" target="_window">
+                  Discord
+                </a>
               </Link>
               <Link href="https://github.com/popcorndao" passHref>
                 <a className="hover:text-blue-600" target="_window">
@@ -732,66 +734,60 @@ const IndexPage = () => {
           <p className="text-lg font-landing text-gray-500 text-center">
             Put your cryptoassets to work
           </p>
-          <div className="w-full flex flex-col justify-between space-y-12 mt-12">
-            <div className="w-full flex-grow-0 flex-shrink-0">
-              <div className="w-11/12 h-104 rounded-xl shadow-2xl flex flex-col items-center">
-                <div className="w-36 h-36 rounded-full bg-primary mt-12 flex items-center">
-                  <img
-                    src="/images/metamaskCat.svg"
-                    alt="metamaskCat"
-                    className="mx-auto mb-1"
-                  ></img>
-                </div>
-                <h3 className="font-medium text-2xl py-8">Connect</h3>
-                <p className="w-3/4 text-center text-lg text-gray-500">
-                  Connect your Metamask wallet with Popcorn
-                </p>
+          <div className="w-11/12 mx-auto justify-between flex flex-col space-y-12 mt-12">
+            <div className="flex-grow-0 flex-shrink-0 h-104 rounded-xl shadow-2xl flex flex-col items-center">
+              <div className="w-36 h-36 rounded-full bg-primary mt-12 flex items-center">
+                <img
+                  src="/images/metamaskCat.svg"
+                  alt="metamaskCat"
+                  className="mx-auto mb-1"
+                ></img>
               </div>
+              <h3 className="font-medium text-2xl pt-8 py-4">Connect</h3>
+              <p className="w-3/4 text-center text-lg text-gray-500">
+                Connect your Metamask wallet with Popcorn
+              </p>
             </div>
-            <div className="w-full flex-grow-0 flex-shrink-0">
-              <div className="w-11/12 h-104 rounded-xl shadow-2xl flex flex-col items-center">
-                <div className="w-36 h-36 rounded-full bg-primary mt-12 flex items-center">
-                  <img
-                    src="/images/vault.svg"
-                    alt="vault"
-                    className="mx-auto mb-2"
-                  ></img>
-                </div>
-                <h3 className="font-medium text-2xl py-8">Deposit</h3>
-                <p className="w-3/4 text-center text-lg text-gray-500">
-                  Deposit your crypto and choose a product or strategy
-                </p>
+
+            <div className="flex-grow-0 flex-shrink-0 h-104 rounded-xl shadow-2xl flex flex-col items-center">
+              <div className="w-36 h-36 rounded-full bg-primary mt-12 flex items-center">
+                <img
+                  src="/images/vault.svg"
+                  alt="vault"
+                  className="mx-auto mb-2"
+                ></img>
               </div>
+              <h3 className="font-medium text-2xl pt-8 py-4">Deposit</h3>
+              <p className="w-3/4 text-center text-lg text-gray-500">
+                Deposit your crypto and choose a product or strategy
+              </p>
             </div>
-            <div className="w-full flex-grow-0 flex-shrink-0">
-              <div className="w-11/12 h-104 rounded-xl shadow-2xl flex flex-col items-center">
-                <div className="w-36 h-36 rounded-full bg-primary mt-12 flex items-center">
-                  <img
-                    src="/images/popcornVault.svg"
-                    alt="popcornVault"
-                    className="mx-auto mt-2"
-                  ></img>
-                </div>
-                <h3 className="font-medium text-2xl py-8">Do well</h3>
-                <p className="w-3/4 text-center text-lg text-gray-500">
-                  Earn competitive returns on your crypto assets
-                </p>
+            <div className="flex-grow-0 flex-shrink-0 h-104 rounded-xl shadow-2xl flex flex-col items-center">
+              <div className="w-36 h-36 rounded-full bg-primary mt-12 flex items-center">
+                <img
+                  src="/images/popcornVault.svg"
+                  alt="popcornVault"
+                  className="mx-auto mt-2"
+                ></img>
               </div>
+              <h3 className="font-medium text-2xl pt-8 py-4">Do well</h3>
+              <p className="w-3/4 text-center text-lg text-gray-500">
+                Earn competitive returns on your crypto assets
+              </p>
             </div>
-            <div className="w-full flex-grow-0 flex-shrink-0">
-              <div className="w-11/12 h-104 rounded-xl shadow-2xl flex flex-col items-center">
-                <div className="w-36 h-36 rounded-full bg-primary mt-12 flex items-center">
-                  <img
-                    src="/images/catMail.svg"
-                    alt="catMail"
-                    className="mx-auto mb-1"
-                  ></img>
-                </div>
-                <h3 className="font-medium text-2xl py-8">Do good</h3>
-                <p className="w-3/4 text-center text-lg text-gray-500">
-                  Choose which social impact organization you’d like to help
-                </p>
+
+            <div className="flex-grow-0 flex-shrink-0 h-104 rounded-xl shadow-2xl flex flex-col items-center">
+              <div className="w-36 h-36 rounded-full bg-primary mt-12 flex items-center">
+                <img
+                  src="/images/catMail.svg"
+                  alt="catMail"
+                  className="mx-auto mb-1"
+                ></img>
               </div>
+              <h3 className="font-medium text-2xl pt-8 py-4">Do good</h3>
+              <p className="w-3/4 text-center text-lg text-gray-500">
+                Choose which social impact organization you’d like to help
+              </p>
             </div>
           </div>
         </section>
@@ -1006,7 +1002,9 @@ const IndexPage = () => {
                   </a>
                 </Link>
                 <Link href="https://discord.gg/w9zeRTSZsq" passHref>
-                  <a className="hover:text-blue-600" target="_window">Discord</a>
+                  <a className="hover:text-blue-600" target="_window">
+                    Discord
+                  </a>
                 </Link>
                 <Link href="https://github.com/popcorndao" passHref>
                   <a className="hover:text-blue-600" target="_window">
