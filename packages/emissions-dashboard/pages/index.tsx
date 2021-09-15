@@ -702,7 +702,7 @@ const IndexPage = (): JSX.Element => {
     setErrorMessage('');
   };
   return (
-    <div>
+    <div className="bg-gray-50">
       <Toaster position="top-right" />
       <NavBar
         title="Smart Contract Emissions Dashboard"
@@ -714,7 +714,7 @@ const IndexPage = (): JSX.Element => {
           setErrorMessage,
         }}
       />
-      <div className="sm:flex sm:flex-col sm:align-center bg-gray-50">
+      <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 ">
         <DateRangePicker
           updateDates={updateDates}
           startDate={startDate}
