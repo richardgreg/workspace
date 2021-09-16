@@ -14,6 +14,7 @@ import {
   TransactionGroupSummary,
 } from '@popcorn/ui/interfaces/emissions-dashboard';
 import { useWeb3React } from '@web3-react/core';
+import * as convert from 'convert-units';
 import { useRouter } from 'next/router';
 import fetch from 'node-fetch';
 import React, { useEffect, useState } from 'react';
@@ -571,6 +572,9 @@ const IndexPage = (): JSX.Element => {
       },
       0,
     );
+    const totalEmissionsConverted = convert(totalEmissionsCurrentPeriod)
+      .from('mcg')
+      .toBest();
 
     const transactionVolPercentChange = percentChange(
       totalTransactionVolPreviousPeriod,
@@ -579,10 +583,10 @@ const IndexPage = (): JSX.Element => {
     return [
       {
         id: 1,
-        name: 'CO2 Emissions (µg)',
-        stat: totalEmissionsCurrentPeriod,
+        name: `CO2 Emissions (${totalEmissionsConverted.unit})`,
+        stat: Math.round(totalEmissionsConverted.val),
         icon: CloudIcon,
-        change: `${emissionsChange}`,
+        change: `${emissionsChange.toLocaleString()}`,
         changeType: emissionsChange > 0 ? 'increase' : 'decrease',
       },
       {
@@ -674,11 +678,15 @@ const IndexPage = (): JSX.Element => {
       averageGasPricePreviousPeriod,
       averageGasPriceCurrentPeriod,
     );
+
+    const totalEmissionsConverted = convert(totalEmissionsCurrentPeriod)
+      .from('mcg')
+      .toBest();
     return [
       {
         id: 1,
-        name: 'CO2 Emissions (µg)',
-        stat: totalEmissionsCurrentPeriod,
+        name: `CO2 Emissions (${totalEmissionsConverted.unit})`,
+        stat: Math.round(totalEmissionsConverted.val),
         icon: CloudIcon,
         change: `${Math.round(emissionsChangePercentChange)}%`,
         changeType: emissionsChangePercentChange > 0 ? 'increase' : 'decrease',
