@@ -1,14 +1,7 @@
 import { BigNumber } from "@ethersproject/bignumber";
+import { Contract } from "@ethersproject/contracts";
 import { Web3Provider } from "@ethersproject/providers";
 import { parseEther } from "@ethersproject/units";
-import {
-  BasicIssuanceModule,
-  Curve3Pool,
-  CurveMetapool,
-  MockYearnV2Vault,
-  SetToken,
-} from "packages/contracts/typechain";
-import { HysiBatchInteraction } from "../../typechain/HysiBatchInteraction";
 
 export enum BatchType {
   Mint,
@@ -38,13 +31,13 @@ export interface AccountBatch extends Batch {
 export interface ComponentMap {
   // key is yTokenAddress
   [key: string]: {
-    metaPool?: CurveMetapool;
-    yPool?: MockYearnV2Vault;
+    metaPool?: Contract;
+    yPool?: Contract;
   };
 }
 
 class HysiBatchInteractionAdapter {
-  constructor(private contract: HysiBatchInteraction) {}
+  constructor(private contract: Contract) {}
 
   async getBatch(batchId: string): Promise<Batch> {
     const batch = await this.contract.batches(batchId);
@@ -84,9 +77,9 @@ class HysiBatchInteractionAdapter {
   static async getMinAmountOf3CrvToReceiveForBatchRedeem(
     slippage: number = 0.005,
     contracts: {
-      hysiBatchInteraction: HysiBatchInteraction;
-      basicIssuanceModule: BasicIssuanceModule;
-      setToken: SetToken;
+      hysiBatchInteraction: Contract;
+      basicIssuanceModule: Contract;
+      setToken: Contract;
     },
     componentMap: ComponentMap
   ): Promise<BigNumber> {
@@ -107,9 +100,8 @@ class HysiBatchInteractionAdapter {
     const componentVirtualPrices = await Promise.all(
       componentAddresses.map(async (component) => {
         const metapool = componentMap[component.toLowerCase()]
-          .metaPool as CurveMetapool;
-        const yPool = componentMap[component.toLowerCase()]
-          .yPool as MockYearnV2Vault;
+          .metaPool as Contract;
+        const yPool = componentMap[component.toLowerCase()].yPool as Contract;
         const yPoolPricePerShare = await yPool.pricePerShare();
         const metapoolPrice = await metapool.get_virtual_price();
         return yPoolPricePerShare.mul(metapoolPrice).div(parseEther("1"));
@@ -117,13 +109,13 @@ class HysiBatchInteractionAdapter {
     );
 
     const componentValuesInUSD = componentVirtualPrices.reduce(
-      (sum, componentPrice, i) => {
+      (sum: BigNumber, componentPrice: BigNumber, i) => {
         return sum.add(
           componentPrice.mul(componentAmounts[i]).div(parseEther("1"))
         );
       },
       parseEther("0")
-    );
+    ) as BigNumber;
 
     // 50 bps slippage tolerance
     const slippageTolerance = 1 - Number(slippage);
@@ -135,7 +127,7 @@ class HysiBatchInteractionAdapter {
   }
 
   public async getHysiPrice(
-    contract: BasicIssuanceModule,
+    contract: Contract,
     componentMap: ComponentMap
   ): Promise<BigNumber> {
     const components = await contract.getRequiredComponentUnitsForIssue(
@@ -144,7 +136,6 @@ class HysiBatchInteractionAdapter {
     );
     const componentAddresses = components[0];
     const componentAmounts = components[1];
-    console.log(componentMap);
 
     const componentVirtualPrices = await Promise.all(
       componentAddresses.map(async (address) => {
@@ -170,7 +161,7 @@ class HysiBatchInteractionAdapter {
     return hysiPrice as BigNumber;
   }
 
-  public async getThreeCrvPrice(contract: Curve3Pool): Promise<BigNumber> {
+  public async getThreeCrvPrice(contract: Contract): Promise<BigNumber> {
     return await contract.get_virtual_price();
   }
 
