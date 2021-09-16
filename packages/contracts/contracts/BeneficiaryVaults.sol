@@ -252,10 +252,6 @@ contract BeneficiaryVaults is IBeneficiaryVaults, Ownable, ReentrancyGuard {
 
   /* ========== RESTRICTED FUNCTIONS ========== */
 
-  function getOpenVaultCount() public view returns (uint8) {
-    return _getOpenVaultCount();
-  }
-
   function _getOpenVaultCount() internal view returns (uint8) {
     uint8 _openVaultCount = 0;
     bool zeroWasCounted = false;
