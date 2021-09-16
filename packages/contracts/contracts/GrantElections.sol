@@ -222,7 +222,9 @@ contract GrantElections is ParticipationReward {
     uint256 activeVaultId = IBeneficiaryVaults(beneficiaryVault).activeVaults(
       _term
     );
-    IBeneficiaryVaults(beneficiaryVault).closeVault(activeVaultId);
+    if (IBeneficiaryVaults(beneficiaryVault).vaultCanBeClosed(_term)) {
+      IBeneficiaryVaults(beneficiaryVault).closeVault(activeVaultId);
+    }
 
     uint256 electionId = elections.length;
     activeElections[_region][_term] = electionId;

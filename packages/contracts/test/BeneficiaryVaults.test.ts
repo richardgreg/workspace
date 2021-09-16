@@ -455,7 +455,7 @@ describe("BeneficiaryVaults", function () {
               expect(vaultData.totalAllocated).to.equal(
                 firstReward.add(secondReward)
               );
-              expect(vaultData.currentBalance).to.equal(0);
+              expect(vaultData.status).to.be.equal(VaultStatus.Closed);
             });
           });
           describe("open vault 1", function () {
@@ -490,7 +490,7 @@ describe("BeneficiaryVaults", function () {
               await contracts.beneficiaryVaults.allocateRewards();
               const vault0 = await contracts.beneficiaryVaults.getVault(0);
               expect(vault0.totalAllocated).to.equal(
-                firstReward.add(parseEther("0.5"))
+                firstReward.add(secondReward).add(parseEther("0.5"))
               );
               expect(vault0.currentBalance).to.equal(
                 firstReward.add(parseEther("0.5"))

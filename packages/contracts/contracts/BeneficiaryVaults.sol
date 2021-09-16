@@ -21,6 +21,12 @@ contract BeneficiaryVaults is IBeneficiaryVaults, Ownable, ReentrancyGuard {
     Closed
   }
 
+  enum ElectionTerm {
+    Monthly,
+    Quarterly,
+    Yearly
+  }
+
   struct Vault {
     uint256 totalAllocated;
     uint256 currentBalance;
@@ -28,6 +34,7 @@ contract BeneficiaryVaults is IBeneficiaryVaults, Ownable, ReentrancyGuard {
     mapping(address => bool) claimed;
     bytes32 merkleRoot;
     VaultStatus status;
+    ElectionTerm term;
   }
 
   /* ========== STATE VARIABLES ========== */
@@ -65,7 +72,8 @@ contract BeneficiaryVaults is IBeneficiaryVaults, Ownable, ReentrancyGuard {
       uint256 currentBalance,
       uint256 unclaimedShare,
       bytes32 merkleRoot,
-      VaultStatus status
+      VaultStatus status,
+      ElectionTerm term
     )
   {
     Vault storage vault = vaults[vaultId_];
@@ -74,6 +82,7 @@ contract BeneficiaryVaults is IBeneficiaryVaults, Ownable, ReentrancyGuard {
     unclaimedShare = vault.unclaimedShare;
     merkleRoot = vault.merkleRoot;
     status = vault.status;
+    term = vault.term;
   }
 
   function hasClaimed(uint256 vaultId_, address beneficiary_)
@@ -82,6 +91,13 @@ contract BeneficiaryVaults is IBeneficiaryVaults, Ownable, ReentrancyGuard {
     returns (bool)
   {
     return vaults[vaultId_].claimed[beneficiary_];
+  }
+
+  function vaultCanBeClosed(uint8 term) public view override returns (bool) {
+    uint256 vaultId = activeVaults[term];
+    return
+      uint8(vaults[vaultId].term) == term &&
+      vaults[vaultId].status == VaultStatus.Open;
   }
 
   /* ========== MUTATIVE FUNCTIONS ========== */
@@ -110,6 +126,7 @@ contract BeneficiaryVaults is IBeneficiaryVaults, Ownable, ReentrancyGuard {
     vault.unclaimedShare = 100e18;
     vault.merkleRoot = merkleRoot_;
     vault.status = VaultStatus.Open;
+    vault.term = ElectionTerm(electionTerm_);
 
     activeVaults[electionTerm_] = vaultId_;
 
@@ -213,9 +230,11 @@ contract BeneficiaryVaults is IBeneficiaryVaults, Ownable, ReentrancyGuard {
 
     //@todo handle dust after div
     uint256 _allocation = availableReward.div(_openVaultCount);
+    bool zeroWasCounted = false;
     for (uint8 i = 0; i < 3; i++) {
       uint256 vaultId = activeVaults[i];
       if (
+        uint8(vaults[vaultId].term) == i &&
         vaults[vaultId].status == VaultStatus.Open &&
         vaults[vaultId].merkleRoot != ""
       ) {
@@ -239,9 +258,11 @@ contract BeneficiaryVaults is IBeneficiaryVaults, Ownable, ReentrancyGuard {
 
   function _getOpenVaultCount() internal view returns (uint8) {
     uint8 _openVaultCount = 0;
+    bool zeroWasCounted = false;
     for (uint8 i = 0; i < 3; i++) {
       uint256 vaultId = activeVaults[i];
       if (
+        uint8(vaults[vaultId].term) == i &&
         vaults[vaultId].merkleRoot != "" &&
         vaults[vaultId].status == VaultStatus.Open
       ) {
@@ -270,6 +291,4 @@ contract BeneficiaryVaults is IBeneficiaryVaults, Ownable, ReentrancyGuard {
     beneficiaryRegistry = beneficiaryRegistry_;
     emit BeneficiaryRegistryChanged(_beneficiaryRegistry, beneficiaryRegistry);
   }
-
-  /* ========== MODIFIERS ========== */
 }
