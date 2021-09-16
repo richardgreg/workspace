@@ -1,4 +1,4 @@
-import { TimeTillBatchProcessing } from 'pages/hysi';
+import { TimeTillBatchProcessing } from '@popcorn/contracts';
 import CircularProgressbar from 'react-circular-progressbar';
 
 interface BatchProcessingInfoProps {

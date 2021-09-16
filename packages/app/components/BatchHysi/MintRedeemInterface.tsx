@@ -1,5 +1,5 @@
 import { BigNumber } from '@ethersproject/bignumber';
-import { BatchType } from '@popcorn/contracts/adapters/BatchHysi/BatchHysiAdapter';
+import { BatchType } from '@popcorn/contracts/adapters/HYSIBatchInteraction/HYSIBatchInteractionAdapter';
 import AccountValue from './AccountValue';
 import DepositWithdrawToggle from './DepositWithdrawToggle';
 import TokenInput, { TokenInputProps } from './TokenInput';
