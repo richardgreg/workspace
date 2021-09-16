@@ -40,7 +40,7 @@ contract BeneficiaryVaults is IBeneficiaryVaults, Ownable, ReentrancyGuard {
 
   /* ========== EVENTS ========== */
 
-  event VaultOpened(uint256 vaultId, bytes32 merkleRoot);
+  event VaultOpened(uint256 vaultId, uint8 electionTerm, bytes32 merkleRoot);
   event VaultClosed(uint256 vaultId);
   event RewardsAllocated(uint256 amount);
   event RewardClaimed(uint256 vaultId, address beneficiary, uint256 amount);
@@ -89,7 +89,7 @@ contract BeneficiaryVaults is IBeneficiaryVaults, Ownable, ReentrancyGuard {
   /**
    * @notice Initializes a vault for beneficiary claims
    * @param vaultId_ Vault ID in range 0-2
-   * @param electionTerm_ TODO
+   * @param electionTerm_ election term of the grant. used to set the vaultId_ on the right slot in activeVaults
    * @param merkleRoot_ Merkle root to support claims
    * @dev Vault cannot be initialized if it is currently in an open state, otherwise existing data is reset*
    */
@@ -103,12 +103,6 @@ contract BeneficiaryVaults is IBeneficiaryVaults, Ownable, ReentrancyGuard {
         vaults[vaultId_].status == VaultStatus.Closed,
       "Vault must not be open"
     );
-    uint256 activeVaultId = activeVaults[electionTerm_];
-    require(
-      vaults[vaultId_].merkleRoot == "" ||
-        vaults[activeVaultId].status == VaultStatus.Closed,
-      "active vault is not closed"
-    );
 
     Vault storage vault = vaults[vaultId_];
     vault.totalAllocated = 0;
@@ -119,11 +113,11 @@ contract BeneficiaryVaults is IBeneficiaryVaults, Ownable, ReentrancyGuard {
 
     activeVaults[electionTerm_] = vaultId_;
 
-    emit VaultOpened(vaultId_, merkleRoot_);
+    emit VaultOpened(vaultId_, electionTerm_, merkleRoot_);
   }
 
   /**
-   * @notice Close an open vault and redirect rewards to other vaults
+   * @notice Close an open vault
    * @dev Vault must be in an open state
    * @param vaultId_ Vault ID in range 0-2
    */
@@ -131,16 +125,8 @@ contract BeneficiaryVaults is IBeneficiaryVaults, Ownable, ReentrancyGuard {
     Vault storage vault = vaults[vaultId_];
     require(vault.status == VaultStatus.Open, "Vault must be open");
 
-    uint256 _remainingBalance = vault.currentBalance;
-    vault.currentBalance = 0;
     vault.status = VaultStatus.Closed;
 
-    if (_remainingBalance > 0) {
-      totalDistributedBalance = totalDistributedBalance.sub(_remainingBalance);
-      if (_getOpenVaultCount() > 0) {
-        allocateRewards();
-      }
-    }
     emit VaultClosed(vaultId_);
   }
 
@@ -246,6 +232,10 @@ contract BeneficiaryVaults is IBeneficiaryVaults, Ownable, ReentrancyGuard {
   }
 
   /* ========== RESTRICTED FUNCTIONS ========== */
+
+  function getOpenVaultCount() public view returns (uint8) {
+    return _getOpenVaultCount();
+  }
 
   function _getOpenVaultCount() internal view returns (uint8) {
     uint8 _openVaultCount = 0;
