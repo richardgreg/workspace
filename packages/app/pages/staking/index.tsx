@@ -272,6 +272,7 @@ export default function LockPop() {
                         {account &&
                           approved >= popToLock &&
                           lockedPop > 0 &&
+                          popToLock > 0 &&
                           !expired && (
                             <MainActionButton
                               label={'Increase Stake POP'}

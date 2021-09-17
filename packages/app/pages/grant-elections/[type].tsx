@@ -21,6 +21,8 @@ import { store } from '../../context/store';
 import { connectors } from '../../context/Web3/connectors';
 import { ContractsContext } from '../../context/Web3/contracts';
 import { ElectionsContext } from '../../context/Web3/elections';
+import { useContractFunction } from '../../hooks/useContractFunction';
+import { GrantElections__factory } from '../../../contracts/typechain';
 
 export interface IGrantRoundFilter {
   active: boolean;
@@ -103,6 +105,9 @@ export default function AllGrants() {
     false,
   ]);
   const [beneficiaryExists, setBeneficiaryExists] = useState<boolean>(false);
+  const electionsContract = GrantElections__factory.connect(process.env.ADDR_POP, library);
+  const { send: handleVote, state: voteState } =
+  electionsContract && useContractFunction(electionsContract, 'vote');
 
   async function IsUserAlreadyRegistered() {
     const connected = contracts.election.connect(library.getSigner());
@@ -128,7 +133,7 @@ export default function AllGrants() {
       connected
         .beneficiaryExists(account)
         .then((response) => setBeneficiaryExists(response))
-        .catch((err) => console.log(err, 'beneficiary doesnt exist'));
+        .catch((err) => console.log(err, "beneficiary doesn't exist"));
     }
   }, [contracts, account]);
 
@@ -192,14 +197,14 @@ export default function AllGrants() {
         .balanceOf(account)
         .then((res) => console.log('POP Balance: ', res));
     }
-  }, [contracts, account]);
+  }, [contracts, account, voteState.status]);
 
   useEffect(() => {
     if (!contracts || !selectedGrantTerms.length) {
       return;
     }
     getVoiceCredits(account);
-  }, [contracts, account, selectedGrantTerms]);
+  }, [contracts, account, selectedGrantTerms, voteState.status]);
 
   useEffect(() => {
     if (!grantRoundFilter.active && !grantRoundFilter.closed) {
@@ -268,16 +273,12 @@ export default function AllGrants() {
       [[], [], grantTerm],
     );
 
-    try {
-      toast.loading('Submitting Votes...');
-      await contracts.election
-        .connect(library.getSigner())
-        .vote(txArgs[0], txArgs[1], txArgs[2]);
-      toast.success('Voted sucessfully!');
-      // setup listener for confirmation
-    } catch (err) {
-      toast.error(err.data.message.split("'")[1]);
-    }
+    toast.promise(handleVote(txArgs[0], txArgs[1], txArgs[2]), {
+      loading: 'Submitting Votes...',
+      success: 'Voted successfully!',
+      error: (error) => error.data.message.split("'")[1],
+    });
+    dispatch(setDualActionModal(false));
   };
 
   return (
