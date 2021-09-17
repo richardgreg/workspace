@@ -1,3 +1,4 @@
+import { ChartData } from '@popcorn/ui/src/interfaces/emissions-dashboard';
 import React from 'react';
 import {
   CartesianGrid,
@@ -9,10 +10,9 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
-import { TransactionGroupSummary } from '../../../../../interfaces/emissions-dashboard';
 
 export interface BiaxialLineChartProps {
-  data: TransactionGroupSummary[];
+  data: ChartData[];
   height?: number;
   width?: number;
   areaColor?: string;

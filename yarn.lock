@@ -16652,7 +16652,14 @@ moize@^6.0.0:
     fast-equals "^2.0.1"
     micro-memoize "^4.0.9"
 
-moment@^2.29.1:
+moment-timezone@^0.5.33:
+  version "0.5.33"
+  resolved "https://registry.yarnpkg.com/moment-timezone/-/moment-timezone-0.5.33.tgz#b252fd6bb57f341c9b59a5ab61a8e51a73bbd22c"
+  integrity sha512-PTc2vcT8K9J5/9rDEPe5czSIKgLoGsH8UNpA4qZTVw0Vd/Uz19geE9abbIOQKaAQFcnQ3v5YEXrbSc5BpshH+w==
+  dependencies:
+    moment ">= 2.9.0"
+
+"moment@>= 2.9.0", moment@^2.29.1:
   version "2.29.1"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.1.tgz#b2be769fa31940be9eeea6469c075e35006fa3d3"
   integrity sha512-kHmoybcPV8Sqy59DwNDY3Jefr64lK/by/da0ViFcuA4DH0vQg5Q6Ze5VimxkfQNSC+Mls/Kx53s7TjP1RhFEDQ==
@@ -21993,6 +22000,14 @@ through@2, "through@>=2.2.7 <3", through@^2.3.4, through@^2.3.6, through@^2.3.8,
   version "2.3.8"
   resolved "https://registry.yarnpkg.com/through/-/through-2.3.8.tgz#0dd4c9ffaabc357960b1b724115d7e0e86a2e1f5"
   integrity sha1-DdTJ/6q8NXlgsbckEV1+Doai4fU=
+
+time-series-aggregator@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/time-series-aggregator/-/time-series-aggregator-1.0.1.tgz#6bb95f8a7de6ae77c8a41573b5a584b8598390e7"
+  integrity sha512-KFwXGmzr/+EdDdgohqJv5wRjUHfS6SCvqqFIubltJ8AAu2qoulW+NuOnP51UDKlFTSLt2tzzKMXySIdTRp4L3A==
+  dependencies:
+    lodash "^4.17.21"
+    moment-timezone "^0.5.33"
 
 timed-out@^4.0.0, timed-out@^4.0.1:
   version "4.0.1"
