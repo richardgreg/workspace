@@ -363,11 +363,6 @@ const getMinAmountOf3CrvToReceive = async (
   const minAmountToReceive = componentValuesInUSD
     .mul(parseEther(slippageTolerance.toString()))
     .div(parseEther("1"));
-
-  console.log({
-    componentValuesInUSD: formatEther(componentValuesInUSD),
-    minAmountToReceive: formatEther(minAmountToReceive),
-  });
   return minAmountToReceive;
 };
 
