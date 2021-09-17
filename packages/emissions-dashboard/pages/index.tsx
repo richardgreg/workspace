@@ -6,10 +6,8 @@ import { NavBar } from '@popcorn/ui/components/popcorn/emissions-dashboard/NavBa
 import { TotalStats } from '@popcorn/ui/components/popcorn/emissions-dashboard/TotalStats/index';
 import {
   Contract,
-  ContractEmissions,
   StatCardData,
   Transaction,
-  TransactionGroupSummary,
 } from '@popcorn/ui/interfaces/emissions-dashboard';
 import { useWeb3React } from '@web3-react/core';
 import { useRouter } from 'next/router';
@@ -18,7 +16,6 @@ import React, { useEffect, useState } from 'react';
 import { Globe } from 'react-feather';
 import toast, { Toaster } from 'react-hot-toast';
 import TimeSeriesAggregator from 'time-series-aggregator';
-import { percentChange } from 'utils/percentChange';
 import web3 from 'web3';
 const aggregator = new TimeSeriesAggregator();
 
@@ -97,8 +94,6 @@ const IndexPage = (): JSX.Element => {
   const [startDate, setStartDate] = useState<Date>(new Date('2021-06-15'));
   const [endDate, setEndDate] = useState<Date>(new Date('2021-08-01'));
 
-  const [previousPeriodStartBlock, setPreviousPeriodStartBlock] =
-    useState<number>(11564729);
   const [transactionsPreviousPeriod, setTransactionsPreviousPeriod] = useState<
     Transaction[]
   >([]);
@@ -106,23 +101,9 @@ const IndexPage = (): JSX.Element => {
     Transaction[]
   >([]);
 
-  const [
-    transactionGroupSummariesPreviousPeriod,
-    setTransactionGroupSummariesPreviousPeriod,
-  ] = useState<ContractEmissions[]>([]);
-  const [
-    transactionGroupSummariesCurrentPeriod,
-    setTransactionGroupSummariesCurrentPeriod,
-  ] = useState<ContractEmissions[]>([]);
-
   useEffect(() => {
     if (endDate && startDate) getTransactions();
   }, [endDate, startDate]);
-
-  useEffect(() => {
-    groupTransactionsPreviousPeriod();
-    groupTransactionsCurrentPeriod();
-  }, [transactionsPreviousPeriod, transactionsCurrentPeriod]);
 
   useEffect(() => {
     if (typeof window !== 'undefined' && window.location.pathname !== '/') {
@@ -160,78 +141,6 @@ const IndexPage = (): JSX.Element => {
       });
     setTransactionsPreviousPeriod(transactionsPreviousPeriod);
     setTransactionsCurrentPeriod(transactionsCurrentPeriod);
-  };
-
-  const getTransactionGroupSummary = (transactions: Transaction[], date) => {
-    const numTransactions = transactions.length;
-    const gasUsed = transactions.reduce((pr, cu) => {
-      return pr + Number(cu.gasUsed);
-    }, 0);
-    const totalGasPrice = transactions.reduce((pr, cu) => {
-      return pr + Number(cu.gasPrice) / GWEI_TO_ETH;
-    }, 0);
-
-    const averageGasPrice =
-      totalGasPrice === 0 ? 0 : Math.round(totalGasPrice / numTransactions);
-
-    const emissions = Math.round(
-      transactions.reduce((pr, cu) => {
-        return pr + Number(cu.emissions);
-      }, 0),
-    );
-    return {
-      averageGasPrice,
-      co2Emissions: emissions,
-      date: new Date(date),
-      gasUsed,
-      numTransactions,
-    };
-  };
-
-  const groupTransactionsPreviousPeriod = async () => {
-    const timeRange = startDate.getTime() - previousPeriodStartDate.getTime();
-    const numDays = Math.round(timeRange / (1000 * 3600 * 24));
-    const data = aggregator
-      .setCollection(transactionsPreviousPeriod)
-      .setPeriod(numDays)
-      .setGranularity('day')
-      .setGroupBy('date')
-      .setEndTime(endDate.toISOString())
-      .aggregate();
-    const groupedCollection = Object(data).groupedCollection;
-    var groupSummaries = [];
-    for (const [date, transactions] of Object.entries(groupedCollection)) {
-      const groupSummary = getTransactionGroupSummary(
-        transactions as Transaction[],
-        date,
-      );
-      groupSummaries.push(groupSummary);
-    }
-    groupSummaries = groupSummaries.sort((a, b) => a.date - b.date);
-    // setTransactionGroupSummariesPreviousPeriod(transactionGroupSummaries);
-  };
-
-  const groupTransactionsCurrentPeriod = async () => {
-    const timeRange = endDate.getTime() - startDate.getTime();
-    const numDays = Math.round(timeRange / (1000 * 3600 * 24));
-    const data = aggregator
-      .setCollection(transactionsPreviousPeriod)
-      .setPeriod(numDays)
-      .setGranularity('day')
-      .setGroupBy('date')
-      .setEndTime(endDate.toISOString())
-      .aggregate();
-    const groupedCollection = Object(data).groupedCollection;
-    var groupSummaries = [];
-    for (const [date, transactions] of Object.entries(groupedCollection)) {
-      const groupSummary = getTransactionGroupSummary(
-        transactions as Transaction[],
-        date,
-      );
-      groupSummaries.push(groupSummary);
-    }
-    groupSummaries = groupSummaries.sort((a, b) => a.date - b.date);
-    // setTransactionGroupSummariesCurrentPeriod(transactionGroupSummaries);
   };
 
   const updateDates = (startDate: Date, endDate: Date): void => {
@@ -286,84 +195,6 @@ const IndexPage = (): JSX.Element => {
     setOpen(false);
   };
 
-  const getStatCardDataForContract = (contract: Contract): StatCardData[] => {
-    if (transactionGroupSummariesCurrentPeriod.length === 0) {
-      return EMPTY_STAT_CARDS;
-    }
-
-    const emissionsCurrentPeriod =
-      transactionGroupSummariesCurrentPeriod.filter(
-        (contractEmissions) =>
-          contractEmissions.contractAddress === contract.address,
-      )[0].transactionGroupSummaries;
-    const emissionsPreviousPeriod =
-      transactionGroupSummariesPreviousPeriod.filter(
-        (contractEmissions) =>
-          contractEmissions.contractAddress === contract.address,
-      )[0].transactionGroupSummaries;
-
-    const totalEmissionsCurrentPeriod = emissionsCurrentPeriod.reduce(
-      (acc, currentGroup) => {
-        return acc + currentGroup.co2Emissions;
-      },
-      0,
-    );
-    const totalEmissionsPreviousPeriod = emissionsPreviousPeriod.reduce(
-      (acc, currentGroup) => {
-        return acc + currentGroup.co2Emissions;
-      },
-      0,
-    );
-    const totalTransactionVolCurrentPeriod = emissionsCurrentPeriod.reduce(
-      (acc, currentGroup) => {
-        return acc + currentGroup.numTransactions;
-      },
-      0,
-    );
-    const emissionsChange = Math.round(
-      totalEmissionsCurrentPeriod - totalEmissionsPreviousPeriod,
-    );
-    const totalTransactionVolPreviousPeriod = emissionsPreviousPeriod.reduce(
-      (acc, currentGroup) => {
-        return acc + currentGroup.numTransactions;
-      },
-      0,
-    );
-
-    const transactionVolPercentChange = percentChange(
-      totalTransactionVolPreviousPeriod,
-      totalTransactionVolCurrentPeriod,
-    );
-    return [
-      {
-        id: 1,
-        name: 'CO2 Emissions (µg)',
-        stat: totalEmissionsCurrentPeriod,
-        icon: CloudIcon,
-        change: `${emissionsChange}`,
-        changeType: emissionsChange > 0 ? 'increase' : 'decrease',
-      },
-      {
-        id: 2,
-        name: 'Transactions',
-        stat: totalTransactionVolCurrentPeriod,
-        icon: Globe,
-        change: `${transactionVolPercentChange}%`,
-        changeType: transactionVolPercentChange > 0 ? 'increase' : 'decrease',
-      },
-    ];
-  };
-
-  const getDataForContract = (
-    contract: Contract,
-  ): TransactionGroupSummary[] => {
-    if (transactionGroupSummariesCurrentPeriod.length === 0) return [];
-    return transactionGroupSummariesCurrentPeriod.filter(
-      (contractEmissions) =>
-        contractEmissions.contractAddress === contract.address,
-    )[0].transactionGroupSummaries;
-  };
-
   const openAddContractModal = (): void => {
     setOpen(true);
     setErrorMessage('');
@@ -400,9 +231,16 @@ const IndexPage = (): JSX.Element => {
         {contracts.map((contract) => {
           return (
             <ContractContainer
-              statCardData={getStatCardDataForContract(contract)}
               contract={contract}
-              data={getDataForContract(contract)}
+              endDate={endDate}
+              previousPeriodStartDate={previousPeriodStartDate}
+              startDate={startDate}
+              transactionsPreviousPeriod={transactionsPreviousPeriod.filter(
+                (txn) => txn.to === contract.address,
+              )}
+              transactionsCurrentPeriod={transactionsCurrentPeriod.filter(
+                (txn) => txn.to === contract.address,
+              )}
             />
           );
         })}

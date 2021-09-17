@@ -4,10 +4,10 @@ import {
   Transaction,
 } from '@popcorn/ui/interfaces/emissions-dashboard';
 import { ChartData } from '@popcorn/ui/src/interfaces/emissions-dashboard';
+import { percentChange } from '@popcorn/utils';
 import React from 'react';
 import { Globe, Wind } from 'react-feather';
 import TimeSeriesAggregator from 'time-series-aggregator';
-import { percentChange } from 'utils/percentChange';
 import { BiaxialLineChart } from '../recharts/BiaxialLineChart';
 import { StatsCards } from '../StatsCards';
 const aggregator = new TimeSeriesAggregator();
@@ -22,7 +22,7 @@ interface TotalStatsProps {
 
 const GWEI_TO_ETH = Math.pow(10, 9);
 
-const getTotalStatCardData = (
+const getStatCardData = (
   transactionsCurrentPeriod: Transaction[],
   transactionsPreviousPeriod: Transaction[],
   startDate: Date,
@@ -195,7 +195,7 @@ export const TotalStats: React.FC<TotalStatsProps> = ({
       </div>
       <div className="max-w-7xl mb-5">
         <StatsCards
-          stats={getTotalStatCardData(
+          stats={getStatCardData(
             transactionsCurrentPeriod,
             transactionsPreviousPeriod,
             startDate,

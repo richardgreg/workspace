@@ -11,4 +11,5 @@ export {
   getBytes32FromIpfsHash,
   getIpfsHashFromBytes32,
 } from './ipfsHashManipulation';
+export { percentChange } from './percentChange';
 export { default as useFetch } from './useFetch';
