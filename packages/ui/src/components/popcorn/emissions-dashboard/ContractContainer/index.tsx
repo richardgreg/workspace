@@ -7,7 +7,7 @@ import {
   percentChange,
 } from '@popcorn/utils';
 import React from 'react';
-import { Globe, Wind } from 'react-feather';
+import { Globe } from 'react-feather';
 import TimeSeriesAggregator from 'time-series-aggregator';
 import {
   Contract,
@@ -73,33 +73,6 @@ const getStatCardData = (
     totalTransactionVolCurrentPeriod,
   );
 
-  const totalGasPriceCurrentPeriod =
-    transactionGroupSummariesCurrentPeriod.reduce((acc, currentGroup) => {
-      return acc + currentGroup.averageGasPrice;
-    }, 0);
-  const totalGasPricePreviousPeriod =
-    transactionGroupSummariesPreviousPeriod.reduce((acc, currentGroup) => {
-      return acc + currentGroup.averageGasPrice;
-    }, 0);
-  const averageGasPriceCurrentPeriod =
-    totalGasPriceCurrentPeriod === 0
-      ? 0
-      : Math.round(
-          totalGasPriceCurrentPeriod /
-            transactionGroupSummariesCurrentPeriod.length,
-        );
-  const averageGasPricePreviousPeriod =
-    totalGasPriceCurrentPeriod === 0
-      ? 0
-      : Math.round(
-          totalGasPricePreviousPeriod /
-            transactionGroupSummariesPreviousPeriod.length,
-        );
-
-  const gasPricePercentChange = percentChange(
-    averageGasPricePreviousPeriod,
-    averageGasPriceCurrentPeriod,
-  );
   return [
     {
       id: 1,
@@ -116,14 +89,6 @@ const getStatCardData = (
       icon: Globe,
       change: `${transactionVolPercentChange}%`,
       changeType: transactionVolPercentChange > 0 ? 'increase' : 'decrease',
-    },
-    {
-      id: 3,
-      name: 'Average Gas Price',
-      stat: averageGasPriceCurrentPeriod,
-      icon: Wind,
-      change: `${gasPricePercentChange}%`,
-      changeType: gasPricePercentChange > 0 ? 'increase' : 'decrease',
     },
   ];
 };

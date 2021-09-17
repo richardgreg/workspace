@@ -82,15 +82,13 @@ const getStatCardData = (
     totalGasPriceCurrentPeriod === 0
       ? 0
       : Math.round(
-          totalGasPriceCurrentPeriod /
-            transactionGroupSummariesCurrentPeriod.length,
+          totalGasPriceCurrentPeriod / totalTransactionVolCurrentPeriod,
         );
   const averageGasPricePreviousPeriod =
     totalGasPriceCurrentPeriod === 0
       ? 0
       : Math.round(
-          totalGasPricePreviousPeriod /
-            transactionGroupSummariesPreviousPeriod.length,
+          totalGasPricePreviousPeriod / totalTransactionVolPreviousPeriod,
         );
 
   const gasPricePercentChange = percentChange(
