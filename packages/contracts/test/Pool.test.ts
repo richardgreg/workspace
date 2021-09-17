@@ -144,15 +144,18 @@ describe("Pool", function () {
       expect(await contracts.pool.contractRegistry()).to.equal(
         contracts.contractRegistry.address
       );
+      expect(await contracts.pool.registry()).to.equal(
+        contracts.mockYearnRegistry.address
+      );
     });
   });
 
   describe("pool token", async function () {
-    it("has a token name", async function () {
+    it("generates token name from underlying", async function () {
       expect(await contracts.pool.name()).to.equal("Popcorn Token Pool");
     });
 
-    it("has a token symbol", async function () {
+    it("generates token symbol from underlying", async function () {
       expect(await contracts.pool.symbol()).to.equal("popToken");
     });
 
@@ -241,6 +244,41 @@ describe("Pool", function () {
       expect(
         await contracts.pool.connect(depositor2).balanceOf(depositor2.address)
       ).to.equal(amount);
+    });
+  });
+
+  describe("transfers", async function () {
+    it("pool tokens are transferable with transfer", async function () {
+      const amount = parseEther("1000");
+      await contracts.mockToken
+        .connect(depositor)
+        .approve(contracts.pool.address, amount);
+      await contracts.pool.connect(depositor).deposit(amount);
+      const balance = await contracts.pool.balanceOf(depositor.address);
+      await contracts.pool
+        .connect(depositor)
+        .transfer(depositor1.address, balance);
+      expect(await contracts.pool.balanceOf(depositor1.address)).to.equal(
+        balance
+      );
+    });
+
+    it("pool tokens are transferable with transferFrom", async function () {
+      const amount = parseEther("1000");
+      await contracts.mockToken
+        .connect(depositor)
+        .approve(contracts.pool.address, amount);
+      await contracts.pool.connect(depositor).deposit(amount);
+      const balance = await contracts.pool.balanceOf(depositor.address);
+      await contracts.pool
+        .connect(depositor)
+        .approve(depositor2.address, balance);
+      await contracts.pool
+        .connect(depositor2)
+        .transferFrom(depositor.address, depositor1.address, balance);
+      expect(await contracts.pool.balanceOf(depositor1.address)).to.equal(
+        balance
+      );
     });
   });
 
@@ -817,6 +855,27 @@ describe("Pool", function () {
           parseEther("5000")
         );
       });
+
+      it("does not take fee when set to zero", async function () {
+        await contracts.pool.connect(owner).setManagementFee(0);
+
+        let amount = parseEther("10000");
+        await contracts.mockToken
+          .connect(depositor)
+          .approve(contracts.pool.address, amount);
+
+        expect(await contracts.pool.balanceOf(contracts.pool.address)).to.equal(
+          0
+        );
+        await contracts.pool.connect(depositor).deposit(amount);
+        await provider.send("evm_increaseTime", [365 * 24 * 60 * 60]);
+        await contracts.pool.takeFees();
+
+        let managementTokenBalance = await contracts.pool.balanceOf(
+          contracts.pool.address
+        );
+        expect(managementTokenBalance).to.equal(0);
+      });
     });
 
     describe("performance fees", async function () {
@@ -833,6 +892,16 @@ describe("Pool", function () {
         await expect(
           contracts.pool.connect(depositor).withdraw(parseEther("10000"))
         ).not.to.emit(contracts.pool, "PerformanceFee");
+      });
+
+      it("does not update HWM when price per pool token is unchanged", async function () {
+        expect(await contracts.pool.poolTokenHWM()).to.equal(parseEther("1"));
+        let amount = parseEther("20000");
+        await contracts.mockToken
+          .connect(depositor)
+          .approve(contracts.pool.address, amount);
+        await contracts.pool.connect(depositor).deposit(amount);
+        expect(await contracts.pool.poolTokenHWM()).to.equal(parseEther("1"));
       });
 
       it("takes a performance fee when value increases", async function () {
@@ -871,6 +940,21 @@ describe("Pool", function () {
         await expect(
           contracts.pool.connect(depositor).withdraw(parseEther("10000"))
         ).not.to.emit(contracts.pool, "PerformanceFee");
+      });
+
+      it("does not update HWM when price per token decreases below HWM", async function () {
+        let amount = parseEther("20000");
+        await contracts.mockToken
+          .connect(depositor)
+          .approve(contracts.pool.address, amount);
+        await contracts.pool.connect(depositor).deposit(amount);
+        expect(await contracts.pool.poolTokenHWM()).to.equal(parseEther("1"));
+        await contracts.mockYearnVault.setPricePerFullShare(parseEther("1.5"));
+        await contracts.pool.takeFees();
+        expect(await contracts.pool.poolTokenHWM()).to.equal(parseEther("1.4"));
+        await contracts.mockYearnVault.setPricePerFullShare(parseEther("1.25"));
+        await contracts.pool.takeFees();
+        expect(await contracts.pool.poolTokenHWM()).to.equal(parseEther("1.4"));
       });
 
       it("takes a performance fee when value decreases below HWM, then increases above it", async function () {

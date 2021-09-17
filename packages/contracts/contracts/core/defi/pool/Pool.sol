@@ -144,6 +144,23 @@ contract Pool is AffiliateToken, ReentrancyGuard, Pausable {
     return withdrawal;
   }
 
+  function transfer(address recipient, uint256 amount)
+    public
+    override
+    blockLocked
+    returns (bool)
+  {
+    return super.transfer(recipient, amount);
+  }
+
+  function transferFrom(
+    address sender,
+    address recipient,
+    uint256 amount
+  ) public override blockLocked returns (bool) {
+    return super.transferFrom(sender, recipient, amount);
+  }
+
   function takeFees() external nonReentrant {
     _takeFees();
     _reportPoolTokenHWM();
@@ -189,6 +206,14 @@ contract Pool is AffiliateToken, ReentrancyGuard, Pausable {
     );
   }
 
+  function pauseContract() external onlyOwner {
+    _pause();
+  }
+
+  function unpauseContract() external onlyOwner {
+    _unpause();
+  }
+
   function pricePerPoolToken() public view returns (uint256) {
     return valueFor(1e18);
   }
@@ -199,6 +224,23 @@ contract Pool is AffiliateToken, ReentrancyGuard, Pausable {
 
   function valueFor(uint256 poolTokens) public view returns (uint256) {
     return _shareValue(poolTokens);
+  }
+
+  function _depositFor(uint256 amount, address recipient)
+    internal
+    returns (uint256)
+  {
+    require(amount <= token.balanceOf(msg.sender), "Insufficient balance");
+    _lockForBlock(msg.sender);
+    _takeFees();
+
+    uint256 deposited = _deposit(msg.sender, address(this), amount, true);
+    uint256 shares = _sharesForValue(deposited);
+    _mint(recipient, shares);
+
+    emit Deposit(recipient, amount, shares);
+    _reportPoolTokenHWM();
+    return shares;
   }
 
   function _reportPoolTokenHWM() internal {
@@ -275,22 +317,5 @@ contract Pool is AffiliateToken, ReentrancyGuard, Pausable {
 
   function _lockForBlock(address account) internal {
     blockLocks[account] = block.number;
-  }
-
-  function transfer(address recipient, uint256 amount)
-    public
-    override
-    blockLocked
-    returns (bool)
-  {
-    return super.transfer(recipient, amount);
-  }
-
-  function transferFrom(
-    address sender,
-    address recipient,
-    uint256 amount
-  ) public override blockLocked returns (bool) {
-    return super.transferFrom(sender, recipient, amount);
   }
 }
