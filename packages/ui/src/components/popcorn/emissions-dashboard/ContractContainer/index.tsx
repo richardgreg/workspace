@@ -163,9 +163,9 @@ const getChartData = (
     .setGroupBy('date')
     .setEndTime(endDate.toISOString())
     .aggregate();
-  const groupedCollection = Object(data).groupedCollection;
+  const hashTableMap = Object(data).HashTableMap;
   var groupSummaries = [];
-  for (const [date, transactions] of Object.entries(groupedCollection)) {
+  for (const [date, transactions] of Object.entries(hashTableMap)) {
     const groupSummary = getTransactionGroupSummary(
       transactions as Transaction[],
       date,
