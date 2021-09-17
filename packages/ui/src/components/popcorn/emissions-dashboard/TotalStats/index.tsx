@@ -70,26 +70,25 @@ const getStatCardData = (
     totalTransactionVolCurrentPeriod,
   );
 
-  const totalGasPriceCurrentPeriod =
-    transactionGroupSummariesCurrentPeriod.reduce((acc, currentGroup) => {
-      return acc + currentGroup.averageGasPrice;
-    }, 0);
-  const totalGasPricePreviousPeriod =
-    transactionGroupSummariesPreviousPeriod.reduce((acc, currentGroup) => {
-      return acc + currentGroup.averageGasPrice;
-    }, 0);
   const averageGasPriceCurrentPeriod =
-    totalGasPriceCurrentPeriod === 0
+    totalTransactionVolCurrentPeriod === 0
       ? 0
-      : Math.round(
-          totalGasPriceCurrentPeriod / totalTransactionVolCurrentPeriod,
-        );
+      : transactionGroupSummariesCurrentPeriod
+          .filter((txnGroup) => txnGroup.numTransactions !== 0)
+          .reduce((acc, currentGroup) => {
+            return acc + currentGroup.averageGasPrice;
+          }, 0) /
+        transactionGroupSummariesCurrentPeriod.filter(
+          (txnGroup) => txnGroup.numTransactions !== 0,
+        ).length;
   const averageGasPricePreviousPeriod =
-    totalGasPriceCurrentPeriod === 0
+    totalTransactionVolPreviousPeriod === 0
       ? 0
-      : Math.round(
-          totalGasPricePreviousPeriod / totalTransactionVolPreviousPeriod,
-        );
+      : transactionGroupSummariesPreviousPeriod
+          .filter((txnGroup) => txnGroup.numTransactions !== 0)
+          .reduce((acc, currentGroup) => {
+            return acc + currentGroup.averageGasPrice;
+          }, 0);
 
   const gasPricePercentChange = percentChange(
     averageGasPricePreviousPeriod,
@@ -125,21 +124,29 @@ const getStatCardData = (
 
 const getTransactionGroupSummary = (transactions: Transaction[], date) => {
   const numTransactions = transactions.length;
-  const gasUsed = transactions.reduce((pr, cu) => {
-    return pr + Number(cu.gasUsed);
-  }, 0);
-  const totalGasPrice = transactions.reduce((pr, cu) => {
-    return pr + Number(cu.gasPrice) / GWEI_TO_ETH;
-  }, 0);
+  const gasUsed =
+    numTransactions === 0
+      ? 0
+      : transactions.reduce((pr, cu) => {
+          return pr + Number(cu.gasUsed);
+        }, 0);
+  const totalGasPrice =
+    numTransactions === 0
+      ? 0
+      : transactions.reduce((pr, cu) => {
+          return pr + Number(cu.gasPrice) / GWEI_TO_ETH;
+        }, 0);
 
   const averageGasPrice =
-    totalGasPrice === 0 ? 0 : Math.round(totalGasPrice / numTransactions);
-
-  const emissions = Math.round(
-    transactions.reduce((pr, cu) => {
-      return pr + Number(cu.emissions);
-    }, 0),
-  );
+    numTransactions === 0 ? 0 : Math.round(totalGasPrice / numTransactions);
+  const emissions =
+    numTransactions === 0
+      ? 0
+      : Math.round(
+          transactions.reduce((pr, cu) => {
+            return pr + Number(cu.emissions);
+          }, 0),
+        );
   return {
     averageGasPrice,
     co2Emissions: emissions,
