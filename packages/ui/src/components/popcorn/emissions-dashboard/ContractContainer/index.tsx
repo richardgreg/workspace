@@ -1,6 +1,11 @@
 import { CloudIcon } from '@heroicons/react/outline';
 import { ChartData } from '@popcorn/ui/src/interfaces/emissions-dashboard';
-import { percentChange } from '@popcorn/utils';
+import {
+  getGranularity,
+  getNumDaysBetweenTwoDates,
+  getPeriod,
+  percentChange,
+} from '@popcorn/utils';
 import React from 'react';
 import { Globe, Wind } from 'react-feather';
 import TimeSeriesAggregator from 'time-series-aggregator';
@@ -154,12 +159,13 @@ const getChartData = (
   startDate: Date,
   endDate: Date,
 ): ChartData[] => {
-  const timeRange = endDate.getTime() - startDate.getTime();
-  const numDays = Math.round(timeRange / (1000 * 3600 * 24));
+  const dateRangeInDays = getNumDaysBetweenTwoDates(startDate, endDate);
+  const granularity = getGranularity(dateRangeInDays);
+  const period = getPeriod(granularity, dateRangeInDays);
   const data = aggregator
     .setCollection(transactions)
-    .setPeriod(numDays)
-    .setGranularity('day')
+    .setPeriod(period)
+    .setGranularity(granularity)
     .setGroupBy('date')
     .setEndTime(endDate.toISOString())
     .aggregate();

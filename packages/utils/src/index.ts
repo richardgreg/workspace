@@ -1,5 +1,10 @@
 export { capitalize } from './capitalize';
 export {
+  getGranularity,
+  getNumDaysBetweenTwoDates,
+  getPeriod,
+} from './EmissionsDashboard';
+export {
   bigNumberToNumber,
   formatAndRoundBigNumber,
   numberToBigNumber,
