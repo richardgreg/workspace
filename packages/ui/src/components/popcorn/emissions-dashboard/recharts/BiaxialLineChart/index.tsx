@@ -24,7 +24,7 @@ const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
     return (
       <div className="bg-gray-50 p-1">
-        <p className="text-xs ">{`${label}`}</p>
+        <p className="text-xs ">{`${label.toLocaleString()}`}</p>
         <p className="text-xs text-indigo-500">{`Transaction Volume: ${payload[0].value}`}</p>
         <p className="text-xs text-green-500">{`CO2 Emissions (µg): ${payload[1].value}`}</p>
       </div>
@@ -62,7 +62,7 @@ export const BiaxialLineChart: React.FC<BiaxialLineChartProps> = ({
           }}
         >
           <CartesianGrid stroke="#f5f5f5" />
-          <XAxis dataKey="blockStartDate" hide={true} />
+          <XAxis dataKey="date" hide={true} />
           <YAxis dataKey="numTransactions" yAxisId="left" hide={true} />
           <YAxis
             dataKey="co2Emissions"
