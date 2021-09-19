@@ -7,7 +7,6 @@ import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import { useContext, useEffect, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
-import { Staking__factory, ERC20__factory } from '../../../contracts/typechain';
 import NavBar from '../../components/NavBar/NavBar';
 import { connectors } from '../../context/Web3/connectors';
 import { ContractsContext } from '../../context/Web3/contracts';
@@ -35,19 +34,18 @@ export default function LockPop() {
   const [approved, setApproval] = useState<number>(0);
   const [expired, setExpired] = useState<boolean>(false);
   const [wait, setWait] = useState<boolean>(false);
-  const stakingContract = Staking__factory.connect(
-    process.env.ADDR_STAKING,
-    library,
-  );
-  const popContract = ERC20__factory.connect(process.env.ADDR_POP, library);
+  const stakingContract = contracts?.staking;
+  const popContract = contracts?.pop;
   const { send: handleIncreaseStake, state: increaseStakeState } =
-    stakingContract && useContractFunction(stakingContract, 'increaseStake');
+    useContractFunction(stakingContract, 'increaseStake');
   const { send: handleIncreaseLockPeriod, state: increaseLockPeriodState } =
-    stakingContract && useContractFunction(stakingContract, 'increaseLock');
+    useContractFunction(stakingContract, 'increaseLock');
   const { send: handleApproveStake, state: approveStakeState } =
-  popContract && useContractFunction(popContract, 'approve');
-  const { send: handleStake, state: stakeState } =
-    stakingContract && useContractFunction(stakingContract, 'stake');
+    useContractFunction(popContract, 'approve');
+  const { send: handleStake, state: stakeState } = useContractFunction(
+    stakingContract,
+    'stake',
+  );
 
   useEffect(() => {
     setVoiceCredits(popToLock * (lockDuration / (ONE_WEEK * 52 * 4)));

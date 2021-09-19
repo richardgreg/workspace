@@ -22,7 +22,6 @@ import { connectors } from '../../context/Web3/connectors';
 import { ContractsContext } from '../../context/Web3/contracts';
 import { ElectionsContext } from '../../context/Web3/elections';
 import { useContractFunction } from '../../hooks/useContractFunction';
-import { GrantElections__factory } from '../../../contracts/typechain';
 
 export interface IGrantRoundFilter {
   active: boolean;
@@ -105,9 +104,10 @@ export default function AllGrants() {
     false,
   ]);
   const [beneficiaryExists, setBeneficiaryExists] = useState<boolean>(false);
-  const electionsContract = GrantElections__factory.connect(process.env.ADDR_POP, library);
-  const { send: handleVote, state: voteState } =
-  electionsContract && useContractFunction(electionsContract, 'vote');
+  const { send: handleVote, state: voteState } = useContractFunction(
+    contracts?.election,
+    'vote',
+  );
 
   async function IsUserAlreadyRegistered() {
     const connected = contracts.election.connect(library.getSigner());

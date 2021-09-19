@@ -13,8 +13,8 @@
     "*.{tsx,ts}": "prettier --write"
   },
   "dependencies": {
-    "@ethersproject/contracts": "^5.0.12",
-    "@ethersproject/providers": "^5.0.24",
+    "@ethersproject/contracts": "5.4.0",
+    "@ethersproject/providers": "5.4.0",
     "@headlessui/react": "^1.0.0",
     "@heroicons/react": "^1.0.1",
     "@material-ui/core": "^4.12.3",
@@ -35,7 +35,7 @@
     "dotenv": "^8.2.0",
     "electron": "^13.1.5",
     "eslint-plugin-react-hooks": "^4.2.0",
-    "ethers": "^5.0.24",
+    "ethers": "5.4.1",
     "luxon": "^1.27.0",
     "next": "10.2.3",
     "postcss": "^8.2.8",

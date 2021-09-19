@@ -1,8 +1,8 @@
-import { Contract } from "@ethersproject/contracts";
 import { parseEther } from "@ethersproject/units";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { expect } from "chai";
 import { deployContract } from "ethereum-waffle";
+import { Contract } from "ethers";
 import { ethers, waffle } from "hardhat";
 import {
   BeneficiaryRegistry,
