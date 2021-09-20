@@ -121,6 +121,14 @@ const IndexPage = (): JSX.Element => {
         success('Loaded transactions for previous period ');
         return res.json();
       })
+      .then((txns) => {
+        // Convert gasUsed and gasPrice to number
+        return txns.map((txn) => {
+          txn.gasUsed = Number(txn.gasUsed);
+          txn.gasPrice = Number(txn.gasPrice);
+          return txn;
+        });
+      })
       .catch((err) => {
         toast.dismiss();
         error('Error loading transactions for previous period');
@@ -133,6 +141,14 @@ const IndexPage = (): JSX.Element => {
         toast.dismiss();
         success('Loaded transactions for current period ');
         return res.json();
+      })
+      .then((txns) => {
+        // Convert gasUsed and gasPrice to number
+        return txns.map((txn) => {
+          txn.gasUsed = Number(txn.gasUsed);
+          txn.gasPrice = Number(txn.gasPrice);
+          return txn;
+        });
       })
       .catch((err) => {
         toast.dismiss();

@@ -2,6 +2,7 @@ import { CloudIcon } from '@heroicons/react/outline';
 import { ChartData } from '@popcorn/ui/src/interfaces/emissions-dashboard';
 import {
   getGranularity,
+  getInterpolatedDate,
   getNumDaysBetweenTwoDates,
   getPeriod,
   percentChange,
@@ -106,9 +107,7 @@ const getTransactionGroupSummary = (transactions: Transaction[], date) => {
     totalGasPrice === 0 ? 0 : Math.round(totalGasPrice / numTransactions);
 
   const emissions = Math.round(
-    transactions.reduce((pr, cu) => {
-      return pr + Number(cu.emissions);
-    }, 0),
+    transactions.reduce((pr, cu) => pr + Number(cu.emissions), 0),
   );
   return {
     averageGasPrice,
@@ -134,16 +133,26 @@ const getChartData = (
     .setGroupBy('date')
     .setEndTime(endDate.toISOString())
     .aggregate();
-  const hashTableMap = Object(data).HashTableMap;
-  var groupSummaries = [];
-  for (const [date, transactions] of Object.entries(hashTableMap)) {
-    const groupSummary = getTransactionGroupSummary(
-      transactions as Transaction[],
-      date,
-    );
-    groupSummaries.push(groupSummary);
-  }
-  return groupSummaries.sort((a, b) => a.date - b.date);
+  return new Array(period)
+    .fill(undefined)
+    .map((x, i) => {
+      const dataForRange = data.select(i);
+      const date = getInterpolatedDate(endDate, granularity, i);
+      const numTransactions = dataForRange.count();
+      const gasUsed = dataForRange.sum('gasUsed');
+      const totalGasPrice = dataForRange.sum('gasPrice') / GWEI_TO_ETH;
+      const emissions = Math.round(dataForRange.sum('emissions'));
+      const averageGasPrice =
+        numTransactions === 0 ? 0 : Math.round(totalGasPrice / numTransactions);
+      return {
+        averageGasPrice,
+        co2Emissions: emissions,
+        date,
+        gasUsed,
+        numTransactions,
+      };
+    })
+    .reverse();
 };
 
 export const ContractContainer: React.FC<ContractContainerProps> = ({

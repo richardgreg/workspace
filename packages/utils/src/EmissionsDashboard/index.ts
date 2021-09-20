@@ -20,3 +20,21 @@ export const getPeriod = (granularity: string, numDays: number): number => {
   if (granularity === 'week') return Math.round(numDays / 7);
   return Math.round(numDays / 30);
 };
+
+export const getNumSecondsByGranularity = (granularity: string): number => {
+  if (granularity === 'hour') return 60 * 60 * 1000;
+  if (granularity === 'day') return 60 * 60 * 24 * 1000;
+  if (granularity === 'week') return 60 * 60 * 24 * 7 * 1000;
+  // Note assuming 30 day months
+  return 60 * 60 * 24 * 30 * 1000;
+};
+
+export const getInterpolatedDate = (
+  endDate: Date,
+  granularity: string,
+  count: number,
+): Date => {
+  const numSecondsByGranularity = getNumSecondsByGranularity(granularity);
+  const startTimestamp = endDate.getTime() - count * numSecondsByGranularity;
+  return new Date(startTimestamp);
+};

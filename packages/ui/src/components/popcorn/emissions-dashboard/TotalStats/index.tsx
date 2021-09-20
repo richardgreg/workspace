@@ -6,6 +6,7 @@ import {
 import { ChartData } from '@popcorn/ui/src/interfaces/emissions-dashboard';
 import {
   getGranularity,
+  getInterpolatedDate,
   getNumDaysBetweenTwoDates,
   getPeriod,
   percentChange,
@@ -122,40 +123,6 @@ const getStatCardData = (
   ];
 };
 
-const getTransactionGroupSummary = (transactions: Transaction[], date) => {
-  const numTransactions = transactions.length;
-  const gasUsed =
-    numTransactions === 0
-      ? 0
-      : transactions.reduce((pr, cu) => {
-          return pr + Number(cu.gasUsed);
-        }, 0);
-  const totalGasPrice =
-    numTransactions === 0
-      ? 0
-      : transactions.reduce((pr, cu) => {
-          return pr + Number(cu.gasPrice) / GWEI_TO_ETH;
-        }, 0);
-
-  const averageGasPrice =
-    numTransactions === 0 ? 0 : Math.round(totalGasPrice / numTransactions);
-  const emissions =
-    numTransactions === 0
-      ? 0
-      : Math.round(
-          transactions.reduce((pr, cu) => {
-            return pr + Number(cu.emissions);
-          }, 0),
-        );
-  return {
-    averageGasPrice,
-    co2Emissions: emissions,
-    date: new Date(date),
-    gasUsed,
-    numTransactions,
-  };
-};
-
 const getChartData = (
   transactions: Transaction[],
   startDate: Date,
@@ -171,16 +138,26 @@ const getChartData = (
     .setGroupBy('date')
     .setEndTime(endDate.toISOString())
     .aggregate();
-  const hashTableMap = Object(data).HashTableMap;
-  var groupSummaries = [];
-  for (const [date, transactions] of Object.entries(hashTableMap)) {
-    const groupSummary = getTransactionGroupSummary(
-      transactions as Transaction[],
-      date,
-    );
-    groupSummaries.push(groupSummary);
-  }
-  return groupSummaries.sort((a, b) => a.date - b.date);
+  return new Array(period)
+    .fill(undefined)
+    .map((x, i) => {
+      const dataForRange = data.select(i);
+      const date = getInterpolatedDate(endDate, granularity, i);
+      const numTransactions = dataForRange.count();
+      const gasUsed = dataForRange.sum('gasUsed');
+      const totalGasPrice = dataForRange.sum('gasPrice') / GWEI_TO_ETH;
+      const emissions = Math.round(dataForRange.sum('emissions'));
+      const averageGasPrice =
+        numTransactions === 0 ? 0 : Math.round(totalGasPrice / numTransactions);
+      return {
+        averageGasPrice,
+        co2Emissions: emissions,
+        date,
+        gasUsed,
+        numTransactions,
+      };
+    })
+    .reverse();
 };
 
 export const TotalStats: React.FC<TotalStatsProps> = ({

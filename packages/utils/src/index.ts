@@ -1,7 +1,9 @@
 export { capitalize } from './capitalize';
 export {
   getGranularity,
+  getInterpolatedDate,
   getNumDaysBetweenTwoDates,
+  getNumSecondsByGranularity,
   getPeriod,
 } from './EmissionsDashboard';
 export {
