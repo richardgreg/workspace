@@ -3,20 +3,11 @@ import {
   StatCardData,
   Transaction,
 } from '@popcorn/ui/interfaces/emissions-dashboard';
-import { ChartData } from '@popcorn/ui/src/interfaces/emissions-dashboard';
-import {
-  getGranularity,
-  getInterpolatedDate,
-  getNumDaysBetweenTwoDates,
-  getPeriod,
-  percentChange,
-} from '@popcorn/utils';
+import { getChartData, percentChange } from '@popcorn/utils';
 import React from 'react';
 import { Globe, Wind } from 'react-feather';
-import TimeSeriesAggregator from 'time-series-aggregator';
 import { BiaxialLineChart } from '../recharts/BiaxialLineChart';
 import { StatsCards } from '../StatsCards';
-const aggregator = new TimeSeriesAggregator();
 
 interface TotalStatsProps {
   transactionsCurrentPeriod: Transaction[];
@@ -100,43 +91,6 @@ const getStatCardData = (
       changeType: gasPricePercentChange > 0 ? 'increase' : 'decrease',
     },
   ];
-};
-
-const getChartData = (
-  transactions: Transaction[],
-  startDate: Date,
-  endDate: Date,
-): ChartData[] => {
-  const dateRangeInDays = getNumDaysBetweenTwoDates(startDate, endDate);
-  const granularity = getGranularity(dateRangeInDays);
-  const period = getPeriod(granularity, dateRangeInDays);
-  const data = aggregator
-    .setCollection(transactions)
-    .setPeriod(period)
-    .setGranularity(granularity)
-    .setGroupBy('date')
-    .setEndTime(endDate.toISOString())
-    .aggregate();
-  return new Array(period)
-    .fill(undefined)
-    .map((x, i) => {
-      const dataForRange = data.select(i);
-      const date = getInterpolatedDate(endDate, granularity, i);
-      const numTransactions = dataForRange.count();
-      const gasUsed = dataForRange.sum('gasUsed');
-      const totalGasPrice = dataForRange.sum('gasPrice') / GWEI_TO_ETH;
-      const emissions = Math.round(dataForRange.sum('emissions'));
-      const averageGasPrice =
-        numTransactions === 0 ? 0 : Math.round(totalGasPrice / numTransactions);
-      return {
-        averageGasPrice,
-        co2Emissions: emissions,
-        date,
-        gasUsed,
-        numTransactions,
-      };
-    })
-    .reverse();
 };
 
 export const TotalStats: React.FC<TotalStatsProps> = ({

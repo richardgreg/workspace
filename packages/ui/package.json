@@ -62,6 +62,7 @@
     "react-tooltip": "^4.2.21",
     "recharts": "^2.1.0",
     "tailwindcss": "^2.2.7",
+    "time-series-aggregator": "^1.1.0",
     "yarn": "^1.22.11"
   }
 }

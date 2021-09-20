@@ -22158,6 +22158,14 @@ time-series-aggregator@^1.0.1:
     lodash "^4.17.21"
     moment-timezone "^0.5.33"
 
+time-series-aggregator@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/time-series-aggregator/-/time-series-aggregator-1.1.0.tgz#9b55f98ec7438feea0e496da63d26b39ed4f2fa2"
+  integrity sha512-g0nVCUX5Xem3MRkvny1WNiAEPeT7FR9wTpE+X/ZuSmLi2/2Akpsg5n447QYuQMEsgNjX1CqBvckQhD01F7IRwg==
+  dependencies:
+    lodash "^4.17.21"
+    moment-timezone "^0.5.33"
+
 timed-out@^4.0.0, timed-out@^4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/timed-out/-/timed-out-4.0.1.tgz#f32eacac5a175bea25d7fab565ab3ed8741ef56f"

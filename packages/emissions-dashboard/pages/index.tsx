@@ -246,16 +246,15 @@ const IndexPage = (): JSX.Element => {
         {contracts.map((contract) => {
           return (
             <ContractContainer
-              contract={contract}
-              endDate={endDate}
-              previousPeriodStartDate={previousPeriodStartDate}
-              startDate={startDate}
               transactionsPreviousPeriod={transactionsPreviousPeriod.filter(
                 (txn) => txn.to === contract.address,
               )}
               transactionsCurrentPeriod={transactionsCurrentPeriod.filter(
                 (txn) => txn.to === contract.address,
               )}
+              contract={contract}
+              endDate={endDate}
+              startDate={startDate}
             />
           );
         })}

@@ -1,3 +1,12 @@
+import {
+  ChartData,
+  Transaction,
+} from '@popcorn/ui/src/interfaces/emissions-dashboard';
+import TimeSeriesAggregator from 'time-series-aggregator';
+const aggregator = new TimeSeriesAggregator();
+
+const GWEI_TO_ETH = Math.pow(10, 9);
+
 export const getNumDaysBetweenTwoDates = (
   startDate: Date,
   endDate: Date,
@@ -37,4 +46,38 @@ export const getInterpolatedDate = (
   const numSecondsByGranularity = getNumSecondsByGranularity(granularity);
   const startTimestamp = endDate.getTime() - count * numSecondsByGranularity;
   return new Date(startTimestamp);
+};
+
+export const getChartData = (
+  transactions: Transaction[],
+  startDate: Date,
+  endDate: Date,
+): ChartData[] => {
+  const dateRangeInDays = getNumDaysBetweenTwoDates(startDate, endDate);
+  const granularity = getGranularity(dateRangeInDays);
+  const period = getPeriod(granularity, dateRangeInDays);
+  const data = aggregator
+    .setCollection(transactions)
+    .setPeriod(period)
+    .setGranularity(granularity)
+    .setGroupBy('date')
+    .setEndTime(endDate.toISOString())
+    .aggregate();
+  return new Array(period).fill(undefined).map((x, i) => {
+    const dataForRange = data.select(period - i - 1, period - i);
+    const date = getInterpolatedDate(endDate, granularity, i);
+    const numTransactions = dataForRange.count();
+    const gasUsed = dataForRange.sum('gasUsed');
+    const totalGasPrice = dataForRange.sum('gasPrice') / GWEI_TO_ETH;
+    const emissions = Math.round(dataForRange.sum('emissions'));
+    const averageGasPrice =
+      numTransactions === 0 ? 0 : Math.round(totalGasPrice / numTransactions);
+    return {
+      averageGasPrice,
+      co2Emissions: emissions,
+      date,
+      gasUsed,
+      numTransactions,
+    };
+  });
 };

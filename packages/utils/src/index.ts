@@ -1,5 +1,6 @@
 export { capitalize } from './capitalize';
 export {
+  getChartData,
   getGranularity,
   getInterpolatedDate,
   getNumDaysBetweenTwoDates,
