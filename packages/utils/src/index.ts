@@ -6,6 +6,7 @@ export {
   getNumDaysBetweenTwoDates,
   getNumSecondsByGranularity,
   getPeriod,
+  getStatCardData,
 } from './EmissionsDashboard';
 export {
   bigNumberToNumber,

@@ -1,8 +1,12 @@
+import { CloudIcon } from '@heroicons/react/outline';
 import {
   ChartData,
+  StatCardData,
   Transaction,
 } from '@popcorn/ui/src/interfaces/emissions-dashboard';
+import { Globe, Wind } from 'react-feather';
 import TimeSeriesAggregator from 'time-series-aggregator';
+import { percentChange } from '../percentChange';
 const aggregator = new TimeSeriesAggregator();
 
 const GWEI_TO_ETH = Math.pow(10, 9);
@@ -80,4 +84,100 @@ export const getChartData = (
       numTransactions,
     };
   });
+};
+
+export const getStatCardData = (
+  transactionsCurrentPeriod: Transaction[],
+  transactionsPreviousPeriod: Transaction[],
+  isTotalStats: boolean,
+): StatCardData[] => {
+  const totalEmissionsCurrentPeriod = Math.round(
+    transactionsCurrentPeriod.reduce((acc, cu) => acc + cu.emissions, 0),
+  );
+  const totalEmissionsPreviousPeriod = Math.round(
+    transactionsPreviousPeriod.reduce((acc, cu) => acc + cu.emissions, 0),
+  );
+  const emissionsChangePercentChange = percentChange(
+    totalEmissionsPreviousPeriod,
+    totalEmissionsCurrentPeriod,
+  );
+
+  const totalTransactionVolCurrentPeriod = transactionsCurrentPeriod.length;
+  const totalTransactionVolPreviousPeriod = transactionsPreviousPeriod.length;
+  const transactionVolPercentChange = percentChange(
+    totalTransactionVolPreviousPeriod,
+    totalTransactionVolCurrentPeriod,
+  );
+
+  if (!isTotalStats) {
+    return [
+      {
+        id: 1,
+        name: 'CO2 Emissions (µg)',
+        stat: totalEmissionsCurrentPeriod,
+        icon: CloudIcon,
+        change: `${Math.round(emissionsChangePercentChange)}%`,
+        changeType: emissionsChangePercentChange > 0 ? 'increase' : 'decrease',
+      },
+      {
+        id: 2,
+        name: 'Transactions',
+        stat: totalTransactionVolCurrentPeriod,
+        icon: Globe,
+        change: `${transactionVolPercentChange}%`,
+        changeType: transactionVolPercentChange > 0 ? 'increase' : 'decrease',
+      },
+    ];
+  }
+  const averageGasPriceCurrentPeriod =
+    transactionsCurrentPeriod.length === 0
+      ? 0
+      : Math.round(
+          transactionsPreviousPeriod.reduce(
+            (acc, cu) => acc + Number(cu.gasPrice),
+            0,
+          ) /
+            (GWEI_TO_ETH * transactionsCurrentPeriod.length),
+        );
+  const averageGasPricePreviousPeriod =
+    transactionsPreviousPeriod.length === 0
+      ? 0
+      : Math.round(
+          transactionsPreviousPeriod.reduce(
+            (acc, cu) => acc + Number(cu.gasPrice),
+            0,
+          ) /
+            (GWEI_TO_ETH * transactionsPreviousPeriod.length),
+        );
+
+  const gasPricePercentChange = percentChange(
+    averageGasPricePreviousPeriod,
+    averageGasPriceCurrentPeriod,
+  );
+  return [
+    {
+      id: 1,
+      name: 'CO2 Emissions (µg)',
+      stat: totalEmissionsCurrentPeriod,
+      icon: CloudIcon,
+      change: `${Math.round(emissionsChangePercentChange)}%`,
+      changeType: emissionsChangePercentChange > 0 ? 'increase' : 'decrease',
+    },
+    {
+      id: 2,
+      name: 'Transactions',
+      stat: totalTransactionVolCurrentPeriod,
+      icon: Globe,
+      change: `${transactionVolPercentChange}%`,
+      changeType: transactionVolPercentChange > 0 ? 'increase' : 'decrease',
+    },
+    {
+      id: 3,
+      name: 'Average Gas Price',
+      stat: averageGasPriceCurrentPeriod,
+      icon: Wind,
+      change: `${gasPricePercentChange}%`,
+      changeType: gasPricePercentChange > 0 ? 'increase' : 'decrease',
+    },
+  ];
 };
