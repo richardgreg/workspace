@@ -21,7 +21,6 @@ const aggregator = new TimeSeriesAggregator();
 interface TotalStatsProps {
   transactionsCurrentPeriod: Transaction[];
   transactionsPreviousPeriod: Transaction[];
-  previousPeriodStartDate: Date;
   startDate: Date;
   endDate: Date;
 }
@@ -31,65 +30,45 @@ const GWEI_TO_ETH = Math.pow(10, 9);
 const getStatCardData = (
   transactionsCurrentPeriod: Transaction[],
   transactionsPreviousPeriod: Transaction[],
-  startDate: Date,
-  endDate: Date,
-  previousPeriodStartDate: Date,
 ): StatCardData[] => {
-  const transactionGroupSummariesCurrentPeriod = getChartData(
-    transactionsCurrentPeriod,
-    startDate,
-    endDate,
+  const totalEmissionsCurrentPeriod = Math.round(
+    transactionsCurrentPeriod.reduce((acc, cu) => acc + cu.emissions, 0),
   );
-  const transactionGroupSummariesPreviousPeriod = getChartData(
-    transactionsPreviousPeriod,
-    previousPeriodStartDate,
-    startDate,
+  const totalEmissionsPreviousPeriod = Math.round(
+    transactionsPreviousPeriod.reduce((acc, cu) => acc + cu.emissions, 0),
   );
-  const totalEmissionsCurrentPeriod =
-    transactionGroupSummariesCurrentPeriod.reduce((acc, currentGroup) => {
-      return acc + currentGroup.co2Emissions;
-    }, 0);
-  const totalEmissionsPreviousPeriod =
-    transactionGroupSummariesPreviousPeriod.reduce((acc, currentGroup) => {
-      return acc + currentGroup.co2Emissions;
-    }, 0);
   const emissionsChangePercentChange = percentChange(
     totalEmissionsPreviousPeriod,
     totalEmissionsCurrentPeriod,
   );
 
-  const totalTransactionVolCurrentPeriod =
-    transactionGroupSummariesCurrentPeriod.reduce((acc, currentGroup) => {
-      return acc + currentGroup.numTransactions;
-    }, 0);
-  const totalTransactionVolPreviousPeriod =
-    transactionGroupSummariesPreviousPeriod.reduce((acc, currentGroup) => {
-      return acc + currentGroup.numTransactions;
-    }, 0);
+  const totalTransactionVolCurrentPeriod = transactionsCurrentPeriod.length;
+  const totalTransactionVolPreviousPeriod = transactionsPreviousPeriod.length;
   const transactionVolPercentChange = percentChange(
     totalTransactionVolPreviousPeriod,
     totalTransactionVolCurrentPeriod,
   );
 
   const averageGasPriceCurrentPeriod =
-    totalTransactionVolCurrentPeriod === 0
+    transactionsCurrentPeriod.length === 0
       ? 0
-      : transactionGroupSummariesCurrentPeriod
-          .filter((txnGroup) => txnGroup.numTransactions !== 0)
-          .reduce((acc, currentGroup) => {
-            return acc + currentGroup.averageGasPrice;
-          }, 0) /
-        transactionGroupSummariesCurrentPeriod.filter(
-          (txnGroup) => txnGroup.numTransactions !== 0,
-        ).length;
+      : Math.round(
+          transactionsPreviousPeriod.reduce(
+            (acc, cu) => acc + Number(cu.gasPrice),
+            0,
+          ) /
+            (GWEI_TO_ETH * transactionsCurrentPeriod.length),
+        );
   const averageGasPricePreviousPeriod =
-    totalTransactionVolPreviousPeriod === 0
+    transactionsPreviousPeriod.length === 0
       ? 0
-      : transactionGroupSummariesPreviousPeriod
-          .filter((txnGroup) => txnGroup.numTransactions !== 0)
-          .reduce((acc, currentGroup) => {
-            return acc + currentGroup.averageGasPrice;
-          }, 0);
+      : Math.round(
+          transactionsPreviousPeriod.reduce(
+            (acc, cu) => acc + Number(cu.gasPrice),
+            0,
+          ) /
+            (GWEI_TO_ETH * transactionsPreviousPeriod.length),
+        );
 
   const gasPricePercentChange = percentChange(
     averageGasPricePreviousPeriod,
@@ -165,7 +144,6 @@ export const TotalStats: React.FC<TotalStatsProps> = ({
   transactionsPreviousPeriod,
   startDate,
   endDate,
-  previousPeriodStartDate,
 }): JSX.Element => {
   return (
     <div className="py-10 mx-8 self-center">
@@ -186,9 +164,6 @@ export const TotalStats: React.FC<TotalStatsProps> = ({
           stats={getStatCardData(
             transactionsCurrentPeriod,
             transactionsPreviousPeriod,
-            startDate,
-            endDate,
-            previousPeriodStartDate,
           )}
         />
       </div>

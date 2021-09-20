@@ -242,7 +242,6 @@ const IndexPage = (): JSX.Element => {
           transactionsCurrentPeriod={transactionsCurrentPeriod}
           startDate={startDate}
           endDate={endDate}
-          previousPeriodStartDate={previousPeriodStartDate}
         />
         {contracts.map((contract) => {
           return (
