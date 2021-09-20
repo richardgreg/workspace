@@ -58,7 +58,7 @@ export const AddContractModal: React.FC<ContractModalProps> = ({
             <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
               <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                 <div>
-                  <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                  <div className="mt-3 text-center sm:text-left mx-auto">
                     <Dialog.Title
                       as="h4"
                       className="text-base text-center mb-8 leading-6 font-medium text-gray-800"
@@ -79,7 +79,7 @@ export const AddContractModal: React.FC<ContractModalProps> = ({
                         ref={inputRef}
                       />
                     </div>
-                    <div className="mt-4">
+                    <div className="mt-6 mb-4">
                       <p className="text-sm text-gray-700 pb-1">
                         Enter Ethereum Contract Address
                       </p>
