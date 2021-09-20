@@ -1,25 +1,18 @@
 import { Web3Provider } from '@ethersproject/providers';
-import { CloudIcon } from '@heroicons/react/outline';
 import { ContractContainer } from '@popcorn/ui/components/popcorn/emissions-dashboard/ContractContainer/index';
 import { DateRangePicker } from '@popcorn/ui/components/popcorn/emissions-dashboard/DateRangePicker';
 import { NavBar } from '@popcorn/ui/components/popcorn/emissions-dashboard/NavBar/index';
 import { TotalStats } from '@popcorn/ui/components/popcorn/emissions-dashboard/TotalStats/index';
 import {
   Contract,
-  StatCardData,
   Transaction,
 } from '@popcorn/ui/interfaces/emissions-dashboard';
 import { useWeb3React } from '@web3-react/core';
 import { useRouter } from 'next/router';
 import fetch from 'node-fetch';
 import React, { useEffect, useState } from 'react';
-import { Globe } from 'react-feather';
 import toast, { Toaster } from 'react-hot-toast';
-import TimeSeriesAggregator from 'time-series-aggregator';
 import web3 from 'web3';
-const aggregator = new TimeSeriesAggregator();
-
-const GWEI_TO_ETH = Math.pow(10, 9);
 
 // TODO: Call toast methods upon success/failure
 const success = (msg: string) => toast.success(msg);
@@ -43,25 +36,6 @@ const DEFAULT_CONTRACTS = [
   {
     name: 'yvCurve-UST',
     address: '0x1c6a9783f812b3af3abbf7de64c3cd7cc7d1af44',
-  },
-];
-
-const EMPTY_STAT_CARDS: StatCardData[] = [
-  {
-    id: 1,
-    name: 'CO2 Emissions (µg)',
-    stat: 0,
-    icon: CloudIcon,
-    change: '0',
-    changeType: 'increase',
-  },
-  {
-    id: 2,
-    name: 'Transactions',
-    stat: 0,
-    icon: Globe,
-    change: '0',
-    changeType: 'increase',
   },
 ];
 
