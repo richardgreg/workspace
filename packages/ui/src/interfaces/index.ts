@@ -28,4 +28,5 @@ export interface NavBarProps {
     setErrorMessage: (error: string) => void;
     openAddContractModal: () => void;
   };
+  refresh: () => void;
 }

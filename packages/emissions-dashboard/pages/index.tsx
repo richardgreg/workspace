@@ -701,6 +701,9 @@ const IndexPage = (): JSX.Element => {
     setOpen(true);
     setErrorMessage('');
   };
+
+  const refresh = () => {};
+
   return (
     <div className="bg-gray-50">
       <Toaster position="top-right" />
@@ -713,6 +716,7 @@ const IndexPage = (): JSX.Element => {
           errorMessage,
           setErrorMessage,
         }}
+        refresh={refresh}
       />
       <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 ">
         <DateRangePicker
