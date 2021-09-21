@@ -4,6 +4,7 @@ import { expect } from "chai";
 import { BigNumber } from "ethers";
 import { parseEther } from "ethers/lib/utils";
 import { ethers, network, waffle } from "hardhat";
+import { SetToken } from "packages/contracts/lib/SetToken/vendor/set-protocol/types/SetToken";
 import HysiBatchInteractionAdapter, {
   ComponentMap,
 } from "../../adapters/HYSIBatchInteraction/HYSIBatchInteractionAdapter";
@@ -11,7 +12,6 @@ import CurveMetapoolAbi from "../../lib/Curve/CurveMetapoolAbi.json";
 import BasicIssuanceModuleAbi from "../../lib/SetToken/vendor/set-protocol/artifacts/BasicIssuanceModule.json";
 import SetTokenAbi from "../../lib/SetToken/vendor/set-protocol/artifacts/SetToken.json";
 import { BasicIssuanceModule } from "../../lib/SetToken/vendor/set-protocol/types/BasicIssuanceModule";
-import { SetToken } from "../../lib/SetToken/vendor/set-protocol/types/SetToken";
 import {
   CurveMetapool,
   ERC20,
@@ -211,12 +211,12 @@ async function deployContracts(): Promise<Contracts> {
   const hysi = (await ethers.getContractAt(
     SetTokenAbi.abi,
     HYSI_TOKEN_ADDRESS
-  )) as any;
+  )) as unknown as SetToken;
 
   const basicIssuanceModule = (await ethers.getContractAt(
     BasicIssuanceModuleAbi.abi,
     SET_BASIC_ISSUANCE_MODULE_ADDRESS
-  )) as any;
+  )) as unknown as BasicIssuanceModule;
 
   //Deploy HysiBatchInteraction
   const HysiBatchInteraction = await ethers.getContractFactory(
@@ -956,7 +956,11 @@ describe("HysiBatchInteraction Network Test", function () {
           const minAmount =
             await HysiBatchInteractionAdapter.getMinAmountOf3CrvToReceiveForBatchRedeem(
               0.0001,
-              contracts,
+              {
+                hysiBatchInteraction: contracts.hysiBatchInteraction,
+                basicIssuanceModule: contracts.basicIssuanceModule,
+                setToken: contracts.hysi,
+              },
               componentMap
             );
 
@@ -981,7 +985,11 @@ describe("HysiBatchInteraction Network Test", function () {
           const min3Crv =
             await HysiBatchInteractionAdapter.getMinAmountOf3CrvToReceiveForBatchRedeem(
               0.0046,
-              contracts,
+              {
+                hysiBatchInteraction: contracts.hysiBatchInteraction,
+                basicIssuanceModule: contracts.basicIssuanceModule,
+                setToken: contracts.hysi,
+              },
               componentMap
             );
           const result = await contracts.hysiBatchInteraction
