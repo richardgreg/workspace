@@ -1,3 +1,5 @@
+import { ChartData } from '@popcorn/ui/src/interfaces/emissions-dashboard';
+import * as convert from 'convert-units';
 import React from 'react';
 import {
   CartesianGrid,
@@ -9,10 +11,9 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
-import { TransactionGroupSummary } from '../../../../../interfaces/emissions-dashboard';
 
 export interface BiaxialLineChartProps {
-  data: TransactionGroupSummary[];
+  data: ChartData[];
   height?: number;
   width?: number;
   areaColor?: string;
@@ -22,15 +23,17 @@ export interface BiaxialLineChartProps {
 
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
+    const emissionsConverted = convert(payload[1].value).from('mcg').toBest();
     return (
       <div className="bg-gray-50 p-1">
         <p className="text-xs ">{`${label}`}</p>
-        <p className="text-xs text-indigo-500">{`Transaction Volume: ${payload[0].value}`}</p>
-        <p className="text-xs text-green-500">{`CO2 Emissions (µg): ${payload[1].value}`}</p>
+        <p className="text-xs text-indigo-500">{`Transaction Volume: ${payload[0].value.toLocaleString()}`}</p>
+        <p className="text-xs text-green-500">{`CO2 Emissions (${
+          emissionsConverted.unit
+        }): ${Math.round(emissionsConverted.val)}`}</p>
       </div>
     );
   }
-
   return null;
 };
 
@@ -62,7 +65,7 @@ export const BiaxialLineChart: React.FC<BiaxialLineChartProps> = ({
           }}
         >
           <CartesianGrid stroke="#f5f5f5" />
-          <XAxis dataKey="blockStartDate" hide={true} />
+          <XAxis dataKey="date" hide={true} />
           <YAxis dataKey="numTransactions" yAxisId="left" hide={true} />
           <YAxis
             dataKey="co2Emissions"

@@ -1,5 +1,14 @@
 export { capitalize } from './capitalize';
 export {
+  getChartData,
+  getGranularity,
+  getInterpolatedDate,
+  getNumDaysBetweenTwoDates,
+  getNumSecondsByGranularity,
+  getPeriod,
+  getStatCardData,
+} from './EmissionsDashboard';
+export {
   bigNumberToNumber,
   formatAndRoundBigNumber,
   numberToBigNumber,
@@ -11,4 +20,5 @@ export {
   getBytes32FromIpfsHash,
   getIpfsHashFromBytes32,
 } from './ipfsHashManipulation';
+export { percentChange } from './percentChange';
 export { default as useFetch } from './useFetch';

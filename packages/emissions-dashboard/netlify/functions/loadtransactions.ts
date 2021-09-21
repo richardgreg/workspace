@@ -5,8 +5,8 @@ exports.handler = async (event, context) => {
   try {
     const uri = process.env.DB_URI;
     const client = new MongoClient(uri);
-    const startBlock = Number(event.queryStringParameters.startBlock);
-    const endBlock = Number(event.queryStringParameters.endBlock);
+    const startDate = new Date(event.queryStringParameters.startDate);
+    const endDate = new Date(event.queryStringParameters.endDate);
     await client.connect();
     const database = client.db('emissions');
     const transactions = await database
@@ -14,18 +14,20 @@ exports.handler = async (event, context) => {
       .find({
         $and: [
           {
-            $expr: {
-              $gt: [{ $toInt: '$blockNumber' }, startBlock],
+            date: {
+              $gt: startDate,
             },
           },
+
           {
-            $expr: {
-              $lt: [{ $toInt: '$blockNumber' }, endBlock],
+            date: {
+              $lte: endDate,
             },
           },
         ],
       })
       .toArray();
+    client.close();
     return { statusCode: 200, body: JSON.stringify(transactions) };
   } catch (error) {
     console.log(error);
