@@ -145,7 +145,7 @@ async function deployContracts(): Promise<Contracts> {
     JSON.stringify(UniswapV2PairJSON.abi),
     owner
   ) as IUniswapV2Pair;
-  const TestERC20Pair = new Contract(
+  const TestERC20Pair = new ethers.Contract(
     TestERC20PairAddress,
     JSON.stringify(UniswapV2PairJSON.abi),
     owner
