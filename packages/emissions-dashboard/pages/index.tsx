@@ -68,7 +68,7 @@ const IndexPage = (): JSX.Element => {
 
   const getTransactions = async () => {
     const transactionsPreviousPeriod = await fetch(
-      `.netlify/functions/loadtransactions?startDate=${previousPeriodStartDate}&endDate=${startDate}`,
+      `.netlify/functions/load-transactions?startDate=${previousPeriodStartDate}&endDate=${startDate}`,
     )
       .then((res) => {
         return res.json();
@@ -86,7 +86,7 @@ const IndexPage = (): JSX.Element => {
         setReadyState('error');
       });
     const transactionsCurrentPeriod = await fetch(
-      `.netlify/functions/loadtransactions?startDate=${startDate}&endDate=${endDate}`,
+      `.netlify/functions/load-transactions?startDate=${startDate}&endDate=${endDate}`,
     )
       .then((res) => {
         return res.json();
