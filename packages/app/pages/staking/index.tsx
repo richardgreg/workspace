@@ -1,4 +1,5 @@
 import { Web3Provider } from '@ethersproject/providers';
+import { useNotifications, useTransactions } from '@usedapp/core';
 import { useWeb3React } from '@web3-react/core';
 import DropdownSelect from 'components/DropdownSelect';
 import MainActionButton from 'components/MainActionButton';
@@ -36,23 +37,28 @@ export default function LockPop() {
   const [wait, setWait] = useState<boolean>(false);
   const stakingContract = contracts?.staking;
   const popContract = contracts?.pop;
-  const { send: handleIncreaseStake, state: increaseStakeState } =
-    useContractFunction(stakingContract, 'increaseStake');
-  const { send: handleIncreaseLockPeriod, state: increaseLockPeriodState } =
-    useContractFunction(stakingContract, 'increaseLock');
-  const { send: handleApproveStake, state: approveStakeState } =
-    useContractFunction(popContract, 'approve');
-  const { send: handleStake, state: stakeState } = useContractFunction(
+  const { send: handleIncreaseStake } = useContractFunction(
     stakingContract,
-    'stake',
+    'increaseStake',
   );
+  const { send: handleIncreaseLockPeriod } = useContractFunction(
+    stakingContract,
+    'increaseLock',
+  );
+  const { send: handleApproveStake } = useContractFunction(
+    popContract,
+    'approve',
+  );
+  const { send: handleStake } = useContractFunction(stakingContract, 'stake');
+  const { transactions } = useTransactions();
+  const { notifications } = useNotifications();
 
   useEffect(() => {
     setVoiceCredits(popToLock * (lockDuration / (ONE_WEEK * 52 * 4)));
   }, [lockDuration, popToLock]);
 
   useEffect(() => {
-    if (!account || approveStakeState?.status !== 'Success') {
+    if (!account) {
       return;
     }
     contracts.pop
@@ -61,7 +67,7 @@ export default function LockPop() {
     contracts.pop
       .allowance(account, process.env.ADDR_STAKING)
       .then((res) => setApproval(Number(utils.formatEther(res))));
-  }, [account, approveStakeState.status]);
+  }, [account, notifications, transactions]);
 
   const getLockedPop = async () => {
     const lockedBalance = await contracts.staking.lockedBalances(account);
@@ -73,21 +79,10 @@ export default function LockPop() {
   };
 
   useEffect(() => {
-    if (
-      increaseStakeState?.status === 'Success' ||
-      increaseLockPeriodState?.status === 'Success' ||
-      stakeState?.status === 'Success' ||
-      (contracts?.staking && account)
-    ) {
+    if (contracts?.staking && account) {
       getLockedPop();
     }
-  }, [
-    account,
-    contracts,
-    increaseStakeState.status,
-    increaseLockPeriodState.status,
-    stakeState.status,
-  ]);
+  }, [account, contracts, notifications, transactions]);
 
   async function lockPop() {
     setWait(true);

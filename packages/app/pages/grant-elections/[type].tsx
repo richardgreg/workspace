@@ -5,6 +5,7 @@ import {
   GrantElectionAdapter,
 } from '@popcorn/contracts/adapters';
 import { capitalize } from '@popcorn/utils';
+import { useNotifications, useTransactions } from '@usedapp/core';
 import { useWeb3React } from '@web3-react/core';
 import ElectionSection from 'components/GrantElections/ElectionSection';
 import { BigNumber, utils } from 'ethers';
@@ -104,10 +105,9 @@ export default function AllGrants() {
     false,
   ]);
   const [beneficiaryExists, setBeneficiaryExists] = useState<boolean>(false);
-  const { send: handleVote, state: voteState } = useContractFunction(
-    contracts?.election,
-    'vote',
-  );
+  const { send: handleVote } = useContractFunction(contracts?.election, 'vote');
+  const { transactions } = useTransactions();
+  const { notifications } = useNotifications();
 
   async function IsUserAlreadyRegistered() {
     const connected = contracts.election.connect(library.getSigner());
@@ -192,23 +192,19 @@ export default function AllGrants() {
   };
 
   useEffect(() => {
-    if (voteState?.status === 'Success' || (contracts?.pop && account)) {
+    if (contracts?.pop && account) {
       contracts.pop
         .balanceOf(account)
         .then((res) => console.log('POP Balance: ', res));
     }
-  }, [contracts, account, voteState.status]);
+  }, [contracts, account, notifications, transactions]);
 
   useEffect(() => {
-    if (
-      !contracts ||
-      !selectedGrantTerms.length ||
-      voteState?.status !== 'Success'
-    ) {
+    if (!contracts || !selectedGrantTerms.length) {
       return;
     }
     getVoiceCredits(account);
-  }, [contracts, account, selectedGrantTerms, voteState.status]);
+  }, [contracts, account, selectedGrantTerms, transactions, notifications]);
 
   useEffect(() => {
     if (!grantRoundFilter.active && !grantRoundFilter.closed) {

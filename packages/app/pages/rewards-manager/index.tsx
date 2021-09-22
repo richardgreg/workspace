@@ -1,6 +1,7 @@
 import { Web3Provider } from '@ethersproject/providers';
 import { ArrowRightIcon } from '@heroicons/react/outline';
 import { formatAndRoundBigNumber } from '@popcorn/utils';
+import { useNotifications, useTransactions } from '@usedapp/core';
 import { useWeb3React } from '@web3-react/core';
 import MainActionButton from 'components/MainActionButton';
 import Navbar from 'components/NavBar/NavBar';
@@ -23,17 +24,19 @@ export default function Register(): JSX.Element {
   const [swapOutput, setSwapOutput] = useState<BigNumber>();
   const [rewardSplits, setRewardSplits] = useState<BigNumber[]>();
 
-  const { send: handleSwapTokenForRewards, state: swapTokenForRewardsState } =
-    useContractFunction(contracts?.rewardsManager, 'swapTokenForRewards');
-  const { send: handleDistributeRewards, state: distributeRewardsState } =
-    useContractFunction(contracts?.rewardsManager, 'distributeRewards');
+  const { send: handleSwapTokenForRewards } = useContractFunction(
+    contracts?.rewardsManager,
+    'swapTokenForRewards',
+  );
+  const { send: handleDistributeRewards } = useContractFunction(
+    contracts?.rewardsManager,
+    'distributeRewards',
+  );
+  const { transactions } = useTransactions();
+  const { notifications } = useNotifications();
 
   useEffect(() => {
-    if (
-      swapTokenForRewardsState?.status === 'Success' ||
-      distributeRewardsState?.status === 'Success' ||
-      (contracts && account)
-    ) {
+    if (contracts && account) {
       contracts.threeCrv
         .balanceOf(contracts.rewardsManager.address)
         .then((res) => setFeeBalance(res));
@@ -44,12 +47,7 @@ export default function Register(): JSX.Element {
         .getRewardSplits()
         .then((res) => setRewardSplits(res));
     }
-  }, [
-    contracts,
-    account,
-    swapTokenForRewardsState.status,
-    distributeRewardsState.status,
-  ]);
+  }, [contracts, account, transactions, notifications]);
 
   useEffect(() => {
     if (contracts && feeBalance !== undefined) {
