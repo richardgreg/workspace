@@ -1,3 +1,4 @@
+import { ChartData } from '@popcorn/ui/src/interfaces/emissions-dashboard';
 import * as convert from 'convert-units';
 import React from 'react';
 import {
@@ -9,11 +10,10 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
-import { TransactionGroupSummary } from '../../../../../interfaces/emissions-dashboard';
 import Spinner from '../../Spinner';
 
 export interface BiaxialLineChartProps {
-  data: TransactionGroupSummary[];
+  data: ChartData[];
   height?: number;
   width?: number;
   areaColor?: string;
@@ -34,7 +34,6 @@ const CustomTooltip = ({ active, payload, label }) => {
       </div>
     );
   }
-
   return null;
 };
 

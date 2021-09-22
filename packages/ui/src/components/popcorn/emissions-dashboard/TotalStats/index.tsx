@@ -1,8 +1,7 @@
-import React from 'react';
+import { getChartData, getStatCardData } from 'utils';
 import {
   ChartReadyState,
-  StatCardData,
-  TransactionGroupSummary,
+  Transaction,
 } from '../../../../interfaces/emissions-dashboard';
 import {
   BiaxialLineChart,
@@ -12,16 +11,18 @@ import {
 import { StatsCards } from '../StatsCards';
 
 interface TotalStatsProps {
-  statCardData: StatCardData[];
-  data: TransactionGroupSummary[];
+  transactionsCurrentPeriod: Transaction[];
+  transactionsPreviousPeriod: Transaction[];
   startDate: Date;
+  endDate: Date;
   readyState: ChartReadyState;
 }
 
 export const TotalStats: React.FC<TotalStatsProps> = ({
-  statCardData,
-  data,
+  transactionsCurrentPeriod,
+  transactionsPreviousPeriod,
   startDate,
+  endDate,
   readyState,
 }): JSX.Element => {
   return (
@@ -39,14 +40,27 @@ export const TotalStats: React.FC<TotalStatsProps> = ({
         </div>
       </div>
       <div className="max-w-7xl mb-5">
-        <StatsCards stats={statCardData} />
+        <StatsCards
+          stats={getStatCardData(
+            transactionsCurrentPeriod,
+            transactionsPreviousPeriod,
+            true,
+          )}
+        />
       </div>
       <div className="max-w-7xl">
         <div className="grid grid-cols-1 gap-4 lg:col-span-2">
           <div className="rounded-lg bg-white overflow-hidden shadow py-6">
             {readyState === 'loading' && <ChartLoading height={300} />}
             {readyState === 'done' && (
-              <BiaxialLineChart data={data} height={300} />
+              <BiaxialLineChart
+                data={getChartData(
+                  transactionsCurrentPeriod,
+                  startDate,
+                  endDate,
+                )}
+                height={300}
+              />
             )}
             {readyState === 'error' && <ChartError height={300} />}
           </div>

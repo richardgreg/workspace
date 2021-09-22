@@ -26,7 +26,7 @@ export default {
   ],
 } as Meta;
 
-const Template: Story = (args) => <StatsCards {...args} />;
+const Template: Story = (args) => <StatsCards stats={[]} {...args} />;
 
 export const Primary = Template.bind({});
 Primary.args = {
