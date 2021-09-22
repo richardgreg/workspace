@@ -1,21 +1,28 @@
 import React from 'react';
 import {
+  ChartReadyState,
   StatCardData,
   TransactionGroupSummary,
 } from '../../../../interfaces/emissions-dashboard';
-import { BiaxialLineChart } from '../recharts/BiaxialLineChart';
+import {
+  BiaxialLineChart,
+  ChartError,
+  ChartLoading,
+} from '../recharts/BiaxialLineChart';
 import { StatsCards } from '../StatsCards';
 
 interface TotalStatsProps {
   statCardData: StatCardData[];
   data: TransactionGroupSummary[];
   startDate: Date;
+  readyState: ChartReadyState;
 }
 
 export const TotalStats: React.FC<TotalStatsProps> = ({
   statCardData,
   data,
   startDate,
+  readyState,
 }): JSX.Element => {
   return (
     <div className="py-10 self-center">
@@ -37,7 +44,11 @@ export const TotalStats: React.FC<TotalStatsProps> = ({
       <div className="max-w-7xl">
         <div className="grid grid-cols-1 gap-4 lg:col-span-2">
           <div className="rounded-lg bg-white overflow-hidden shadow py-6">
-            <BiaxialLineChart data={data} height={300} />
+            {readyState === 'loading' && <ChartLoading height={300} />}
+            {readyState === 'done' && (
+              <BiaxialLineChart data={data} height={300} />
+            )}
+            {readyState === 'error' && <ChartError height={300} />}
           </div>
         </div>
       </div>

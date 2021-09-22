@@ -61,6 +61,7 @@
     "react-feather": "^2.0.9",
     "react-tooltip": "^4.2.21",
     "recharts": "^2.1.0",
+    "svg-loaders-react": "^2.2.1",
     "tailwindcss": "^2.2.7",
     "yarn": "^1.22.11"
   }

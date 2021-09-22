@@ -2,7 +2,6 @@ import * as convert from 'convert-units';
 import React from 'react';
 import {
   CartesianGrid,
-  ComposedChart,
   Line,
   LineChart,
   ResponsiveContainer,
@@ -11,6 +10,7 @@ import {
   YAxis,
 } from 'recharts';
 import { TransactionGroupSummary } from '../../../../../interfaces/emissions-dashboard';
+import Spinner from '../../Spinner';
 
 export interface BiaxialLineChartProps {
   data: TransactionGroupSummary[];
@@ -38,6 +38,49 @@ const CustomTooltip = ({ active, payload, label }) => {
   return null;
 };
 
+const ChartContentWrapper: React.FC<{ height: number; children: JSX.Element }> =
+  (props) => {
+    return (
+      <div
+        className="w-full flex flex-wrap content-center border-2 border-gray-50 justify-center "
+        style={{
+          objectFit: 'cover',
+          height: props.height,
+          marginTop: 5,
+          marginRight: 30,
+          marginLeft: 30,
+          marginBottom: 5,
+        }}
+      >
+        {props.children}
+      </div>
+    );
+  };
+
+export const ChartLoading: React.FC<{ height: number }> = ({ height }) => {
+  return (
+    <ChartContentWrapper height={height}>
+      <Spinner />
+    </ChartContentWrapper>
+  );
+};
+
+export const ChartError: React.FC<{ height: number }> = ({ height }) => {
+  return (
+    <ChartContentWrapper height={height}>
+      <p className="text-lg text-gray-500">Error loading transactions</p>
+    </ChartContentWrapper>
+  );
+};
+
+export const ChartEmpty: React.FC<{ height: number }> = ({ height }) => {
+  return (
+    <ChartContentWrapper height={height}>
+      <p className="text-lg text-gray-500">No transactions were made</p>
+    </ChartContentWrapper>
+  );
+};
+
 export const BiaxialLineChart: React.FC<BiaxialLineChartProps> = ({
   data,
   height,
@@ -49,71 +92,56 @@ export const BiaxialLineChart: React.FC<BiaxialLineChartProps> = ({
     data.reduce((pr, cu) => {
       return pr + cu.co2Emissions;
     }, 0) > 0;
-  return (
+  return containsData ? (
     <ResponsiveContainer
       className="justify-self-center"
       width="100%"
       height={height}
     >
-      {containsData ? (
-        <LineChart
-          data={data}
-          margin={{
-            top: 5,
-            right: 30,
-            left: 30,
-            bottom: 5,
-          }}
-        >
-          <CartesianGrid stroke="#f5f5f5" />
-          <XAxis dataKey="blockStartDate" hide={true} />
-          <YAxis dataKey="numTransactions" yAxisId="left" hide={true} />
-          <YAxis
-            dataKey="co2Emissions"
-            yAxisId="right"
-            orientation="right"
-            hide={true}
-          />
+      <LineChart
+        data={data}
+        margin={{
+          top: 5,
+          right: 30,
+          left: 30,
+          bottom: 5,
+        }}
+      >
+        <CartesianGrid stroke="#f5f5f5" />
+        <XAxis dataKey="blockStartDate" hide={true} />
+        <YAxis dataKey="numTransactions" yAxisId="left" hide={true} />
+        <YAxis
+          dataKey="co2Emissions"
+          yAxisId="right"
+          orientation="right"
+          hide={true}
+        />
 
-          <Line
-            yAxisId="left"
-            type="monotone"
-            dataKey="numTransactions"
-            stroke="#7c3aed" // indigo-500
-            activeDot={{ r: 8 }}
-          />
-          <Line
-            yAxisId="right"
-            type="monotone"
-            dataKey="co2Emissions"
-            fill="#10b981" // green-500
-          />
-          <Tooltip
-            content={
-              <CustomTooltip
-                active={undefined}
-                payload={undefined}
-                label={undefined}
-              />
-            }
-          />
-        </LineChart>
-      ) : (
-        <ComposedChart
-          data={[]}
-          margin={{
-            top: 5,
-            right: 30,
-            left: 30,
-            bottom: 5,
-          }}
-        >
-          <CartesianGrid stroke="#f5f5f5" />
-          <text x="50%" fill="#D0D0D0" text-anchor="middle" dy="50%">
-            `No trades were made under this contract in the date range provided`
-          </text>
-        </ComposedChart>
-      )}
+        <Line
+          yAxisId="left"
+          type="monotone"
+          dataKey="numTransactions"
+          stroke="#7c3aed" // indigo-500
+          activeDot={{ r: 8 }}
+        />
+        <Line
+          yAxisId="right"
+          type="monotone"
+          dataKey="co2Emissions"
+          fill="#10b981" // green-500
+        />
+        <Tooltip
+          content={
+            <CustomTooltip
+              active={undefined}
+              payload={undefined}
+              label={undefined}
+            />
+          }
+        />
+      </LineChart>
     </ResponsiveContainer>
+  ) : (
+    <ChartEmpty height={height} />
   );
 };

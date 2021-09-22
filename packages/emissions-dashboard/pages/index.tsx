@@ -3,9 +3,10 @@ import { CloudIcon } from '@heroicons/react/outline';
 import Patch from '@patch-technology/patch';
 import { ContractContainer } from '@popcorn/ui/components/popcorn/emissions-dashboard/ContractContainer/index';
 import { DateRangePicker } from '@popcorn/ui/components/popcorn/emissions-dashboard/DateRangePicker';
-import { NavBar } from '@popcorn/ui/components/popcorn/emissions-dashboard/NavBar/index';
+import { NavBar } from '@popcorn/ui/components/popcorn/emissions-dashboard/NavBar';
 import { TotalStats } from '@popcorn/ui/components/popcorn/emissions-dashboard/TotalStats/index';
 import {
+  ChartReadyState,
   Contract,
   ContractEmissions,
   EmissionEstimate,
@@ -19,7 +20,6 @@ import { useRouter } from 'next/router';
 import fetch from 'node-fetch';
 import React, { useEffect, useState } from 'react';
 import { Globe, Wind } from 'react-feather';
-import toast, { Toaster } from 'react-hot-toast';
 import { percentChange } from 'utils/percentChange';
 import web3 from 'web3';
 
@@ -28,10 +28,6 @@ const GWEI_ETH_MULTIPLIER = Math.pow(10, 9);
 const WEI_ETH_MULTIPLIER = Math.pow(10, 18);
 const MICROGRAM_GRAM_CONVERTER = Math.pow(10, 6);
 
-// TODO: Call toast methods upon success/failure
-const success = (msg: string) => toast.success(msg);
-const loading = (msg: string) => toast.loading(msg);
-const error = (msg: string) => toast.error(msg);
 const NUM_FULL_PERIODS = 19;
 const DEFAULT_CONTRACTS = [
   { name: 'POP', address: '0xd0cd466b34a24fcb2f87676278af2005ca8a78c4' },
@@ -129,6 +125,7 @@ const IndexPage = (): JSX.Element => {
     useState<EmissionEstimate[]>();
   const [previousPeriodStartBlock, setPreviousPeriodStartBlock] =
     useState<number>(11564729);
+  const [readyState, setReadyState] = useState<ChartReadyState>('loading');
   const [startBlock, setStartBlock] = useState<number>(12338493);
   const [endBlock, setEndBlock] = useState<number>(13133291);
   const [blockRanges, setBlockRanges] = useState<number[][]>();
@@ -193,6 +190,7 @@ const IndexPage = (): JSX.Element => {
       groupTransactionsPreviousPeriod();
       groupTransactionsCurrentPeriod();
       groupTransactionsTotalStats();
+      setReadyState('done');
     }
   }, [
     transactionsPreviousPeriodWithEmissions,
@@ -234,35 +232,32 @@ const IndexPage = (): JSX.Element => {
   };
 
   const getTransactions = async () => {
-    loading('Loading transactions...');
     const transactionsPreviousPeriod = await fetch(
       `.netlify/functions/loadtransactions?startBlock=${previousPeriodStartBlock}&endBlock=${startBlock}`,
     )
       .then((res) => {
-        toast.dismiss();
-        success('Loaded transactions for previous period ');
         return res.json();
       })
       .catch((err) => {
-        toast.dismiss();
-        error('Error loading transactions for previous period');
-        console.log('error', error);
+        console.log('error', err);
+        setReadyState('error');
       });
     const transactionsCurrentPeriod = await fetch(
       `.netlify/functions/loadtransactions?startBlock=${startBlock}&endBlock=${endBlock}`,
     )
       .then((res) => {
-        toast.dismiss();
-        success('Loaded transactions for current period ');
         return res.json();
       })
       .catch((err) => {
-        toast.dismiss();
-        error('Error loading transactions for current period');
-        console.log('error', error);
+        console.log('error', err);
+        setReadyState('error');
       });
-    setTransactionsPreviousPeriod(transactionsPreviousPeriod);
-    setTransactionsCurrentPeriod(transactionsCurrentPeriod);
+    transactionsPreviousPeriod
+      ? setTransactionsPreviousPeriod(transactionsPreviousPeriod)
+      : setTransactionsPreviousPeriod([]);
+    transactionsCurrentPeriod
+      ? setTransactionsCurrentPeriod(transactionsCurrentPeriod)
+      : setTransactionsCurrentPeriod([]);
   };
 
   const getTransactionGroupSummary = (
@@ -402,14 +397,11 @@ const IndexPage = (): JSX.Element => {
     if (datesToCache.length > 0) {
       const emissionEstimatesByDate = await Promise.all(
         datesToCache.map(async (date) => {
-          loading('Sourcing emission estimates...');
           const patchEstimate = await patch.estimates.createEthereumEstimate({
             create_order: false,
             gas_used: GWEI_ETH_MULTIPLIER, // 1 ETH
             timestamp: date,
           });
-          toast.dismiss();
-          success('Loaded emission estimates');
           return {
             emissionsGpEth: patchEstimate.data.mass_g,
             date: date,
@@ -463,6 +455,8 @@ const IndexPage = (): JSX.Element => {
   };
 
   const updateDates = (startDate: Date, endDate: Date): void => {
+    setReadyState('loading');
+    clearTransactions();
     const previousPeriodStartDate = new Date(
       startDate.getTime() - (endDate.getTime() - startDate.getTime()),
     );
@@ -705,13 +699,22 @@ const IndexPage = (): JSX.Element => {
     )[0].transactionGroupSummaries;
   };
 
+  const clearTransactions = () => {
+    setTransactionsCurrentPeriod([]);
+    setTransactionsPreviousPeriod([]);
+    setTransactionsCurrentPeriodWithEmissions([]);
+    setTransactionsPreviousPeriodWithEmissions([]);
+    setTransactionGroupSummariesCurrentPeriod([]);
+    setTransactionGroupSummariesPreviousPeriod([]);
+    setTransactionTotals([]);
+  };
+
   const openAddContractModal = (): void => {
     setOpen(true);
     setErrorMessage('');
   };
   return (
-    <div className="bg-gray-50">
-      <Toaster position="top-right" />
+    <div>
       <NavBar
         title="Smart Contract Emissions Dashboard"
         logo="/images/popcorn-logo.png"
@@ -732,6 +735,7 @@ const IndexPage = (): JSX.Element => {
           statCardData={getTotalStatCardData()}
           data={transactionTotals}
           startDate={startDate}
+          readyState={readyState}
         />
         {contracts.map((contract) => {
           return (
@@ -739,6 +743,7 @@ const IndexPage = (): JSX.Element => {
               statCardData={getStatCardDataForContract(contract)}
               contract={contract}
               data={getDataForContract(contract)}
+              readyState={readyState}
             />
           );
         })}

@@ -1,22 +1,29 @@
 import React from 'react';
 import {
+  ChartReadyState,
   Contract,
   StatCardData,
   TransactionGroupSummary,
 } from '../../../../interfaces/emissions-dashboard';
-import { BiaxialLineChart } from '../recharts/BiaxialLineChart';
+import {
+  BiaxialLineChart,
+  ChartError,
+  ChartLoading,
+} from '../recharts/BiaxialLineChart';
 import { StatsCards } from '../StatsCards';
 
 interface ContractContainerProps {
   statCardData: StatCardData[];
   contract: Contract;
   data: TransactionGroupSummary[];
+  readyState: ChartReadyState;
 }
 
 export const ContractContainer: React.FC<ContractContainerProps> = ({
   statCardData,
   contract,
   data,
+  readyState,
 }): JSX.Element => {
   return (
     <div className="mb-5 mt-12 self-center">
@@ -31,7 +38,11 @@ export const ContractContainer: React.FC<ContractContainerProps> = ({
       <div className="max-w-7xl">
         <div className="grid grid-cols-1 gap-4 lg:col-span-2">
           <div className="rounded-lg bg-white overflow-hidden shadow py-6">
-            <BiaxialLineChart data={data} height={224} />
+            {readyState === 'loading' && <ChartLoading height={300} />}
+            {readyState === 'done' && (
+              <BiaxialLineChart data={data} height={300} />
+            )}
+            {readyState === 'error' && <ChartError height={300} />}
           </div>
         </div>
       </div>
