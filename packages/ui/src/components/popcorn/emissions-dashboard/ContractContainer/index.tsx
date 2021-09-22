@@ -1,13 +1,18 @@
+import React from 'react';
 import {
   getChartData,
   getStatCardData,
 } from '../../../../../../emissions-dashboard/utils';
-import React from 'react';
 import {
+  ChartReadyState,
   Contract,
   Transaction,
 } from '../../../../interfaces/emissions-dashboard';
-import { BiaxialLineChart } from '../recharts/BiaxialLineChart';
+import {
+  BiaxialLineChart,
+  ChartError,
+  ChartLoading,
+} from '../recharts/BiaxialLineChart';
 import { StatsCards } from '../StatsCards';
 
 interface ContractContainerProps {
@@ -16,6 +21,7 @@ interface ContractContainerProps {
   startDate: Date;
   endDate: Date;
   contract: Contract;
+  readyState: ChartReadyState;
 }
 
 export const ContractContainer: React.FC<ContractContainerProps> = ({
@@ -24,6 +30,7 @@ export const ContractContainer: React.FC<ContractContainerProps> = ({
   startDate,
   endDate,
   contract,
+  readyState,
 }): JSX.Element => {
   return (
     <div className="mb-5 mt-12 self-center">
@@ -44,10 +51,18 @@ export const ContractContainer: React.FC<ContractContainerProps> = ({
       <div className="max-w-7xl">
         <div className="grid grid-cols-1 gap-4 lg:col-span-2">
           <div className="rounded-lg bg-white overflow-hidden shadow py-6">
-            <BiaxialLineChart
-              data={getChartData(transactionsCurrentPeriod, startDate, endDate)}
-              height={224}
-            />
+            {readyState === 'loading' && <ChartLoading height={300} />}
+            {readyState === 'done' && (
+              <BiaxialLineChart
+                data={getChartData(
+                  transactionsCurrentPeriod,
+                  startDate,
+                  endDate,
+                )}
+                height={224}
+              />
+            )}
+            {readyState === 'error' && <ChartError height={300} />}
           </div>
         </div>
       </div>

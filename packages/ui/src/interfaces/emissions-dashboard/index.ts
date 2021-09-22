@@ -79,3 +79,5 @@ export interface CalendarInputProps {
   isStartInput?: Boolean;
   onChange?: (selectedDate: Date) => void;
 }
+
+export type ChartReadyState = 'loading' | 'error' | 'done';

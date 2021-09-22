@@ -1,9 +1,10 @@
 import { Web3Provider } from '@ethersproject/providers';
 import { ContractContainer } from '@popcorn/ui/components/popcorn/emissions-dashboard/ContractContainer/index';
 import { DateRangePicker } from '@popcorn/ui/components/popcorn/emissions-dashboard/DateRangePicker';
-import { NavBar } from '@popcorn/ui/components/popcorn/emissions-dashboard/NavBar/index';
+import { NavBar } from '@popcorn/ui/components/popcorn/emissions-dashboard/NavBar';
 import { TotalStats } from '@popcorn/ui/components/popcorn/emissions-dashboard/TotalStats/index';
 import {
+  ChartReadyState,
   Contract,
   Transaction,
 } from '@popcorn/ui/interfaces/emissions-dashboard';
@@ -11,13 +12,7 @@ import { useWeb3React } from '@web3-react/core';
 import { useRouter } from 'next/router';
 import fetch from 'node-fetch';
 import React, { useEffect, useState } from 'react';
-import toast, { Toaster } from 'react-hot-toast';
 import web3 from 'web3';
-
-// TODO: Call toast methods upon success/failure
-const success = (msg: string) => toast.success(msg);
-const loading = (msg: string) => toast.loading(msg);
-const error = (msg: string) => toast.error(msg);
 
 const DEFAULT_CONTRACTS = [
   { name: 'POP', address: '0xd0cd466b34a24fcb2f87676278af2005ca8a78c4' },
@@ -52,6 +47,7 @@ const IndexPage = (): JSX.Element => {
   );
   const [startDate, setStartDate] = useState<Date>(new Date('2021-06-15'));
   const [endDate, setEndDate] = useState<Date>(new Date('2021-08-01'));
+  const [readyState, setReadyState] = useState<ChartReadyState>('loading');
 
   const [transactionsPreviousPeriod, setTransactionsPreviousPeriod] = useState<
     Transaction[]
@@ -71,13 +67,10 @@ const IndexPage = (): JSX.Element => {
   }, [router.pathname]);
 
   const getTransactions = async () => {
-    loading('Loading transactions...');
     const transactionsPreviousPeriod = await fetch(
       `.netlify/functions/loadtransactions?startDate=${previousPeriodStartDate}&endDate=${startDate}`,
     )
       .then((res) => {
-        toast.dismiss();
-        success('Loaded transactions for previous period ');
         return res.json();
       })
       .then((txns) => {
@@ -89,16 +82,13 @@ const IndexPage = (): JSX.Element => {
         });
       })
       .catch((err) => {
-        toast.dismiss();
-        error('Error loading transactions for previous period');
-        console.log('error', error);
+        console.log('error', err);
+        setReadyState('error');
       });
     const transactionsCurrentPeriod = await fetch(
       `.netlify/functions/loadtransactions?startDate=${startDate}&endDate=${endDate}`,
     )
       .then((res) => {
-        toast.dismiss();
-        success('Loaded transactions for current period ');
         return res.json();
       })
       .then((txns) => {
@@ -110,15 +100,21 @@ const IndexPage = (): JSX.Element => {
         });
       })
       .catch((err) => {
-        toast.dismiss();
-        error('Error loading transactions for current period');
-        console.log('error', error);
+        console.log('error', err);
+        setReadyState('error');
       });
-    setTransactionsPreviousPeriod(transactionsPreviousPeriod);
-    setTransactionsCurrentPeriod(transactionsCurrentPeriod);
+    setReadyState('done');
+    transactionsPreviousPeriod
+      ? setTransactionsPreviousPeriod(transactionsPreviousPeriod)
+      : setTransactionsPreviousPeriod([]);
+    transactionsCurrentPeriod
+      ? setTransactionsCurrentPeriod(transactionsCurrentPeriod)
+      : setTransactionsCurrentPeriod([]);
   };
 
   const updateDates = (startDate: Date, endDate: Date): void => {
+    setReadyState('loading');
+    clearTransactions();
     const previousPeriodStartDate = new Date(
       startDate.getTime() - (endDate.getTime() - startDate.getTime()),
     );
@@ -170,13 +166,17 @@ const IndexPage = (): JSX.Element => {
     setOpen(false);
   };
 
+  const clearTransactions = () => {
+    setTransactionsCurrentPeriod([]);
+    setTransactionsPreviousPeriod([]);
+  };
+
   const openAddContractModal = (): void => {
     setOpen(true);
     setErrorMessage('');
   };
   return (
-    <div className="bg-gray-50">
-      <Toaster position="top-right" />
+    <div>
       <NavBar
         title="Smart Contract Emissions Dashboard"
         logo="/images/popcorn-logo.png"
@@ -197,6 +197,7 @@ const IndexPage = (): JSX.Element => {
           transactionsPreviousPeriod={transactionsPreviousPeriod}
           transactionsCurrentPeriod={transactionsCurrentPeriod}
           startDate={startDate}
+          readyState={readyState}
           endDate={endDate}
         />
         {contracts.map((contract) => {
@@ -211,6 +212,7 @@ const IndexPage = (): JSX.Element => {
               contract={contract}
               endDate={endDate}
               startDate={startDate}
+              readyState={readyState}
             />
           );
         })}
