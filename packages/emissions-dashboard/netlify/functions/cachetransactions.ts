@@ -84,7 +84,7 @@ const addDateToTransaction = (transaction: Transaction): Transaction => {
   return transaction;
 };
 
-exports.handler = async (event, context) => {
+export const handler = async (event, context) => {
   try {
     const uri = process.env.DB_URI;
     const client = new MongoClient(uri);

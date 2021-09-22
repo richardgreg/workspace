@@ -4,7 +4,7 @@ require('dotenv').config();
 
 const GWEI_ETH_MULTIPLIER = Math.pow(10, 9);
 
-exports.handler = async (event, context) => {
+export const handler = async (event, context) => {
   try {
     const uri = process.env.DB_URI;
     const client = new MongoClient(uri);
