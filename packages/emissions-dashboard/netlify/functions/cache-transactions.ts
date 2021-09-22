@@ -109,45 +109,42 @@ export const handler = async (event, context) => {
     console.log(
       `${transactions.length} new transactions across ${CONTRACTS.length} contracts`,
     );
-    if (transactions.length) {
-      const emissionEstimates = (await database
-        .collection('patch-estimates')
-        .find({ timestamp: { $gt: startTimestamp } })
-        .toArray()) as EmissionEstimate[];
-      console.log(`Retrieved ${emissionEstimates.length} emission estimates`);
-      const transactionsWithEstimateAndDate = transactions
-        .map((transaction) => {
-          return addEmissionDataToSingleTransaction(
-            transaction,
-            emissionEstimates,
-          );
-        })
-        .map(addDateToTransaction);
-      console.log(
-        `Added emission data to ${transactionsWithEstimateAndDate.length} transactions across ${CONTRACTS.length} contracts`,
-      );
-      const bulkUpdateOps = transactionsWithEstimateAndDate.map(
-        (transaction) => {
-          return {
-            updateOne: {
-              filter: { hash: transaction.hash },
-              update: { $set: transaction },
-              upsert: true,
-            },
-          };
+    if (!transactions.length) {
+      return {
+        statusCode: 200,
+        body: `There are no transactions to cache since last run`,
+      };
+    }
+    const emissionEstimates = (await database
+      .collection('patch-estimates')
+      .find({ timestamp: { $gt: startTimestamp } })
+      .toArray()) as EmissionEstimate[];
+    console.log(`Retrieved ${emissionEstimates.length} emission estimates`);
+    const transactionsWithEstimateAndDate = transactions
+      .map((transaction) => {
+        return addEmissionDataToSingleTransaction(
+          transaction,
+          emissionEstimates,
+        );
+      })
+      .map(addDateToTransaction);
+    console.log(
+      `Added emission data to ${transactionsWithEstimateAndDate.length} transactions across ${CONTRACTS.length} contracts`,
+    );
+    const bulkUpdateOps = transactionsWithEstimateAndDate.map((transaction) => {
+      return {
+        updateOne: {
+          filter: { hash: transaction.hash },
+          update: { $set: transaction },
+          upsert: true,
         },
-      );
+      };
+    });
 
-      const res = await database
-        .collection('transactions')
-        .bulkWrite(bulkUpdateOps);
-      if (res.result.ok === 1) {
-        return {
-          statusCode: 200,
-          body: `${transactions.length} transactions cached for ${CONTRACTS.length} contracts`,
-        };
-      }
-      console.log({ res });
+    const res = await database
+      .collection('transactions')
+      .bulkWrite(bulkUpdateOps);
+    if (res.result.ok !== 1) {
       return {
         statusCode: 500,
         body: 'Failed to cache transactions',
@@ -155,7 +152,7 @@ export const handler = async (event, context) => {
     }
     return {
       statusCode: 200,
-      body: `There were no transactions to cache since last run`,
+      body: `${transactions.length} transactions cached for ${CONTRACTS.length} contracts`,
     };
   } catch (error) {
     console.log(error);
