@@ -5,6 +5,14 @@ export interface Contract {
   name: string;
 }
 
+export interface ChartData {
+  averageGasPrice: number;
+  co2Emissions: number;
+  date: Date;
+  gasUsed: number;
+  numTransactions: number;
+}
+
 export interface EmissionEstimate {
   emissionsGpEth: number;
   date: Date;
@@ -71,3 +79,5 @@ export interface CalendarInputProps {
   isStartInput?: Boolean;
   onChange?: (selectedDate: Date) => void;
 }
+
+export type ChartReadyState = 'loading' | 'error' | 'done';
