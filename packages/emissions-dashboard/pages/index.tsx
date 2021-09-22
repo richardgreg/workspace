@@ -3,7 +3,7 @@ import { CloudIcon } from '@heroicons/react/outline';
 import Patch from '@patch-technology/patch';
 import { ContractContainer } from '@popcorn/ui/components/popcorn/emissions-dashboard/ContractContainer/index';
 import { DateRangePicker } from '@popcorn/ui/components/popcorn/emissions-dashboard/DateRangePicker';
-import { NavBar } from '@popcorn/ui/components/popcorn/emissions-dashboard/NavBar/index';
+import { NavBar } from '@popcorn/ui/components/popcorn/emissions-dashboard/NavBar';
 import { TotalStats } from '@popcorn/ui/components/popcorn/emissions-dashboard/TotalStats/index';
 import {
   ChartReadyState,
@@ -15,6 +15,7 @@ import {
   TransactionGroupSummary,
 } from '@popcorn/ui/interfaces/emissions-dashboard';
 import { useWeb3React } from '@web3-react/core';
+import * as convert from 'convert-units';
 import { useRouter } from 'next/router';
 import fetch from 'node-fetch';
 import React, { useEffect, useState } from 'react';
@@ -65,21 +66,6 @@ const EMPTY_STAT_CARDS: StatCardData[] = [
     change: '0',
     changeType: 'increase',
   },
-];
-
-const user = {
-  name: 'Tom Cook',
-  email: 'tom@example.com',
-  imageUrl:
-    'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-};
-
-export const navigation = [{ name: 'Dashboard', href: '#', current: true }];
-
-export const userNavigation = [
-  { name: 'Your Profile', href: '#' },
-  { name: 'Settings', href: '#' },
-  { name: 'Sign out', href: '#' },
 ];
 
 const getBlockNumberByTimestamp = async (
@@ -565,6 +551,9 @@ const IndexPage = (): JSX.Element => {
       },
       0,
     );
+    const totalEmissionsConverted = convert(totalEmissionsCurrentPeriod)
+      .from('mcg')
+      .toBest();
 
     const transactionVolPercentChange = percentChange(
       totalTransactionVolPreviousPeriod,
@@ -573,10 +562,10 @@ const IndexPage = (): JSX.Element => {
     return [
       {
         id: 1,
-        name: 'CO2 Emissions (µg)',
-        stat: totalEmissionsCurrentPeriod,
+        name: `CO2 Emissions (${totalEmissionsConverted.unit})`,
+        stat: Math.round(totalEmissionsConverted.val),
         icon: CloudIcon,
-        change: `${emissionsChange}`,
+        change: `${emissionsChange.toLocaleString()}`,
         changeType: emissionsChange > 0 ? 'increase' : 'decrease',
       },
       {
@@ -668,11 +657,15 @@ const IndexPage = (): JSX.Element => {
       averageGasPricePreviousPeriod,
       averageGasPriceCurrentPeriod,
     );
+
+    const totalEmissionsConverted = convert(totalEmissionsCurrentPeriod)
+      .from('mcg')
+      .toBest();
     return [
       {
         id: 1,
-        name: 'CO2 Emissions (µg)',
-        stat: totalEmissionsCurrentPeriod,
+        name: `CO2 Emissions (${totalEmissionsConverted.unit})`,
+        stat: Math.round(totalEmissionsConverted.val),
         icon: CloudIcon,
         change: `${Math.round(emissionsChangePercentChange)}%`,
         changeType: emissionsChangePercentChange > 0 ? 'increase' : 'decrease',
@@ -724,9 +717,6 @@ const IndexPage = (): JSX.Element => {
     <div>
       <NavBar
         title="Smart Contract Emissions Dashboard"
-        headerNavigation={navigation}
-        userNavigation={userNavigation}
-        user={user}
         logo="/images/popcorn-logo.png"
         contractProps={{ addContract, open, setOpen }}
         contractErrorProps={{
@@ -735,7 +725,7 @@ const IndexPage = (): JSX.Element => {
           setErrorMessage,
         }}
       />
-      <div className="sm:flex sm:flex-col sm:align-center bg-gray-50">
+      <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 ">
         <DateRangePicker
           updateDates={updateDates}
           startDate={startDate}
