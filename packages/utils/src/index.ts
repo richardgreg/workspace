@@ -1,14 +1,5 @@
 export { capitalize } from './capitalize';
 export {
-  getChartData,
-  getGranularity,
-  getInterpolatedDate,
-  getNumDaysBetweenTwoDates,
-  getNumSecondsByGranularity,
-  getPeriod,
-  getStatCardData,
-} from './EmissionsDashboard';
-export {
   bigNumberToNumber,
   formatAndRoundBigNumber,
   numberToBigNumber,

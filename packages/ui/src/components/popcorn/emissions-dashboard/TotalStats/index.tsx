@@ -1,5 +1,8 @@
 import { Transaction } from '@popcorn/ui/interfaces/emissions-dashboard';
-import { getChartData, getStatCardData } from '@popcorn/utils';
+import {
+  getChartData,
+  getStatCardData,
+} from '../../../../../../emissions-dashboard/utils';
 import React from 'react';
 import { BiaxialLineChart } from '../recharts/BiaxialLineChart';
 import { StatsCards } from '../StatsCards';

@@ -1,4 +1,7 @@
-import { getChartData, getStatCardData } from '@popcorn/utils';
+import {
+  getChartData,
+  getStatCardData,
+} from '../../../../../../emissions-dashboard/utils';
 import React from 'react';
 import {
   Contract,
