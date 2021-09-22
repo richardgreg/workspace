@@ -181,7 +181,7 @@ const IndexPage = (): JSX.Element => {
   const getTransactions = async () => {
     loading('Loading transactions...');
     const transactionsPreviousPeriod = await fetch(
-      `.netlify/functions/loadtransactions?startBlock=${previousPeriodStartBlock}&endBlock=${startBlock}`,
+      `.netlify/functions/load-transactions?startBlock=${previousPeriodStartBlock}&endBlock=${startBlock}`,
     )
       .then((res) => {
         toast.dismiss();
@@ -194,7 +194,7 @@ const IndexPage = (): JSX.Element => {
         console.log('error', error);
       });
     const transactionsCurrentPeriod = await fetch(
-      `.netlify/functions/loadtransactions?startBlock=${startBlock}&endBlock=${endBlock}`,
+      `.netlify/functions/load-transactions?startBlock=${startBlock}&endBlock=${endBlock}`,
     )
       .then((res) => {
         toast.dismiss();
