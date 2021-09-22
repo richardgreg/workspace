@@ -72,21 +72,6 @@ const EMPTY_STAT_CARDS: StatCardData[] = [
   },
 ];
 
-const user = {
-  name: 'Tom Cook',
-  email: 'tom@example.com',
-  imageUrl:
-    'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-};
-
-export const navigation = [{ name: 'Dashboard', href: '#', current: true }];
-
-export const userNavigation = [
-  { name: 'Your Profile', href: '#' },
-  { name: 'Settings', href: '#' },
-  { name: 'Sign out', href: '#' },
-];
-
 const getBlockNumberByTimestamp = async (
   timestamp: number,
 ): Promise<number> => {
@@ -725,13 +710,10 @@ const IndexPage = (): JSX.Element => {
     setErrorMessage('');
   };
   return (
-    <div>
+    <div className="bg-gray-50">
       <Toaster position="top-right" />
       <NavBar
         title="Smart Contract Emissions Dashboard"
-        headerNavigation={navigation}
-        userNavigation={userNavigation}
-        user={user}
         logo="/images/popcorn-logo.png"
         contractProps={{ addContract, open, setOpen }}
         contractErrorProps={{
@@ -740,7 +722,7 @@ const IndexPage = (): JSX.Element => {
           setErrorMessage,
         }}
       />
-      <div className="sm:flex sm:flex-col sm:align-center bg-gray-50">
+      <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 ">
         <DateRangePicker
           updateDates={updateDates}
           startDate={startDate}
