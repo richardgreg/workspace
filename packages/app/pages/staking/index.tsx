@@ -52,7 +52,7 @@ export default function LockPop() {
   }, [lockDuration, popToLock]);
 
   useEffect(() => {
-    if (!account) {
+    if (!account || approveStakeState?.status !== 'Success') {
       return;
     }
     contracts.pop
@@ -73,7 +73,12 @@ export default function LockPop() {
   };
 
   useEffect(() => {
-    if (contracts?.staking && account) {
+    if (
+      increaseStakeState?.status === 'Success' ||
+      increaseLockPeriodState?.status === 'Success' ||
+      stakeState?.status === 'Success' ||
+      (contracts?.staking && account)
+    ) {
       getLockedPop();
     }
   }, [

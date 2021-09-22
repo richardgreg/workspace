@@ -192,7 +192,7 @@ export default function AllGrants() {
   };
 
   useEffect(() => {
-    if (contracts?.pop && account) {
+    if (voteState?.status === 'Success' || (contracts?.pop && account)) {
       contracts.pop
         .balanceOf(account)
         .then((res) => console.log('POP Balance: ', res));
@@ -200,7 +200,11 @@ export default function AllGrants() {
   }, [contracts, account, voteState.status]);
 
   useEffect(() => {
-    if (!contracts || !selectedGrantTerms.length) {
+    if (
+      !contracts ||
+      !selectedGrantTerms.length ||
+      voteState?.status !== 'Success'
+    ) {
       return;
     }
     getVoiceCredits(account);
