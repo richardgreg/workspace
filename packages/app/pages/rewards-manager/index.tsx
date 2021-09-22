@@ -11,6 +11,7 @@ import { parseEther } from 'ethers/lib/utils';
 import { useContext, useEffect, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import RewardDestination from '../../components/RewardsManager/RewardDestination';
+import { useContractFunction } from '../../hooks/useContractFunction';
 
 export default function Register(): JSX.Element {
   const context = useWeb3React<Web3Provider>();
@@ -22,8 +23,17 @@ export default function Register(): JSX.Element {
   const [swapOutput, setSwapOutput] = useState<BigNumber>();
   const [rewardSplits, setRewardSplits] = useState<BigNumber[]>();
 
+  const { send: handleSwapTokenForRewards, state: swapTokenForRewardsState } =
+    useContractFunction(contracts?.rewardsManager, 'swapTokenForRewards');
+  const { send: handleDistributeRewards, state: distributeRewardsState } =
+    useContractFunction(contracts?.rewardsManager, 'distributeRewards');
+
   useEffect(() => {
-    if (contracts && account) {
+    if (
+      swapTokenForRewardsState?.status === 'Success' ||
+      distributeRewardsState?.status === 'Success' ||
+      (contracts && account)
+    ) {
       contracts.threeCrv
         .balanceOf(contracts.rewardsManager.address)
         .then((res) => setFeeBalance(res));
@@ -34,7 +44,12 @@ export default function Register(): JSX.Element {
         .getRewardSplits()
         .then((res) => setRewardSplits(res));
     }
-  }, [contracts, account]);
+  }, [
+    contracts,
+    account,
+    swapTokenForRewardsState.status,
+    distributeRewardsState.status,
+  ]);
 
   useEffect(() => {
     if (contracts && feeBalance !== undefined) {
@@ -57,30 +72,27 @@ export default function Register(): JSX.Element {
 
   async function swapToken(): Promise<void> {
     setWait(true);
-    toast.loading('Swap in Progress...');
-    await contracts.rewardsManager
-      .connect(library.getSigner())
-      .swapTokenForRewards(
+    toast.promise(
+      handleSwapTokenForRewards(
         [contracts.threeCrv.address, contracts.pop.address],
         swapOutput,
-      )
-      .then((res) => toast.success('Funds swapped!'))
-      .catch((err) => {
-        toast.error(err.data.message.split("'")[1]);
-      });
+      ),
+      {
+        loading: 'Swap in Progress...',
+        success: 'Funds swapped!',
+        error: (error) => error.data.message.split("'")[1],
+      },
+    );
     setWait(false);
   }
 
   async function distributeRewards(): Promise<void> {
     setWait(true);
-    toast.loading('Distributing funds...');
-    await contracts.rewardsManager
-      .connect(library.getSigner())
-      .distributeRewards()
-      .then((res) => toast.success('Funds distributed!'))
-      .catch((err) => {
-        toast.error(err.data.message.split("'")[1]);
-      });
+    toast.promise(handleDistributeRewards(), {
+      loading: 'Distributing funds...',
+      success: 'Funds distributed!',
+      error: (error) => error.data.message.split("'")[1],
+    });
     setWait(false);
   }
 
