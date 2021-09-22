@@ -352,7 +352,7 @@ export const DateRangePicker: React.FC<DateTimePickerProps> = ({
   const [selectedStartDate, setSelectedStartDate] = useState(startDate);
   const [selectedEndDate, setSelectedEndDate] = useState(endDate);
   return (
-    <div className="grid justify-items-stretch md:mr-24">
+    <div className="grid justify-items-stretch mt-6">
       <div className="md:flex md:items-center md:justify-between justify-self-end">
         <div className="mt-4 flex md:mt-0 md:ml-4">
           <CalendarInput

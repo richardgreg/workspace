@@ -18,7 +18,7 @@ export const TotalStats: React.FC<TotalStatsProps> = ({
   startDate,
 }): JSX.Element => {
   return (
-    <div className="py-10 mx-8 self-center">
+    <div className="py-10 self-center">
       <div className="max-w-7xl">
         <div className="mt-2 mb-5">
           <dt>
