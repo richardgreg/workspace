@@ -6,9 +6,7 @@
       {
         "alias": {
           "@popcorn/ui": "../ui/src",
-          "@popcorn/utils": "../utils",
-          "containers": "./containers",
-          "emissions-dashboard": "./emissions-dashboard"
+          "@popcorn/utils": "../utils"
         }
       }
     ]
