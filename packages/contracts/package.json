@@ -14,7 +14,11 @@
     "test": "yarn hardhat test test/*.test.ts",
     "test:fork": "yarn hardhat test test/fork/*.test.ts",
     "coverage": "yarn hardhat coverage --testfiles 'test/*.test.ts'",
-    "postinstall": "yarn compile"
+    "postinstall": "yarn compile",
+    "prettify": "yarn lint-staged --allow-empty"
+  },
+  "lint-staged": {
+    "*.{sol,ts,tsx}": "prettier --write"
   },
   "devDependencies": {
     "@float-capital/solidity-coverage": "^0.7.17",
@@ -31,7 +35,7 @@
     "@nomiclabs/hardhat-waffle": "^2.0.1",
     "@openzeppelin/contracts": "^3.4.0",
     "@popcorn/utils": "*",
-    "@setprotocol/set-protocol-v2": "^0.0.7",
+    "@setprotocol/set-protocol-v2": "^0.0.45",
     "@typechain/ethers-v5": "^7.0.0",
     "@typechain/hardhat": "^2.0.0",
     "@uniswap/sdk": "^3.0.3",
