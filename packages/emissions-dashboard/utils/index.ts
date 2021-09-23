@@ -6,7 +6,7 @@ import {
 } from '@popcorn/ui/src/interfaces/emissions-dashboard';
 import { Globe, Wind } from 'react-feather';
 import TimeSeriesAggregator from 'time-series-aggregator';
-import { percentChange } from '../../utils/src/percentChange';
+import { percentChange } from './percentChange';
 const aggregator = new TimeSeriesAggregator();
 
 const GWEI_TO_ETH = Math.pow(10, 9);
