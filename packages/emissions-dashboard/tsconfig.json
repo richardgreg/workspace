@@ -1,34 +1,12 @@
 {
-  "compileOnSave": false,
+  "extends": "../../tsconfig",
   "compilerOptions": {
     "baseUrl": ".",
-    "allowJs": true,
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "isolatedModules": true,
-    "jsx": "preserve",
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "noEmit": true,
-    "noImplicitAny": false,
-    "noImplicitReturns": false,
-    "noImplicitThis": false,
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
-    "preserveConstEnums": true,
-    "removeComments": false,
-    "strict": false,
-    "resolveJsonModule": true,
-    "skipLibCheck": true,
-    "sourceMap": true,
-    "target": "es5",
-    "downlevelIteration": true,
-    "lib": ["dom", "es2017"],
-    "paths": {
-      "@popcorn/ui": ["../ui/src"],
-      "@popcorn/ui/*": ["../ui/src/*"]
-    }
+    "module": "esnext",
+    "noEmit": false,
+    "outDir": "dist",
+    "target": "ES2017",
+    "isolatedModules": true
   },
   "exclude": ["dist", ".next", "out", "next.config.js"],
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"]
