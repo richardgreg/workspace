@@ -67,6 +67,7 @@ const IndexPage = (): JSX.Element => {
   }, [router.pathname]);
 
   const getTransactions = async () => {
+    setReadyState('loading');
     const transactionsPreviousPeriod = await fetch(
       `.netlify/functions/load-transactions?startDate=${previousPeriodStartDate}&endDate=${startDate}`,
     )
@@ -175,6 +176,7 @@ const IndexPage = (): JSX.Element => {
     setOpen(true);
     setErrorMessage('');
   };
+
   return (
     <div>
       <NavBar
@@ -186,6 +188,7 @@ const IndexPage = (): JSX.Element => {
           errorMessage,
           setErrorMessage,
         }}
+        refresh={getTransactions}
       />
       <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 ">
         <DateRangePicker

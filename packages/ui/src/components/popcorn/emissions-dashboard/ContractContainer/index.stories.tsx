@@ -1,14 +1,13 @@
 import { CloudIcon, TrendingUpIcon } from '@heroicons/react/outline';
 import { Meta, Story } from '@storybook/react/types-6-0';
 import React from 'react';
+import * as transactions from '../../../../fixtures/transactions.json';
 import {
   Contract,
   Transaction,
 } from '../../../../interfaces/emissions-dashboard';
 import { EmissionSummaryStats } from '../../../../interfaces/index';
 import { getDummyEmissionData } from '../dummyEmissionsData';
-import * as transactions from '../../../../fixtures/transactions.json';
-
 import { ContractContainer } from './index';
 
 const statCardData: EmissionSummaryStats[] = [

@@ -1,4 +1,4 @@
-import { PlusIcon } from '@heroicons/react/solid';
+import { PlusIcon, RefreshIcon } from '@heroicons/react/solid';
 import React from 'react';
 import { NavBarProps } from '../../../../interfaces/index';
 import { AddContractModal } from '../AddContractModal';
@@ -13,6 +13,7 @@ export const NavBar: React.FC<NavBarProps> = ({
   logo,
   contractProps,
   contractErrorProps,
+  refresh,
 }) => {
   return (
     <div className="bg-gray-50 ">
@@ -29,6 +30,17 @@ export const NavBar: React.FC<NavBarProps> = ({
             <div className="hidden sm:-my-px sm:ml-6 sm:flex sm:space-x-8"></div>
           </div>
           <div className="hidden sm:ml-6 sm:flex sm:items-center">
+            <button
+              type="button"
+              onClick={refresh}
+              className="mr-3 inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            >
+              <RefreshIcon
+                className="-ml-0.5 mr-2 h-4 w-4"
+                aria-hidden="true"
+              />
+              Refresh
+            </button>
             <button
               type="button"
               onClick={() => contractProps.setOpen(!contractProps.open)}

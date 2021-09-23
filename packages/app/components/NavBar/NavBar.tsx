@@ -94,6 +94,15 @@ const Navbar: React.FC = () => {
             <div className="w-2 h-2 bg-green-400 rounded-full ml-2" />
           )}
         </button>
+        <button
+          className="w-28 p-1 flex flex-row items-center justify-center border border-gray-400 rounded hover:bg-indigo-400 hover:text-white"
+          onClick={() => activate(connectors.Injected)}
+        >
+          <p>Connect{account && 'ed'}</p>
+          {account && (
+            <div className="w-2 h-2 bg-green-400 rounded-full ml-2" />
+          )}
+        </button>
       </nav>
     </>
   );
