@@ -5,8 +5,7 @@
       "module-resolver",
       {
         "alias": {
-          "@popcorn/ui": "../ui/src",
-          "@popcorn/utils": "../utils"
+          "@popcorn/ui": "../ui/src"
         }
       }
     ]
