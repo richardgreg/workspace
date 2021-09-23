@@ -9,6 +9,7 @@ import {
   Transaction,
 } from '@popcorn/ui/interfaces/emissions-dashboard';
 import { useWeb3React } from '@web3-react/core';
+import { DateTime } from 'luxon';
 import { useRouter } from 'next/router';
 import fetch from 'node-fetch';
 import React, { useEffect, useState } from 'react';
@@ -43,10 +44,12 @@ const IndexPage = (): JSX.Element => {
 
   const [contracts, setContracts] = useState<Contract[]>(DEFAULT_CONTRACTS);
   const [previousPeriodStartDate, setPreviousPeriodStartDate] = useState<Date>(
-    new Date('2021-05-01T00:00:00Z'),
+    new Date(DateTime.now().minus({ months: 2 }).toISO()),
   );
-  const [startDate, setStartDate] = useState<Date>(new Date('2021-06-15'));
-  const [endDate, setEndDate] = useState<Date>(new Date('2021-08-01'));
+  const [startDate, setStartDate] = useState<Date>(
+    new Date(DateTime.now().minus({ months: 1 }).toISO()),
+  );
+  const [endDate, setEndDate] = useState<Date>(new Date());
   const [readyState, setReadyState] = useState<ChartReadyState>('loading');
 
   const [transactionsPreviousPeriod, setTransactionsPreviousPeriod] = useState<
