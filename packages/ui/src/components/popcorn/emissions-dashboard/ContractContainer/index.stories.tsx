@@ -1,13 +1,13 @@
 import { CloudIcon, TrendingUpIcon } from '@heroicons/react/outline';
 import { Meta, Story } from '@storybook/react/types-6-0';
 import React from 'react';
-import * as transactions from '../../../../fixtures/transactions.json';
-import {
-  Contract,
-  Transaction,
-} from '../../../../interfaces/emissions-dashboard';
+import { Contract } from '../../../../interfaces/emissions-dashboard';
 import { EmissionSummaryStats } from '../../../../interfaces/index';
 import { getDummyEmissionData } from '../dummyEmissionsData';
+import {
+  getDummyTxnsCurrentPeriod,
+  getDummyTxnsPreviousPeriod,
+} from '../dummyTxns';
 import { ContractContainer } from './index';
 
 const statCardData: EmissionSummaryStats[] = [
@@ -48,11 +48,12 @@ export default {
 
 const Template: Story = (args) => (
   <ContractContainer
-    transactionsCurrentPeriod={transactions as unknown as Transaction[]}
-    transactionsPreviousPeriod={transactions as unknown as Transaction[]}
-    startDate={undefined}
-    endDate={undefined}
-    contract={undefined}
+    readyState={'done'}
+    transactionsCurrentPeriod={getDummyTxnsCurrentPeriod()}
+    transactionsPreviousPeriod={getDummyTxnsPreviousPeriod()}
+    startDate={new Date('2021/08/01')}
+    endDate={new Date('2021/08/02')}
+    contract={{ name: 'POP', address: '0x' }}
     {...args}
   />
 );

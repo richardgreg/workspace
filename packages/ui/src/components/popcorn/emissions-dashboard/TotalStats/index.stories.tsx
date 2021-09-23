@@ -3,6 +3,10 @@ import { Meta, Story } from '@storybook/react/types-6-0';
 import React from 'react';
 import { Globe, Wind } from 'react-feather';
 import { getDummyEmissionData } from '../dummyEmissionsData';
+import {
+  getDummyTxnsCurrentPeriod,
+  getDummyTxnsPreviousPeriod,
+} from '../dummyTxns';
 import { TotalStats } from './index';
 const statCardData = [
   {
@@ -43,7 +47,16 @@ export default {
   ],
 } as Meta;
 
-const Template: Story = (args) => <TotalStats {...args} />;
+const Template: Story = (args) => (
+  <TotalStats
+    transactionsCurrentPeriod={getDummyTxnsCurrentPeriod()}
+    transactionsPreviousPeriod={getDummyTxnsPreviousPeriod()}
+    startDate={new Date('2021/08/01')}
+    endDate={new Date('2021/08/02')}
+    readyState={'loading'}
+    {...args}
+  />
+);
 export const Primary = Template.bind({});
 Primary.args = {
   statCardData,

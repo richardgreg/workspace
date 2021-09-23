@@ -1,4 +1,7 @@
-import { getChartData, getStatCardData } from 'utils';
+import {
+  getChartData,
+  getStatCardData,
+} from '../../../../../../emissions-dashboard/utils';
 import {
   ChartReadyState,
   Transaction,
