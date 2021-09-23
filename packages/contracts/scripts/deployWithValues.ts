@@ -608,9 +608,18 @@ export default async function deploy(ethers): Promise<void> {
         .connect(account)
         .approve(
           contracts.hysiBatchInteraction.address,
-          utils.parseEther("250")
+          utils.parseEther("500")
         );
     });
+    await bluebird.map(accounts, async (account: SignerWithAddress) => {
+      await contracts.hysiBatchInteraction
+        .connect(account)
+        .depositForMint(utils.parseEther("250"));
+    });
+    await ethers.provider.send("evm_increaseTime", [1800]);
+    await ethers.provider.send("evm_mine", []);
+
+    await contracts.hysiBatchInteraction.connect(accounts[0]).batchMint(0);
     await bluebird.map(accounts, async (account: SignerWithAddress) => {
       await contracts.hysiBatchInteraction
         .connect(account)
@@ -627,8 +636,17 @@ export default async function deploy(ethers): Promise<void> {
     await bluebird.map(accounts, async (account: SignerWithAddress) => {
       await contracts.mockHYSI
         .connect(account)
-        .approve(contracts.hysiBatchInteraction.address, utils.parseEther("1"));
+        .approve(contracts.hysiBatchInteraction.address, utils.parseEther("2"));
     });
+    await bluebird.map(accounts, async (account: SignerWithAddress) => {
+      await contracts.hysiBatchInteraction
+        .connect(account)
+        .depositForRedeem(utils.parseEther("1"));
+    });
+
+    await ethers.provider.send("evm_increaseTime", [1800]);
+    await ethers.provider.send("evm_mine", []);
+    await contracts.hysiBatchInteraction.connect(accounts[0]).batchRedeem(0);
     await bluebird.map(accounts, async (account: SignerWithAddress) => {
       await contracts.hysiBatchInteraction
         .connect(account)

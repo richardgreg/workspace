@@ -1,14 +1,17 @@
+import { BigNumber } from '@ethersproject/bignumber';
 import { AccountBatch } from '@popcorn/contracts/adapters/HYSIBatchInteraction/HYSIBatchInteractionAdapter';
 import ClaimableBatch from './ClaimableBatch';
 
 interface ClaimableBatchesProps {
   batches: AccountBatch[];
   claim: (batchId: string) => Promise<void>;
+  withdraw: (batchId: string, amount: BigNumber) => Promise<void>;
 }
 
 const ClaimableBatches: React.FC<ClaimableBatchesProps> = ({
   batches,
   claim,
+  withdraw,
 }) => {
   return (
     <table className="min-w-full divide-y divide-gray-200">
@@ -44,6 +47,7 @@ const ClaimableBatches: React.FC<ClaimableBatchesProps> = ({
             batch={batch}
             index={i}
             claim={claim}
+            withdraw={withdraw}
             key={batch.batchId}
           />
         ))}

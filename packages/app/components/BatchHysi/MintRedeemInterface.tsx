@@ -20,6 +20,8 @@ const MintRedeemInterface: React.FC<MintRedeemInterfaceProps> = ({
   setDepositAmount,
   deposit,
   depositDisabled,
+  useUnclaimedDeposits,
+  setUseUnclaimedDeposits,
 }) => {
   return (
     <div className="bg-white rounded-lg shadow px-5 py-6 sm:px-6">
@@ -39,6 +41,8 @@ const MintRedeemInterface: React.FC<MintRedeemInterfaceProps> = ({
             setwithdrawal={setwithdrawal}
             depositAmount={depositAmount}
             setDepositAmount={setDepositAmount}
+            useUnclaimedDeposits={useUnclaimedDeposits}
+            setUseUnclaimedDeposits={setUseUnclaimedDeposits}
           />
           <div className="w-full text-center mt-10">
             <button

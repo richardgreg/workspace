@@ -1,4 +1,5 @@
 import { Web3Provider } from '@ethersproject/providers';
+import { parseEther } from '@ethersproject/units';
 import {
   AccountBatch,
   BatchType,
@@ -18,6 +19,34 @@ import {
   TimeTillBatchProcessing,
 } from '../../../contracts';
 
+interface HotSwapParameter {
+  batchIds: String[];
+  amounts: BigNumber[];
+}
+interface ClaimableBatches {
+  balance: BigNumber;
+  batches: AccountBatch[];
+}
+
+function getClaimableBalance(claimableBatches: AccountBatch[]): BigNumber {
+  return claimableBatches.reduce(
+    (acc: BigNumber, batch: AccountBatch) =>
+      acc.add(batch.accountClaimableTokenBalance),
+    BigNumber.from('0'),
+  );
+}
+
+function isDepositDisabled(
+  depositAmount: BigNumber,
+  hysiBalance: BigNumber,
+  threeCrvBalance: BigNumber,
+  wait: Boolean,
+  withdrawal: Boolean,
+): boolean {
+  const balance = withdrawal ? hysiBalance : threeCrvBalance;
+  return depositAmount > balance && !wait;
+}
+
 export default function BatchHysi(): JSX.Element {
   const context = useWeb3React<Web3Provider>();
   const { library, account, activate } = context;
@@ -30,12 +59,43 @@ export default function BatchHysi(): JSX.Element {
     BigNumber.from('0'),
   );
   const [withdrawal, setwithdrawal] = useState<Boolean>(false);
+  const [useUnclaimedDeposits, setUseUnclaimedDeposits] =
+    useState<Boolean>(false);
   const [wait, setWait] = useState<Boolean>(false);
   const [batchHysiAdapter, setBatchHysiAdapter] =
     useState<HYSIBatchInteractionAdapter>();
   const [batches, setBatches] = useState<AccountBatch[]>();
   const [timeTillBatchProcessing, setTimeTillBatchProcessing] =
     useState<TimeTillBatchProcessing[]>();
+  const [claimableBatches, setClaimableBatches] =
+    useState<ClaimableBatches[]>();
+
+  function prepareHotSwap(
+    batches: AccountBatch[],
+    depositAmount: BigNumber,
+  ): HotSwapParameter {
+    let cumulatedBatchAmounts = BigNumber.from('0');
+    const batchIds: String[] = [];
+    const amounts: BigNumber[] = [];
+    batches.forEach((batch) => {
+      if (cumulatedBatchAmounts < depositAmount) {
+        const missingAmount = depositAmount.sub(cumulatedBatchAmounts);
+        const amountOfBatch = batch.accountClaimableTokenBalance.gt(
+          missingAmount,
+        )
+          ? missingAmount
+          : batch.accountClaimableTokenBalance;
+        cumulatedBatchAmounts = cumulatedBatchAmounts.add(amountOfBatch);
+        const shareValue = batch.accountClaimableTokenBalance
+          .mul(parseEther('1'))
+          .div(batch.accountSuppliedTokenBalance);
+
+        batchIds.push(batch.batchId);
+        amounts.push(amountOfBatch.mul(parseEther('1')).div(shareValue));
+      }
+    });
+    return { batchIds: batchIds, amounts: amounts };
+  }
 
   useEffect(() => {
     if (!library || !contracts) {
@@ -84,6 +144,62 @@ export default function BatchHysi(): JSX.Element {
       .then((res) => setTimeTillBatchProcessing(res));
   }, [batchHysiAdapter]);
 
+  useEffect(() => {
+    if (!batches) {
+      return;
+    }
+    const claimableMintBatches = batches.filter(
+      (batch) => batch.batchType == BatchType.Mint && batch.claimable,
+    );
+    const claimableRedeemBatches = batches.filter(
+      (batch) => batch.batchType == BatchType.Redeem && batch.claimable,
+    );
+
+    setClaimableBatches([
+      {
+        balance: getClaimableBalance(claimableMintBatches),
+        batches: claimableMintBatches,
+      },
+      {
+        balance: getClaimableBalance(claimableRedeemBatches),
+        batches: claimableRedeemBatches,
+      },
+    ]);
+  }, [batches]);
+
+  async function hotswap(
+    depositAmount: BigNumber,
+    batchType: BatchType,
+  ): Promise<void> {
+    const hotSwapParameter = prepareHotSwap(
+      claimableBatches[batchType === BatchType.Mint ? 1 : 0].batches,
+      depositAmount,
+    );
+    toast.loading('Depositing Funds...');
+    const res = await contracts.batchHysi
+      .connect(library.getSigner())
+      .moveUnclaimedDepositsIntoCurrentBatch(
+        hotSwapParameter.batchIds as string[],
+        hotSwapParameter.amounts,
+        batchType === BatchType.Mint ? BatchType.Redeem : BatchType.Mint,
+      )
+      .then((res) => {
+        res.wait().then((res) => {
+          toast.dismiss();
+          toast.success('Funds deposited!');
+          batchHysiAdapter.getBatches(account).then((res) => setBatches(res));
+        });
+      })
+      .catch((err) => {
+        toast.dismiss();
+        if (err.data === undefined) {
+          toast.error('An error occured');
+        } else {
+          toast.error(err.data.message.split("'")[1]);
+        }
+      });
+  }
+
   async function deposit(
     depositAmount: BigNumber,
     batchType: BatchType,
@@ -94,7 +210,6 @@ export default function BatchHysi(): JSX.Element {
         account,
         contracts.batchHysi.address,
       );
-      console.log('mint allowance', allowance.toString());
       if (allowance >= depositAmount) {
         toast.loading('Depositing 3CRV...');
         const res = await contracts.batchHysi
@@ -132,6 +247,9 @@ export default function BatchHysi(): JSX.Element {
             res.wait().then((res) => {
               toast.dismiss();
               toast.success('HYSI deposited!');
+              batchHysiAdapter
+                .getBatches(account)
+                .then((res) => setBatches(res));
             });
           })
           .catch((err) => {
@@ -158,6 +276,28 @@ export default function BatchHysi(): JSX.Element {
         res.wait().then((res) => {
           toast.dismiss();
           toast.success('Batch claimed!');
+        });
+        batchHysiAdapter.getBatches(account).then((res) => setBatches(res));
+      })
+      .catch((err) => {
+        toast.dismiss();
+        if (err.data === undefined) {
+          toast.error('An error occured');
+        } else {
+          toast.error(err.data.message.split("'")[1]);
+        }
+      });
+  }
+
+  async function withdraw(batchId: string, amount: BigNumber): Promise<void> {
+    toast.loading('Withdrawing from Batch...');
+    await contracts.batchHysi
+      .connect(library.getSigner())
+      .withdrawFromBatch(batchId, amount)
+      .then((res) => {
+        res.wait().then((res) => {
+          toast.dismiss();
+          toast.success('Funds withdrawn!');
         });
         batchHysiAdapter.getBatches(account).then((res) => setBatches(res));
       })
@@ -212,20 +352,40 @@ export default function BatchHysi(): JSX.Element {
         <div className="max-w-7xl mx-auto pb-12 px-4 sm:px-6 lg:px-8">
           {batchHysiAdapter && (
             <MintRedeemInterface
-              threeCrvBalance={threeCrvBalance}
+              threeCrvBalance={
+                useUnclaimedDeposits
+                  ? claimableBatches[1].balance
+                  : threeCrvBalance
+              }
               threeCrvPrice={threeCrvPrice}
-              hysiBalance={hysiBalance}
+              hysiBalance={
+                useUnclaimedDeposits ? claimableBatches[0].balance : hysiBalance
+              }
               hysiPrice={hysiPrice}
               withdrawal={withdrawal}
               setwithdrawal={setwithdrawal}
               depositAmount={depositAmount}
               setDepositAmount={setDepositAmount}
-              deposit={deposit}
+              deposit={useUnclaimedDeposits ? hotswap : deposit}
               depositDisabled={
-                withdrawal
-                  ? depositAmount > hysiBalance && !wait
-                  : depositAmount > threeCrvBalance && !wait
+                useUnclaimedDeposits
+                  ? isDepositDisabled(
+                      depositAmount,
+                      claimableBatches[0].balance,
+                      claimableBatches[1].balance,
+                      wait,
+                      withdrawal,
+                    )
+                  : isDepositDisabled(
+                      depositAmount,
+                      hysiBalance,
+                      threeCrvBalance,
+                      wait,
+                      withdrawal,
+                    )
               }
+              useUnclaimedDeposits={useUnclaimedDeposits}
+              setUseUnclaimedDeposits={setUseUnclaimedDeposits}
             />
           )}
           <BatchProcessingInfo
@@ -238,7 +398,11 @@ export default function BatchHysi(): JSX.Element {
                 <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                   <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
                     <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-                      <ClaimableBatches batches={batches} claim={claim} />
+                      <ClaimableBatches
+                        batches={batches}
+                        claim={claim}
+                        withdraw={withdraw}
+                      />
                     </div>
                   </div>
                 </div>

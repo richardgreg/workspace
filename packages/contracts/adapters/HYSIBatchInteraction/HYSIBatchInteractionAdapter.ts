@@ -174,9 +174,13 @@ class HysiBatchInteractionAdapter {
         return {
           ...batch,
           accountSuppliedTokenBalance: shares,
-          accountClaimableTokenBalance: batch.claimableTokenBalance
-            .mul(shares)
-            .div(batch.unclaimedShares),
+          accountClaimableTokenBalance: batch.unclaimedShares.eq(
+            BigNumber.from("0")
+          )
+            ? 0
+            : batch.claimableTokenBalance
+                .mul(shares)
+                .div(batch.unclaimedShares),
         };
       })
     );
