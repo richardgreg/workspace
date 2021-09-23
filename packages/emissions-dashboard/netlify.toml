@@ -2,11 +2,5 @@
   package = "@netlify/plugin-nextjs"
 
 [build]
-  command = "yarn netlify-build"
+  command = "yarn build"
   publish = "out"
-
-[[plugins]]
-  package = 'netlify-plugin-contextual-env'
-  [plugins.inputs]
-    mode = 'prefix'
-
