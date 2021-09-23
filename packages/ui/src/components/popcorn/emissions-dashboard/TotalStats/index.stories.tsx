@@ -2,7 +2,6 @@ import { CloudIcon } from '@heroicons/react/outline';
 import { Meta, Story } from '@storybook/react/types-6-0';
 import React from 'react';
 import { Globe, Wind } from 'react-feather';
-import { getDummyEmissionData } from '../dummyEmissionsData';
 import {
   getDummyTxnsCurrentPeriod,
   getDummyTxnsPreviousPeriod,
@@ -47,19 +46,22 @@ export default {
   ],
 } as Meta;
 
-const Template: Story = (args) => (
-  <TotalStats
-    transactionsCurrentPeriod={getDummyTxnsCurrentPeriod()}
-    transactionsPreviousPeriod={getDummyTxnsPreviousPeriod()}
-    startDate={new Date('2021/08/01')}
-    endDate={new Date('2021/08/02')}
-    readyState={'loading'}
-    {...args}
-  />
-);
+const Template: Story = (args) => <TotalStats {...args} />;
 export const Primary = Template.bind({});
 Primary.args = {
-  statCardData,
-  startDate: new Date(),
-  data: getDummyEmissionData(),
+  readyState: 'done',
+  transactionsCurrentPeriod: getDummyTxnsCurrentPeriod(),
+  transactionsPreviousPeriod: getDummyTxnsPreviousPeriod(),
+  startDate: new Date('2021/08/01'),
+  endDate: new Date('2021/08/02'),
+  contract: { name: 'POP', address: '0x' },
+};
+export const Loading = Template.bind({});
+Loading.args = {
+  readyState: 'loading',
+  transactionsCurrentPeriod: getDummyTxnsCurrentPeriod(),
+  transactionsPreviousPeriod: getDummyTxnsPreviousPeriod(),
+  startDate: new Date('2021/08/01'),
+  endDate: new Date('2021/08/02'),
+  contract: { name: 'POP', address: '0x' },
 };

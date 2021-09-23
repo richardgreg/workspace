@@ -3,7 +3,6 @@ import { Meta, Story } from '@storybook/react/types-6-0';
 import React from 'react';
 import { Contract } from '../../../../interfaces/emissions-dashboard';
 import { EmissionSummaryStats } from '../../../../interfaces/index';
-import { getDummyEmissionData } from '../dummyEmissionsData';
 import {
   getDummyTxnsCurrentPeriod,
   getDummyTxnsPreviousPeriod,
@@ -46,20 +45,22 @@ export default {
   ],
 } as Meta;
 
-const Template: Story = (args) => (
-  <ContractContainer
-    readyState={'done'}
-    transactionsCurrentPeriod={getDummyTxnsCurrentPeriod()}
-    transactionsPreviousPeriod={getDummyTxnsPreviousPeriod()}
-    startDate={new Date('2021/08/01')}
-    endDate={new Date('2021/08/02')}
-    contract={{ name: 'POP', address: '0x' }}
-    {...args}
-  />
-);
+const Template: Story = (args) => <ContractContainer {...args} />;
 export const Primary = Template.bind({});
 Primary.args = {
-  statCardData,
-  contract,
-  data: getDummyEmissionData(),
+  readyState: 'done',
+  transactionsCurrentPeriod: getDummyTxnsCurrentPeriod(),
+  transactionsPreviousPeriod: getDummyTxnsPreviousPeriod(),
+  startDate: new Date('2021/08/01'),
+  endDate: new Date('2021/08/02'),
+  contract: { name: 'POP', address: '0x' },
+};
+export const Loading = Template.bind({});
+Loading.args = {
+  readyState: 'loading',
+  transactionsCurrentPeriod: getDummyTxnsCurrentPeriod(),
+  transactionsPreviousPeriod: getDummyTxnsPreviousPeriod(),
+  startDate: new Date('2021/08/01'),
+  endDate: new Date('2021/08/02'),
+  contract: { name: 'POP', address: '0x' },
 };
