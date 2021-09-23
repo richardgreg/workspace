@@ -1,7 +1,13 @@
-import { Transaction } from '@popcorn/ui/interfaces/emissions-dashboard';
-import { getChartData, getStatCardData } from '@popcorn/utils';
-import React from 'react';
-import { BiaxialLineChart } from '../recharts/BiaxialLineChart';
+import { getChartData, getStatCardData } from 'utils';
+import {
+  ChartReadyState,
+  Transaction,
+} from '../../../../interfaces/emissions-dashboard';
+import {
+  BiaxialLineChart,
+  ChartError,
+  ChartLoading,
+} from '../recharts/BiaxialLineChart';
 import { StatsCards } from '../StatsCards';
 
 interface TotalStatsProps {
@@ -9,6 +15,7 @@ interface TotalStatsProps {
   transactionsPreviousPeriod: Transaction[];
   startDate: Date;
   endDate: Date;
+  readyState: ChartReadyState;
 }
 
 export const TotalStats: React.FC<TotalStatsProps> = ({
@@ -16,6 +23,7 @@ export const TotalStats: React.FC<TotalStatsProps> = ({
   transactionsPreviousPeriod,
   startDate,
   endDate,
+  readyState,
 }): JSX.Element => {
   return (
     <div className="py-10 self-center">
@@ -43,10 +51,18 @@ export const TotalStats: React.FC<TotalStatsProps> = ({
       <div className="max-w-7xl">
         <div className="grid grid-cols-1 gap-4 lg:col-span-2">
           <div className="rounded-lg bg-white overflow-hidden shadow py-6">
-            <BiaxialLineChart
-              data={getChartData(transactionsCurrentPeriod, startDate, endDate)}
-              height={300}
-            />
+            {readyState === 'loading' && <ChartLoading height={300} />}
+            {readyState === 'done' && (
+              <BiaxialLineChart
+                data={getChartData(
+                  transactionsCurrentPeriod,
+                  startDate,
+                  endDate,
+                )}
+                height={300}
+              />
+            )}
+            {readyState === 'error' && <ChartError height={300} />}
           </div>
         </div>
       </div>

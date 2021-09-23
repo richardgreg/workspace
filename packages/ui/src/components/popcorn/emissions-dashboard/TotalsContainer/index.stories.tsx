@@ -47,6 +47,8 @@ export default {
   ],
 } as Meta;
 
-const Template: Story = (args) => <TotalsContainer {...args} />;
+const Template: Story = (args) => (
+  <TotalsContainer emissionSummaryStats={emissionSummaryStats} {...args} />
+);
 export const Increase = Template.bind({});
 Increase.args = { emissionSummaryStats: emissionSummaryStats };

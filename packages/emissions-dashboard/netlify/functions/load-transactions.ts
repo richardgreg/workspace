@@ -1,7 +1,7 @@
 import { MongoClient } from 'mongodb';
 require('dotenv').config();
 
-exports.handler = async (event, context) => {
+export const handler = async (event, context) => {
   try {
     const uri = process.env.DB_URI;
     const client = new MongoClient(uri);

@@ -1,9 +1,13 @@
 import { CloudIcon, TrendingUpIcon } from '@heroicons/react/outline';
 import { Meta, Story } from '@storybook/react/types-6-0';
 import React from 'react';
+import * as transactions from '../../../../fixtures/transactions.json';
+import {
+  Contract,
+  Transaction,
+} from '../../../../interfaces/emissions-dashboard';
 import { EmissionSummaryStats } from '../../../../interfaces/index';
 import { getDummyEmissionData } from '../dummyEmissionsData';
-import { Contract } from '../interfaces';
 import { ContractContainer } from './index';
 
 const statCardData: EmissionSummaryStats[] = [
@@ -42,7 +46,16 @@ export default {
   ],
 } as Meta;
 
-const Template: Story = (args) => <ContractContainer {...args} />;
+const Template: Story = (args) => (
+  <ContractContainer
+    transactionsCurrentPeriod={transactions as unknown as Transaction[]}
+    transactionsPreviousPeriod={transactions as unknown as Transaction[]}
+    startDate={undefined}
+    endDate={undefined}
+    contract={undefined}
+    {...args}
+  />
+);
 export const Primary = Template.bind({});
 Primary.args = {
   statCardData,
