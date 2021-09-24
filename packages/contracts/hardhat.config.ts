@@ -13,6 +13,7 @@ import SetTokenManager from "./lib/SetToken/SetTokenManager";
 import deploy from "./scripts/deployWithValues";
 import deployTestnet from "./scripts/deployWithValuesTestnet";
 import finalizeElection from "./scripts/finalizeElection";
+import simulateSlippage from "./scripts/simulateSlippage";
 
 task("accounts", "Prints the list of accounts", async (args, hre) => {
   const accounts = await hre.ethers.getSigners();
@@ -195,6 +196,12 @@ task("hysi:deploy", "deploys set token")
     );
     await manager.createSet({ args });
   });
+
+task("simulate:slippage", "simulates hysi batch slippage").setAction(
+  async (args, hre) => {
+    await simulateSlippage(hre.ethers, hre.network);
+  }
+);
 
 module.exports = {
   solidity: {

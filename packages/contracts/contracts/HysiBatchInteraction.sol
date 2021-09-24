@@ -688,7 +688,7 @@ contract HysiBatchInteraction is Owned, KeeperIncentive {
     IERC20 lpToken_,
     CurveMetapool curveMetapool_
   ) internal returns (uint256) {
-    lpToken_.safeIncreaseAllowance(address(curveMetapool_), amount_);
+    lpToken_.approve(address(curveMetapool_), amount_);
 
     //Takes lp Token and sends 3CRV to this contract
     //The second variable is the index for the token we want to receive (0 = exotic stablecoin, 1 = 3CRV)
