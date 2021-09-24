@@ -1,6 +1,11 @@
 import { Meta, Story } from '@storybook/react/types-6-0';
 import { getDummyEmissionData } from '../../dummyEmissionsData';
-import { BiaxialLineChart, ChartError, ChartLoading } from './index';
+import {
+  BiaxialLineChart,
+  BiaxialLineChartProps,
+  ChartError,
+  ChartLoading,
+} from './index';
 
 export default {
   title: 'Emissions Dashboard / Components / Charts / BiaxialLineChart',
@@ -14,9 +19,15 @@ export default {
   ],
 } as Meta;
 
-const ChartTemplate: Story = (args) => <BiaxialLineChart {...args} />;
-const LoadingTemplate: Story = (args) => <ChartLoading {...args} />;
-const ErrorTemplate: Story = (args) => <ChartError {...args} />;
+const ChartTemplate: Story<BiaxialLineChartProps> = (args) => (
+  <BiaxialLineChart {...args} />
+);
+const LoadingTemplate: Story<Partial<BiaxialLineChartProps>> = (args) => (
+  <ChartLoading {...args} />
+);
+const ErrorTemplate: Story<Partial<BiaxialLineChartProps>> = (args) => (
+  <ChartError {...args} />
+);
 
 export const WithData = ChartTemplate.bind({});
 WithData.args = {
