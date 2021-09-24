@@ -35,6 +35,10 @@ export default function DashboardApp(props) {
           href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500&display=swap"
           rel="stylesheet"
         ></link>
+        <link
+          href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css"
+          rel="stylesheet"
+        />
       </Head>
       <Web3ReactProvider getLibrary={getLibrary}>
         <StateProvider>

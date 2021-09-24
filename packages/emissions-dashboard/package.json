@@ -5,6 +5,7 @@
     "dev": "next",
     "netlify:dev": "netlify dev",
     "build": "yarn next build",
+    "start": "yarn next start",
     "export": "yarn next export",
     "jest": "jest",
     "prettier": "prettier",
