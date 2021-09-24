@@ -181,7 +181,7 @@ const IndexPage = (): JSX.Element => {
   };
 
   return (
-    <div>
+    <div className="bg-gray-50">
       <NavBar
         title="Smart Contract Emissions Dashboard"
         logo="/images/popcorn-logo.png"
