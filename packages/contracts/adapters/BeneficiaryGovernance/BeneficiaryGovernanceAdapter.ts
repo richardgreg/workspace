@@ -62,8 +62,13 @@ export interface Proposal {
 export class BeneficiaryGovernanceAdapter {
   constructor(private contract: Contract, private IpfsClient: IIpfsClient) {}
 
-  public async getProposal(id: number): Promise<Proposal> {
-    const proposal = await this.contract.proposals(id);
+  public async getProposal(
+    id: number,
+    proposalType: ProposalType
+  ): Promise<Proposal> {
+    const proposalTypeName =
+      proposalType === ProposalType.Nomination ? "nominations" : "takedowns";
+    const proposal = await this.contract[proposalTypeName](id);
     return {
       application: await this.IpfsClient.get(proposal.applicationCid),
       id: id.toString(),
@@ -88,7 +93,6 @@ export class BeneficiaryGovernanceAdapter {
     const proposalCount = await this.contract.getNumberOfProposals(
       proposalType
     );
-
     const proposalTypeName =
       proposalType === ProposalType.Nomination ? "nominations" : "takedowns";
 
@@ -97,10 +101,9 @@ export class BeneficiaryGovernanceAdapter {
         return this.contract[proposalTypeName](i);
       })
     );
-
     return Promise.all(
       proposalIds.map(async (id) => {
-        return this.getProposal(Number(id));
+        return this.getProposal(Number(id), proposalType);
       })
     );
   }

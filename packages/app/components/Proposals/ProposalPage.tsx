@@ -3,6 +3,7 @@ import {
   BeneficiaryGovernanceAdapter,
   Proposal,
   ProposalStatus,
+  ProposalType,
 } from '@popcorn/contracts/adapters';
 import { IpfsClient } from '@popcorn/utils';
 import { useWeb3React } from '@web3-react/core';
@@ -23,7 +24,11 @@ const getTitle = (proposal: Proposal): string => {
   }`;
 };
 
-const ProposalPage: React.FC = () => {
+export interface ProposalPageProps {
+  proposalType: ProposalType;
+}
+
+const ProposalPage: React.FC<ProposalPageProps> = ({ proposalType }) => {
   const { contracts } = useContext(ContractsContext);
   const { account } = useWeb3React<Web3Provider>();
   const router = useRouter();
@@ -42,9 +47,8 @@ const ProposalPage: React.FC = () => {
         contracts.beneficiaryGovernance,
         IpfsClient,
       )
-        .getProposal(Number(proposalId))
+        .getProposal(Number(proposalId), proposalType)
         .then((res) => {
-          console.log(res);
           setProposal(res);
         });
     }
