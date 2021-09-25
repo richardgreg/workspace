@@ -1,9 +1,9 @@
-import { BigNumber } from "@ethersproject/bignumber";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { expect } from "chai";
+import { BigNumber } from "ethers";
 import { parseEther } from "ethers/lib/utils";
-import { ethers, waffle } from "hardhat";
-import { StakingDefendedHelper, MockERC20, Staking } from "../typechain";
+import { ethers } from "hardhat";
+import { MockERC20, Staking, StakingDefendedHelper } from "../typechain";
 import { RewardsEscrow } from "../typechain/RewardsEscrow";
 
 let stakingFund: BigNumber;
@@ -32,9 +32,9 @@ describe("Staking", function () {
     await mockPop.mint(nonOwner.address, parseEther("10"));
 
     rewardsEscrow = (await (
-      await (await ethers.getContractFactory("RewardsEscrow")).deploy(
-        mockPop.address
-      )
+      await (
+        await ethers.getContractFactory("RewardsEscrow")
+      ).deploy(mockPop.address)
     ).deployed()) as RewardsEscrow;
 
     const stakingFactory = await ethers.getContractFactory("Staking");

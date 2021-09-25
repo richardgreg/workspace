@@ -1,16 +1,18 @@
-import { BigNumber } from "@ethersproject/bignumber";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
+import BasicIssuanceModuleAbi from "@setprotocol/set-protocol-v2/artifacts/contracts/protocol/modules/BasicIssuanceModule.sol/BasicIssuanceModule.json";
+import SetTokenAbi from "@setprotocol/set-protocol-v2/artifacts/contracts/protocol/SetToken.sol/SetToken.json";
+import {
+  BasicIssuanceModule,
+  SetToken,
+} from "@setprotocol/set-protocol-v2/dist/typechain";
 import { expect } from "chai";
+import { BigNumber } from "ethers";
 import { parseEther } from "ethers/lib/utils";
 import { ethers, network, waffle } from "hardhat";
 import HysiBatchInteractionAdapter, {
   ComponentMap,
 } from "../../adapters/HYSIBatchInteraction/HYSIBatchInteractionAdapter";
 import CurveMetapoolAbi from "../../lib/Curve/CurveMetapoolAbi.json";
-import BasicIssuanceModuleAbi from "../../lib/SetToken/vendor/set-protocol/artifacts/BasicIssuanceModule.json";
-import SetTokenAbi from "../../lib/SetToken/vendor/set-protocol/artifacts/SetToken.json";
-import { BasicIssuanceModule } from "../../lib/SetToken/vendor/set-protocol/types/BasicIssuanceModule";
-import { SetToken } from "../../lib/SetToken/vendor/set-protocol/types/SetToken";
 import {
   Curve3Pool,
   CurveMetapool,

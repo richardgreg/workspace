@@ -1,7 +1,7 @@
-import { BigNumber } from "@ethersproject/bignumber";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import bluebird from "bluebird";
 import { expect } from "chai";
+import { BigNumber } from "ethers";
 import { parseEther } from "ethers/lib/utils";
 import { ethers, waffle } from "hardhat";
 import HysiBatchInteractionAdapter from "../adapters/HYSIBatchInteraction/HYSIBatchInteractionAdapter";
@@ -267,7 +267,7 @@ describe("HysiBatchInteraction", function () {
   });
   context("batch generation", () => {
     describe("mint batch generation", () => {
-      it("should set batch struct properties when the contract is deployed", async () => {
+      it("should set a non-zero batchId when initialized", async () => {
         const batchId0 = await contracts.hysiBatchInteraction.batchIds(0);
         const adapter = new HysiBatchInteractionAdapter(
           contracts.hysiBatchInteraction
@@ -278,19 +278,26 @@ describe("HysiBatchInteraction", function () {
             /0x.+[^0x0000000000000000000000000000000000000000000000000000000000000000]/
           )?.length
         ).equal(1);
+      });
+      it("should set batch struct properties when the contract is deployed", async () => {
+        const batchId0 = await contracts.hysiBatchInteraction.batchIds(0);
+        const adapter = new HysiBatchInteractionAdapter(
+          contracts.hysiBatchInteraction
+        );
+        const batch = await adapter.getBatch(batchId0);
         expect(batch).to.deep.contain({
           batchType: BatchType.Mint,
           claimable: false,
-          unclaimedShares: BigNumber.from(0),
           claimableTokenAddress: contracts.mockSetToken.address,
-          claimableTokenBalance: BigNumber.from(0),
           suppliedTokenAddress: contracts.mock3Crv.address,
-          suppliedTokenBalance: BigNumber.from(0),
         });
+        expect(batch.claimableTokenBalance).to.equal(BigNumber.from(0));
+        expect(batch.unclaimedShares).to.equal(BigNumber.from(0));
+        expect(batch.suppliedTokenBalance).to.equal(BigNumber.from(0));
       });
     });
     describe("redeem batch generation", () => {
-      it("should set batch struct properties when the contract is deployed", async () => {
+      it("should set a non-zero batchId when initialized", async () => {
         const batchId1 = await contracts.hysiBatchInteraction.batchIds(1);
         const adapter = new HysiBatchInteractionAdapter(
           contracts.hysiBatchInteraction
@@ -301,15 +308,23 @@ describe("HysiBatchInteraction", function () {
             /0x.+[^0x0000000000000000000000000000000000000000000000000000000000000000]/
           )?.length
         ).equal(1);
-        expect(await adapter.getBatch(batchId1)).to.deep.contain({
+      });
+      it("should set batch struct properties when the contract is deployed", async () => {
+        const batchId1 = await contracts.hysiBatchInteraction.batchIds(1);
+        const adapter = new HysiBatchInteractionAdapter(
+          contracts.hysiBatchInteraction
+        );
+        const batch = await adapter.getBatch(batchId1);
+
+        expect(batch).to.deep.contain({
           batchType: BatchType.Redeem,
           claimable: false,
-          unclaimedShares: BigNumber.from(0),
           claimableTokenAddress: contracts.mock3Crv.address,
-          claimableTokenBalance: BigNumber.from(0),
           suppliedTokenAddress: contracts.mockSetToken.address,
-          suppliedTokenBalance: BigNumber.from(0),
         });
+        expect(batch.claimableTokenBalance).to.equal(BigNumber.from(0));
+        expect(batch.unclaimedShares).to.equal(BigNumber.from(0));
+        expect(batch.suppliedTokenBalance).to.equal(BigNumber.from(0));
       });
     });
   });

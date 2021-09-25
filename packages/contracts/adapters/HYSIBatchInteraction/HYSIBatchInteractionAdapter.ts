@@ -1,8 +1,10 @@
-import { BigNumber } from "@ethersproject/bignumber";
 import { parseEther } from "@ethersproject/units";
+import {
+  BasicIssuanceModule,
+  SetToken,
+} from "@setprotocol/set-protocol-v2/dist/typechain";
+import { BigNumber } from "ethers";
 import { CurveMetapool, MockYearnV2Vault } from "packages/contracts/typechain";
-import { BasicIssuanceModule } from "../../lib/SetToken/vendor/set-protocol/types/BasicIssuanceModule";
-import { SetToken } from "../../lib/SetToken/vendor/set-protocol/types/SetToken";
 import { HysiBatchInteraction } from "../../typechain/HysiBatchInteraction";
 export enum BatchType {
   Mint,
@@ -83,7 +85,7 @@ export class HysiBatchInteractionAdapter {
     const componentAddresses = components[0];
     const componentAmounts = components[1];
 
-    const componentVirtualPrices = await Promise.all(
+    const componentVirtualPrices = (await Promise.all(
       componentAddresses.map(async (component) => {
         const metapool = componentMap[component.toLowerCase()]
           .metaPool as CurveMetapool;
@@ -93,7 +95,7 @@ export class HysiBatchInteractionAdapter {
         const metapoolPrice = await metapool.get_virtual_price();
         return yPoolPricePerShare.mul(metapoolPrice).div(parseEther("1"));
       })
-    );
+    )) as BigNumber[];
 
     const componentValuesInUSD = componentVirtualPrices.reduce(
       (sum, componentPrice, i) => {
