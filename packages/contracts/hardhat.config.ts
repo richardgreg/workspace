@@ -1,12 +1,18 @@
 import "@float-capital/solidity-coverage";
 import "@nomiclabs/hardhat-waffle";
+import { addGasToAbiMethods } from "@popcorn/utils/src/addGasToAbiMethods";
 import "@popcorn/utils/src/envLoader";
+import { setupNativeSolc } from "@popcorn/utils/src/setupNativeSolc";
 import "@typechain/hardhat";
 import { utils } from "ethers";
 import { parseEther } from "ethers/lib/utils";
 import "hardhat-contract-sizer";
 import "hardhat-gas-reporter";
-import { task } from "hardhat/config";
+import {
+  TASK_COMPILE_SOLIDITY_COMPILE,
+  TASK_COMPILE_SOLIDITY_GET_ARTIFACT_FROM_COMPILATION_OUTPUT,
+} from "hardhat/builtin-tasks/task-names";
+import { internalTask, subtask, task } from "hardhat/config";
 import { GrantElectionAdapter } from "./adapters/GrantElection/GrantElectionAdapter";
 import { DefaultConfiguration } from "./lib/SetToken/Configuration";
 import SetTokenManager from "./lib/SetToken/SetTokenManager";
@@ -202,6 +208,25 @@ task("simulate:slippage", "simulates hysi batch slippage").setAction(
     await simulateSlippage(hre.ethers, hre.network);
   }
 );
+
+// Injects network block limit (minus 1 million) in the abi so
+// ethers uses it instead of running gas estimation.
+subtask(TASK_COMPILE_SOLIDITY_GET_ARTIFACT_FROM_COMPILATION_OUTPUT).setAction(
+  async (_, { network }, runSuper) => {
+    const artifact = await runSuper();
+
+    // These changes should be skipped when publishing to npm.
+    // They override ethers' gas estimation
+    artifact.abi = addGasToAbiMethods(network.config, artifact.abi);
+
+    return artifact;
+  }
+);
+
+// Use native solc if available locally at config specified version
+internalTask(TASK_COMPILE_SOLIDITY_COMPILE).setAction(setupNativeSolc);
+
+export {};
 
 module.exports = {
   solidity: {
