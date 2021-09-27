@@ -1,0 +1,14 @@
+.recharts-tooltip-cursor {
+  stroke: red;
+  stroke-dasharray: 5;
+}
+
+.recharts-active-dot {
+  stroke: white;
+  stroke-width: 3;
+  fill: red;
+}
+
+.recharts-active-dot .recharts-dot {
+  fill: red;
+}

@@ -44,6 +44,7 @@ export const Complete = ChartTemplate.bind({});
 Complete.args = {
   dataSet: 'ex1',
   height: 200,
+  topPadding: 10,
 };
 
 Complete.argTypes = {
