@@ -43,13 +43,40 @@ export default function Register(): JSX.Element {
 
         <div className="mt-8 pb-12 lg:mt-8 lg:pb-20">
           <div className="w-11/12 mx-auto rounded-lg shadow-xl bg-white">
-            <div className="rounded-t-lg pt-12 pb-10 h-96">
-              <div className="text-lg text-center text-gray-800 mt-4">
+            <div className="rounded-t-lg pt-10 pb-10 h-96">
+              <div>
+                <dl className="px-20 grid grid-cols-1 gap-5 sm:grid-cols-2">
+                  <div
+                    key={'claimable'}
+                    className="px-4 px-4 py-5 bg-white shadow rounded-lg overflow-hidden sm:p-6"
+                  >
+                    <dt className="text-sm font-medium text-gray-500 truncate">
+                      Total Claimable
+                    </dt>
+                    <dd className="mt-1 text-3xl font-semibold text-gray-900">
+                      {340}
+                    </dd>
+                  </div>
+                  <div
+                    key={'deposit'}
+                    className="px-4 py-5 bg-white shadow rounded-lg overflow-hidden sm:p-6"
+                  >
+                    <dt className="text-sm font-medium text-gray-500 truncate">
+                      Total Deposits
+                    </dt>
+                    <dd className="mt-1 text-3xl font-semibold text-gray-900">
+                      100
+                    </dd>
+                  </div>
+                </dl>
+              </div>
+
+              {/* <div className="text-lg text-center text-gray-800 mt-4">
                 Claim
               </div>
               <div className="text-lg text-center text-gray-800 mt-4">
                 Stake
-              </div>
+              </div> */}
               {/* <h3 className="text-center text-3xl font-semibold text-gray-900 sm:-mx-6">
                 Swap Accrued Fees
               </h3>
