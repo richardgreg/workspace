@@ -54,7 +54,7 @@ export default async function simulateSlippage(
   const INPUT_AMOUNT = parseEther("1000000");
   let mintBlockNumber = 12780990;
 
-  const RESET_BLOCK_NUMBER = 12780990;
+  const RESET_BLOCK_NUMBER = 12780977;
   const END_BLOCK_NUMBER = 13307297;
   await network.provider.request({
     method: "hardhat_reset",
@@ -111,7 +111,8 @@ export default async function simulateSlippage(
     const mintBatchId =
       await contracts.hysiBatchInteraction.currentMintBatchId();
     await contracts.hysiBatchInteraction.connect(signer).batchMint(0);
-    mintBlockNumber = await (await ethers.provider.getBlock("latest")).number;
+    const mintingBlock = await ethers.provider.getBlock("latest");
+    mintBlockNumber = mintingBlock.number;
 
     const hysiBalance = await (
       await contracts.hysiBatchInteraction.batches(mintBatchId)
@@ -128,12 +129,16 @@ export default async function simulateSlippage(
       ) - 1;
     fs.appendFileSync(
       "slippage.csv",
-      `\r\n${mintBlockNumber},${INPUT_AMOUNT.toString()},${inputAmountInUSD.toString()},${hysiBalance.toString()},${hysiAmountInUSD.toString()},${slippage},${
+      `\r\n${mintBlockNumber},${
+        mintingBlock.timestamp
+      },${INPUT_AMOUNT.toString()},${inputAmountInUSD.toString()},${hysiBalance.toString()},${hysiAmountInUSD.toString()},${slippage},${
         slippage <= MAX_SLIPPAGE
       }`
     );
     console.log(
-      `At block: ${mintBlockNumber}, inputAmount ${INPUT_AMOUNT.toString()} 3CRV => ${inputAmountInUSD.toString()} USD, outputAmount: ${hysiBalance.toString()} => ${hysiAmountInUSD.toString()} USD, slippage: ${slippage} is accepable ${
+      `At block: ${mintBlockNumber} - ${
+        mintingBlock.timestamp
+      }, inputAmount ${INPUT_AMOUNT.toString()} 3CRV => ${inputAmountInUSD.toString()} USD, outputAmount: ${hysiBalance.toString()} => ${hysiAmountInUSD.toString()} USD, slippage: ${slippage} is accepable ${
         slippage <= MAX_SLIPPAGE
       }`
     );

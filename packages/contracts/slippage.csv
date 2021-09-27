@@ -1,1 +1,1 @@
-blockNumber,inputAmount,inputInUSD,outputAmount,outputInUSD,slippage,slippageIsAcceptable
+blockNumber,timestamp, inputAmount,inputInUSD,outputAmount,outputInUSD,slippage,slippageIsAcceptable
