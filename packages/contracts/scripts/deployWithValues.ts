@@ -36,6 +36,7 @@ interface Contracts {
   beneficiaryGovernance: Contract;
   region: Contract;
   rewardsEscrow: Contract;
+  participationReward: Contract;
 }
 
 enum Vote {
@@ -176,6 +177,12 @@ export default async function deploy(ethers): Promise<void> {
       )
     ).deployed();
 
+    const participationReward = await (
+      await (
+        await ethers.getContractFactory("ParticipationReward")
+      ).deploy(mockPop.address, accounts[0].address)
+    ).deployed();
+
     const beneficiaryGovernance = await (
       await (
         await ethers.getContractFactory("BeneficiaryGovernance")
@@ -184,6 +191,7 @@ export default async function deploy(ethers): Promise<void> {
         beneficiaryRegistry.address,
         mockPop.address,
         region.address,
+        participationReward.address,
         accounts[0].address
       )
     ).deployed();
@@ -197,6 +205,7 @@ export default async function deploy(ethers): Promise<void> {
         randomNumberConsumer.address,
         mockPop.address,
         region.address,
+        participationReward.address,
         accounts[0].address
       )
     ).deployed();
@@ -216,7 +225,24 @@ export default async function deploy(ethers): Promise<void> {
       uniswapPair,
       beneficiaryGovernance,
       region,
+      participationReward,
     };
+  };
+
+  const addingControllerContracts = async (): Promise<void> => {
+    console.log("adding controller contracts to ParticipationReward ...");
+    await contracts.participationReward
+      .connect(accounts[0])
+      .addControllerContract(
+        "BeneficiaryGovernance",
+        contracts.beneficiaryGovernance.address
+      );
+    await contracts.participationReward
+      .connect(accounts[0])
+      .addControllerContract(
+        "GrantElections",
+        contracts.grantElections.address
+      );
   };
 
   const addBeneficiariesToRegistry = async (): Promise<void> => {
@@ -920,6 +946,7 @@ ADDR_REWARDS_ESCROW=${contracts.rewardsEscrow.address}
   await setSigners();
   await giveBeneficiariesETH();
   await deployContracts();
+  await addingControllerContracts();
   await addBeneficiariesToRegistry();
   await mintPOP();
   await approveForStaking();
