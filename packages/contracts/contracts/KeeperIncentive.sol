@@ -69,8 +69,7 @@ contract KeeperIncentive is Governed {
     }
     if (incentive.enabled && incentive.reward <= incentiveBudget) {
       incentiveBudget = incentiveBudget.sub(incentive.reward);
-      POP.approve(address(this), incentive.reward);
-      POP.safeTransferFrom(address(this), msg.sender, incentive.reward);
+      POP.safeTransfer(keeper, incentive.reward);
     }
   }
 

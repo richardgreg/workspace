@@ -37,6 +37,7 @@ interface Contracts {
   region: Contract;
   rewardsEscrow: Contract;
   participationReward: Contract;
+  keeperIncentive: Contract;
 }
 
 enum Vote {
@@ -129,6 +130,12 @@ export default async function deploy(ethers): Promise<void> {
       ).deploy(mockPop.address, rewardsEscrow.address)
     ).deployed();
 
+    const keeperIncentive = await (
+      await (
+        await ethers.getContractFactory("KeeperIncentive")
+      ).deploy(mockPop.address, accounts[0].address)
+    ).deployed();
+
     const uniswapFactory = await deployContract(
       accounts[0],
       UniswapV2FactoryJSON,
@@ -161,6 +168,7 @@ export default async function deploy(ethers): Promise<void> {
         treasuryFund.address,
         insuranceFund.address,
         beneficiaryVaults.address,
+        keeperIncentive.address,
         uniswapRouter.address
       )
     ).deployed();
@@ -226,7 +234,24 @@ export default async function deploy(ethers): Promise<void> {
       beneficiaryGovernance,
       region,
       participationReward,
+      keeperIncentive,
     };
+  };
+
+  const prepareKeeperIncentives = async (): Promise<void> => {
+    console.log("prepare keeper incentives...");
+    await contracts.keeperIncentive
+      .connect(accounts[0])
+      .addControllerContract(
+        utils.formatBytes32String("RewardsManager"),
+        contracts.rewardsManager.address
+      );
+    await contracts.keeperIncentive
+      .connect(accounts[0])
+      .approveAccount(
+        utils.formatBytes32String("RewardsManager"),
+        accounts[0].address
+      );
   };
 
   const addingControllerContracts = async (): Promise<void> => {
@@ -234,13 +259,13 @@ export default async function deploy(ethers): Promise<void> {
     await contracts.participationReward
       .connect(accounts[0])
       .addControllerContract(
-        "BeneficiaryGovernance",
+        utils.formatBytes32String("BeneficiaryGovernance"),
         contracts.beneficiaryGovernance.address
       );
     await contracts.participationReward
       .connect(accounts[0])
       .addControllerContract(
-        "GrantElections",
+        utils.formatBytes32String("GrantElections"),
         contracts.grantElections.address
       );
   };
@@ -947,6 +972,7 @@ ADDR_REWARDS_ESCROW=${contracts.rewardsEscrow.address}
   await giveBeneficiariesETH();
   await deployContracts();
   await addingControllerContracts();
+  await prepareKeeperIncentives();
   await addBeneficiariesToRegistry();
   await mintPOP();
   await approveForStaking();
