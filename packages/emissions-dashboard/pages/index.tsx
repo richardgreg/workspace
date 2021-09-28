@@ -14,6 +14,7 @@ import { useRouter } from 'next/router';
 import fetch from 'node-fetch';
 import React, { useEffect, useState } from 'react';
 import web3 from 'web3';
+import { connectors } from '../context/Web3/connectors';
 
 const DEFAULT_CONTRACTS = [
   { name: 'POP', address: '0xd0cd466b34a24fcb2f87676278af2005ca8a78c4' },
@@ -41,7 +42,6 @@ const IndexPage = (): JSX.Element => {
   const [errorMessage, setErrorMessage] = useState<string>('');
   const context = useWeb3React<Web3Provider>();
   const { library, activate, active } = context;
-
   const [contracts, setContracts] = useState<Contract[]>(DEFAULT_CONTRACTS);
   const [previousPeriodStartDate, setPreviousPeriodStartDate] = useState<Date>(
     new Date(DateTime.now().minus({ months: 2 }).toISO()),
@@ -68,6 +68,12 @@ const IndexPage = (): JSX.Element => {
       router.replace(window.location.pathname);
     }
   }, [router.pathname]);
+
+  useEffect(() => {
+    if (!active) {
+      activate(connectors.Network);
+    }
+  }, [active]);
 
   const getTransactions = async () => {
     setReadyState('loading');

@@ -7,8 +7,11 @@ const workspace = join(__dirname, '..');
 module.exports = {
   target: 'serverless',
   env: {
+    CHAIN_ID: process.env.CHAIN_ID,
     ETHERSCAN_API_KEY: process.env.ETHERSCAN_API_KEY,
     PATCH_API_KEY: process.env.PATCH_API_KEY,
+    RPC_URL: process.env.RPC_URL,
+    PRIVATE_KEY: process.env.PRIVATE_KEY,
   },
   poweredByHeader: false,
   webpack: (config, options) => {
