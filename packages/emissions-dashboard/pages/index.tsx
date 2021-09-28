@@ -122,25 +122,17 @@ const IndexPage = (): JSX.Element => {
     setEndDate(endDate);
   };
 
-  const handleAddContract = (contractAddress): void => {
-    if (localStorage.getItem('contracts')) {
-      const existingContracts = JSON.parse(localStorage.getItem('contracts'));
-      existingContracts.push(contractAddress);
-      localStorage.setItem('contracts', JSON.stringify(existingContracts));
-    }
-  };
-
-  const addContract = async (contractAddress: string): Promise<void> => {
-    const enterMessage: string = 'Please enter a valid address';
+  const addContract = async (contract: Contract): Promise<void> => {
     let message: string;
-
-    if (!contractAddress) {
-      message = `No Contract Address was provided. ${enterMessage}`;
-    } else if (!ethers.utils.isAddress(contractAddress)) {
-      message = `The address is not a valid Ethereum address. ${enterMessage}`;
+    if (!contract.name) {
+      message = `The contract name cannot be blank`;
+    } else if (!contract.address) {
+      message = `No Contract Address was provided.`;
+    } else if (!ethers.utils.isAddress(contract.address)) {
+      message = `The address is not a valid Ethereum address.`;
     } else {
       const isContract = await fetch(
-        `.netlify/functions/is-contract?contractAddress=${contractAddress}`,
+        `.netlify/functions/is-contract?contractAddress=${contract.address}`,
       )
         .then((res) => {
           return res.json();
@@ -150,21 +142,24 @@ const IndexPage = (): JSX.Element => {
           setReadyState('error');
         });
       if (!isContract) {
-        message = `The address does not point to a valid Ethereum contract. ${enterMessage}`;
+        message = `The address does not point to a valid Ethereum contract.`;
       } else {
         if (localStorage.getItem('contracts')) {
           const existingContracts = JSON.parse(
             localStorage.getItem('contracts'),
           );
-          if (!existingContracts.includes(contractAddress)) {
-            existingContracts.push(contractAddress);
+          const listOfContractAddresses = existingContracts.map(
+            (contract) => contract.address,
+          );
+          if (!listOfContractAddresses.includes(contract.address)) {
+            existingContracts.push(contract);
             localStorage.setItem(
               'contracts',
               JSON.stringify(existingContracts),
             );
           }
         } else {
-          localStorage.setItem('contracts', JSON.stringify([contractAddress]));
+          localStorage.setItem('contracts', JSON.stringify([contract]));
         }
       }
     }
