@@ -51,10 +51,10 @@ export default async function simulateSlippage(
   network: Network
 ): Promise<void> {
   const MAX_SLIPPAGE = 0.005;
-  const INPUT_AMOUNT = parseEther("1000000");
-  let mintBlockNumber = 12850987;
+  const INPUT_AMOUNT = parseEther("100000000");
+  let mintBlockNumber = 12798739;
 
-  const RESET_BLOCK_NUMBER = 12850987; //mintBlockNumber - 5
+  const RESET_BLOCK_NUMBER = 12798739; //mintBlockNumber - 10
   const END_BLOCK_NUMBER = 13307297;
   await network.provider.request({
     method: "hardhat_reset",
@@ -93,14 +93,27 @@ export default async function simulateSlippage(
     },
   };
   await contracts.faucet.sendThreeCrv(100000, signer.address);
-  await contracts.threeCrv
-    .connect(signer)
-    .approve(contracts.hysiBatchInteraction.address, parseEther("1000000000"));
-  await contracts.hysi
-    .connect(signer)
-    .approve(contracts.hysiBatchInteraction.address, parseEther("1000000000"));
 
   while (mintBlockNumber < END_BLOCK_NUMBER) {
+    await contracts.threeCrv
+      .connect(signer)
+      .approve(contracts.hysiBatchInteraction.address, 0);
+    await contracts.hysi
+      .connect(signer)
+      .approve(contracts.hysiBatchInteraction.address, 0);
+    await contracts.threeCrv
+      .connect(signer)
+      .approve(
+        contracts.hysiBatchInteraction.address,
+        parseEther("1000000000")
+      );
+    await contracts.hysi
+      .connect(signer)
+      .approve(
+        contracts.hysiBatchInteraction.address,
+        parseEther("1000000000")
+      );
+
     const threeCrvPrice = await contracts.threePool.get_virtual_price();
     const inputAmountInUSD = INPUT_AMOUNT.mul(threeCrvPrice).div(
       parseEther("1")
