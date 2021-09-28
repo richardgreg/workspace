@@ -88,9 +88,13 @@ async function deployContracts(): Promise<Contracts> {
   ).deploy(mockBeneficiaryVaults.address);
   await region.deployed();
 
+  const aclRegistry = await (
+    await (await ethers.getContractFactory("ACLRegistry")).deploy()
+  ).deployed();
+
   const participationReward = await (
     await ethers.getContractFactory("ParticipationReward")
-  ).deploy(mockPop.address, owner.address);
+  ).deploy(mockPop.address, aclRegistry.address);
   await participationReward.deployed();
 
   const BeneficiaryGovernance = await ethers.getContractFactory(
@@ -103,9 +107,20 @@ async function deployContracts(): Promise<Contracts> {
       mockPop.address,
       region.address,
       participationReward.address,
-      owner.address
+      aclRegistry.address
     )
   ).deployed();
+
+  await aclRegistry
+    .connect(owner)
+    .grantRole(ethers.utils.id("DAO"), owner.address);
+
+  await aclRegistry
+    .connect(owner)
+    .grantRole(
+      ethers.utils.id("BeneficiaryGovernance"),
+      beneficiaryGovernance.address
+    );
 
   await mockPop
     .connect(owner)
@@ -768,10 +783,6 @@ describe("BeneficiaryGovernance", function () {
       ).to.be.revertedWith("Finalization not allowed");
     });
     it("should register the beneficiary after a successful BNP voting", async function () {
-      await contracts.beneficiaryRegistry.transferOwnership(
-        contracts.beneficiaryGovernance.address
-      );
-
       //three yes votes
       await contracts.mockStaking.mock.getVoiceCredits.returns(20);
       await contracts.beneficiaryGovernance
@@ -811,10 +822,6 @@ describe("BeneficiaryGovernance", function () {
       ).to.equal(true);
     });
     it("should remove beneficiary after a successful BTP voting", async function () {
-      await contracts.beneficiaryRegistry.transferOwnership(
-        contracts.beneficiaryGovernance.address
-      );
-      // register beneficiary:
       //three yes votes
       await contracts.mockStaking.mock.getVoiceCredits.returns(80);
       await contracts.beneficiaryGovernance
@@ -989,10 +996,6 @@ describe("BeneficiaryGovernance", function () {
       ).to.be.revertedWith("Proposal failed or is processing!");
     });
     it("should be able to claim bond after a proposal passed.", async function () {
-      await contracts.beneficiaryRegistry.transferOwnership(
-        contracts.beneficiaryGovernance.address
-      );
-
       //three yes votes
       await contracts.mockStaking.mock.getVoiceCredits.returns(20);
       await contracts.beneficiaryGovernance

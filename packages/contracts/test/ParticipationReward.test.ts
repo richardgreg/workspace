@@ -5,6 +5,7 @@ import { parseEther } from "ethers/lib/utils";
 import { ethers } from "hardhat";
 import ParticipationRewardsAdapter from "../../utils/src/Contracts/ParticipationReward/ParticipationRewardsAdapter";
 import {
+  ACLRegistry,
   MockERC20,
   ParticipationReward,
   ParticipationRewardHelper,
@@ -12,6 +13,7 @@ import {
 
 interface Contracts {
   mockPop: MockERC20;
+  aclRegistry: ACLRegistry;
   participationReward: ParticipationReward;
   participationRewardHelper: ParticipationRewardHelper;
 }
@@ -58,10 +60,14 @@ async function deployContracts(): Promise<Contracts> {
   ).deployed();
   await mockPop.mint(owner.address, parseEther("50"));
 
+  const aclRegistry = await (
+    await (await ethers.getContractFactory("ACLRegistry")).deploy()
+  ).deployed();
+
   const participationReward = await (
     await (
       await ethers.getContractFactory("ParticipationReward")
-    ).deploy(mockPop.address, governance.address)
+    ).deploy(mockPop.address, aclRegistry.address)
   ).deployed();
 
   const participationRewardHelper = await (
@@ -70,9 +76,14 @@ async function deployContracts(): Promise<Contracts> {
     ).deploy(participationReward.address)
   ).deployed();
 
+  await aclRegistry
+    .connect(owner)
+    .grantRole(ethers.utils.id("DAO"), governance.address);
+
   await mockPop
     .connect(owner)
     .approve(participationReward.address, parseEther("1000000"));
+
   await participationReward.connect(owner).contributeReward(parseEther("10"));
   await participationReward
     .connect(governance)
@@ -83,6 +94,7 @@ async function deployContracts(): Promise<Contracts> {
 
   return {
     mockPop,
+    aclRegistry,
     participationReward,
     participationRewardHelper,
   };

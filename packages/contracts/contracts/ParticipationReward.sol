@@ -4,9 +4,9 @@ import "@openzeppelin/contracts/math/Math.sol";
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
-import "./Governed.sol";
+import "./Interfaces/IACLRegistry.sol";
 
-contract ParticipationReward is Governed, ReentrancyGuard {
+contract ParticipationReward is ReentrancyGuard {
   using SafeMath for uint256;
   using SafeERC20 for IERC20;
 
@@ -26,6 +26,8 @@ contract ParticipationReward is Governed, ReentrancyGuard {
   }
 
   IERC20 public immutable POP;
+  IACLRegistry public aclRegistry;
+
   uint256 public rewardBalance;
   uint256 public totalVaultsBudget;
   mapping(bytes32 => uint256) public rewardBudgets;
@@ -48,8 +50,9 @@ contract ParticipationReward is Governed, ReentrancyGuard {
 
   /* ========== CONSTRUCTOR ========== */
 
-  constructor(IERC20 _pop, address _governance) Governed(_governance) {
+  constructor(IERC20 _pop, IACLRegistry _aclRegistry) {
     POP = _pop;
+    aclRegistry = _aclRegistry;
   }
 
   /* ========== VIEWS ========== */
@@ -285,10 +288,8 @@ contract ParticipationReward is Governed, ReentrancyGuard {
    * @dev When opening a vault this contract must have enough POP to fund the rewardBudgets of the new vault
    * @dev Every controller contract has their own rewardsBudget to set indivual rewards per controller contract
    */
-  function setRewardsBudget(bytes32 contractName_, uint256 amount)
-    external
-    onlyGovernance
-  {
+  function setRewardsBudget(bytes32 contractName_, uint256 amount) external {
+    require(aclRegistry.hasRole(keccak256("DAO"), msg.sender), "only for DAO");
     require(amount > 0, "must be larger 0");
     rewardBudgets[contractName_] = amount;
     emit RewardBudgetChanged(contractName_, amount);
@@ -302,8 +303,8 @@ contract ParticipationReward is Governed, ReentrancyGuard {
    */
   function addControllerContract(bytes32 contractName_, address contract_)
     external
-    onlyGovernance
   {
+    require(aclRegistry.hasRole(keccak256("DAO"), msg.sender), "only for DAO");
     controllerContracts[contractName_] = contract_;
     rewardsEnabled[contractName_] = true;
     emit ControllerContractAdded(contractName_, contract_);
@@ -314,7 +315,8 @@ contract ParticipationReward is Governed, ReentrancyGuard {
    * @param contractName_ the address of the controller contract
    * @dev all critical functions to init/open vaults and add shares to them can only be called by controller contracts
    */
-  function toggleRewards(bytes32 contractName_) external onlyGovernance {
+  function toggleRewards(bytes32 contractName_) external {
+    require(aclRegistry.hasRole(keccak256("DAO"), msg.sender), "only for DAO");
     bool prevState = rewardsEnabled[contractName_];
     rewardsEnabled[contractName_] = !prevState;
     emit RewardsToggled(

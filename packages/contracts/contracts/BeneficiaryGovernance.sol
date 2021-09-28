@@ -8,14 +8,15 @@ import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 import "./Interfaces/IRegion.sol";
 import "./Interfaces/IStaking.sol";
 import "./Interfaces/IBeneficiaryRegistry.sol";
+import "./Interfaces/IACLRegistry.sol";
 import "./ParticipationReward.sol";
-import "./Governed.sol";
+import "./ACLRegistry.sol";
 
 /**
  * @title BeneficiaryGovernance
  * @notice This contract is for submitting beneficiary nomination proposals and beneficiary takedown proposals
  */
-contract BeneficiaryGovernance is Governed {
+contract BeneficiaryGovernance {
   using SafeMath for uint256;
   using SafeERC20 for IERC20;
 
@@ -70,6 +71,7 @@ contract BeneficiaryGovernance is Governed {
   IERC20 public POP;
   IRegion internal region;
   ParticipationReward public participationReward;
+  IACLRegistry public aclRegistry;
 
   mapping(address => bool) pendingBeneficiaries;
   mapping(address => uint256) beneficiaryProposals;
@@ -104,13 +106,14 @@ contract BeneficiaryGovernance is Governed {
     IERC20 _pop,
     IRegion _region,
     ParticipationReward _participationReward,
-    address _governance
-  ) Governed(_governance) {
+    IACLRegistry _aclRegistry
+  ) {
     staking = _staking;
     beneficiaryRegistry = _beneficiaryRegistry;
     POP = _pop;
     region = _region;
     participationReward = _participationReward;
+    aclRegistry = _aclRegistry;
     _setDefaults();
   }
 
@@ -451,7 +454,8 @@ contract BeneficiaryGovernance is Governed {
     uint256 _votingPeriod,
     uint256 _vetoPeriod,
     uint256 _proposalBond
-  ) public onlyGovernance {
+  ) public {
+    require(aclRegistry.hasRole(keccak256("DAO"), msg.sender), "only for DAO");
     DefaultConfigurations.votingPeriod = _votingPeriod;
     DefaultConfigurations.vetoPeriod = _vetoPeriod;
     DefaultConfigurations.proposalBond = _proposalBond;

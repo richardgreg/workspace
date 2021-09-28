@@ -3,16 +3,10 @@
 pragma solidity >=0.7.0 <=0.8.3;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "./Interfaces/IRegion.sol";
 import "./Interfaces/IBeneficiaryRegistry.sol";
-import "./CouncilControlled.sol";
-import "./Governed.sol";
+import "./Interfaces/IACLRegistry.sol";
 
-contract BeneficiaryRegistry is
-  IBeneficiaryRegistry,
-  Ownable,
-  CouncilControlled
-{
+contract BeneficiaryRegistry is IBeneficiaryRegistry {
   struct Beneficiary {
     bytes applicationCid; // ipfs address of application
     bytes2 region;
@@ -20,6 +14,8 @@ contract BeneficiaryRegistry is
   }
 
   /* ========== STATE VARIABLES ========== */
+
+  IACLRegistry private aclRegistry;
 
   mapping(address => Beneficiary) private beneficiariesMap;
   address[] private beneficiariesList;
@@ -34,10 +30,9 @@ contract BeneficiaryRegistry is
 
   /* ========== CONSTRUCTOR ========== */
 
-  constructor(IRegion _region)
-    Ownable()
-    CouncilControlled(msg.sender, _region)
-  {}
+  constructor(IACLRegistry _aclRegistry) {
+    aclRegistry = _aclRegistry;
+  }
 
   /* ========== VIEW FUNCTIONS ========== */
 
@@ -76,7 +71,11 @@ contract BeneficiaryRegistry is
     address account,
     bytes2 region,
     bytes calldata applicationCid
-  ) external override onlyOwner {
+  ) external override {
+    require(
+      aclRegistry.hasRole(keccak256("BeneficiaryGovernance"), msg.sender),
+      "only for BeneficiaryGovernance"
+    );
     require(account == address(account), "invalid address");
     require(applicationCid.length > 0, "!application");
     require(!beneficiaryExists(account), "exists");
@@ -96,9 +95,9 @@ contract BeneficiaryRegistry is
    */
   function revokeBeneficiary(address _address) external override {
     require(
-      msg.sender == owner() ||
-        msg.sender == getCouncil(beneficiariesMap[_address].region),
-      "Only the owner or council may perform this action"
+      aclRegistry.hasRole(keccak256("BeneficiaryGovernance"), msg.sender) ||
+        aclRegistry.hasRole(keccak256("Council"), msg.sender),
+      "Only the BeneficiaryGovernance or council may perform this action"
     );
     require(beneficiaryExists(_address), "exists");
     delete beneficiariesList[beneficiariesMap[_address].listPointer];
