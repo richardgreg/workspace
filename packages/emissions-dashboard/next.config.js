@@ -12,6 +12,9 @@ module.exports = {
     PATCH_API_KEY: process.env.PATCH_API_KEY,
     RPC_URL: process.env.RPC_URL,
     PRIVATE_KEY: process.env.PRIVATE_KEY,
+    INFURA_MAINNET_ENDPOINT: process.env.INFURA_MAINNET_ENDPOINT,
+    INFURA_PROJECT_SECRET: process.env.INFURA_PROJECT_SECRET,
+    INFURA_PROJECT_ID: process.env.INFURA_PROJECT_ID,
   },
   poweredByHeader: false,
   webpack: (config, options) => {

@@ -1,4 +1,3 @@
-import { Web3Provider } from '@ethersproject/providers';
 import { ContractContainer } from '@popcorn/ui/components/popcorn/emissions-dashboard/ContractContainer/index';
 import { DateRangePicker } from '@popcorn/ui/components/popcorn/emissions-dashboard/DateRangePicker';
 import { NavBar } from '@popcorn/ui/components/popcorn/emissions-dashboard/NavBar';
@@ -8,13 +7,11 @@ import {
   Contract,
   Transaction,
 } from '@popcorn/ui/interfaces/emissions-dashboard';
-import { useWeb3React } from '@web3-react/core';
+import { ethers } from 'ethers';
 import { DateTime } from 'luxon';
 import { useRouter } from 'next/router';
 import fetch from 'node-fetch';
 import React, { useEffect, useState } from 'react';
-import web3 from 'web3';
-import { connectors } from '../context/Web3/connectors';
 
 const DEFAULT_CONTRACTS = [
   { name: 'POP', address: '0xd0cd466b34a24fcb2f87676278af2005ca8a78c4' },
@@ -40,8 +37,6 @@ const IndexPage = (): JSX.Element => {
   const router = useRouter();
   const [open, setOpen] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
-  const context = useWeb3React<Web3Provider>();
-  const { library, activate, active } = context;
   const [contracts, setContracts] = useState<Contract[]>(DEFAULT_CONTRACTS);
   const [previousPeriodStartDate, setPreviousPeriodStartDate] = useState<Date>(
     new Date(DateTime.now().minus({ months: 2 }).toISO()),
@@ -68,12 +63,6 @@ const IndexPage = (): JSX.Element => {
       router.replace(window.location.pathname);
     }
   }, [router.pathname]);
-
-  useEffect(() => {
-    if (!active) {
-      activate(connectors.Network);
-    }
-  }, [active]);
 
   const getTransactions = async () => {
     setReadyState('loading');
@@ -147,12 +136,20 @@ const IndexPage = (): JSX.Element => {
 
     if (!contractAddress) {
       message = `No Contract Address was provided. ${enterMessage}`;
-    } else if (!web3.utils.isAddress(contractAddress)) {
+    } else if (!ethers.utils.isAddress(contractAddress)) {
       message = `The address is not a valid Ethereum address. ${enterMessage}`;
     } else {
-      const code = await library.getCode(contractAddress);
-      const isConnected = !(code === '0x0' || code === '0x');
-      if (!isConnected) {
+      const isContract = await fetch(
+        `.netlify/functions/is-contract?contractAddress=${contractAddress}`,
+      )
+        .then((res) => {
+          return res.json();
+        })
+        .catch((err) => {
+          console.log('error', err);
+          setReadyState('error');
+        });
+      if (!isContract) {
         message = `The address does not point to a valid Ethereum contract. ${enterMessage}`;
       } else {
         if (localStorage.getItem('contracts')) {
