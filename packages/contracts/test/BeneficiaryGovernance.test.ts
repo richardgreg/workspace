@@ -1,12 +1,14 @@
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { expect } from "chai";
 import { MockContract } from "ethereum-waffle";
+import { utils } from "ethers";
 import { parseEther } from "ethers/lib/utils";
 import { ethers, waffle } from "hardhat";
 import {
   BeneficiaryGovernance,
   BeneficiaryRegistry,
   MockERC20,
+  ParticipationReward,
   Region,
 } from "../typechain";
 
@@ -15,6 +17,7 @@ interface Contracts {
   mockStaking: MockContract;
   mockBeneficiaryRegistry: MockContract;
   region: Region;
+  participationReward: ParticipationReward;
   beneficiaryGovernance: BeneficiaryGovernance;
   beneficiaryRegistry?: BeneficiaryRegistry;
 }
@@ -85,6 +88,11 @@ async function deployContracts(): Promise<Contracts> {
   ).deploy(mockBeneficiaryVaults.address);
   await region.deployed();
 
+  const participationReward = await (
+    await ethers.getContractFactory("ParticipationReward")
+  ).deploy(mockPop.address, owner.address);
+  await participationReward.deployed();
+
   const BeneficiaryGovernance = await ethers.getContractFactory(
     "BeneficiaryGovernance"
   );
@@ -94,22 +102,29 @@ async function deployContracts(): Promise<Contracts> {
       mockBeneficiaryRegistry.address,
       mockPop.address,
       region.address,
+      participationReward.address,
       owner.address
     )
   ).deployed();
 
   await mockPop
     .connect(owner)
-    .approve(beneficiaryGovernance.address, parseEther("100000"));
-  await beneficiaryGovernance
+    .approve(participationReward.address, parseEther("100000"));
+  await participationReward.connect(owner).contributeReward(parseEther("2000"));
+
+  await participationReward
     .connect(owner)
-    .contributeReward(parseEther("2000"));
+    .addControllerContract(
+      utils.formatBytes32String("BeneficiaryGovernance"),
+      beneficiaryGovernance.address
+    );
 
   return {
     mockPop,
     mockStaking,
     mockBeneficiaryRegistry,
     region,
+    participationReward,
     beneficiaryGovernance,
   };
 }
@@ -185,7 +200,7 @@ describe("BeneficiaryGovernance", function () {
           ethers.utils.formatBytes32String("testCid")
         );
       expect(result)
-        .to.emit(contracts.beneficiaryGovernance, "VaultInitialized")
+        .to.emit(contracts.participationReward, "VaultInitialized")
         .withArgs(
           ethers.utils.solidityKeccak256(
             ["uint256", "uint256"],
@@ -304,9 +319,12 @@ describe("BeneficiaryGovernance", function () {
       );
     });
     it("should not initialize a vault when the needed budget is larger than rewardBudget", async function () {
-      await contracts.beneficiaryGovernance
+      await contracts.participationReward
         .connect(owner)
-        .setRewardsBudget(parseEther("3000"));
+        .setRewardsBudget(
+          utils.formatBytes32String("BeneficiaryGovernance"),
+          parseEther("3000")
+        );
       await contracts.mockBeneficiaryRegistry.mock.beneficiaryExists.returns(
         false
       );
@@ -327,7 +345,7 @@ describe("BeneficiaryGovernance", function () {
         "ProposalCreated"
       );
       expect(result).to.not.emit(
-        contracts.beneficiaryGovernance,
+        contracts.participationReward,
         "VaultInitialized"
       );
     });
@@ -362,9 +380,17 @@ describe("BeneficiaryGovernance", function () {
         contracts.mockBeneficiaryRegistry.address,
         contracts.mockPop.address,
         contracts.region.address,
+        contracts.participationReward.address,
         owner.address
       );
       await contracts.beneficiaryGovernance.deployed();
+
+      await contracts.participationReward
+        .connect(owner)
+        .addControllerContract(
+          utils.formatBytes32String("BeneficiaryGovernance"),
+          contracts.beneficiaryGovernance.address
+        );
       // create a BNP proposal
       await contracts.mockBeneficiaryRegistry.mock.beneficiaryExists.returns(
         false
@@ -620,9 +646,17 @@ describe("BeneficiaryGovernance", function () {
           contracts.beneficiaryRegistry.address,
           contracts.mockPop.address,
           contracts.region.address,
+          contracts.participationReward.address,
           governance.address
         )
       ).deployed();
+
+      await contracts.participationReward
+        .connect(owner)
+        .addControllerContract(
+          utils.formatBytes32String("BeneficiaryGovernance"),
+          contracts.beneficiaryGovernance.address
+        );
 
       // pass the Beneficiary governance contract address as the governance address for the beneficiary registry contract
 
@@ -893,9 +927,17 @@ describe("BeneficiaryGovernance", function () {
           contracts.beneficiaryRegistry.address,
           contracts.mockPop.address,
           contracts.region.address,
+          contracts.participationReward.address,
           governance.address
         )
       ).deployed();
+
+      await contracts.participationReward
+        .connect(owner)
+        .addControllerContract(
+          utils.formatBytes32String("BeneficiaryGovernance"),
+          contracts.beneficiaryGovernance.address
+        );
 
       // pass the Beneficiary governance contract address as the governance address for the beneficiary registry contract
 
