@@ -42,7 +42,7 @@ import "./Interfaces/IACLRegistry.sol";
  * grant and revoke this role. Extra precautions should be taken to secure
  * accounts that have been granted it.
  */
-abstract contract ACLRegistry is IACLRegistry {
+contract ACLRegistry is IACLRegistry {
   /* ========== STATE VARIABLES ========== */
 
   struct RoleData {
@@ -57,7 +57,7 @@ abstract contract ACLRegistry is IACLRegistry {
   /* ========== CONSTRUCTOR ========== */
 
   constructor() {
-    _roles[DEFAULT_ADMIN_ROLE].members(msg.sender);
+    _roles[DEFAULT_ADMIN_ROLE].members[msg.sender] = true;
   }
 
   /* ========== VIEW FUNCTIONS ========== */
@@ -98,7 +98,6 @@ abstract contract ACLRegistry is IACLRegistry {
    */
   function grantRole(bytes32 role, address account)
     public
-    virtual
     override
     onlyRole(getRoleAdmin(role))
   {
@@ -116,7 +115,6 @@ abstract contract ACLRegistry is IACLRegistry {
    */
   function revokeRole(bytes32 role, address account)
     public
-    virtual
     override
     onlyRole(getRoleAdmin(role))
   {
@@ -137,23 +135,23 @@ abstract contract ACLRegistry is IACLRegistry {
    *
    * - the caller must be `account`.
    */
-  function renounceRole(bytes32 role, address account) public virtual override {
+  function renounceRole(bytes32 role, address account) public override {
     require(
-      account == msg.sender || msg.sender == getRoleAdmin(role),
-      "AccessControl: you cant renounce a role"
+      account == msg.sender || hasRole(getRoleAdmin(role), msg.sender),
+      "you cant renounce this role"
     );
 
     _revokeRole(role, account);
   }
 
-  function setRoleAdmin(bytes32 role, address account) public virtual override {
+  function setRoleAdmin(bytes32 role, bytes32 adminRole) public override {
     require(
-      msg.sender == getRoleAdmin(role) ||
-        msg.sender == hasRole(DEFAULT_ADMIN_ROLE),
-      "AccessControl: can only renounce roles for self"
+      hasRole(getRoleAdmin(role), msg.sender) ||
+        hasRole(DEFAULT_ADMIN_ROLE, msg.sender),
+      "can only renounce roles for self"
     );
 
-    _setRoleAdmin(role, account);
+    _setRoleAdmin(role, adminRole);
   }
 
   /* ========== RESTRICTED FUNCTIONS ========== */
@@ -185,7 +183,7 @@ abstract contract ACLRegistry is IACLRegistry {
    * system imposed by {AccessControl}.
    * ====
    */
-  function _setupRole(bytes32 role, address account) internal virtual {
+  function _setupRole(bytes32 role, address account) internal {
     _grantRole(role, account);
   }
 
@@ -194,7 +192,7 @@ abstract contract ACLRegistry is IACLRegistry {
    *
    * Emits a {RoleAdminChanged} event.
    */
-  function _setRoleAdmin(bytes32 role, bytes32 adminRole) internal virtual {
+  function _setRoleAdmin(bytes32 role, bytes32 adminRole) internal {
     bytes32 previousAdminRole = getRoleAdmin(role);
     _roles[role].adminRole = adminRole;
     emit RoleAdminChanged(role, previousAdminRole, adminRole);

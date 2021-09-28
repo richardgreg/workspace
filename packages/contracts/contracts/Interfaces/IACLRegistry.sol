@@ -97,5 +97,5 @@ interface IACLRegistry {
    */
   function renounceRole(bytes32 role, address account) external;
 
-  function setRoleAdmin(bytes32 role, address account) external;
+  function setRoleAdmin(bytes32 role, bytes32 adminRole) external;
 }
