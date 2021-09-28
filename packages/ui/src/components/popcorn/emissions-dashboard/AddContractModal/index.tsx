@@ -1,5 +1,5 @@
 import { Dialog, Transition } from '@headlessui/react';
-import { Contract } from 'packages/ui/src/interfaces/emissions-dashboard';
+import { Contract } from '@popcorn/ui/src/interfaces/emissions-dashboard';
 import React, { Fragment, useRef, useState } from 'react';
 
 export interface ContractModalProps {
