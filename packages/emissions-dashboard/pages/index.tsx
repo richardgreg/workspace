@@ -124,12 +124,13 @@ const IndexPage = (): JSX.Element => {
 
   const addContract = async (contract: Contract): Promise<void> => {
     let message: string;
+    console.log({ contract });
     if (!contract.name) {
       message = `The contract name cannot be blank`;
     } else if (!contract.address) {
-      message = `No Contract Address was provided.`;
+      message = `The contract address cannot be blank`;
     } else if (!ethers.utils.isAddress(contract.address)) {
-      message = `The address is not a valid Ethereum address.`;
+      message = `The address must be a valid Ethereum address`;
     } else {
       const isContract = await fetch(
         `.netlify/functions/is-contract?contractAddress=${contract.address}`,
@@ -142,7 +143,7 @@ const IndexPage = (): JSX.Element => {
           setReadyState('error');
         });
       if (!isContract) {
-        message = `The address does not point to a valid Ethereum contract.`;
+        message = `The address does not point to a valid Ethereum contract`;
       } else {
         if (localStorage.getItem('contracts')) {
           const existingContracts = JSON.parse(
