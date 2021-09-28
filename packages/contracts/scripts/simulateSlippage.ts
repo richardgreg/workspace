@@ -52,9 +52,9 @@ export default async function simulateSlippage(
 ): Promise<void> {
   const MAX_SLIPPAGE = 0.005;
   const INPUT_AMOUNT = parseEther("100000000");
-  let mintBlockNumber = 12798739;
+  let mintBlockNumber = 12833323;
 
-  const RESET_BLOCK_NUMBER = 12798739; //mintBlockNumber - 10
+  const RESET_BLOCK_NUMBER = 12833323; //mintBlockNumber - 10
   const END_BLOCK_NUMBER = 13307297;
   await network.provider.request({
     method: "hardhat_reset",
