@@ -16,6 +16,7 @@ import NavBar from 'components/NavBar/NavBar';
 import { ContractsContext } from 'context/Web3/contracts';
 import { useRouter } from 'next/router';
 import React, { useContext, useEffect, useState } from 'react';
+import toast, { Toaster } from 'react-hot-toast';
 import Voting from './Voting/Voting';
 
 const getTitle = (proposal: Proposal): string => {
@@ -48,12 +49,8 @@ const ProposalPage: React.FC<ProposalPageProps> = ({ proposalType }) => {
         IpfsClient,
       )
         .getProposal(Number(proposalId), proposalType)
-        .then((res) => {
-          setProposal(res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+        .then((res) => setProposal(res))
+        .catch((err) => toast.error(err.message));
     }
   }, [contracts, account, proposalId]);
 
@@ -94,6 +91,7 @@ const ProposalPage: React.FC<ProposalPageProps> = ({ proposalType }) => {
   return (
     <div className="flex flex-col h-full w-full pb-16 ">
       <NavBar />
+      <Toaster position="top-right" />
       {getContent()}
     </div>
   );

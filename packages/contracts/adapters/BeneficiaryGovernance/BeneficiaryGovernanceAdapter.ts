@@ -68,7 +68,9 @@ export class BeneficiaryGovernanceAdapter {
   ): Promise<Proposal> {
     const proposal = await this.contract.proposals(id);
     if (proposal.proposalType !== proposalType)
-      throw ` Error: A ${ProposalType[proposalType]} proposal at index ${id} does not exist`;
+      throw new Error(
+        `Error: A ${ProposalType[proposalType]} proposal at index ${id} does not exist`
+      );
     return {
       application: await this.IpfsClient.get(proposal.applicationCid),
       id: id.toString(),
