@@ -66,9 +66,9 @@ export class BeneficiaryGovernanceAdapter {
     id: number,
     proposalType: ProposalType
   ): Promise<Proposal> {
-    const proposalTypeName =
-      proposalType === ProposalType.Nomination ? "nominations" : "takedowns";
-    const proposal = await this.contract[proposalTypeName](id);
+    const proposal = await this.contract.proposals(id);
+    if (proposal.proposalType !== proposalType)
+      throw ` Error: A ${ProposalType[proposalType]} proposal at index ${id} does not exist`;
     return {
       application: await this.IpfsClient.get(proposal.applicationCid),
       id: id.toString(),

@@ -50,6 +50,9 @@ const ProposalPage: React.FC<ProposalPageProps> = ({ proposalType }) => {
         .getProposal(Number(proposalId), proposalType)
         .then((res) => {
           setProposal(res);
+        })
+        .catch((err) => {
+          console.log(err);
         });
     }
   }, [contracts, account, proposalId]);
