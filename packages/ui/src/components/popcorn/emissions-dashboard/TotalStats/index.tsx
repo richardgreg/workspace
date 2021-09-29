@@ -1,7 +1,9 @@
+import { useEffect, useState } from 'react';
 import {
   getChartData,
   getStatCardData,
 } from '../../../../../../emissions-dashboard/utils';
+import { getMassUnitForTxns } from '../../../../../../emissions-dashboard/utils/getMassUnitForTxns';
 import {
   ChartReadyState,
   Transaction,
@@ -28,6 +30,10 @@ export const TotalStats: React.FC<TotalStatsProps> = ({
   endDate,
   readyState,
 }): JSX.Element => {
+  const [unit, setUnit] = useState<string>('mcg');
+  useEffect(() => {
+    setUnit(getMassUnitForTxns(transactionsCurrentPeriod));
+  }, [transactionsCurrentPeriod, transactionsPreviousPeriod]);
   return (
     <div className="py-10 self-center">
       <div className="max-w-7xl">
@@ -48,6 +54,7 @@ export const TotalStats: React.FC<TotalStatsProps> = ({
             transactionsCurrentPeriod,
             transactionsPreviousPeriod,
             true,
+            unit,
           )}
         />
       </div>

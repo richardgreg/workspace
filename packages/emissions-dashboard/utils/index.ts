@@ -4,6 +4,7 @@ import {
   StatCardData,
   Transaction,
 } from '@popcorn/ui/src/interfaces/emissions-dashboard';
+import * as convert from 'convert-units';
 import { Globe, Wind } from 'react-feather';
 import TimeSeriesAggregator from 'time-series-aggregator';
 import { percentChange } from './percentChange';
@@ -90,6 +91,7 @@ export const getStatCardData = (
   transactionsCurrentPeriod: Transaction[],
   transactionsPreviousPeriod: Transaction[],
   isTotalStats: boolean,
+  unit: string,
 ): StatCardData[] => {
   const totalEmissionsCurrentPeriod = Math.round(
     transactionsCurrentPeriod.reduce((acc, cu) => acc + cu.emissions, 0),
@@ -113,8 +115,8 @@ export const getStatCardData = (
     return [
       {
         id: 1,
-        name: 'CO2 Emissions (µg)',
-        stat: totalEmissionsCurrentPeriod,
+        name: `CO2 Emissions (${unit})`,
+        stat: convert(totalEmissionsCurrentPeriod).from('mcg').to(unit),
         icon: CloudIcon,
         change: `${Math.round(emissionsChangePercentChange)}%`,
         changeType: emissionsChangePercentChange > 0 ? 'increase' : 'decrease',
@@ -157,8 +159,8 @@ export const getStatCardData = (
   return [
     {
       id: 1,
-      name: 'CO2 Emissions (µg)',
-      stat: totalEmissionsCurrentPeriod,
+      name: `CO2 Emissions (${unit})`,
+      stat: convert(totalEmissionsCurrentPeriod).from('mcg').to(unit),
       icon: CloudIcon,
       change: `${Math.round(emissionsChangePercentChange)}%`,
       changeType: emissionsChangePercentChange > 0 ? 'increase' : 'decrease',

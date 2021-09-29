@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   getChartData,
   getStatCardData,
 } from '../../../../../../emissions-dashboard/utils';
+import { getMassUnitForTxns } from '../../../../../../emissions-dashboard/utils/getMassUnitForTxns';
 import {
   ChartReadyState,
   Contract,
@@ -32,6 +33,10 @@ export const ContractContainer: React.FC<ContractContainerProps> = ({
   contract,
   readyState,
 }): JSX.Element => {
+  const [unit, setUnit] = useState<string>('mcg');
+  useEffect(() => {
+    setUnit(getMassUnitForTxns(transactionsCurrentPeriod));
+  }, [transactionsCurrentPeriod, transactionsPreviousPeriod]);
   return (
     <div className="mb-5 mt-12 self-center">
       <div className="max-w-7xl">
@@ -45,6 +50,7 @@ export const ContractContainer: React.FC<ContractContainerProps> = ({
             transactionsCurrentPeriod,
             transactionsPreviousPeriod,
             false,
+            unit,
           )}
         />
       </div>
