@@ -52,9 +52,9 @@ export default async function simulateSlippage(
 ): Promise<void> {
   const MAX_SLIPPAGE = 0.005;
   const INPUT_AMOUNT = parseEther("100000000");
-  let mintBlockNumber = 12833323;
+  let mintBlockNumber = 13009065;
 
-  const RESET_BLOCK_NUMBER = 12833323; //mintBlockNumber - 10
+  const RESET_BLOCK_NUMBER = 13009065; //mintBlockNumber - 10
   const END_BLOCK_NUMBER = 13307297;
   await network.provider.request({
     method: "hardhat_reset",
@@ -92,7 +92,7 @@ export default async function simulateSlippage(
       yPool: contracts.yUST,
     },
   };
-  await contracts.faucet.sendThreeCrv(100000, signer.address);
+  await contracts.faucet.sendThreeCrv(500000, signer.address);
 
   while (mintBlockNumber < END_BLOCK_NUMBER) {
     await contracts.threeCrv

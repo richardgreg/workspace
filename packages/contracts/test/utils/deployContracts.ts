@@ -107,7 +107,7 @@ export default async function deployContracts(
   ).deployed();
   await network.provider.send("hardhat_setBalance", [
     faucet.address,
-    "0x69e10de76676d0800000", // 100k ETH
+    "0x69e10de76676d0800000", // 500k ETH
   ]);
 
   const mockPop = await (
