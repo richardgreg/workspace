@@ -48,8 +48,14 @@ const ProposalPage: React.FC<ProposalPageProps> = ({ proposalType }) => {
         contracts.beneficiaryGovernance,
         IpfsClient,
       )
-        .getProposal(Number(proposalId), proposalType)
-        .then((res) => setProposal(res))
+        .getProposal(Number(proposalId))
+        .then((proposal) => {
+          proposal.proposalType === proposalType
+            ? setProposal(proposal)
+            : toast.error(
+                `A ${ProposalType[proposalType]} proposal at index ${proposalId} does not exist`,
+              );
+        })
         .catch((err) => toast.error(err.message));
     }
   }, [contracts, account, proposalId]);

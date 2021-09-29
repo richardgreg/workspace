@@ -62,15 +62,8 @@ export interface Proposal {
 export class BeneficiaryGovernanceAdapter {
   constructor(private contract: Contract, private IpfsClient: IIpfsClient) {}
 
-  public async getProposal(
-    id: number,
-    proposalType: ProposalType
-  ): Promise<Proposal> {
+  public async getProposal(id: number): Promise<Proposal> {
     const proposal = await this.contract.proposals(id);
-    if (proposal.proposalType !== proposalType)
-      throw new Error(
-        `Error: A ${ProposalType[proposalType]} proposal at index ${id} does not exist`
-      );
     return {
       application: await this.IpfsClient.get(proposal.applicationCid),
       id: id.toString(),
@@ -105,7 +98,7 @@ export class BeneficiaryGovernanceAdapter {
     );
     return Promise.all(
       proposalIds.map(async (id) => {
-        return this.getProposal(Number(id), proposalType);
+        return this.getProposal(Number(id));
       })
     );
   }
