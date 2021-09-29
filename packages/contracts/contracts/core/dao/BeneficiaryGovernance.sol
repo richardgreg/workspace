@@ -54,7 +54,7 @@ contract BeneficiaryGovernance {
     bytes applicationCid;
     address proposer;
     uint256 startTime;
-    bytes2 region;
+    bytes32 region;
     uint256 yesCount;
     uint256 noCount;
     uint256 voterCount;
@@ -183,7 +183,7 @@ contract BeneficiaryGovernance {
    */
   function createProposal(
     address _beneficiary,
-    bytes2 _region,
+    bytes32 _region,
     bytes calldata _applicationCid,
     ProposalType _type
   )

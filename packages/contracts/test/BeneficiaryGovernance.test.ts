@@ -49,7 +49,7 @@ const ProposalStatus = {
   Failed: 4,
 };
 const ONE_DAY = 86400;
-const DEFAULT_REGION = "0x5757";
+const DEFAULT_REGION = ethers.utils.id("World");
 
 async function deployContracts(): Promise<Contracts> {
   const MockERC20 = await ethers.getContractFactory("MockERC20");
