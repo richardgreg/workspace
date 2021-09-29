@@ -64,6 +64,7 @@ export const ContractContainer: React.FC<ContractContainerProps> = ({
                   transactionsCurrentPeriod,
                   startDate,
                   endDate,
+                  unit,
                 )}
                 height={224}
               />

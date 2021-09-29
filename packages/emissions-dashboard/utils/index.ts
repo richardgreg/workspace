@@ -57,6 +57,7 @@ export const getChartData = (
   transactions: Transaction[],
   startDate: Date,
   endDate: Date,
+  unit: string,
 ): ChartData[] => {
   const dateRangeInDays = getNumDaysBetweenTwoDates(startDate, endDate);
   const granularity = getGranularity(dateRangeInDays);
@@ -74,7 +75,9 @@ export const getChartData = (
     const numTransactions = dataForRange.count();
     const gasUsed = dataForRange.sum('gasUsed');
     const totalGasPrice = dataForRange.sum('gasPrice') / GWEI_TO_ETH;
-    const emissions = Math.round(dataForRange.sum('emissions'));
+    const emissions = convert(dataForRange.sum('emissions'))
+      .from('mcg')
+      .to(unit);
     const averageGasPrice =
       numTransactions === 0 ? 0 : Math.round(totalGasPrice / numTransactions);
     return {
@@ -83,6 +86,7 @@ export const getChartData = (
       date,
       gasUsed,
       numTransactions,
+      unit,
     };
   });
 };

@@ -68,6 +68,7 @@ export const TotalStats: React.FC<TotalStatsProps> = ({
                   transactionsCurrentPeriod,
                   startDate,
                   endDate,
+                  unit,
                 )}
                 height={300}
               />
