@@ -5,6 +5,7 @@ import { utils } from "ethers";
 import { parseEther } from "ethers/lib/utils";
 import { ethers, waffle } from "hardhat";
 import {
+  ACLRegistry,
   BeneficiaryGovernance,
   BeneficiaryRegistry,
   MockERC20,
@@ -18,6 +19,7 @@ interface Contracts {
   mockBeneficiaryRegistry: MockContract;
   region: Region;
   participationReward: ParticipationReward;
+  aclRegistry: ACLRegistry;
   beneficiaryGovernance: BeneficiaryGovernance;
   beneficiaryRegistry?: BeneficiaryRegistry;
 }
@@ -83,14 +85,14 @@ async function deployContracts(): Promise<Contracts> {
     BeneficiaryVaults.interface.format() as any
   );
 
-  const region = await (
-    await ethers.getContractFactory("Region")
-  ).deploy(mockBeneficiaryVaults.address);
-  await region.deployed();
-
   const aclRegistry = await (
     await (await ethers.getContractFactory("ACLRegistry")).deploy()
   ).deployed();
+
+  const region = await (
+    await ethers.getContractFactory("Region")
+  ).deploy(mockBeneficiaryVaults.address, aclRegistry.address);
+  await region.deployed();
 
   const participationReward = await (
     await ethers.getContractFactory("ParticipationReward")
@@ -140,6 +142,7 @@ async function deployContracts(): Promise<Contracts> {
     mockBeneficiaryRegistry,
     region,
     participationReward,
+    aclRegistry,
     beneficiaryGovernance,
   };
 }
@@ -649,7 +652,7 @@ describe("BeneficiaryGovernance", function () {
         "BeneficiaryRegistry"
       );
       contracts.beneficiaryRegistry = await (
-        await BeneficiaryRegistry.deploy(contracts.region.address)
+        await BeneficiaryRegistry.deploy(contracts.aclRegistry.address)
       ).deployed();
 
       const BeneficiaryNomination = await ethers.getContractFactory(
@@ -662,9 +665,16 @@ describe("BeneficiaryGovernance", function () {
           contracts.mockPop.address,
           contracts.region.address,
           contracts.participationReward.address,
-          governance.address
+          contracts.aclRegistry.address
         )
       ).deployed();
+
+      await contracts.aclRegistry
+        .connect(owner)
+        .grantRole(
+          ethers.utils.id("BeneficiaryGovernance"),
+          contracts.beneficiaryGovernance.address
+        );
 
       await contracts.participationReward
         .connect(owner)
@@ -922,7 +932,7 @@ describe("BeneficiaryGovernance", function () {
         "BeneficiaryRegistry"
       );
       contracts.beneficiaryRegistry = await (
-        await BeneficiaryRegistry.deploy(contracts.region.address)
+        await BeneficiaryRegistry.deploy(contracts.aclRegistry.address)
       ).deployed();
 
       const BeneficiaryNomination = await ethers.getContractFactory(
@@ -935,9 +945,16 @@ describe("BeneficiaryGovernance", function () {
           contracts.mockPop.address,
           contracts.region.address,
           contracts.participationReward.address,
-          governance.address
+          contracts.aclRegistry.address
         )
       ).deployed();
+
+      await contracts.aclRegistry
+        .connect(owner)
+        .grantRole(
+          ethers.utils.id("BeneficiaryGovernance"),
+          contracts.beneficiaryGovernance.address
+        );
 
       await contracts.participationReward
         .connect(owner)

@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity >=0.7.0 <0.8.0;
+pragma solidity >=0.6.0 <0.8.0;
 
 /**
  * @dev External interface of AccessControl declared to support ERC165 detection.
@@ -51,6 +51,14 @@ interface IACLRegistry {
   function hasRole(bytes32 role, address account) external view returns (bool);
 
   /**
+   * @dev Returns `true` if `account` has been granted `permission`.
+   */
+  function hasPermission(bytes32 permission, address account)
+    external
+    view
+    returns (bool);
+
+  /**
    * @dev Returns the admin role that controls `role`. See {grantRole} and
    * {revokeRole}.
    *
@@ -98,4 +106,16 @@ interface IACLRegistry {
   function renounceRole(bytes32 role, address account) external;
 
   function setRoleAdmin(bytes32 role, bytes32 adminRole) external;
+
+  function grantPermission(bytes32 permission, address account) external;
+
+  function revokePermission(bytes32 permission) external;
+
+  function defend(address account) external view;
+
+  function checkRole(bytes32 role, address account) external view;
+
+  function checkPermission(bytes32 permission, address account) external view;
+
+  function isRoleAdmin(bytes32 role, address account) external view;
 }

@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity >=0.7.0 <0.8.0;
+pragma solidity >=0.6.0 <0.8.0;
 
-import "./Interfaces/IACLRegistry.sol";
+import "../interfaces/IACLRegistry.sol";
 
 /**
  * @dev Contract module that allows children to implement role-based access
@@ -51,6 +51,7 @@ contract ACLRegistry is IACLRegistry {
   }
 
   mapping(bytes32 => RoleData) private _roles;
+  mapping(bytes32 => address) private _permissions;
 
   bytes32 public constant DEFAULT_ADMIN_ROLE = 0x00;
 
@@ -75,6 +76,18 @@ contract ACLRegistry is IACLRegistry {
   }
 
   /**
+   * @dev Returns `true` if `account` has been granted `permission`.
+   */
+  function hasPermission(bytes32 permission, address account)
+    public
+    view
+    override
+    returns (bool)
+  {
+    return _permissions[permission] == account;
+  }
+
+  /**
    * @dev Returns the admin role that controls `role`. See {grantRole} and
    * {revokeRole}.
    *
@@ -82,6 +95,32 @@ contract ACLRegistry is IACLRegistry {
    */
   function getRoleAdmin(bytes32 role) public view override returns (bytes32) {
     return _roles[role].adminRole;
+  }
+
+  function checkRole(bytes32 role, address account) public view override {
+    require(hasRole(role, account), "you dont have the right role");
+  }
+
+  function checkPermission(bytes32 permission, address account)
+    public
+    view
+    override
+  {
+    require(
+      hasPermission(permission, account),
+      "you dont have the right permissions"
+    );
+  }
+
+  function isRoleAdmin(bytes32 role, address account) public view override {
+    require(hasRole(getRoleAdmin(role), account), "you have to be role admin");
+  }
+
+  function defend(address account) public view override {
+    require(
+      hasRole(keccak256("Defender"), account) || account == tx.origin,
+      "Access denied for caller"
+    );
   }
 
   /* ========== MUTATIVE FUNCTIONS ========== */
@@ -152,6 +191,19 @@ contract ACLRegistry is IACLRegistry {
     );
 
     _setRoleAdmin(role, adminRole);
+  }
+
+  function grantPermission(bytes32 permission, address account)
+    public
+    override
+  {
+    require(hasRole(DEFAULT_ADMIN_ROLE, msg.sender), "only for admin");
+    _permissions[permission] = account;
+  }
+
+  function revokePermission(bytes32 permission) public override {
+    require(hasRole(DEFAULT_ADMIN_ROLE, msg.sender), "only for admin");
+    delete _permissions[permission];
   }
 
   /* ========== RESTRICTED FUNCTIONS ========== */

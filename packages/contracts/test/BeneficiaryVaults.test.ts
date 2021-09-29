@@ -5,13 +5,19 @@ import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { expect } from "chai";
 import { ethers, waffle } from "hardhat";
 import { generateClaims, makeElement, merklize } from "../scripts/merkle";
-import { BeneficiaryVaults, MockERC20, Region } from "../typechain";
+import {
+  ACLRegistry,
+  BeneficiaryVaults,
+  MockERC20,
+  Region,
+} from "../typechain";
 const provider = waffle.provider;
 
 interface Contracts {
   mockPop: MockERC20;
   beneficiaryRegistry: MockContract;
   region: Region;
+  aclRegistry: ACLRegistry;
   beneficiaryVaults: BeneficiaryVaults;
 }
 
@@ -48,22 +54,40 @@ async function deployContracts(): Promise<Contracts> {
   );
   await beneficiaryRegistry.mock.beneficiaryExists.returns(true); //assume true
 
+  const aclRegistry = await (
+    await (await ethers.getContractFactory("ACLRegistry")).deploy()
+  ).deployed();
+
   const beneficiaryVaults = await (
     await (
       await ethers.getContractFactory("BeneficiaryVaults")
-    ).deploy(mockPop.address)
+    ).deploy(mockPop.address, aclRegistry.address)
   ).deployed();
-  await beneficiaryVaults
-    .connect(owner)
-    .setBeneficiaryRegistry(beneficiaryRegistry.address);
 
   const region = await (
     await (
       await ethers.getContractFactory("Region")
-    ).deploy(beneficiaryVaults.address)
+    ).deploy(beneficiaryVaults.address, aclRegistry.address)
   ).deployed();
 
-  return { mockPop, beneficiaryRegistry, region, beneficiaryVaults };
+  await aclRegistry
+    .connect(owner)
+    .grantRole(ethers.utils.id("Comptroller"), owner.address);
+  await aclRegistry
+    .connect(owner)
+    .grantRole(ethers.utils.id("BeneficiaryGovernance"), owner.address);
+
+  await beneficiaryVaults
+    .connect(owner)
+    .setBeneficiaryRegistry(beneficiaryRegistry.address);
+
+  return {
+    mockPop,
+    beneficiaryRegistry,
+    region,
+    aclRegistry,
+    beneficiaryVaults,
+  };
 }
 
 describe("BeneficiaryVaults", function () {
@@ -101,14 +125,6 @@ describe("BeneficiaryVaults", function () {
     await expect(
       contracts.beneficiaryVaults.openVault(4, merkleRoot)
     ).to.be.revertedWith("Invalid vault id");
-  });
-
-  it("cannot nominate new owner as non-owner", async function () {
-    await expect(
-      contracts.beneficiaryVaults
-        .connect(beneficiary1)
-        .transferOwnership(beneficiary1.address)
-    ).to.be.revertedWith("caller is not the owner");
   });
 
   it("should revert setting to same Beneficiary Registry", async function () {
@@ -185,10 +201,7 @@ describe("BeneficiaryVaults", function () {
       expect(vaultData.merkleRoot).to.equal(merkleRoot);
       expect(vaultData.status).to.equal(VaultStatus.Open);
       expect(
-        await contracts.beneficiaryVaults.hasClaimed(
-          0,
-          beneficiary1.address
-        )
+        await contracts.beneficiaryVaults.hasClaimed(0, beneficiary1.address)
       ).to.be.false;
       expect(
         await contracts.beneficiaryVaults.hasClaimed(
@@ -216,12 +229,14 @@ describe("BeneficiaryVaults", function () {
         makeElement(beneficiary1.address, claims[beneficiary1.address])
       );
       await expect(
-        contracts.beneficiaryVaults.connect(beneficiary1).claimReward(
-          0,
-          proof,
-          beneficiary1.address,
-          claims[beneficiary1.address]
-        )
+        contracts.beneficiaryVaults
+          .connect(beneficiary1)
+          .claimReward(
+            0,
+            proof,
+            beneficiary1.address,
+            claims[beneficiary1.address]
+          )
       ).to.be.revertedWith("No reward");
     });
     describe("deposits reward and distribute it", function () {
@@ -322,7 +337,9 @@ describe("BeneficiaryVaults", function () {
           const vault = await contracts.beneficiaryVaults.getVault(0);
           expect(vault.totalAllocated).to.equal(firstReward);
           expect(vault.currentBalance).to.equal(firstReward);
-          expect(await contracts.beneficiaryVaults.totalDistributedBalance()).to.equal(firstReward);
+          expect(
+            await contracts.beneficiaryVaults.totalDistributedBalance()
+          ).to.equal(firstReward);
         });
         it("allocates rewards to multiple vaults evenly", async function () {
           await contracts.mockPop
@@ -352,7 +369,7 @@ describe("BeneficiaryVaults", function () {
             ).to.be.revertedWith("no rewards available");
           });
           it("when a region as no open vaults", async function () {
-            await contracts.beneficiaryVaults.connect(owner).closeVault(0)
+            await contracts.beneficiaryVaults.connect(owner).closeVault(0);
             await contracts.mockPop
               .connect(owner)
               .transfer(contracts.beneficiaryVaults.address, parseEther("1"));

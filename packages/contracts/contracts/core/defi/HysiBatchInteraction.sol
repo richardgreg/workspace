@@ -8,12 +8,12 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/math/Math.sol";
-import "./lib/Owned.sol";
-import "./Interfaces/Integrations/YearnVault.sol";
-import "./Interfaces/Integrations/BasicIssuanceModule.sol";
-import "./Interfaces/Integrations/ISetToken.sol";
-import "./Interfaces/Integrations/CurveContracts.sol";
-import "./KeeperIncentive.sol";
+import "../interfaces/IACLRegistry.sol";
+import "../../integrations/interfaces/YearnVault.sol";
+import "../../integrations/interfaces/BasicIssuanceModule.sol";
+import "../../integrations/interfaces/ISetToken.sol";
+import "../../integrations/interfaces/CurveContracts.sol";
+import "../utils/KeeperIncentive.sol";
 
 /*
 This Contract allows smaller depositors to mint and redeem HYSI without needing to through all the steps necessary on their own...
@@ -22,7 +22,7 @@ The HYSI is created from 4 different yToken which in turn need each a deposit of
 This means 12 approvals and 9 deposits are necessary to mint one HYSI.
 We Batch this process and allow users to pool their funds. Than we pay keeper to Mint or Redeem HYSI regularly.
 */
-contract HysiBatchInteraction is Owned {
+contract HysiBatchInteraction {
   using SafeMath for uint256;
   using SafeERC20 for YearnVault;
   using SafeERC20 for ISetToken;
@@ -76,8 +76,8 @@ contract HysiBatchInteraction is Owned {
   IERC20 public threeCrv;
   BasicIssuanceModule public setBasicIssuanceModule;
   KeeperIncentive public keeperIncentive;
+  IACLRegistry public aclRegistry;
   ISetToken public setToken;
-  address public zapper;
   mapping(address => CurvePoolTokenPair) public curvePoolTokenPairs;
 
   /**
@@ -132,12 +132,13 @@ contract HysiBatchInteraction is Owned {
     ISetToken setToken_,
     BasicIssuanceModule basicIssuanceModule_,
     KeeperIncentive keeperIncentive_,
+    IACLRegistry aclRegistry_,
     address[] memory yTokenAddresses_,
     CurvePoolTokenPair[] memory curvePoolTokenPairs_,
     uint256 batchCooldown_,
     uint256 mintThreshold_,
     uint256 redeemThreshold_
-  ) Owned(msg.sender) {
+  ) {
     require(address(pop_) != address(0));
     require(address(threeCrv_) != address(0));
     require(address(setToken_) != address(0));
@@ -148,6 +149,7 @@ contract HysiBatchInteraction is Owned {
     setToken = setToken_;
     setBasicIssuanceModule = basicIssuanceModule_;
     keeperIncentive = keeperIncentive_;
+    aclRegistry = aclRegistry_;
 
     _setCurvePoolTokenPairs(yTokenAddresses_, curvePoolTokenPairs_);
 
@@ -184,7 +186,8 @@ contract HysiBatchInteraction is Owned {
    */
   function depositForMint(uint256 amount_, address depositFor_) external {
     require(
-      msg.sender == zapper || msg.sender == depositFor_,
+      aclRegistry.hasRole(keccak256("HysiZapper"), msg.sender) ||
+        msg.sender == depositFor_,
       "you cant transfer other funds"
     );
     require(threeCrv.balanceOf(msg.sender) >= amount_, "insufficent balance");
@@ -601,7 +604,8 @@ contract HysiBatchInteraction is Owned {
   function _getRecipient(address account_) internal returns (address) {
     //Make sure that only zapper can withdraw from someone else
     require(
-      msg.sender == zapper || msg.sender == account_,
+      aclRegistry.hasRole(keccak256("HysiZapper"), msg.sender) ||
+        msg.sender == account_,
       "you cant transfer other funds"
     );
 
@@ -609,7 +613,7 @@ contract HysiBatchInteraction is Owned {
     address recipient = account_;
 
     //set the recipient to zapper if its called by the zapper
-    if (msg.sender == zapper) {
+    if (aclRegistry.hasRole(keccak256("HysiZapper"), msg.sender)) {
       recipient = msg.sender;
     }
     return recipient;
@@ -758,7 +762,8 @@ contract HysiBatchInteraction is Owned {
   function setCurvePoolTokenPairs(
     address[] memory yTokenAddresses_,
     CurvePoolTokenPair[] calldata curvePoolTokenPairs_
-  ) public onlyOwner {
+  ) public {
+    aclRegistry.checkRole(keccak256("Comptroller"), msg.sender);
     _setCurvePoolTokenPairs(yTokenAddresses_, curvePoolTokenPairs_);
   }
 
@@ -783,7 +788,8 @@ contract HysiBatchInteraction is Owned {
    * @param cooldown_ Cooldown in seconds
    * @dev The cooldown is the same for redeem and mint batches
    */
-  function setBatchCooldown(uint256 cooldown_) external onlyOwner {
+  function setBatchCooldown(uint256 cooldown_) external {
+    aclRegistry.checkRole(keccak256("Comptroller"), msg.sender);
     batchCooldown = cooldown_;
   }
 
@@ -791,7 +797,8 @@ contract HysiBatchInteraction is Owned {
    * @notice Changes the Threshold of 3CRV which need to be deposited to be able to mint immediately
    * @param threshold_ Amount of 3CRV necessary to mint immediately
    */
-  function setMintThreshold(uint256 threshold_) external onlyOwner {
+  function setMintThreshold(uint256 threshold_) external {
+    aclRegistry.checkRole(keccak256("Comptroller"), msg.sender);
     mintThreshold = threshold_;
   }
 
@@ -799,17 +806,8 @@ contract HysiBatchInteraction is Owned {
    * @notice Changes the Threshold of HYSI which need to be deposited to be able to redeem immediately
    * @param threshold_ Amount of HYSI necessary to mint immediately
    */
-  function setRedeemThreshold(uint256 threshold_) external onlyOwner {
+  function setRedeemThreshold(uint256 threshold_) external {
+    aclRegistry.checkRole(keccak256("Comptroller"), msg.sender);
     redeemThreshold = threshold_;
-  }
-
-  /**
-   * @notice Set the address of HysiBatchZapper to allow the zapper to deposit and claim for user
-   * @param zapper_ Address of the HysiBatchZapper
-   * @dev This should only be called once after deployment to mitigate the risk of changing this to a malicious contract
-   */
-  function setZapper(address zapper_) external onlyOwner {
-    require(zapper == address(0), "zapper already set");
-    zapper = zapper_;
   }
 }

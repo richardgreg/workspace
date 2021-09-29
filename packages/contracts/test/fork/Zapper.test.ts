@@ -58,25 +58,28 @@ async function deployContracts(): Promise<Contracts> {
     await Zapper.deploy(CURVE_ADDRESS_PROVIDER_ADDRESS)
   ).deployed();
 
-  const Pool = await ethers.getContractFactory("Pool");
+  const aclRegistry = await (
+    await (await ethers.getContractFactory("ACLRegistry")).deploy()
+  ).deployed();
 
+  const Pool = await ethers.getContractFactory("Pool");
   const fraxPool = await (
     await Pool.deploy(
       FRAX_LP_TOKEN_ADDRESS,
       YEARN_REGISTRY_ADDRESS,
-      rewardsManager.address
+      rewardsManager.address,
+      aclRegistry.address
     )
   ).deployed();
-  fraxPool.approveContractAccess(zapper.address);
 
   const usdnPool = await (
     await Pool.deploy(
       USDN_LP_TOKEN_ADDRESS,
       YEARN_REGISTRY_ADDRESS,
-      rewardsManager.address
+      rewardsManager.address,
+      aclRegistry.address
     )
   ).deployed();
-  usdnPool.approveContractAccess(zapper.address);
 
   const dai = (await ethers.getContractAt(
     "MockERC20",
@@ -102,6 +105,12 @@ async function deployContracts(): Promise<Contracts> {
     "MockERC20",
     USDN_TOKEN_ADDRESS
   )) as MockERC20;
+
+  await aclRegistry.grantRole(
+    ethers.utils.id("Comptroller"),
+    depositor.address
+  );
+  await aclRegistry.grantRole(ethers.utils.id("Defender"), zapper.address);
 
   return {
     dai,

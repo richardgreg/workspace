@@ -104,10 +104,14 @@ async function deployContracts(): Promise<Contracts> {
     ).deploy([mockYearnVaultUSDX.address, mockYearnVaultUST.address], [50, 50])
   ).deployed()) as MockBasicIssuanceModule;
 
+  const aclRegistry = await (
+    await (await ethers.getContractFactory("ACLRegistry")).deploy()
+  ).deployed();
+
   const keeperIncentive = await (
     await (
       await ethers.getContractFactory("KeeperIncentive")
-    ).deploy(mockPop.address, owner.address)
+    ).deploy(mockPop.address, aclRegistry.address)
   ).deployed();
 
   const hysiBatchInteraction = (await (
@@ -119,6 +123,7 @@ async function deployContracts(): Promise<Contracts> {
       mockSetToken.address,
       mockBasicIssuanceModule.address,
       keeperIncentive.address,
+      aclRegistry.address,
       [mockYearnVaultUSDX.address, mockYearnVaultUST.address],
       [
         {
@@ -136,17 +141,15 @@ async function deployContracts(): Promise<Contracts> {
     )
   ).deployed()) as HysiBatchInteraction;
 
+  await aclRegistry.grantRole(ethers.utils.id("DAO"), owner.address);
+  await aclRegistry.grantRole(ethers.utils.id("Comptroller"), owner.address);
+  await aclRegistry.grantRole(ethers.utils.id("Keeper"), owner.address);
+
   await keeperIncentive
     .connect(owner)
     .addControllerContract(
       utils.formatBytes32String("HysiBatchInteraction"),
       hysiBatchInteraction.address
-    );
-  await keeperIncentive
-    .connect(owner)
-    .approveAccount(
-      utils.formatBytes32String("HysiBatchInteraction"),
-      owner.address
     );
 
   return {
@@ -220,7 +223,7 @@ describe("HysiBatchInteraction", function () {
           contracts.hysiBatchInteraction
             .connect(depositor)
             .setBatchCooldown(52414)
-        ).to.be.revertedWith("Only the contract owner may perform this action");
+        ).to.be.revertedWith("you dont have the right role");
       });
     });
     describe("setMintThreshold", () => {
@@ -237,7 +240,7 @@ describe("HysiBatchInteraction", function () {
           contracts.hysiBatchInteraction
             .connect(depositor)
             .setMintThreshold(parseEther("100342312"))
-        ).to.be.revertedWith("Only the contract owner may perform this action");
+        ).to.be.revertedWith("you dont have the right role");
       });
     });
     describe("setRedeemThreshold", () => {
@@ -254,34 +257,7 @@ describe("HysiBatchInteraction", function () {
           contracts.hysiBatchInteraction
             .connect(depositor)
             .setRedeemThreshold(parseEther("100342312"))
-        ).to.be.revertedWith("Only the contract owner may perform this action");
-      });
-    });
-    describe("setZapper", () => {
-      it("sets zapper", async () => {
-        await contracts.hysiBatchInteraction.setRedeemThreshold(
-          parseEther("100342312")
-        );
-        expect(await contracts.hysiBatchInteraction.redeemThreshold()).to.equal(
-          parseEther("100342312")
-        );
-      });
-      it("should revert if not owner", async function () {
-        await expect(
-          contracts.hysiBatchInteraction
-            .connect(depositor)
-            .setZapper(zapper.address)
-        ).to.be.revertedWith("Only the contract owner may perform this action");
-      });
-      it("should revert if zapper is already set", async function () {
-        await contracts.hysiBatchInteraction
-          .connect(owner)
-          .setZapper(zapper.address);
-        await expect(
-          contracts.hysiBatchInteraction
-            .connect(owner)
-            .setZapper(zapper.address)
-        ).to.be.revertedWith("zapper already set");
+        ).to.be.revertedWith("you dont have the right role");
       });
     });
   });
@@ -541,7 +517,7 @@ describe("HysiBatchInteraction", function () {
 
           await expect(
             contracts.hysiBatchInteraction.connect(depositor).batchMint(0)
-          ).to.be.revertedWith("you are not approved as a keeper");
+          ).to.be.revertedWith("you dont have the right role");
         });
       });
       context("success", function () {
@@ -917,7 +893,7 @@ describe("HysiBatchInteraction", function () {
 
           await expect(
             contracts.hysiBatchInteraction.connect(depositor).batchRedeem(0)
-          ).to.be.revertedWith("you are not approved as a keeper");
+          ).to.be.revertedWith("you dont have the right role");
         });
       });
       context("success", function () {

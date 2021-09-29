@@ -3,16 +3,15 @@
 pragma solidity >=0.7.0 <0.8.0;
 
 import "@openzeppelin/contracts/math/SafeMath.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 import "@openzeppelin/contracts/cryptography/MerkleProof.sol";
-import "./lib/Owned.sol";
-import "./Interfaces/IRegion.sol";
-import "./Interfaces/IBeneficiaryVaults.sol";
-import "./Interfaces/IBeneficiaryRegistry.sol";
+import "../interfaces/IRegion.sol";
+import "../interfaces/IBeneficiaryVaults.sol";
+import "../interfaces/IBeneficiaryRegistry.sol";
+import "../interfaces/IACLRegistry.sol";
 
-contract BeneficiaryVaults is IBeneficiaryVaults, Ownable, ReentrancyGuard {
+contract BeneficiaryVaults is IBeneficiaryVaults, ReentrancyGuard {
   using SafeMath for uint256;
   using SafeERC20 for IERC20;
 
@@ -33,6 +32,7 @@ contract BeneficiaryVaults is IBeneficiaryVaults, Ownable, ReentrancyGuard {
   /* ========== STATE VARIABLES ========== */
 
   IERC20 public immutable pop;
+  IACLRegistry public aclRegistry;
   IBeneficiaryRegistry public beneficiaryRegistry;
   uint256 public totalDistributedBalance = 0;
   Vault[3] public vaults;
@@ -50,8 +50,9 @@ contract BeneficiaryVaults is IBeneficiaryVaults, Ownable, ReentrancyGuard {
 
   /* ========== CONSTRUCTOR ========== */
 
-  constructor(IERC20 pop_) {
+  constructor(IERC20 pop_, IACLRegistry aclRegistry_) {
     pop = pop_;
+    aclRegistry = aclRegistry_;
   }
 
   /* ========== VIEWS ========== */
@@ -97,11 +98,8 @@ contract BeneficiaryVaults is IBeneficiaryVaults, Ownable, ReentrancyGuard {
    * @param merkleRoot_ Merkle root to support claims
    * @dev Vault cannot be initialized if it is currently in an open state, otherwise existing data is reset*
    */
-  function openVault(uint8 vaultId_, bytes32 merkleRoot_)
-    public
-    override
-    onlyOwner
-  {
+  function openVault(uint8 vaultId_, bytes32 merkleRoot_) public override {
+    aclRegistry.checkRole(keccak256("BeneficiaryGovernance"), msg.sender);
     require(vaultId_ < 3, "Invalid vault id");
     require(
       vaults[vaultId_].merkleRoot == "" ||
@@ -125,12 +123,8 @@ contract BeneficiaryVaults is IBeneficiaryVaults, Ownable, ReentrancyGuard {
    * @dev Vault must be in an open state
    * @param vaultId_ Vault ID in range 0-2
    */
-  function closeVault(uint8 vaultId_)
-    public
-    override
-    onlyOwner
-    _vaultExists(vaultId_)
-  {
+  function closeVault(uint8 vaultId_) public override _vaultExists(vaultId_) {
+    aclRegistry.checkRole(keccak256("BeneficiaryGovernance"), msg.sender);
     Vault storage vault = vaults[vaultId_];
     require(vault.status == VaultStatus.Open, "Vault must be open");
 
@@ -268,8 +262,8 @@ contract BeneficiaryVaults is IBeneficiaryVaults, Ownable, ReentrancyGuard {
    */
   function setBeneficiaryRegistry(IBeneficiaryRegistry beneficiaryRegistry_)
     public
-    onlyOwner
   {
+    aclRegistry.checkRole(keccak256("Comptroller"), msg.sender);
     require(
       beneficiaryRegistry != beneficiaryRegistry_,
       "Same BeneficiaryRegistry"

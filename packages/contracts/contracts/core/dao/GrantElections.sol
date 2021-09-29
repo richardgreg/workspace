@@ -3,15 +3,15 @@ pragma experimental ABIEncoderV2;
 
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
-import "./Interfaces/IStaking.sol";
-import "./Interfaces/IBeneficiaryRegistry.sol";
-import "./Interfaces/IBeneficiaryVaults.sol";
-import "./Interfaces/IRandomNumberConsumer.sol";
-import "./Interfaces/IRegion.sol";
-import "./Governed.sol";
-import "./ParticipationReward.sol";
+import "../interfaces/IStaking.sol";
+import "../interfaces/IBeneficiaryRegistry.sol";
+import "../interfaces/IBeneficiaryVaults.sol";
+import "../interfaces/IRandomNumberConsumer.sol";
+import "../interfaces/IRegion.sol";
+import "../interfaces/IACLRegistry.sol";
+import "../utils/ParticipationReward.sol";
 
-contract GrantElections is Governed {
+contract GrantElections {
   using SafeMath for uint256;
   using SafeERC20 for IERC20;
 
@@ -33,7 +33,7 @@ contract GrantElections is Governed {
     uint256 randomNumber;
     bytes32 merkleRoot;
     bytes32 vaultId;
-    bytes2 region;
+    bytes32 region;
   }
 
   struct ElectionConfiguration {
@@ -80,16 +80,14 @@ contract GrantElections is Governed {
   IBeneficiaryRegistry internal beneficiaryRegistry;
   IRandomNumberConsumer internal randomNumberConsumer;
   ParticipationReward internal participationReward;
+  IACLRegistry internal aclRegistry;
 
   bytes32 public immutable contractName = "GrantElections";
 
   Election[] public elections;
-  mapping(bytes2 => uint256[3]) public activeElections;
+  mapping(bytes32 => uint256[3]) public activeElections;
   ElectionConfiguration[3] public electionDefaults;
   uint256 public incentiveBudget;
-
-  mapping(address => bool) public proposer;
-  mapping(address => bool) public approver;
 
   /* ========== EVENTS ========== */
 
@@ -97,15 +95,11 @@ contract GrantElections is Governed {
   event UserVoted(address _user, ElectionTerm _term);
   event ElectionInitialized(
     ElectionTerm _term,
-    bytes2 _region,
+    bytes32 _region,
     uint256 _startTime
   );
   event FinalizationProposed(uint256 _electionId, bytes32 _merkleRoot);
   event ElectionFinalized(uint256 _electionId, bytes32 _merkleRoot);
-  event ProposerAdded(address proposer);
-  event ProposerRemoved(address proposer);
-  event ApproverAdded(address approver);
-  event ApproverRemoved(address approver);
 
   /* ========== CONSTRUCTOR ========== */
 
@@ -116,14 +110,15 @@ contract GrantElections is Governed {
     IERC20 _pop,
     IRegion _region,
     ParticipationReward _participationReward,
-    address _governance
-  ) Governed(_governance) {
+    IACLRegistry _aclRegistry
+  ) {
     staking = _staking;
     beneficiaryRegistry = _beneficiaryRegistry;
     randomNumberConsumer = _randomNumberConsumer;
     region = _region;
     POP = _pop;
     participationReward = _participationReward;
+    aclRegistry = _aclRegistry;
     _setDefaults();
   }
 
@@ -202,7 +197,7 @@ contract GrantElections is Governed {
 
   // todo: mint POP for caller to incentivize calling function
   // todo: use bonds to incentivize callers instead of minting
-  function initialize(ElectionTerm _grantTerm, bytes2 _region) public {
+  function initialize(ElectionTerm _grantTerm, bytes32 _region) public {
     require(region.regionExists(_region), "region doesnt exist");
     uint8 _term = uint8(_grantTerm);
     if (elections.length != 0) {
@@ -406,7 +401,7 @@ contract GrantElections is Governed {
   function proposeFinalization(uint256 _electionId, bytes32 _merkleRoot)
     external
   {
-    require(proposer[msg.sender] == true, "not a proposer");
+    aclRegistry.checkRole(keccak256("ElectionResultProposer"), msg.sender);
 
     Election storage _election = elections[_electionId];
     require(
@@ -442,7 +437,7 @@ contract GrantElections is Governed {
   function approveFinalization(uint256 _electionId, bytes32 _merkleRoot)
     external
   {
-    require(approver[msg.sender] == true, "not an approver");
+    aclRegistry.checkRole(keccak256("ElectionResultApprover"), msg.sender);
 
     Election storage election = elections[_electionId];
     require(
@@ -466,41 +461,11 @@ contract GrantElections is Governed {
     emit ElectionFinalized(_electionId, _merkleRoot);
   }
 
-  function toggleRegistrationBondRequirement(ElectionTerm _term)
-    external
-    onlyGovernance
-  {
+  function toggleRegistrationBondRequirement(ElectionTerm _term) external {
+    aclRegistry.checkRole(keccak256("DAO"), msg.sender);
     electionDefaults[uint8(_term)]
       .bondRequirements
       .required = !electionDefaults[uint8(_term)].bondRequirements.required;
-  }
-
-  function addProposer(address _proposer) external onlyGovernance {
-    require(proposer[_proposer] != true, "already registered");
-    require(approver[_proposer] != true, "is already an approver");
-
-    proposer[_proposer] = true;
-    emit ProposerAdded(_proposer);
-  }
-
-  function removeProposer(address _proposer) external onlyGovernance {
-    require(proposer[_proposer] == true, "not registered");
-    delete proposer[_proposer];
-    emit ProposerRemoved(_proposer);
-  }
-
-  function addApprover(address _approver) external onlyGovernance {
-    require(approver[_approver] != true, "already registered");
-    require(proposer[_approver] != true, "is already a proposer");
-
-    approver[_approver] = true;
-    emit ApproverAdded(_approver);
-  }
-
-  function removeApprover(address _approver) external onlyGovernance {
-    require(approver[_approver] == true, "not registered");
-    delete approver[_approver];
-    emit ApproverRemoved(_approver);
   }
 
   function _collectRegistrationBond(Election storage _election) internal {
@@ -594,7 +559,8 @@ contract GrantElections is Governed {
     uint256 _finalizationIncentive,
     bool _enabled,
     ShareType _shareType
-  ) public onlyGovernance {
+  ) public {
+    aclRegistry.checkRole(keccak256("DAO"), msg.sender);
     ElectionConfiguration storage _defaults = electionDefaults[uint8(_term)];
     _defaults.ranking = _ranking;
     _defaults.awardees = _awardees;

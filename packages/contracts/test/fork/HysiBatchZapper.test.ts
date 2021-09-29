@@ -13,6 +13,7 @@ import SetTokenAbi from "../../lib/SetToken/vendor/set-protocol/artifacts/SetTok
 import { BasicIssuanceModule } from "../../lib/SetToken/vendor/set-protocol/types/BasicIssuanceModule";
 import { SetToken } from "../../lib/SetToken/vendor/set-protocol/types/SetToken";
 import {
+  ACLRegistry,
   Curve3Pool,
   CurveMetapool,
   ERC20,
@@ -49,6 +50,7 @@ interface Contracts {
   hysiBatchInteraction: HysiBatchInteraction;
   keeperIncentive: KeeperIncentive;
   faucet: Faucet;
+  aclRegistry: ACLRegistry;
   hysiBatchZapper: HysiBatchZapper;
 }
 
@@ -233,10 +235,14 @@ async function deployContracts(): Promise<Contracts> {
     SET_BASIC_ISSUANCE_MODULE_ADDRESS
   )) as unknown as BasicIssuanceModule;
 
+  const aclRegistry = await (
+    await (await ethers.getContractFactory("ACLRegistry")).deploy()
+  ).deployed();
+
   const keeperIncentive = await (
     await (
       await ethers.getContractFactory("KeeperIncentive")
-    ).deploy(pop.address, owner.address)
+    ).deploy(pop.address, aclRegistry.address)
   ).deployed();
 
   //Deploy HysiBatchInteraction
@@ -250,6 +256,7 @@ async function deployContracts(): Promise<Contracts> {
       HYSI_TOKEN_ADDRESS,
       SET_BASIC_ISSUANCE_MODULE_ADDRESS,
       keeperIncentive.address,
+      aclRegistry.address,
       [
         YDUSD_TOKEN_ADDRESS,
         YFRAX_TOKEN_ADDRESS,
@@ -310,6 +317,7 @@ async function deployContracts(): Promise<Contracts> {
     hysiBatchInteraction,
     keeperIncentive,
     faucet,
+    aclRegistry,
     hysiBatchZapper,
   };
 }
@@ -321,9 +329,20 @@ const deployAndAssignContracts = async () => {
     contracts.faucet.address,
     "0x152d02c7e14af6800000", // 100k ETH
   ]);
-  await contracts.hysiBatchInteraction
-    .connect(owner)
-    .setZapper(contracts.hysiBatchZapper.address);
+
+  await contracts.aclRegistry.grantRole(ethers.utils.id("DAO"), owner.address);
+  await contracts.aclRegistry.grantRole(
+    ethers.utils.id("Comptroller"),
+    owner.address
+  );
+  await contracts.aclRegistry.grantRole(
+    ethers.utils.id("Keeper"),
+    owner.address
+  );
+  await contracts.aclRegistry.grantRole(
+    ethers.utils.id("HysiZapper"),
+    contracts.hysiBatchZapper.address
+  );
   await contracts.faucet.sendTokens(
     contracts.dai.address,
     4,
@@ -335,12 +354,6 @@ const deployAndAssignContracts = async () => {
     .addControllerContract(
       utils.formatBytes32String("HysiBatchInteraction"),
       contracts.hysiBatchInteraction.address
-    );
-  await contracts.keeperIncentive
-    .connect(owner)
-    .approveAccount(
-      utils.formatBytes32String("HysiBatchInteraction"),
-      owner.address
     );
 
   DepositorInitial = await contracts.dai.balanceOf(depositor.address);

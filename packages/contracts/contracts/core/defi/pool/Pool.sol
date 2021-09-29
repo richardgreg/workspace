@@ -2,21 +2,21 @@
 
 pragma solidity ^0.6.12;
 
-import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/utils/Pausable.sol";
 import "./AffiliateToken.sol";
-import "./../Interfaces/IERC20Metadata.sol";
-import "./../Interfaces/Integrations/CurveContracts.sol";
-import "./../Defended.sol";
+import "../../interfaces/IERC20Metadata.sol";
+import "../../interfaces/IACLRegistry.sol";
+import "../../../integrations/interfaces/CurveContracts.sol";
 
-contract Pool is AffiliateToken, Ownable, ReentrancyGuard, Pausable, Defended {
+contract Pool is AffiliateToken, ReentrancyGuard, Pausable {
   using SafeMath for uint256;
   using SafeERC20 for IERC20;
 
+  IACLRegistry public aclRegistry;
   address public rewardsManager;
 
   uint256 constant BPS_DENOMINATOR = 10_000;
@@ -42,7 +42,8 @@ contract Pool is AffiliateToken, Ownable, ReentrancyGuard, Pausable, Defended {
   constructor(
     address token_,
     address yearnRegistry_,
-    address rewardsManager_
+    address rewardsManager_,
+    IACLRegistry aclRegistry_
   )
     public
     AffiliateToken(
@@ -59,6 +60,7 @@ contract Pool is AffiliateToken, Ownable, ReentrancyGuard, Pausable, Defended {
     require(rewardsManager_ != address(0));
 
     rewardsManager = rewardsManager_;
+    aclRegistry = aclRegistry_;
     feesUpdatedAt = block.timestamp;
   }
 
@@ -70,12 +72,12 @@ contract Pool is AffiliateToken, Ownable, ReentrancyGuard, Pausable, Defended {
   function deposit(uint256 amount)
     public
     override
-    defend
     nonReentrant
     whenNotPaused
     blockLocked
     returns (uint256)
   {
+    aclRegistry.defend(msg.sender);
     require(amount <= token.balanceOf(msg.sender), "Insufficient balance");
     _lockForBlock(msg.sender);
     _takeFees();
@@ -92,12 +94,12 @@ contract Pool is AffiliateToken, Ownable, ReentrancyGuard, Pausable, Defended {
 
   function depositFor(uint256 amount, address recipient)
     public
-    defend
     nonReentrant
     whenNotPaused
     blockLocked
     returns (uint256)
   {
+    aclRegistry.defend(msg.sender);
     require(amount <= token.balanceOf(msg.sender), "Insufficient balance");
     _lockForBlock(msg.sender);
     _takeFees();
@@ -145,28 +147,32 @@ contract Pool is AffiliateToken, Ownable, ReentrancyGuard, Pausable, Defended {
     _reportPoolTokenHWM();
   }
 
-  function setWithdrawalFee(uint256 withdrawalFee_) external onlyOwner {
+  function setWithdrawalFee(uint256 withdrawalFee_) external {
+    aclRegistry.checkRole(keccak256("Comptroller"), msg.sender);
     require(withdrawalFee != withdrawalFee_, "Same withdrawalFee");
     uint256 _previousWithdrawalFee = withdrawalFee;
     withdrawalFee = withdrawalFee_;
     emit WithdrawalFeeChanged(_previousWithdrawalFee, withdrawalFee);
   }
 
-  function setManagementFee(uint256 managementFee_) external onlyOwner {
+  function setManagementFee(uint256 managementFee_) external {
+    aclRegistry.checkRole(keccak256("Comptroller"), msg.sender);
     require(managementFee != managementFee_, "Same managementFee");
     uint256 _previousManagementFee = managementFee;
     managementFee = managementFee_;
     emit ManagementFeeChanged(_previousManagementFee, managementFee);
   }
 
-  function setPerformanceFee(uint256 performanceFee_) external onlyOwner {
+  function setPerformanceFee(uint256 performanceFee_) external {
+    aclRegistry.checkRole(keccak256("Comptroller"), msg.sender);
     require(performanceFee != performanceFee_, "Same performanceFee");
     uint256 _previousPerformanceFee = performanceFee;
     performanceFee = performanceFee_;
     emit PerformanceFeeChanged(_previousPerformanceFee, performanceFee);
   }
 
-  function withdrawAccruedFees() external onlyOwner {
+  function withdrawAccruedFees() external {
+    aclRegistry.checkRole(keccak256("Comptroller"), msg.sender);
     uint256 balance = balanceOf(address(this));
     _burn(address(this), balance);
     _withdraw(address(this), rewardsManager, valueFor(balance), true);
@@ -244,11 +250,13 @@ contract Pool is AffiliateToken, Ownable, ReentrancyGuard, Pausable, Defended {
     return amount;
   }
 
-  function pauseContract() external onlyOwner {
+  function pauseContract() external {
+    aclRegistry.checkRole(keccak256("Comptroller"), msg.sender);
     _pause();
   }
 
-  function unpauseContract() external onlyOwner {
+  function unpauseContract() external {
+    aclRegistry.checkRole(keccak256("Comptroller"), msg.sender);
     _unpause();
   }
 

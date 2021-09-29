@@ -3,13 +3,13 @@
 pragma solidity >=0.7.0 <=0.8.3;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "./Interfaces/IBeneficiaryRegistry.sol";
-import "./Interfaces/IACLRegistry.sol";
+import "../interfaces/IBeneficiaryRegistry.sol";
+import "../interfaces/IACLRegistry.sol";
 
 contract BeneficiaryRegistry is IBeneficiaryRegistry {
   struct Beneficiary {
     bytes applicationCid; // ipfs address of application
-    bytes2 region;
+    bytes32 region;
     uint256 listPointer;
   }
 
@@ -69,13 +69,10 @@ contract BeneficiaryRegistry is IBeneficiaryRegistry {
    */
   function addBeneficiary(
     address account,
-    bytes2 region,
+    bytes32 region,
     bytes calldata applicationCid
   ) external override {
-    require(
-      aclRegistry.hasRole(keccak256("BeneficiaryGovernance"), msg.sender),
-      "only for BeneficiaryGovernance"
-    );
+    aclRegistry.checkRole(keccak256("BeneficiaryGovernance"), msg.sender);
     require(account == address(account), "invalid address");
     require(applicationCid.length > 0, "!application");
     require(!beneficiaryExists(account), "exists");
@@ -96,7 +93,11 @@ contract BeneficiaryRegistry is IBeneficiaryRegistry {
   function revokeBeneficiary(address _address) external override {
     require(
       aclRegistry.hasRole(keccak256("BeneficiaryGovernance"), msg.sender) ||
-        aclRegistry.hasRole(keccak256("Council"), msg.sender),
+        (aclRegistry.hasRole(keccak256("Council"), msg.sender) &&
+          aclRegistry.hasPermission(
+            beneficiariesMap[_address].region,
+            msg.sender
+          )),
       "Only the BeneficiaryGovernance or council may perform this action"
     );
     require(beneficiaryExists(_address), "exists");

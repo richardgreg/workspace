@@ -5,8 +5,8 @@ pragma experimental ABIEncoderV2;
 
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
-import {BatchType, Batch, IHysiBatchInteraction} from "./Interfaces/IHysiBatchInteraction.sol";
-import "./Interfaces/Integrations/Curve3Pool.sol";
+import {BatchType, Batch, IHysiBatchInteraction} from "../interfaces/IHysiBatchInteraction.sol";
+import "../../integrations/interfaces/Curve3Pool.sol";
 
 /*
 This Contract allows user to use and receive stablecoins directly when interacting with HysiBatchInteraction.

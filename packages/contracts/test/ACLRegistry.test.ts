@@ -9,6 +9,7 @@ const DEFAULT_ADMIN_ROLE =
   "0x0000000000000000000000000000000000000000000000000000000000000000";
 const ROLE = ethers.utils.id("ROLE");
 const OTHER_ROLE = ethers.utils.id("OTHER_ROLE");
+const PERMISSION = ethers.utils.id("PERMISSION");
 
 let admin: SignerWithAddress,
   authorized: SignerWithAddress,
@@ -244,6 +245,43 @@ describe("ACLRegistry", () => {
         aclRegistry.connect(admin).revokeRole(ROLE, authorized.address),
         `you dont have the required role`
       );
+    });
+  });
+
+  describe("permissions", function () {
+    context("grant permission", () => {
+      it("admin can set permission", async function () {
+        await aclRegistry
+          .connect(admin)
+          .grantPermission(PERMISSION, authorized.address);
+      });
+
+      it("revert if sender is not admin", async function () {
+        await expectRevert(
+          aclRegistry
+            .connect(other)
+            .grantPermission(PERMISSION, authorized.address),
+          `only for admin`
+        );
+      });
+
+      it("admin can overwrite permission", async function () {
+        await aclRegistry
+          .connect(admin)
+          .grantPermission(PERMISSION, authorized.address);
+      });
+    });
+    context("revoke permission", () => {
+      it("admin can delete permission", async function () {
+        await aclRegistry.connect(admin).revokePermission(PERMISSION);
+      });
+
+      it("revert if sender is not admin", async function () {
+        await expectRevert(
+          aclRegistry.connect(other).revokePermission(PERMISSION),
+          `only for admin`
+        );
+      });
     });
   });
 

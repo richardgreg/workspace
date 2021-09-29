@@ -6,13 +6,12 @@ import "@openzeppelin/contracts/math/Math.sol";
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
-import "./lib/Owned.sol";
-import "./Interfaces/IStaking.sol";
-import "./Interfaces/IRewardsManager.sol";
-import "./Interfaces/IRewardsEscrow.sol";
-import "./Defended.sol";
+import "../interfaces/IStaking.sol";
+import "../interfaces/IRewardsManager.sol";
+import "../interfaces/IRewardsEscrow.sol";
+import "../interfaces/IACLRegistry.sol";
 
-contract Staking is IStaking, Owned, ReentrancyGuard, Defended {
+contract Staking is IStaking, ReentrancyGuard {
   using SafeMath for uint256;
   using SafeERC20 for IERC20;
 
@@ -26,6 +25,8 @@ contract Staking is IStaking, Owned, ReentrancyGuard, Defended {
   IERC20 public immutable POP;
   IRewardsManager public RewardsManager;
   IRewardsEscrow public RewardsEscrow;
+  IACLRegistry public aclRegistry;
+
   bool public initialised = false;
   uint256 public periodFinish = 0;
   uint256 public rewardRate = 0;
@@ -50,9 +51,14 @@ contract Staking is IStaking, Owned, ReentrancyGuard, Defended {
 
   /* ========== CONSTRUCTOR ========== */
 
-  constructor(IERC20 _pop, IRewardsEscrow _rewardsEscrow) Owned(msg.sender) {
+  constructor(
+    IERC20 _pop,
+    IRewardsEscrow _rewardsEscrow,
+    IACLRegistry _aclRegistry
+  ) {
     POP = _pop;
     RewardsEscrow = _rewardsEscrow;
+    aclRegistry = _aclRegistry;
   }
 
   /* ========== VIEWS ========== */
@@ -137,10 +143,10 @@ contract Staking is IStaking, Owned, ReentrancyGuard, Defended {
     external
     override
     nonReentrant
-    defend
     isInitialised
     updateReward(msg.sender)
   {
+    aclRegistry.defend(msg.sender);
     uint256 _currentTime = block.timestamp;
     require(amount > 0, "amount must be greater than 0");
     require(lengthOfTime >= 7 days, "must lock tokens for at least 1 week");
@@ -235,7 +241,8 @@ contract Staking is IStaking, Owned, ReentrancyGuard, Defended {
 
   /* ========== RESTRICTED FUNCTIONS ========== */
 
-  function init(IRewardsManager _rewardsManager) external onlyOwner {
+  function init(IRewardsManager _rewardsManager) external {
+    aclRegistry.checkRole(keccak256("Comptroller"), msg.sender);
     RewardsManager = _rewardsManager;
     initialised = true;
   }
@@ -276,16 +283,15 @@ contract Staking is IStaking, Owned, ReentrancyGuard, Defended {
     }
   }
 
-  function setRewardsManager(IRewardsManager _rewardsManager)
-    external
-    onlyOwner
-  {
+  function setRewardsManager(IRewardsManager _rewardsManager) external {
+    aclRegistry.checkRole(keccak256("Comptroller"), msg.sender);
     require(RewardsManager != _rewardsManager, "Same RewardsManager");
     RewardsManager = _rewardsManager;
     emit RewardsManagerChanged(_rewardsManager);
   }
 
-  function setRewardsEscrow(IRewardsEscrow _rewardsEscrow) external onlyOwner {
+  function setRewardsEscrow(IRewardsEscrow _rewardsEscrow) external {
+    aclRegistry.checkRole(keccak256("Comptroller"), msg.sender);
     require(RewardsEscrow != _rewardsEscrow, "Same RewardsEscrow");
     RewardsEscrow = _rewardsEscrow;
     emit RewardsEscrowChanged(_rewardsEscrow);
@@ -298,7 +304,8 @@ contract Staking is IStaking, Owned, ReentrancyGuard, Defended {
     isInitialised
   {
     require(
-      IRewardsManager(msg.sender) == RewardsManager || msg.sender == owner,
+      IRewardsManager(msg.sender) == RewardsManager ||
+        aclRegistry.hasRole(keccak256("Comptroller"), msg.sender),
       "Not allowed"
     );
     if (block.timestamp >= periodFinish) {
@@ -327,9 +334,9 @@ contract Staking is IStaking, Owned, ReentrancyGuard, Defended {
   // End rewards emission earlier
   function updatePeriodFinish(uint256 timestamp)
     external
-    onlyOwner
     updateReward(address(0))
   {
+    aclRegistry.checkRole(keccak256("Comptroller"), msg.sender);
     require(timestamp > block.timestamp, "timestamp cant be in the past");
     periodFinish = timestamp;
   }

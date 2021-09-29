@@ -5,12 +5,11 @@ pragma experimental ABIEncoderV2;
 
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
-import "./Interfaces/IRegion.sol";
-import "./Interfaces/IStaking.sol";
-import "./Interfaces/IBeneficiaryRegistry.sol";
-import "./Interfaces/IACLRegistry.sol";
-import "./ParticipationReward.sol";
-import "./ACLRegistry.sol";
+import "../interfaces/IRegion.sol";
+import "../interfaces/IStaking.sol";
+import "../interfaces/IBeneficiaryRegistry.sol";
+import "../interfaces/IACLRegistry.sol";
+import "../utils/ParticipationReward.sol";
 
 /**
  * @title BeneficiaryGovernance
@@ -455,7 +454,7 @@ contract BeneficiaryGovernance {
     uint256 _vetoPeriod,
     uint256 _proposalBond
   ) public {
-    require(aclRegistry.hasRole(keccak256("DAO"), msg.sender), "only for DAO");
+    aclRegistry.checkRole(keccak256("DAO"), msg.sender);
     DefaultConfigurations.votingPeriod = _votingPeriod;
     DefaultConfigurations.vetoPeriod = _vetoPeriod;
     DefaultConfigurations.proposalBond = _proposalBond;

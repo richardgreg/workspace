@@ -4,6 +4,7 @@ import { utils } from "ethers";
 import { parseEther } from "ethers/lib/utils";
 import { ethers, waffle } from "hardhat";
 import {
+  ACLRegistry,
   KeeperIncentive,
   KeeperIncentiveHelper,
   MockERC20,
@@ -12,9 +13,9 @@ import {
 let deployTimestamp;
 let owner: SignerWithAddress, nonOwner: SignerWithAddress;
 let mockPop: MockERC20;
+let aclRegistry: ACLRegistry;
 let keeperIncentive: KeeperIncentive;
 let keeperIncentiveHelper: KeeperIncentiveHelper;
-const dayInSec = 86400;
 const incentive = parseEther("10");
 
 describe("Keeper incentives", function () {
@@ -27,10 +28,14 @@ describe("Keeper incentives", function () {
     await mockPop.mint(owner.address, parseEther("100"));
     await mockPop.mint(nonOwner.address, parseEther("10"));
 
+    aclRegistry = await (
+      await (await ethers.getContractFactory("ACLRegistry")).deploy()
+    ).deployed();
+
     keeperIncentive = await (
       await (
         await ethers.getContractFactory("KeeperIncentive")
-      ).deploy(mockPop.address, owner.address)
+      ).deploy(mockPop.address, aclRegistry.address)
     ).deployed();
 
     deployTimestamp = (await waffle.provider.getBlock("latest")).timestamp + 1;
@@ -39,6 +44,14 @@ describe("Keeper incentives", function () {
         await ethers.getContractFactory("KeeperIncentiveHelper")
       ).deploy(keeperIncentive.address)
     ).deployed();
+
+    await aclRegistry
+      .connect(owner)
+      .grantRole(ethers.utils.id("DAO"), owner.address);
+    await aclRegistry
+      .connect(owner)
+      .grantRole(ethers.utils.id("Keeper"), owner.address);
+
     await keeperIncentive
       .connect(owner)
       .addControllerContract(
@@ -52,12 +65,6 @@ describe("Keeper incentives", function () {
         incentive,
         true,
         false
-      );
-    await keeperIncentive
-      .connect(owner)
-      .approveAccount(
-        utils.formatBytes32String("KeeperIncentiveHelper"),
-        owner.address
       );
     await mockPop
       .connect(owner)
@@ -76,9 +83,7 @@ describe("Keeper incentives", function () {
           true,
           false
         )
-    ).to.be.revertedWith(
-      "Only the contract governance may perform this action"
-    );
+    ).to.be.revertedWith("you dont have the right role");
     await expect(
       keeperIncentive
         .connect(nonOwner)
@@ -88,43 +93,17 @@ describe("Keeper incentives", function () {
           true,
           false
         )
-    ).to.be.revertedWith(
-      "Only the contract governance may perform this action"
-    );
-    await expect(
-      keeperIncentive
-        .connect(nonOwner)
-        .approveAccount(
-          utils.formatBytes32String("KeeperIncentiveHelper"),
-          owner.address
-        )
-    ).to.be.revertedWith(
-      "Only the contract governance may perform this action"
-    );
-    await expect(
-      keeperIncentive
-        .connect(nonOwner)
-        .removeApproval(
-          utils.formatBytes32String("KeeperIncentiveHelper"),
-          owner.address
-        )
-    ).to.be.revertedWith(
-      "Only the contract governance may perform this action"
-    );
+    ).to.be.revertedWith("you dont have the right role");
     await expect(
       keeperIncentive
         .connect(nonOwner)
         .toggleApproval(utils.formatBytes32String("KeeperIncentiveHelper"))
-    ).to.be.revertedWith(
-      "Only the contract governance may perform this action"
-    );
+    ).to.be.revertedWith("you dont have the right role");
     await expect(
       keeperIncentive
         .connect(nonOwner)
         .toggleIncentive(utils.formatBytes32String("KeeperIncentiveHelper"))
-    ).to.be.revertedWith(
-      "Only the contract governance may perform this action"
-    );
+    ).to.be.revertedWith("you dont have the right role");
   });
   it("should create an incentive", async () => {
     const result = await keeperIncentive
@@ -221,54 +200,6 @@ describe("Keeper incentives", function () {
       expect(await keeperIncentive.incentiveBudget()).to.equal(incentive);
     });
     context("approval", function () {
-      it("should approve accounts", async function () {
-        expect(
-          await keeperIncentive
-            .connect(owner)
-            .approveAccount(
-              utils.formatBytes32String("KeeperIncentiveHelper"),
-              nonOwner.address
-            )
-        )
-          .to.emit(keeperIncentive, "Approved")
-          .withArgs(
-            utils.formatBytes32String("KeeperIncentiveHelper"),
-            nonOwner.address
-          );
-        expect(
-          await keeperIncentive.approved(
-            utils.formatBytes32String("KeeperIncentiveHelper"),
-            nonOwner.address
-          )
-        ).to.equal(true);
-      });
-      it("should remove approval", async function () {
-        await keeperIncentive
-          .connect(owner)
-          .approveAccount(
-            utils.formatBytes32String("KeeperIncentiveHelper"),
-            nonOwner.address
-          );
-        expect(
-          await keeperIncentive
-            .connect(owner)
-            .removeApproval(
-              utils.formatBytes32String("KeeperIncentiveHelper"),
-              nonOwner.address
-            )
-        )
-          .to.emit(keeperIncentive, "RemovedApproval")
-          .withArgs(
-            utils.formatBytes32String("KeeperIncentiveHelper"),
-            nonOwner.address
-          );
-        expect(
-          await keeperIncentive.approved(
-            utils.formatBytes32String("KeeperIncentiveHelper"),
-            nonOwner.address
-          )
-        ).to.equal(false);
-      });
       it("should toggle approval", async function () {
         expect(
           await keeperIncentive
@@ -324,7 +255,7 @@ describe("Keeper incentives", function () {
       it("should not be callable for non approved addresses", async function () {
         await expect(
           keeperIncentiveHelper.connect(nonOwner).incentivisedFunction()
-        ).to.revertedWith("you are not approved as a keeper");
+        ).to.revertedWith("you dont have the right role");
       });
       it("should be callable for non approved addresses if the incentive is open to everyone", async function () {
         await keeperIncentive
@@ -352,19 +283,13 @@ describe("Keeper incentives", function () {
         keeperIncentive = await (
           await (
             await ethers.getContractFactory("KeeperIncentive")
-          ).deploy(mockPop.address, owner.address)
+          ).deploy(mockPop.address, aclRegistry.address)
         ).deployed();
         await keeperIncentive
           .connect(owner)
           .addControllerContract(
             utils.formatBytes32String("KeeperIncentiveHelper"),
             keeperIncentiveHelper.address
-          );
-        await keeperIncentive
-          .connect(owner)
-          .approveAccount(
-            utils.formatBytes32String("KeeperIncentiveHelper"),
-            owner.address
           );
         await mockPop
           .connect(nonOwner)

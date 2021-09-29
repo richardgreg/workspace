@@ -7,6 +7,7 @@ import { ethers, waffle } from "hardhat";
 import IUniswapV2Factory from "../artifacts/@uniswap/v2-core/contracts/interfaces/IUniswapV2Factory.sol/IUniswapV2Factory.json";
 import IUniswapV2Router02 from "../artifacts/@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol/IUniswapV2Router02.json";
 import {
+  ACLRegistry,
   BeneficiaryVaults,
   KeeperIncentive,
   MockERC20,
@@ -17,16 +18,17 @@ import {
 } from "../typechain";
 
 interface Contracts {
-  POP: MockERC20;
-  MockAlt: MockERC20;
-  Insurance: MockContract;
-  Treasury: MockContract;
-  BeneficiaryVaults: BeneficiaryVaults;
-  Staking: Staking;
+  pop: MockERC20;
+  mockAlt: MockERC20;
+  insurance: MockContract;
+  treasury: MockContract;
+  beneficiaryVaults: BeneficiaryVaults;
+  staking: Staking;
   mockUniswapV2Router: MockContract;
-  RewardsManager: RewardsManager;
-  Region: Region;
-  KeeperIncentive: KeeperIncentive;
+  rewardsManager: RewardsManager;
+  region: Region;
+  keeperIncentive: KeeperIncentive;
+  aclRegistry: ACLRegistry;
 }
 
 const RewardSplits = {
@@ -46,37 +48,40 @@ let contracts: Contracts;
 
 async function deployContracts(): Promise<Contracts> {
   const mockERC20Factory = await ethers.getContractFactory("MockERC20");
-  const POP = (await mockERC20Factory.deploy(
-    "TestPOP",
-    "TPOP",
+  const pop = (await mockERC20Factory.deploy(
+    "Testpop",
+    "Tpop",
     18
   )) as MockERC20;
-  await POP.mint(owner.address, OwnerInitial);
-  await POP.mint(rewarder.address, RewarderInitial);
 
-  const MockAlt = await mockERC20Factory.deploy("TestALT", "TALT", 18);
-  await MockAlt.mint(owner.address, OwnerInitial);
+  const mockAlt = await mockERC20Factory.deploy("TestALT", "TALT", 18);
 
   const treasuryFactory = await ethers.getContractFactory("MockTreasury");
-  const Treasury = await waffle.deployMockContract(
+  const treasury = await waffle.deployMockContract(
     owner,
     treasuryFactory.interface.format() as any[]
   );
 
   const insuranceFactory = await ethers.getContractFactory("MockInsurance");
-  const Insurance = await waffle.deployMockContract(
+  const insurance = await waffle.deployMockContract(
     owner,
     insuranceFactory.interface.format() as any[]
   );
 
+  const aclRegistry = await (
+    await (await ethers.getContractFactory("ACLRegistry")).deploy()
+  ).deployed();
+
   const rewardsEscrow = (await (
-    await (await ethers.getContractFactory("RewardsEscrow")).deploy(POP.address)
+    await (
+      await ethers.getContractFactory("RewardsEscrow")
+    ).deploy(pop.address, aclRegistry.address)
   ).deployed()) as RewardsEscrow;
 
-  const Staking = await (
+  const staking = await (
     await (
       await ethers.getContractFactory("Staking")
-    ).deploy(POP.address, rewardsEscrow.address)
+    ).deploy(pop.address, rewardsEscrow.address, aclRegistry.address)
   ).deployed();
 
   const mockBeneficiaryRegistryFactory = await ethers.getContractFactory(
@@ -90,23 +95,20 @@ async function deployContracts(): Promise<Contracts> {
   const beneficiaryVaultsFactory = await ethers.getContractFactory(
     "BeneficiaryVaults"
   );
-  const BeneficiaryVaults = await (
-    await beneficiaryVaultsFactory.deploy(POP.address)
+  const beneficiaryVaults = await (
+    await beneficiaryVaultsFactory.deploy(pop.address, aclRegistry.address)
   ).deployed();
-  await BeneficiaryVaults.connect(owner).setBeneficiaryRegistry(
-    mockBeneficiaryRegistry.address
-  );
 
-  const Region = await (
+  const region = await (
     await (
       await ethers.getContractFactory("Region")
-    ).deploy(BeneficiaryVaults.address)
+    ).deploy(beneficiaryVaults.address, aclRegistry.address)
   ).deployed();
 
-  const KeeperIncentive = await (
+  const keeperIncentive = await (
     await (
       await ethers.getContractFactory("KeeperIncentive")
-    ).deploy(POP.address, owner.address)
+    ).deploy(pop.address, aclRegistry.address)
   ).deployed();
 
   const mockUniswapV2Factory = await waffle.deployMockContract(
@@ -122,39 +124,57 @@ async function deployContracts(): Promise<Contracts> {
   const rewardsManagerFactory = await ethers.getContractFactory(
     "RewardsManager"
   );
-  const RewardsManager = await rewardsManagerFactory.deploy(
-    POP.address,
-    Staking.address,
-    Treasury.address,
-    Insurance.address,
-    Region.address,
-    KeeperIncentive.address,
+  const rewardsManager = await rewardsManagerFactory.deploy(
+    pop.address,
+    staking.address,
+    treasury.address,
+    insurance.address,
+    region.address,
+    aclRegistry.address,
+    keeperIncentive.address,
     mockUniswapV2Router.address
   );
-  await RewardsManager.deployed();
-  await Staking.init(RewardsManager.address);
+  await rewardsManager.deployed();
 
-  await KeeperIncentive.connect(owner).addControllerContract(
-    utils.formatBytes32String("RewardsManager"),
-    RewardsManager.address
-  );
+  await aclRegistry
+    .connect(owner)
+    .grantRole(ethers.utils.id("Comptroller"), owner.address);
+  await aclRegistry
+    .connect(owner)
+    .grantRole(ethers.utils.id("DAO"), owner.address);
+  await aclRegistry
+    .connect(owner)
+    .grantRole(ethers.utils.id("Keeper"), owner.address);
 
-  await KeeperIncentive.connect(owner).approveAccount(
-    utils.formatBytes32String("RewardsManager"),
-    owner.address
-  );
+  await staking.init(rewardsManager.address);
+
+  await beneficiaryVaults
+    .connect(owner)
+    .setBeneficiaryRegistry(mockBeneficiaryRegistry.address);
+
+  await keeperIncentive
+    .connect(owner)
+    .addControllerContract(
+      utils.formatBytes32String("RewardsManager"),
+      rewardsManager.address
+    );
+
+  await pop.mint(owner.address, OwnerInitial);
+  await pop.mint(rewarder.address, RewarderInitial);
+  await mockAlt.mint(owner.address, OwnerInitial);
 
   return {
-    POP,
-    MockAlt,
-    Insurance,
-    Treasury,
-    Staking,
-    BeneficiaryVaults,
+    pop,
+    mockAlt,
+    insurance,
+    treasury,
+    staking,
+    beneficiaryVaults,
     mockUniswapV2Router,
-    RewardsManager,
-    Region,
-    KeeperIncentive,
+    rewardsManager,
+    region,
+    keeperIncentive,
+    aclRegistry,
   };
 }
 
@@ -165,58 +185,58 @@ describe("RewardsManager", function () {
   });
 
   it("should be constructed with correct addresses", async function () {
-    expect(await contracts.RewardsManager.POP()).to.equal(
-      contracts.POP.address
+    expect(await contracts.rewardsManager.POP()).to.equal(
+      contracts.pop.address
     );
-    expect(await contracts.RewardsManager.staking()).to.equal(
-      contracts.Staking.address
+    expect(await contracts.rewardsManager.staking()).to.equal(
+      contracts.staking.address
     );
-    expect(await contracts.RewardsManager.treasury()).to.equal(
-      contracts.Treasury.address
+    expect(await contracts.rewardsManager.treasury()).to.equal(
+      contracts.treasury.address
     );
-    expect(await contracts.RewardsManager.insurance()).to.equal(
-      contracts.Insurance.address
+    expect(await contracts.rewardsManager.insurance()).to.equal(
+      contracts.insurance.address
     );
-    expect(await contracts.RewardsManager.region()).to.equal(
-      contracts.Region.address
+    expect(await contracts.rewardsManager.region()).to.equal(
+      contracts.region.address
     );
-    expect(await contracts.RewardsManager.uniswapV2Router()).to.equal(
+    expect(await contracts.rewardsManager.uniswapV2Router()).to.equal(
       contracts.mockUniswapV2Router.address
     );
   });
 
   it("should be initialized with correct splits", async function () {
-    expect(await contracts.RewardsManager.rewardSplits(0)).to.equal(
+    expect(await contracts.rewardsManager.rewardSplits(0)).to.equal(
       parseEther("32")
     );
-    expect(await contracts.RewardsManager.rewardSplits(1)).to.equal(
+    expect(await contracts.rewardsManager.rewardSplits(1)).to.equal(
       parseEther("32")
     );
-    expect(await contracts.RewardsManager.rewardSplits(2)).to.equal(
+    expect(await contracts.rewardsManager.rewardSplits(2)).to.equal(
       parseEther("2")
     );
-    expect(await contracts.RewardsManager.rewardSplits(3)).to.equal(
+    expect(await contracts.rewardsManager.rewardSplits(3)).to.equal(
       parseEther("34")
     );
   });
 
   it("reverts when setting reward splits as non-owner", async function () {
     await expect(
-      contracts.RewardsManager.connect(nonOwner).setRewardSplits([
-        20, 18, 2, 60,
-      ])
-    ).to.be.revertedWith("Only the contract owner may perform this action");
+      contracts.rewardsManager
+        .connect(nonOwner)
+        .setRewardSplits([20, 18, 2, 60])
+    ).to.be.revertedWith("you dont have the right role");
   });
 
   it("reverts when setting invalid reward splits", async function () {
     await expect(
-      contracts.RewardsManager.setRewardSplits([19, 19, 2, 60])
+      contracts.rewardsManager.setRewardSplits([19, 19, 2, 60])
     ).to.be.revertedWith("Invalid split");
   });
 
   it("reverts when setting invalid total reward splits", async function () {
     await expect(
-      contracts.RewardsManager.setRewardSplits([
+      contracts.rewardsManager.setRewardSplits([
         parseEther("20.000000001"),
         parseEther("18"),
         parseEther("2"),
@@ -227,21 +247,13 @@ describe("RewardsManager", function () {
 
   it("reverts when setting out of bounds reward splits", async function () {
     await expect(
-      contracts.RewardsManager.setRewardSplits([
+      contracts.rewardsManager.setRewardSplits([
         parseEther("9"),
         parseEther("9"),
         parseEther("2"),
         parseEther("80"),
       ])
     ).to.be.revertedWith("Invalid split");
-  });
-
-  it("cannot nominate new owner as non-owner", async function () {
-    await expect(
-      contracts.RewardsManager.connect(nonOwner).nominateNewOwner(
-        nonOwner.address
-      )
-    ).to.be.revertedWith("Only the contract owner may perform this action");
   });
 
   describe("reward splits are set", function () {
@@ -253,7 +265,7 @@ describe("RewardsManager", function () {
     ];
     let result;
     beforeEach(async function () {
-      result = await contracts.RewardsManager.setRewardSplits([
+      result = await contracts.rewardsManager.setRewardSplits([
         parseEther("20"),
         parseEther("18"),
         parseEther("2"),
@@ -263,21 +275,21 @@ describe("RewardsManager", function () {
 
     it("should emit RewardSplitsUpdated event", async function () {
       expect(result)
-        .to.emit(contracts.RewardsManager, "RewardSplitsUpdated")
+        .to.emit(contracts.rewardsManager, "RewardSplitsUpdated")
         .withArgs(newRewardSplits);
     });
 
     it("should have updated correct splits", async function () {
-      expect(await contracts.RewardsManager.rewardSplits(0)).to.equal(
+      expect(await contracts.rewardsManager.rewardSplits(0)).to.equal(
         parseEther("20")
       );
-      expect(await contracts.RewardsManager.rewardSplits(1)).to.equal(
+      expect(await contracts.rewardsManager.rewardSplits(1)).to.equal(
         parseEther("18")
       );
-      expect(await contracts.RewardsManager.rewardSplits(2)).to.equal(
+      expect(await contracts.rewardsManager.rewardSplits(2)).to.equal(
         parseEther("2")
       );
-      expect(await contracts.RewardsManager.rewardSplits(3)).to.equal(
+      expect(await contracts.rewardsManager.rewardSplits(3)).to.equal(
         parseEther("60")
       );
     });
@@ -285,25 +297,25 @@ describe("RewardsManager", function () {
 
   it("should revert setting to same Staking", async function () {
     await expect(
-      contracts.RewardsManager.setStaking(contracts.Staking.address)
+      contracts.rewardsManager.setStaking(contracts.staking.address)
     ).to.be.revertedWith("Same Staking");
   });
 
   it("should revert setting to same Treasury", async function () {
     await expect(
-      contracts.RewardsManager.setTreasury(contracts.Treasury.address)
+      contracts.rewardsManager.setTreasury(contracts.treasury.address)
     ).to.be.revertedWith("Same Treasury");
   });
 
   it("should revert setting to same Insurance", async function () {
     await expect(
-      contracts.RewardsManager.setInsurance(contracts.Insurance.address)
+      contracts.rewardsManager.setInsurance(contracts.insurance.address)
     ).to.be.revertedWith("Same Insurance");
   });
 
   it("should revert setting to same Region", async function () {
     await expect(
-      contracts.RewardsManager.setRegion(contracts.Region.address)
+      contracts.rewardsManager.setRegion(contracts.region.address)
     ).to.be.revertedWith("Same Region");
   });
 
@@ -312,59 +324,59 @@ describe("RewardsManager", function () {
     it("sets new Staking", async function () {
       const newStaking = await waffle.deployMockContract(
         owner,
-        contracts.Staking.interface.format() as any[]
+        contracts.staking.interface.format() as any[]
       );
-      result = await contracts.RewardsManager.setStaking(newStaking.address);
-      expect(await contracts.RewardsManager.staking()).to.equal(
+      result = await contracts.rewardsManager.setStaking(newStaking.address);
+      expect(await contracts.rewardsManager.staking()).to.equal(
         newStaking.address
       );
       expect(result)
-        .to.emit(contracts.RewardsManager, "StakingChanged")
-        .withArgs(contracts.Staking.address, newStaking.address);
+        .to.emit(contracts.rewardsManager, "StakingChanged")
+        .withArgs(contracts.staking.address, newStaking.address);
     });
 
     it("sets new Insurance", async function () {
       const newInsurance = await waffle.deployMockContract(
         owner,
-        contracts.Insurance.interface.format() as any[]
+        contracts.insurance.interface.format() as any[]
       );
-      result = await contracts.RewardsManager.setInsurance(
+      result = await contracts.rewardsManager.setInsurance(
         newInsurance.address
       );
-      expect(await contracts.RewardsManager.insurance()).to.equal(
+      expect(await contracts.rewardsManager.insurance()).to.equal(
         newInsurance.address
       );
       expect(result)
-        .to.emit(contracts.RewardsManager, "InsuranceChanged")
-        .withArgs(contracts.Insurance.address, newInsurance.address);
+        .to.emit(contracts.rewardsManager, "InsuranceChanged")
+        .withArgs(contracts.insurance.address, newInsurance.address);
     });
 
     it("sets new Treasury", async function () {
       const newTreasury = await waffle.deployMockContract(
         owner,
-        contracts.Treasury.interface.format() as any[]
+        contracts.treasury.interface.format() as any[]
       );
-      result = await contracts.RewardsManager.setTreasury(newTreasury.address);
-      expect(await contracts.RewardsManager.treasury()).to.equal(
+      result = await contracts.rewardsManager.setTreasury(newTreasury.address);
+      expect(await contracts.rewardsManager.treasury()).to.equal(
         newTreasury.address
       );
       expect(result)
-        .to.emit(contracts.RewardsManager, "TreasuryChanged")
-        .withArgs(contracts.Treasury.address, newTreasury.address);
+        .to.emit(contracts.rewardsManager, "TreasuryChanged")
+        .withArgs(contracts.treasury.address, newTreasury.address);
     });
 
     it("sets new Region", async function () {
       const newRegion = await waffle.deployMockContract(
         owner,
-        contracts.Region.interface.format() as any[]
+        contracts.region.interface.format() as any[]
       );
-      result = await contracts.RewardsManager.setRegion(newRegion.address);
-      expect(await contracts.RewardsManager.region()).to.equal(
+      result = await contracts.rewardsManager.setRegion(newRegion.address);
+      expect(await contracts.rewardsManager.region()).to.equal(
         newRegion.address
       );
       expect(result)
-        .to.emit(contracts.RewardsManager, "RegionChanged")
-        .withArgs(contracts.Region.address, newRegion.address);
+        .to.emit(contracts.rewardsManager, "RegionChanged")
+        .withArgs(contracts.region.address, newRegion.address);
     });
   });
 
@@ -385,83 +397,81 @@ describe("RewardsManager", function () {
     let result;
 
     beforeEach(async function () {
-      await contracts.POP.connect(rewarder).transfer(
-        contracts.RewardsManager.address,
-        firstReward
-      );
+      await contracts.pop
+        .connect(rewarder)
+        .transfer(contracts.rewardsManager.address, firstReward);
     });
 
     it("contract has expected balance", async function () {
       expect(
-        await contracts.POP.balanceOf(contracts.RewardsManager.address)
+        await contracts.pop.balanceOf(contracts.rewardsManager.address)
       ).to.equal(firstReward);
     });
 
     describe("rewards are distributed", function () {
       beforeEach(async function () {
-        result = await contracts.RewardsManager.distributeRewards();
+        result = await contracts.rewardsManager.distributeRewards();
       });
 
       it("emits expected events", async function () {
         expect(result)
-          .to.emit(contracts.RewardsManager, "StakingDeposited")
-          .withArgs(contracts.Staking.address, stakingReward);
+          .to.emit(contracts.rewardsManager, "StakingDeposited")
+          .withArgs(contracts.staking.address, stakingReward);
         expect(result)
-          .to.emit(contracts.RewardsManager, "TreasuryDeposited")
-          .withArgs(contracts.Treasury.address, treasuryReward);
+          .to.emit(contracts.rewardsManager, "TreasuryDeposited")
+          .withArgs(contracts.treasury.address, treasuryReward);
         expect(result)
-          .to.emit(contracts.RewardsManager, "InsuranceDeposited")
-          .withArgs(contracts.Insurance.address, insuranceReward);
+          .to.emit(contracts.rewardsManager, "InsuranceDeposited")
+          .withArgs(contracts.insurance.address, insuranceReward);
         expect(result)
-          .to.emit(contracts.RewardsManager, "BeneficiaryVaultsDeposited")
+          .to.emit(contracts.rewardsManager, "BeneficiaryVaultsDeposited")
           .withArgs(beneficiaryVaultsReward);
         expect(result)
-          .to.emit(contracts.RewardsManager, "RewardsDistributed")
+          .to.emit(contracts.rewardsManager, "RewardsDistributed")
           .withArgs(firstReward);
       });
 
       it("has expected contract balance", async function () {
         expect(
-          await contracts.POP.balanceOf(contracts.RewardsManager.address)
+          await contracts.pop.balanceOf(contracts.rewardsManager.address)
         ).to.equal(0);
       });
 
       it("Staking has expected balance", async function () {
         expect(
-          await contracts.POP.balanceOf(contracts.Staking.address)
+          await contracts.pop.balanceOf(contracts.staking.address)
         ).to.equal(stakingReward);
       });
 
       it("Treasury has expected balance", async function () {
         expect(
-          await contracts.POP.balanceOf(contracts.Treasury.address)
+          await contracts.pop.balanceOf(contracts.treasury.address)
         ).to.equal(treasuryReward);
       });
 
       it("Insurance has expected balance", async function () {
         expect(
-          await contracts.POP.balanceOf(contracts.Insurance.address)
+          await contracts.pop.balanceOf(contracts.insurance.address)
         ).to.equal(insuranceReward);
       });
 
       it("BeneficiaryVaults has expected balance", async function () {
         expect(
-          await contracts.POP.balanceOf(contracts.BeneficiaryVaults.address)
+          await contracts.pop.balanceOf(contracts.beneficiaryVaults.address)
         ).to.equal(beneficiaryVaultsReward);
       });
 
       describe("send more rewards", function () {
         const secondReward = parseEther("0.05");
         beforeEach(async function () {
-          await contracts.POP.connect(rewarder).transfer(
-            contracts.RewardsManager.address,
-            secondReward
-          );
+          await contracts.pop
+            .connect(rewarder)
+            .transfer(contracts.rewardsManager.address, secondReward);
         });
 
         it("has expected contract balance", async function () {
           expect(
-            await contracts.POP.balanceOf(contracts.RewardsManager.address)
+            await contracts.pop.balanceOf(contracts.rewardsManager.address)
           ).to.equal(secondReward);
         });
 
@@ -479,54 +489,54 @@ describe("RewardsManager", function () {
             .mul(RewardSplits.BeneficiaryVaults)
             .div(parseEther("100"));
           beforeEach(async function () {
-            result = await contracts.RewardsManager.distributeRewards();
+            result = await contracts.rewardsManager.distributeRewards();
           });
 
           it("emits expected events", async function () {
             expect(result)
-              .to.emit(contracts.RewardsManager, "StakingDeposited")
-              .withArgs(contracts.Staking.address, stakingSecondReward);
+              .to.emit(contracts.rewardsManager, "StakingDeposited")
+              .withArgs(contracts.staking.address, stakingSecondReward);
             expect(result)
-              .to.emit(contracts.RewardsManager, "TreasuryDeposited")
-              .withArgs(contracts.Treasury.address, treasurySecondReward);
+              .to.emit(contracts.rewardsManager, "TreasuryDeposited")
+              .withArgs(contracts.treasury.address, treasurySecondReward);
             expect(result)
-              .to.emit(contracts.RewardsManager, "InsuranceDeposited")
-              .withArgs(contracts.Insurance.address, insuranceSecondReward);
+              .to.emit(contracts.rewardsManager, "InsuranceDeposited")
+              .withArgs(contracts.insurance.address, insuranceSecondReward);
             expect(result)
-              .to.emit(contracts.RewardsManager, "BeneficiaryVaultsDeposited")
+              .to.emit(contracts.rewardsManager, "BeneficiaryVaultsDeposited")
               .withArgs(beneficiaryVaultsSecondReward);
             expect(result)
-              .to.emit(contracts.RewardsManager, "RewardsDistributed")
+              .to.emit(contracts.rewardsManager, "RewardsDistributed")
               .withArgs(secondReward);
           });
 
           it("has expected contract balance", async function () {
             expect(
-              await contracts.POP.balanceOf(contracts.RewardsManager.address)
+              await contracts.pop.balanceOf(contracts.rewardsManager.address)
             ).to.equal(0);
           });
 
           it("Staking has expected balance", async function () {
             expect(
-              await contracts.POP.balanceOf(contracts.Staking.address)
+              await contracts.pop.balanceOf(contracts.staking.address)
             ).to.equal(stakingReward.add(stakingSecondReward));
           });
 
           it("Treasury has expected balance", async function () {
             expect(
-              await contracts.POP.balanceOf(contracts.Treasury.address)
+              await contracts.pop.balanceOf(contracts.treasury.address)
             ).to.equal(treasuryReward.add(treasurySecondReward));
           });
 
           it("Insurance has expected balance", async function () {
             expect(
-              await contracts.POP.balanceOf(contracts.Insurance.address)
+              await contracts.pop.balanceOf(contracts.insurance.address)
             ).to.equal(insuranceReward.add(insuranceSecondReward));
           });
 
           it("BeneficiaryVaults has expected balance", async function () {
             expect(
-              await contracts.POP.balanceOf(contracts.BeneficiaryVaults.address)
+              await contracts.pop.balanceOf(contracts.beneficiaryVaults.address)
             ).to.equal(
               beneficiaryVaultsReward.add(beneficiaryVaultsSecondReward)
             );
@@ -538,22 +548,22 @@ describe("RewardsManager", function () {
     describe("send alt token for reward swap", function () {
       const altAmount = parseEther("1");
       beforeEach(async function () {
-        await contracts.MockAlt.transfer(
-          contracts.RewardsManager.address,
+        await contracts.mockAlt.transfer(
+          contracts.rewardsManager.address,
           altAmount
         );
       });
 
       it("has expected contract balance", async function () {
         expect(
-          await contracts.MockAlt.balanceOf(contracts.RewardsManager.address)
+          await contracts.mockAlt.balanceOf(contracts.rewardsManager.address)
         ).to.equal(altAmount);
       });
 
       it("reverts with short path", async function () {
         await expect(
-          contracts.RewardsManager.swapTokenForRewards(
-            [contracts.MockAlt.address],
+          contracts.rewardsManager.swapTokenForRewards(
+            [contracts.mockAlt.address],
             100
           )
         ).to.be.revertedWith("Invalid swap path");
@@ -561,8 +571,8 @@ describe("RewardsManager", function () {
 
       it("reverts with invalid amount", async function () {
         await expect(
-          contracts.RewardsManager.swapTokenForRewards(
-            [contracts.MockAlt.address, contracts.POP.address],
+          contracts.rewardsManager.swapTokenForRewards(
+            [contracts.mockAlt.address, contracts.pop.address],
             0
           )
         ).to.be.revertedWith("Invalid amount");
@@ -570,8 +580,8 @@ describe("RewardsManager", function () {
 
       it("reverts with invalid path", async function () {
         await expect(
-          contracts.RewardsManager.swapTokenForRewards(
-            [contracts.MockAlt.address, contracts.MockAlt.address],
+          contracts.rewardsManager.swapTokenForRewards(
+            [contracts.mockAlt.address, contracts.mockAlt.address],
             100
           )
         ).to.be.revertedWith("POP must be last in path");
@@ -583,25 +593,25 @@ describe("RewardsManager", function () {
           await contracts.mockUniswapV2Router.mock.swapExactTokensForTokens.returns(
             [altAmount, swapReward]
           );
-          await contracts.POP.transfer(
-            contracts.RewardsManager.address,
+          await contracts.pop.transfer(
+            contracts.rewardsManager.address,
             swapReward
           ); //simulate swap
-          result = await contracts.RewardsManager.swapTokenForRewards(
-            [contracts.MockAlt.address, contracts.POP.address],
+          result = await contracts.rewardsManager.swapTokenForRewards(
+            [contracts.mockAlt.address, contracts.pop.address],
             swapReward
           );
         });
 
         it("emits expected events", async function () {
           expect(result)
-            .to.emit(contracts.RewardsManager, "TokenSwapped")
-            .withArgs(contracts.MockAlt.address, altAmount, swapReward);
+            .to.emit(contracts.rewardsManager, "TokenSwapped")
+            .withArgs(contracts.mockAlt.address, altAmount, swapReward);
         });
 
         it("has expected contract balance", async function () {
           expect(
-            await contracts.POP.balanceOf(contracts.RewardsManager.address)
+            await contracts.pop.balanceOf(contracts.rewardsManager.address)
           ).to.equal(firstReward.add(swapReward));
         });
       });
@@ -610,36 +620,32 @@ describe("RewardsManager", function () {
   describe("Keeper Incentives", function () {
     it("pays out keeper incentives", async function () {
       //Test preparation
-      await contracts.POP.mint(owner.address, parseEther("20.24"));
-      await contracts.POP.connect(owner).approve(
-        contracts.RewardsManager.address,
-        parseEther("20")
-      );
-      await contracts.KeeperIncentive.connect(owner).createIncentive(
-        utils.formatBytes32String("RewardsManager"),
-        parseEther("10"),
-        true,
-        false
-      );
-      await contracts.KeeperIncentive.connect(owner).approveAccount(
-        utils.formatBytes32String("RewardsManager"),
-        owner.address
-      );
-      await contracts.POP.connect(owner).approve(
-        contracts.KeeperIncentive.address,
-        parseEther("100000")
-      );
-      await contracts.KeeperIncentive.connect(owner).fundIncentive(
-        parseEther("20")
-      );
+      await contracts.pop.mint(owner.address, parseEther("20.24"));
+      await contracts.pop
+        .connect(owner)
+        .approve(contracts.rewardsManager.address, parseEther("20"));
+      await contracts.keeperIncentive
+        .connect(owner)
+        .createIncentive(
+          utils.formatBytes32String("RewardsManager"),
+          parseEther("10"),
+          true,
+          false
+        );
+      await contracts.pop
+        .connect(owner)
+        .approve(contracts.keeperIncentive.address, parseEther("100000"));
+      await contracts.keeperIncentive
+        .connect(owner)
+        .fundIncentive(parseEther("20"));
       const swapReward = parseEther("0.24");
       const altAmount = parseEther("1");
-      await contracts.MockAlt.transfer(
-        contracts.RewardsManager.address,
+      await contracts.mockAlt.transfer(
+        contracts.rewardsManager.address,
         altAmount
       );
-      await contracts.POP.transfer(
-        contracts.RewardsManager.address,
+      await contracts.pop.transfer(
+        contracts.rewardsManager.address,
         swapReward
       );
 
@@ -648,16 +654,18 @@ describe("RewardsManager", function () {
       );
 
       //Actual test
-      await contracts.RewardsManager.connect(owner).swapTokenForRewards(
-        [contracts.MockAlt.address, contracts.POP.address],
-        swapReward
-      );
-      expect(await contracts.POP.balanceOf(owner.address)).to.equal(
+      await contracts.rewardsManager
+        .connect(owner)
+        .swapTokenForRewards(
+          [contracts.mockAlt.address, contracts.pop.address],
+          swapReward
+        );
+      expect(await contracts.pop.balanceOf(owner.address)).to.equal(
         parseEther("20")
       );
 
-      await contracts.RewardsManager.connect(owner).distributeRewards();
-      expect(await contracts.POP.balanceOf(owner.address)).to.equal(
+      await contracts.rewardsManager.connect(owner).distributeRewards();
+      expect(await contracts.pop.balanceOf(owner.address)).to.equal(
         parseEther("30")
       );
     });

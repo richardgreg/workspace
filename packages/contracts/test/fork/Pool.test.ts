@@ -1,8 +1,8 @@
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
-import { MockERC20, Faucet, Zapper, Pool } from "../../typechain";
 import { expect } from "chai";
-import { waffle, ethers, network } from "hardhat";
 import { parseEther, parseUnits } from "ethers/lib/utils";
+import { ethers, network, waffle } from "hardhat";
+import { Faucet, MockERC20, Pool, Zapper } from "../../typechain";
 
 const provider = waffle.provider;
 
@@ -58,15 +58,19 @@ async function deployContracts(): Promise<Contracts> {
     await Zapper.deploy(CURVE_ADDRESS_PROVIDER_ADDRESS)
   ).deployed();
 
+  const aclRegistry = await (
+    await (await ethers.getContractFactory("ACLRegistry")).deploy()
+  ).deployed();
+
   const Pool = await ethers.getContractFactory("Pool");
   const pool = await (
     await Pool.deploy(
       FRAX_LP_TOKEN_ADDRESS,
       YEARN_REGISTRY_ADDRESS,
-      rewardsManager.address
+      rewardsManager.address,
+      aclRegistry.address
     )
   ).deployed();
-  pool.approveContractAccess(zapper.address);
 
   const dai = (await ethers.getContractAt(
     "MockERC20",
@@ -88,6 +92,8 @@ async function deployContracts(): Promise<Contracts> {
     FRAX_TOKEN_ADDRESS
   )) as MockERC20;
 
+  await aclRegistry.grantRole(ethers.utils.id("Comptroller"), owner.address);
+  await aclRegistry.grantRole(ethers.utils.id("Defender"), zapper.address);
   return {
     dai,
     usdc,
@@ -98,7 +104,6 @@ async function deployContracts(): Promise<Contracts> {
     pool,
   };
 }
-
 
 describe("Pool  [ @skip-on-coverage ]", function () {
   beforeEach(async function () {
@@ -113,14 +118,8 @@ describe("Pool  [ @skip-on-coverage ]", function () {
         },
       ],
     });
-    [
-      owner,
-      depositor,
-      depositor1,
-      depositor2,
-      depositor3,
-      rewardsManager,
-    ] = await ethers.getSigners();
+    [owner, depositor, depositor1, depositor2, depositor3, rewardsManager] =
+      await ethers.getSigners();
     contracts = await deployContracts();
     [depositor, depositor1, depositor2, depositor3].forEach(async (account) => {
       await contracts.faucet.sendTokens(
