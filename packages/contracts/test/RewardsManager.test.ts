@@ -141,6 +141,9 @@ async function deployContracts(): Promise<Contracts> {
     .grantRole(ethers.utils.id("Comptroller"), owner.address);
   await aclRegistry
     .connect(owner)
+    .grantRole(ethers.utils.id("RewardsManager"), rewardsManager.address);
+  await aclRegistry
+    .connect(owner)
     .grantRole(ethers.utils.id("DAO"), owner.address);
   await aclRegistry
     .connect(owner)
@@ -151,6 +154,24 @@ async function deployContracts(): Promise<Contracts> {
   await beneficiaryVaults
     .connect(owner)
     .setBeneficiaryRegistry(mockBeneficiaryRegistry.address);
+
+  await keeperIncentive
+    .connect(owner)
+    .createIncentive(
+      utils.formatBytes32String("RewardsManager"),
+      parseEther("10"),
+      true,
+      false
+    );
+
+  await keeperIncentive
+    .connect(owner)
+    .createIncentive(
+      utils.formatBytes32String("RewardsManager"),
+      parseEther("10"),
+      true,
+      false
+    );
 
   await keeperIncentive
     .connect(owner)

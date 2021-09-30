@@ -356,6 +356,15 @@ const deployAndAssignContracts = async () => {
       contracts.hysiBatchInteraction.address
     );
 
+  await contracts.keeperIncentive
+    .connect(owner)
+    .createIncentive(
+      utils.formatBytes32String("HysiBatchInteraction"),
+      0,
+      true,
+      false
+    );
+
   DepositorInitial = await contracts.dai.balanceOf(depositor.address);
   await contracts.faucet.sendThreeCrv(100, depositor.address);
   await contracts.dai

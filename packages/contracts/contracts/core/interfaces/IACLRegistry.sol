@@ -111,7 +111,7 @@ interface IACLRegistry {
 
   function revokePermission(bytes32 permission) external;
 
-  function defend(address account) external view;
+  function requireApprovedContractOrEOA(address account) external view;
 
   function requireRole(bytes32 role, address account) external view;
 

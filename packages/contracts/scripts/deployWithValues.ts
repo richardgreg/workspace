@@ -227,6 +227,31 @@ export default async function deploy(ethers): Promise<void> {
       accounts[0].address
     );
 
+    await keeperIncentive
+      .connect(accounts[0])
+      .createIncentive(
+        utils.formatBytes32String("RewardsManager"),
+        0,
+        true,
+        false
+      );
+    await keeperIncentive
+      .connect(accounts[0])
+      .createIncentive(
+        utils.formatBytes32String("RewardsManager"),
+        0,
+        true,
+        false
+      );
+    await keeperIncentive
+      .connect(accounts[0])
+      .createIncentive(
+        utils.formatBytes32String("HysiBatchInteraction"),
+        0,
+        true,
+        false
+      );
+
     await staking.connect(accounts[0]).init(rewardsManager.address);
 
     contracts = {

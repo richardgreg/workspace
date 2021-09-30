@@ -20,7 +20,7 @@ contract KeeperIncentiveHelper {
   }
 
   function incentivisedFunction() public {
-    keeperIncentive.handleKeeperIncentive(contractName, msg.sender);
+    keeperIncentive.handleKeeperIncentive(contractName, 0, msg.sender);
     emit FunctionCalled(msg.sender);
   }
 }
