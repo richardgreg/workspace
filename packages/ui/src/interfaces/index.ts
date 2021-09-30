@@ -16,7 +16,6 @@ export interface ChartData {
 }
 
 export interface NavBarProps {
-  title: string;
   logo: string;
   contractProps: {
     open: boolean;

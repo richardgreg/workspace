@@ -164,7 +164,7 @@ export const CalendarInput: React.FC<CalendarInputProps> = ({
   }, []);
 
   return (
-    <div className="container mx-auto px-4 py-2">
+    <div className="px-1 py-2">
       <div className="w-72">
         {label && (
           <label

@@ -33,13 +33,12 @@ export const ContractContainer: React.FC<ContractContainerProps> = ({
   readyState,
 }): JSX.Element => {
   return (
-    <div className="mb-5 mt-12 self-center">
-      <div className="max-w-7xl">
-        <h1 className="text-3xl font-bold leading-tight text-gray-900">
-          {contract.name}
-        </h1>
-      </div>
-      <div className="max-w-7xl mb-5">
+    <div className="mb-5 mt-12">
+      <h1 className="text-3xl font-medium leading-tight text-gray-900">
+        {contract.name}
+      </h1>
+
+      <div className="mb-5">
         <StatsCards
           stats={getStatCardData(
             transactionsCurrentPeriod,
@@ -48,23 +47,16 @@ export const ContractContainer: React.FC<ContractContainerProps> = ({
           )}
         />
       </div>
-      <div className="max-w-7xl">
-        <div className="grid grid-cols-1 gap-4 lg:col-span-2">
-          <div className="rounded-lg bg-white overflow-hidden shadow py-6">
-            {readyState === 'loading' && <ChartLoading height={300} />}
-            {readyState === 'done' && (
-              <BiaxialLineChart
-                data={getChartData(
-                  transactionsCurrentPeriod,
-                  startDate,
-                  endDate,
-                )}
-                height={224}
-              />
-            )}
-            {readyState === 'error' && <ChartError height={300} />}
-          </div>
-        </div>
+
+      <div className="rounded-lg bg-white overflow-hidden shadow py-6">
+        {readyState === 'loading' && <ChartLoading height={300} />}
+        {readyState === 'done' && (
+          <BiaxialLineChart
+            data={getChartData(transactionsCurrentPeriod, startDate, endDate)}
+            height={224}
+          />
+        )}
+        {readyState === 'error' && <ChartError height={300} />}
       </div>
     </div>
   );
