@@ -27,6 +27,16 @@ const loadingCard = (item: StatCardData) => {
   );
 };
 
+const errorCard = () => {
+  return (
+    <div className="relative h-24 w-64 flex items-stretch justify-center bg-white px-4  shadow rounded-lg overflow-hidden">
+      <p className="text-sm self-center text-gray-500 ">
+        Error loading transactions
+      </p>
+    </div>
+  );
+};
+
 export const StatsCards: React.FC<StatsCardProps> = ({
   stats,
   iconCol = 'bg-indigo-500',
@@ -36,6 +46,7 @@ export const StatsCards: React.FC<StatsCardProps> = ({
     <div className="w-screen grid justify-items-stretch">
       <dl className="justify-self-start mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {readyState === 'loading' && stats.map((item) => loadingCard(item))}
+
         {readyState === 'done' &&
           stats.map((item) => (
             <div
@@ -85,6 +96,7 @@ export const StatsCards: React.FC<StatsCardProps> = ({
               </dd>
             </div>
           ))}
+        {readyState === 'error' && errorCard()}
       </dl>
     </div>
   );
