@@ -7,10 +7,12 @@ function classNames(...classes) {
 
 interface StatsCardProps {
   stats: StatCardData[];
+  iconCol?: string;
 }
 
 export const StatsCards: React.FC<StatsCardProps> = ({
   stats,
+  iconCol = 'bg-indigo-500',
 }): JSX.Element => {
   return (
     <div className="w-screen grid justify-items-stretch">
@@ -21,7 +23,7 @@ export const StatsCards: React.FC<StatsCardProps> = ({
             className="relative h-24 w-64 bg-white pt-5 px-4 pb-12 sm:pt-6 sm:px-6 shadow rounded-lg overflow-hidden"
           >
             <dt>
-              <div className="absolute bg-indigo-500 rounded-md p-3">
+              <div className={`absolute ${iconCol} rounded-md p-3`}>
                 <item.icon className="h-6 w-6 text-white" aria-hidden="true" />
               </div>
               <p className="ml-16 text-sm font-medium text-gray-500 truncate">
