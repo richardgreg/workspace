@@ -180,9 +180,8 @@ const IndexPage = (): JSX.Element => {
   };
 
   return (
-    <div className="bg-gray-50">
+    <div className="bg-white">
       <NavBar
-        title="Smart Contract Emissions Dashboard"
         logo="/images/popcorn-logo.png"
         contractProps={{ addContract, open, setOpen }}
         contractErrorProps={{
@@ -192,35 +191,44 @@ const IndexPage = (): JSX.Element => {
         }}
         refresh={getTransactions}
       />
-      <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 ">
-        <DateRangePicker
-          updateDates={updateDates}
-          startDate={startDate}
-          endDate={endDate}
-        />
-        <TotalStats
-          transactionsPreviousPeriod={transactionsPreviousPeriod}
-          transactionsCurrentPeriod={transactionsCurrentPeriod}
-          startDate={startDate}
-          readyState={readyState}
-          endDate={endDate}
-        />
-        {contracts.map((contract) => {
-          return (
-            <ContractContainer
-              transactionsPreviousPeriod={transactionsPreviousPeriod.filter(
-                (txn) => txn.to === contract.address,
-              )}
-              transactionsCurrentPeriod={transactionsCurrentPeriod.filter(
-                (txn) => txn.to === contract.address,
-              )}
-              contract={contract}
-              endDate={endDate}
-              startDate={startDate}
-              readyState={readyState}
-            />
-          );
-        })}
+      <div className="bg-gray-100">
+        <div className="max-w-7xl mx-auto pb-8">
+          <header>
+            <div className="pt-6 py-5  ">
+              <h1 className="text-5xl text-center font-medium leading-tight text-black">
+                Smart Contract Emissions Dashboard
+              </h1>
+            </div>
+          </header>
+          <DateRangePicker
+            updateDates={updateDates}
+            startDate={startDate}
+            endDate={endDate}
+          />
+          <TotalStats
+            transactionsPreviousPeriod={transactionsPreviousPeriod}
+            transactionsCurrentPeriod={transactionsCurrentPeriod}
+            startDate={startDate}
+            readyState={readyState}
+            endDate={endDate}
+          />
+          {contracts.map((contract) => {
+            return (
+              <ContractContainer
+                transactionsPreviousPeriod={transactionsPreviousPeriod.filter(
+                  (txn) => txn.to === contract.address,
+                )}
+                transactionsCurrentPeriod={transactionsCurrentPeriod.filter(
+                  (txn) => txn.to === contract.address,
+                )}
+                contract={contract}
+                endDate={endDate}
+                startDate={startDate}
+                readyState={readyState}
+              />
+            );
+          })}
+        </div>
       </div>
     </div>
   );
