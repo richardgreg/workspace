@@ -1,7 +1,9 @@
+import { useEffect, useState } from 'react';
 import {
   getChartData,
   getStatCardData,
 } from '../../../../../../emissions-dashboard/utils';
+import { getMassUnitForTxns } from '../../../../../../emissions-dashboard/utils/getMassUnitForTxns';
 import {
   ChartReadyState,
   Transaction,
@@ -28,6 +30,10 @@ export const TotalStats: React.FC<TotalStatsProps> = ({
   endDate,
   readyState,
 }): JSX.Element => {
+  const [unit, setUnit] = useState<string>('mcg');
+  useEffect(() => {
+    setUnit(getMassUnitForTxns(transactionsCurrentPeriod));
+  }, [transactionsCurrentPeriod, transactionsPreviousPeriod]);
   return (
     <div>
       <div className="mt-2 mb-5">
@@ -46,7 +52,9 @@ export const TotalStats: React.FC<TotalStatsProps> = ({
             transactionsCurrentPeriod,
             transactionsPreviousPeriod,
             true,
+            unit,
           )}
+          readyState={readyState}
         />
       </div>
 
@@ -54,7 +62,12 @@ export const TotalStats: React.FC<TotalStatsProps> = ({
         {readyState === 'loading' && <ChartLoading height={300} />}
         {readyState === 'done' && (
           <BiaxialLineChart
-            data={getChartData(transactionsCurrentPeriod, startDate, endDate)}
+            data={getChartData(
+              transactionsCurrentPeriod,
+              startDate,
+              endDate,
+              unit,
+            )}
             height={300}
           />
         )}

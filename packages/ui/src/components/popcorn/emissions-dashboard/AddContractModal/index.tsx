@@ -1,10 +1,11 @@
 import { Dialog, Transition } from '@headlessui/react';
-import React, { Fragment, useState, useRef } from 'react';
+import { Contract } from '@popcorn/ui/src/interfaces/emissions-dashboard';
+import React, { Fragment, useRef, useState } from 'react';
 
 export interface ContractModalProps {
   open: boolean;
   setOpen: (state: boolean) => void;
-  addContract: (contract: string) => void;
+  addContract: (contract: Contract) => Promise<void>;
 }
 
 export const AddContractModal: React.FC<ContractModalProps> = ({
@@ -13,7 +14,8 @@ export const AddContractModal: React.FC<ContractModalProps> = ({
   addContract,
 }) => {
   const [contractAddress, setContractAddress] = useState<string>('');
-  const inputRef= useRef(null)
+  const [contractName, setContractName] = useState<string>('');
+  const inputRef = useRef(null);
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -56,7 +58,7 @@ export const AddContractModal: React.FC<ContractModalProps> = ({
             <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
               <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                 <div>
-                  <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                  <div className="mt-3 text-center sm:text-left mx-auto">
                     <Dialog.Title
                       as="h4"
                       className="text-base text-center mb-8 leading-6 font-medium text-gray-800"
@@ -65,7 +67,21 @@ export const AddContractModal: React.FC<ContractModalProps> = ({
                     </Dialog.Title>
                     <div className="mt-2">
                       <p className="text-sm text-gray-700 pb-1">
-                        Enter Ethereum Address of contract
+                        Enter Ethereum Contract Name
+                      </p>
+                      <input
+                        type="text"
+                        onChange={(event) =>
+                          setContractName(event.target.value)
+                        }
+                        className="w-full pl-4 pr-10 py-2 text-sm leading-none border rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-500 font-light"
+                        placeholder="POP HYSI"
+                        ref={inputRef}
+                      />
+                    </div>
+                    <div className="mt-6 mb-4">
+                      <p className="text-sm text-gray-700 pb-1">
+                        Enter Ethereum Contract Address
                       </p>
                       <input
                         type="text"
@@ -84,7 +100,12 @@ export const AddContractModal: React.FC<ContractModalProps> = ({
                 <button
                   type="button"
                   className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm"
-                  onClick={() => addContract(contractAddress)}
+                  onClick={() =>
+                    addContract({
+                      address: contractAddress,
+                      name: contractName,
+                    })
+                  }
                 >
                   Confirm
                 </button>

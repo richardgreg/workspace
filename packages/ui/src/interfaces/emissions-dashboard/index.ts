@@ -11,6 +11,7 @@ export interface ChartData {
   date: Date;
   gasUsed: number;
   numTransactions: number;
+  unit: string;
 }
 
 export interface EmissionEstimate {
