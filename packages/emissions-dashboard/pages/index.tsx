@@ -1,4 +1,3 @@
-import { Web3Provider } from '@ethersproject/providers';
 import { ContractContainer } from '@popcorn/ui/components/popcorn/emissions-dashboard/ContractContainer/index';
 import { DateRangePicker } from '@popcorn/ui/components/popcorn/emissions-dashboard/DateRangePicker';
 import { NavBar } from '@popcorn/ui/components/popcorn/emissions-dashboard/NavBar';
@@ -8,12 +7,11 @@ import {
   Contract,
   Transaction,
 } from '@popcorn/ui/interfaces/emissions-dashboard';
-import { useWeb3React } from '@web3-react/core';
+import { ethers } from 'ethers';
 import { DateTime } from 'luxon';
 import { useRouter } from 'next/router';
 import fetch from 'node-fetch';
 import React, { useEffect, useState } from 'react';
-import web3 from 'web3';
 
 const DEFAULT_CONTRACTS = [
   { name: 'POP', address: '0xd0cd466b34a24fcb2f87676278af2005ca8a78c4' },
@@ -39,9 +37,6 @@ const IndexPage = (): JSX.Element => {
   const router = useRouter();
   const [open, setOpen] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
-  const context = useWeb3React<Web3Provider>();
-  const { library, activate, active } = context;
-
   const [contracts, setContracts] = useState<Contract[]>(DEFAULT_CONTRACTS);
   const [previousPeriodStartDate, setPreviousPeriodStartDate] = useState<Date>(
     new Date(DateTime.now().minus({ months: 2 }).toISO()),
@@ -127,41 +122,45 @@ const IndexPage = (): JSX.Element => {
     setEndDate(endDate);
   };
 
-  const handleAddContract = (contractAddress): void => {
-    if (localStorage.getItem('contracts')) {
-      const existingContracts = JSON.parse(localStorage.getItem('contracts'));
-      existingContracts.push(contractAddress);
-      localStorage.setItem('contracts', JSON.stringify(existingContracts));
-    }
-  };
-
-  const addContract = async (contractAddress: string): Promise<void> => {
-    const enterMessage: string = 'Please enter a valid address';
+  const addContract = async (contract: Contract): Promise<void> => {
     let message: string;
-
-    if (!contractAddress) {
-      message = `No Contract Address was provided. ${enterMessage}`;
-    } else if (!web3.utils.isAddress(contractAddress)) {
-      message = `The address is not a valid Ethereum address. ${enterMessage}`;
+    console.log({ contract });
+    if (!contract.name) {
+      message = `The contract name cannot be blank`;
+    } else if (!contract.address) {
+      message = `The contract address cannot be blank`;
+    } else if (!ethers.utils.isAddress(contract.address)) {
+      message = `The address must be a valid Ethereum address`;
     } else {
-      const code = await library.getCode(contractAddress);
-      const isConnected = !(code === '0x0' || code === '0x');
-      if (!isConnected) {
-        message = `The address does not point to a valid Ethereum contract. ${enterMessage}`;
+      const isContract = await fetch(
+        `.netlify/functions/is-contract?contractAddress=${contract.address}`,
+      )
+        .then((res) => {
+          return res.json();
+        })
+        .catch((err) => {
+          console.log('error', err);
+          setReadyState('error');
+        });
+      if (!isContract) {
+        message = `The address does not point to a valid Ethereum contract`;
       } else {
         if (localStorage.getItem('contracts')) {
           const existingContracts = JSON.parse(
             localStorage.getItem('contracts'),
           );
-          if (!existingContracts.includes(contractAddress)) {
-            existingContracts.push(contractAddress);
+          const listOfContractAddresses = existingContracts.map(
+            (contract) => contract.address,
+          );
+          if (!listOfContractAddresses.includes(contract.address)) {
+            existingContracts.push(contract);
             localStorage.setItem(
               'contracts',
               JSON.stringify(existingContracts),
             );
           }
         } else {
-          localStorage.setItem('contracts', JSON.stringify([contractAddress]));
+          localStorage.setItem('contracts', JSON.stringify([contract]));
         }
       }
     }

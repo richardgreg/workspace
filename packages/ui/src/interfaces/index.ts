@@ -1,4 +1,5 @@
 import { SVGProps } from 'react';
+import { Contract } from './emissions-dashboard';
 
 export interface EmissionSummaryStats {
   id: number;
@@ -21,7 +22,7 @@ export interface NavBarProps {
   contractProps: {
     open: boolean;
     setOpen: (state: boolean) => void;
-    addContract: (contract: string) => void;
+    addContract: (contract: Contract) => Promise<void>;
   };
   contractErrorProps: {
     errorMessage: string;

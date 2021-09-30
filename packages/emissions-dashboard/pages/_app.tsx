@@ -1,16 +1,9 @@
-import { Web3Provider } from '@ethersproject/providers';
-import { Web3ReactProvider } from '@web3-react/core';
 import Head from 'next/head';
 import React, { useEffect } from 'react';
 import { StateProvider } from '../context/store';
 import '../styles/globals.css';
-function getLibrary(provider: any): Web3Provider {
-  const library = new Web3Provider(provider);
-  library.pollingInterval = 12000;
-  return library;
-}
 
-export default function DashboardApp(props) {
+export default function EmissionDashboard(props) {
   const { Component, pageProps } = props;
 
   useEffect(() => {
@@ -40,11 +33,9 @@ export default function DashboardApp(props) {
           rel="stylesheet"
         />
       </Head>
-      <Web3ReactProvider getLibrary={getLibrary}>
-        <StateProvider>
-          <Component {...pageProps} />
-        </StateProvider>
-      </Web3ReactProvider>
+      <StateProvider>
+        <Component {...pageProps} />
+      </StateProvider>
     </React.Fragment>
   );
 }
