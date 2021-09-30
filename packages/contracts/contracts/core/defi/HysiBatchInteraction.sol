@@ -763,7 +763,7 @@ contract HysiBatchInteraction {
     address[] memory yTokenAddresses_,
     CurvePoolTokenPair[] calldata curvePoolTokenPairs_
   ) public {
-    aclRegistry.checkRole(keccak256("Comptroller"), msg.sender);
+    aclRegistry.requireRole(keccak256("Comptroller"), msg.sender);
     _setCurvePoolTokenPairs(yTokenAddresses_, curvePoolTokenPairs_);
   }
 
@@ -789,7 +789,7 @@ contract HysiBatchInteraction {
    * @dev The cooldown is the same for redeem and mint batches
    */
   function setBatchCooldown(uint256 cooldown_) external {
-    aclRegistry.checkRole(keccak256("Comptroller"), msg.sender);
+    aclRegistry.requireRole(keccak256("Comptroller"), msg.sender);
     batchCooldown = cooldown_;
   }
 
@@ -798,7 +798,7 @@ contract HysiBatchInteraction {
    * @param threshold_ Amount of 3CRV necessary to mint immediately
    */
   function setMintThreshold(uint256 threshold_) external {
-    aclRegistry.checkRole(keccak256("Comptroller"), msg.sender);
+    aclRegistry.requireRole(keccak256("Comptroller"), msg.sender);
     mintThreshold = threshold_;
   }
 
@@ -807,7 +807,7 @@ contract HysiBatchInteraction {
    * @param threshold_ Amount of HYSI necessary to mint immediately
    */
   function setRedeemThreshold(uint256 threshold_) external {
-    aclRegistry.checkRole(keccak256("Comptroller"), msg.sender);
+    aclRegistry.requireRole(keccak256("Comptroller"), msg.sender);
     redeemThreshold = threshold_;
   }
 }

@@ -34,7 +34,7 @@ contract Region is IRegion {
     external
     override
   {
-    aclRegistry.checkRole(keccak256("DAO"), msg.sender);
+    aclRegistry.requireRole(keccak256("DAO"), msg.sender);
     require(regionExists[region_] == false, "region already exists");
     regions.push(region_);
     regionExists[region_] = true;

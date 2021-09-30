@@ -20,6 +20,7 @@ contract KeeperIncentive {
   IACLRegistry public aclRegistry;
 
   uint256 public incentiveBudget;
+  //TODO turn into array
   mapping(bytes32 => Incentive) public incentives;
   mapping(bytes32 => address) public controllerContracts;
 
@@ -54,15 +55,16 @@ contract KeeperIncentive {
   function handleKeeperIncentive(bytes32 contractName_, address keeper)
     external
   {
+    //TODO add contractRegistry check
     require(
       msg.sender == controllerContracts[contractName_],
       "Can only be called by the controlling contract"
     );
 
-    Incentive memory incentive = incentives[contractName_];
+    Incentive memory incentive = incentives[contractName_][i];
 
     if (!incentive.openToEveryone) {
-      aclRegistry.checkRole(keccak256("Keeper"), keeper);
+      aclRegistry.requireRole(keccak256("Keeper"), keeper);
     }
     if (incentive.enabled && incentive.reward <= incentiveBudget) {
       incentiveBudget = incentiveBudget.sub(incentive.reward);
@@ -87,7 +89,7 @@ contract KeeperIncentive {
     bool _enabled,
     bool _openToEveryone
   ) public {
-    aclRegistry.checkRole(keccak256("DAO"), msg.sender);
+    aclRegistry.requireRole(keccak256("DAO"), msg.sender);
     incentives[contractName_] = Incentive({
       reward: _reward,
       enabled: _enabled,
@@ -104,8 +106,8 @@ contract KeeperIncentive {
     bool _enabled,
     bool _openToEveryone
   ) external {
-    aclRegistry.checkRole(keccak256("DAO"), msg.sender);
-    Incentive storage incentive = incentives[contractName_];
+    aclRegistry.requireRole(keccak256("DAO"), msg.sender);
+    Incentive storage incentive = incentives[contractName_][i];
     uint256 oldReward = incentive.reward;
     bool oldOpenToEveryone = incentive.openToEveryone;
     incentive.reward = _reward;
@@ -120,15 +122,15 @@ contract KeeperIncentive {
     );
   }
 
-  function toggleApproval(bytes32 contractName_) external {
-    aclRegistry.checkRole(keccak256("DAO"), msg.sender);
+  function toggleApproval(bytes32 contractName_, uint8) external {
+    aclRegistry.requireRole(keccak256("DAO"), msg.sender);
     Incentive storage incentive = incentives[contractName_];
     incentive.openToEveryone = !incentive.openToEveryone;
     emit ApprovalToggled(contractName_, incentive.openToEveryone);
   }
 
   function toggleIncentive(bytes32 contractName_) external {
-    aclRegistry.checkRole(keccak256("DAO"), msg.sender);
+    aclRegistry.requireRole(keccak256("DAO"), msg.sender);
     Incentive storage incentive = incentives[contractName_];
     incentive.enabled = !incentive.enabled;
     emit IncentiveToggled(contractName_, incentive.enabled);
@@ -149,7 +151,7 @@ contract KeeperIncentive {
   function addControllerContract(bytes32 contractName_, address contract_)
     external
   {
-    aclRegistry.checkRole(keccak256("DAO"), msg.sender);
+    aclRegistry.requireRole(keccak256("DAO"), msg.sender);
     controllerContracts[contractName_] = contract_;
     emit ControllerContractAdded(contractName_, contract_);
   }

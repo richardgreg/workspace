@@ -99,7 +99,7 @@ contract BeneficiaryVaults is IBeneficiaryVaults, ReentrancyGuard {
    * @dev Vault cannot be initialized if it is currently in an open state, otherwise existing data is reset*
    */
   function openVault(uint8 vaultId_, bytes32 merkleRoot_) public override {
-    aclRegistry.checkRole(keccak256("BeneficiaryGovernance"), msg.sender);
+    aclRegistry.requireRole(keccak256("BeneficiaryGovernance"), msg.sender);
     require(vaultId_ < 3, "Invalid vault id");
     require(
       vaults[vaultId_].merkleRoot == "" ||
@@ -124,7 +124,7 @@ contract BeneficiaryVaults is IBeneficiaryVaults, ReentrancyGuard {
    * @param vaultId_ Vault ID in range 0-2
    */
   function closeVault(uint8 vaultId_) public override _vaultExists(vaultId_) {
-    aclRegistry.checkRole(keccak256("BeneficiaryGovernance"), msg.sender);
+    aclRegistry.requireRole(keccak256("BeneficiaryGovernance"), msg.sender);
     Vault storage vault = vaults[vaultId_];
     require(vault.status == VaultStatus.Open, "Vault must be open");
 
@@ -263,7 +263,7 @@ contract BeneficiaryVaults is IBeneficiaryVaults, ReentrancyGuard {
   function setBeneficiaryRegistry(IBeneficiaryRegistry beneficiaryRegistry_)
     public
   {
-    aclRegistry.checkRole(keccak256("Comptroller"), msg.sender);
+    aclRegistry.requireRole(keccak256("Comptroller"), msg.sender);
     require(
       beneficiaryRegistry != beneficiaryRegistry_,
       "Same BeneficiaryRegistry"

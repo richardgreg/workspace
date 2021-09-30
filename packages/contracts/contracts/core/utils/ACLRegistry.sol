@@ -97,7 +97,7 @@ contract ACLRegistry is IACLRegistry {
     return _roles[role].adminRole;
   }
 
-  function checkRole(bytes32 role, address account) public view override {
+  function requireRole(bytes32 role, address account) public view override {
     require(hasRole(role, account), "you dont have the right role");
   }
 
@@ -116,9 +116,9 @@ contract ACLRegistry is IACLRegistry {
     require(hasRole(getRoleAdmin(role), account), "you have to be role admin");
   }
 
-  function defend(address account) public view override {
+  function requireApprovedContractOrEOA(address account) public view override {
     require(
-      hasRole(keccak256("Defender"), account) || account == tx.origin,
+      hasRole(keccak256("ApprovedContract"), account) || account == tx.origin,
       "Access denied for caller"
     );
   }
@@ -215,7 +215,7 @@ contract ACLRegistry is IACLRegistry {
    *
    *  /^AccessControl: account (0x[0-9a-f]{40}) is missing role (0x[0-9a-f]{64})$/
    */
-  function _checkRole(bytes32 role, address account) internal view {
+  function _requireRole(bytes32 role, address account) internal view {
     require(hasRole(role, account), "you dont have the required role");
   }
 
@@ -277,7 +277,7 @@ contract ACLRegistry is IACLRegistry {
    * _Available since v4.1._
    */
   modifier onlyRole(bytes32 role) {
-    _checkRole(role, msg.sender);
+    _requireRole(role, msg.sender);
     _;
   }
 }

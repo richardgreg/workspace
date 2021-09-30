@@ -401,7 +401,7 @@ contract GrantElections {
   function proposeFinalization(uint256 _electionId, bytes32 _merkleRoot)
     external
   {
-    aclRegistry.checkRole(keccak256("ElectionResultProposer"), msg.sender);
+    aclRegistry.requireRole(keccak256("ElectionResultProposer"), msg.sender);
 
     Election storage _election = elections[_electionId];
     require(
@@ -437,7 +437,7 @@ contract GrantElections {
   function approveFinalization(uint256 _electionId, bytes32 _merkleRoot)
     external
   {
-    aclRegistry.checkRole(keccak256("ElectionResultApprover"), msg.sender);
+    aclRegistry.requireRole(keccak256("ElectionResultApprover"), msg.sender);
 
     Election storage election = elections[_electionId];
     require(
@@ -462,7 +462,7 @@ contract GrantElections {
   }
 
   function toggleRegistrationBondRequirement(ElectionTerm _term) external {
-    aclRegistry.checkRole(keccak256("DAO"), msg.sender);
+    aclRegistry.requireRole(keccak256("DAO"), msg.sender);
     electionDefaults[uint8(_term)]
       .bondRequirements
       .required = !electionDefaults[uint8(_term)].bondRequirements.required;
@@ -560,7 +560,7 @@ contract GrantElections {
     bool _enabled,
     ShareType _shareType
   ) public {
-    aclRegistry.checkRole(keccak256("DAO"), msg.sender);
+    aclRegistry.requireRole(keccak256("DAO"), msg.sender);
     ElectionConfiguration storage _defaults = electionDefaults[uint8(_term)];
     _defaults.ranking = _ranking;
     _defaults.awardees = _awardees;

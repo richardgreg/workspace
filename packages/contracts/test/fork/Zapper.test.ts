@@ -110,7 +110,10 @@ async function deployContracts(): Promise<Contracts> {
     ethers.utils.id("Comptroller"),
     depositor.address
   );
-  await aclRegistry.grantRole(ethers.utils.id("Defender"), zapper.address);
+  await aclRegistry.grantRole(
+    ethers.utils.id("ApprovedContract"),
+    zapper.address
+  );
 
   return {
     dai,

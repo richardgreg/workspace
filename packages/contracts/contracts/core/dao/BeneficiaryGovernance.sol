@@ -192,7 +192,7 @@ contract BeneficiaryGovernance {
     enoughBond(msg.sender)
     returns (uint256)
   {
-    //require(region.regionExists(_region), "region doesnt exist");
+    require(region.regionExists(_region), "region doesnt exist");
     _assertProposalPreconditions(_type, _beneficiary);
 
     if (DefaultConfigurations.proposalBond > 0) {
@@ -454,7 +454,7 @@ contract BeneficiaryGovernance {
     uint256 _vetoPeriod,
     uint256 _proposalBond
   ) public {
-    aclRegistry.checkRole(keccak256("DAO"), msg.sender);
+    aclRegistry.requireRole(keccak256("DAO"), msg.sender);
     DefaultConfigurations.votingPeriod = _votingPeriod;
     DefaultConfigurations.vetoPeriod = _vetoPeriod;
     DefaultConfigurations.proposalBond = _proposalBond;

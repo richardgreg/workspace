@@ -208,7 +208,7 @@ contract RewardsManager is IRewardsManager, ReentrancyGuard {
    * @dev Must implement IStaking and cannot be same as existing
    */
   function setStaking(IStaking staking_) public {
-    aclRegistry.checkRole(keccak256("Comptroller"), msg.sender);
+    aclRegistry.requireRole(keccak256("Comptroller"), msg.sender);
     require(staking != staking_, "Same Staking");
     IStaking _previousStaking = staking;
     staking = staking_;
@@ -221,7 +221,7 @@ contract RewardsManager is IRewardsManager, ReentrancyGuard {
    * @dev Must implement ITreasury and cannot be same as existing
    */
   function setTreasury(ITreasury treasury_) public {
-    aclRegistry.checkRole(keccak256("Comptroller"), msg.sender);
+    aclRegistry.requireRole(keccak256("Comptroller"), msg.sender);
     require(treasury != treasury_, "Same Treasury");
     ITreasury _previousTreasury = treasury;
     treasury = treasury_;
@@ -234,7 +234,7 @@ contract RewardsManager is IRewardsManager, ReentrancyGuard {
    * @dev Must implement IInsurance and cannot be same as existing
    */
   function setInsurance(IInsurance insurance_) public {
-    aclRegistry.checkRole(keccak256("Comptroller"), msg.sender);
+    aclRegistry.requireRole(keccak256("Comptroller"), msg.sender);
     require(insurance != insurance_, "Same Insurance");
     IInsurance _previousInsurance = insurance;
     insurance = insurance_;
@@ -247,7 +247,7 @@ contract RewardsManager is IRewardsManager, ReentrancyGuard {
    * @dev Must implement IRegion and cannot be same as existing
    */
   function setRegion(IRegion region_) public {
-    aclRegistry.checkRole(keccak256("Comptroller"), msg.sender);
+    aclRegistry.requireRole(keccak256("Comptroller"), msg.sender);
     require(region != region_, "Same Region");
     IRegion _previousRegion = region;
     region = region_;
@@ -260,7 +260,7 @@ contract RewardsManager is IRewardsManager, ReentrancyGuard {
    * @dev Values must be within rewardsLimit range, specified in percent to 18 decimal place precision
    */
   function setRewardSplits(uint256[4] calldata splits_) public {
-    aclRegistry.checkRole(keccak256("Comptroller"), msg.sender);
+    aclRegistry.requireRole(keccak256("Comptroller"), msg.sender);
     uint256 _total = 0;
     for (uint8 i = 0; i < 4; i++) {
       require(

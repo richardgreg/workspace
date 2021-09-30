@@ -87,11 +87,11 @@ async function deployContracts(): Promise<Contracts> {
 
   await aclRegistry.grantRole(ethers.utils.id("Comptroller"), owner.address);
   await aclRegistry.grantRole(
-    ethers.utils.id("Defender"),
+    ethers.utils.id("ApprovedContract"),
     defendedHelper.address
   );
   await aclRegistry.grantRole(
-    ethers.utils.id("Defender"),
+    ethers.utils.id("ApprovedContract"),
     blockLockHelper.address
   );
 

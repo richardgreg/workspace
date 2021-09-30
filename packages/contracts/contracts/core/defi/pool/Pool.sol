@@ -77,7 +77,7 @@ contract Pool is AffiliateToken, ReentrancyGuard, Pausable {
     blockLocked
     returns (uint256)
   {
-    aclRegistry.defend(msg.sender);
+    aclRegistry.requireApprovedContractOrEOA(msg.sender);
     require(amount <= token.balanceOf(msg.sender), "Insufficient balance");
     _lockForBlock(msg.sender);
     _takeFees();
@@ -99,7 +99,7 @@ contract Pool is AffiliateToken, ReentrancyGuard, Pausable {
     blockLocked
     returns (uint256)
   {
-    aclRegistry.defend(msg.sender);
+    aclRegistry.requireApprovedContractOrEOA(msg.sender);
     require(amount <= token.balanceOf(msg.sender), "Insufficient balance");
     _lockForBlock(msg.sender);
     _takeFees();
@@ -148,7 +148,7 @@ contract Pool is AffiliateToken, ReentrancyGuard, Pausable {
   }
 
   function setWithdrawalFee(uint256 withdrawalFee_) external {
-    aclRegistry.checkRole(keccak256("Comptroller"), msg.sender);
+    aclRegistry.requireRole(keccak256("Comptroller"), msg.sender);
     require(withdrawalFee != withdrawalFee_, "Same withdrawalFee");
     uint256 _previousWithdrawalFee = withdrawalFee;
     withdrawalFee = withdrawalFee_;
@@ -156,7 +156,7 @@ contract Pool is AffiliateToken, ReentrancyGuard, Pausable {
   }
 
   function setManagementFee(uint256 managementFee_) external {
-    aclRegistry.checkRole(keccak256("Comptroller"), msg.sender);
+    aclRegistry.requireRole(keccak256("Comptroller"), msg.sender);
     require(managementFee != managementFee_, "Same managementFee");
     uint256 _previousManagementFee = managementFee;
     managementFee = managementFee_;
@@ -164,7 +164,7 @@ contract Pool is AffiliateToken, ReentrancyGuard, Pausable {
   }
 
   function setPerformanceFee(uint256 performanceFee_) external {
-    aclRegistry.checkRole(keccak256("Comptroller"), msg.sender);
+    aclRegistry.requireRole(keccak256("Comptroller"), msg.sender);
     require(performanceFee != performanceFee_, "Same performanceFee");
     uint256 _previousPerformanceFee = performanceFee;
     performanceFee = performanceFee_;
@@ -172,7 +172,7 @@ contract Pool is AffiliateToken, ReentrancyGuard, Pausable {
   }
 
   function withdrawAccruedFees() external {
-    aclRegistry.checkRole(keccak256("Comptroller"), msg.sender);
+    aclRegistry.requireRole(keccak256("Comptroller"), msg.sender);
     uint256 balance = balanceOf(address(this));
     _burn(address(this), balance);
     _withdraw(address(this), rewardsManager, valueFor(balance), true);
@@ -251,12 +251,12 @@ contract Pool is AffiliateToken, ReentrancyGuard, Pausable {
   }
 
   function pauseContract() external {
-    aclRegistry.checkRole(keccak256("Comptroller"), msg.sender);
+    aclRegistry.requireRole(keccak256("Comptroller"), msg.sender);
     _pause();
   }
 
   function unpauseContract() external {
-    aclRegistry.checkRole(keccak256("Comptroller"), msg.sender);
+    aclRegistry.requireRole(keccak256("Comptroller"), msg.sender);
     _unpause();
   }
 

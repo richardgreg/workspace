@@ -93,7 +93,10 @@ async function deployContracts(): Promise<Contracts> {
   )) as MockERC20;
 
   await aclRegistry.grantRole(ethers.utils.id("Comptroller"), owner.address);
-  await aclRegistry.grantRole(ethers.utils.id("Defender"), zapper.address);
+  await aclRegistry.grantRole(
+    ethers.utils.id("ApprovedContract"),
+    zapper.address
+  );
   return {
     dai,
     usdc,

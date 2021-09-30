@@ -72,7 +72,7 @@ contract BeneficiaryRegistry is IBeneficiaryRegistry {
     bytes32 region,
     bytes calldata applicationCid
   ) external override {
-    aclRegistry.checkRole(keccak256("BeneficiaryGovernance"), msg.sender);
+    aclRegistry.requireRole(keccak256("BeneficiaryGovernance"), msg.sender);
     require(account == address(account), "invalid address");
     require(applicationCid.length > 0, "!application");
     require(!beneficiaryExists(account), "exists");

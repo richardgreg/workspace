@@ -289,7 +289,7 @@ contract ParticipationReward is ReentrancyGuard {
    * @dev Every controller contract has their own rewardsBudget to set indivual rewards per controller contract
    */
   function setRewardsBudget(bytes32 contractName_, uint256 amount) external {
-    aclRegistry.checkRole(keccak256("DAO"), msg.sender);
+    aclRegistry.requireRole(keccak256("DAO"), msg.sender);
     require(amount > 0, "must be larger 0");
     rewardBudgets[contractName_] = amount;
     emit RewardBudgetChanged(contractName_, amount);
@@ -304,7 +304,7 @@ contract ParticipationReward is ReentrancyGuard {
   function addControllerContract(bytes32 contractName_, address contract_)
     external
   {
-    aclRegistry.checkRole(keccak256("DAO"), msg.sender);
+    aclRegistry.requireRole(keccak256("DAO"), msg.sender);
     controllerContracts[contractName_] = contract_;
     rewardsEnabled[contractName_] = true;
     emit ControllerContractAdded(contractName_, contract_);
@@ -316,7 +316,7 @@ contract ParticipationReward is ReentrancyGuard {
    * @dev all critical functions to init/open vaults and add shares to them can only be called by controller contracts
    */
   function toggleRewards(bytes32 contractName_) external {
-    aclRegistry.checkRole(keccak256("DAO"), msg.sender);
+    aclRegistry.requireRole(keccak256("DAO"), msg.sender);
     bool prevState = rewardsEnabled[contractName_];
     rewardsEnabled[contractName_] = !prevState;
     emit RewardsToggled(

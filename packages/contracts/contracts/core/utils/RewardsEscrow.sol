@@ -176,19 +176,19 @@ contract RewardsEscrow is IRewardsEscrow, ReentrancyGuard {
   }
 
   function updateEscrowDuration(uint256 _escrowDuration) external {
-    aclRegistry.checkRole(keccak256("Comptroller"), msg.sender);
+    aclRegistry.requireRole(keccak256("Comptroller"), msg.sender);
     escrowDuration = _escrowDuration;
     emit EscrowDurationChanged(_escrowDuration);
   }
 
   function updateCliff(uint256 _vestingCliff) external {
-    aclRegistry.checkRole(keccak256("Comptroller"), msg.sender);
+    aclRegistry.requireRole(keccak256("Comptroller"), msg.sender);
     vestingCliff = _vestingCliff;
     emit VestingCliffChanged(_vestingCliff);
   }
 
   function setStaking(IStaking _staking) external {
-    aclRegistry.checkRole(keccak256("Comptroller"), msg.sender);
+    aclRegistry.requireRole(keccak256("Comptroller"), msg.sender);
     require(staking != _staking, "Same Staking");
     staking = _staking;
     emit StakingChanged(_staking);

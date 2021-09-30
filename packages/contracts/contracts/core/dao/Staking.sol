@@ -146,7 +146,7 @@ contract Staking is IStaking, ReentrancyGuard {
     isInitialised
     updateReward(msg.sender)
   {
-    aclRegistry.defend(msg.sender);
+    aclRegistry.requireApprovedContractOrEOA(msg.sender);
     uint256 _currentTime = block.timestamp;
     require(amount > 0, "amount must be greater than 0");
     require(lengthOfTime >= 7 days, "must lock tokens for at least 1 week");
@@ -242,7 +242,7 @@ contract Staking is IStaking, ReentrancyGuard {
   /* ========== RESTRICTED FUNCTIONS ========== */
 
   function init(IRewardsManager _rewardsManager) external {
-    aclRegistry.checkRole(keccak256("Comptroller"), msg.sender);
+    aclRegistry.requireRole(keccak256("Comptroller"), msg.sender);
     RewardsManager = _rewardsManager;
     initialised = true;
   }
@@ -284,14 +284,14 @@ contract Staking is IStaking, ReentrancyGuard {
   }
 
   function setRewardsManager(IRewardsManager _rewardsManager) external {
-    aclRegistry.checkRole(keccak256("Comptroller"), msg.sender);
+    aclRegistry.requireRole(keccak256("Comptroller"), msg.sender);
     require(RewardsManager != _rewardsManager, "Same RewardsManager");
     RewardsManager = _rewardsManager;
     emit RewardsManagerChanged(_rewardsManager);
   }
 
   function setRewardsEscrow(IRewardsEscrow _rewardsEscrow) external {
-    aclRegistry.checkRole(keccak256("Comptroller"), msg.sender);
+    aclRegistry.requireRole(keccak256("Comptroller"), msg.sender);
     require(RewardsEscrow != _rewardsEscrow, "Same RewardsEscrow");
     RewardsEscrow = _rewardsEscrow;
     emit RewardsEscrowChanged(_rewardsEscrow);
@@ -304,7 +304,7 @@ contract Staking is IStaking, ReentrancyGuard {
     isInitialised
   {
     require(
-      IRewardsManager(msg.sender) == RewardsManager ||
+      aclRegistry.hasRole(keccak256("RewardsManager"), msg.sender) ||
         aclRegistry.hasRole(keccak256("Comptroller"), msg.sender),
       "Not allowed"
     );
@@ -336,7 +336,7 @@ contract Staking is IStaking, ReentrancyGuard {
     external
     updateReward(address(0))
   {
-    aclRegistry.checkRole(keccak256("Comptroller"), msg.sender);
+    aclRegistry.requireRole(keccak256("Comptroller"), msg.sender);
     require(timestamp > block.timestamp, "timestamp cant be in the past");
     periodFinish = timestamp;
   }

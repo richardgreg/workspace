@@ -272,6 +272,10 @@ export default async function deploy(ethers): Promise<void> {
       ethers.utils.id("BeneficiaryGovernance"),
       contracts.grantElections.address
     );
+    await contracts.aclRegistry.grantRole(
+      ethers.utils.id("RewardsManager"),
+      contracts.rewardsManager.address
+    );
   };
 
   const addingControllerContracts = async (): Promise<void> => {

@@ -60,7 +60,11 @@ describe("Staking", function () {
       .grantRole(ethers.utils.id("Comptroller"), owner.address);
     await aclRegistry
       .connect(owner)
-      .grantRole(ethers.utils.id("Defender"), owner.address);
+      .grantRole(ethers.utils.id("ApprovedContract"), owner.address);
+    await aclRegistry.grantRole(
+      ethers.utils.id("RewardsManager"),
+      rewarder.address
+    );
 
     await staking.init(rewarder.address);
     await rewardsEscrow.setStaking(staking.address);
@@ -112,7 +116,7 @@ describe("Staking", function () {
     it("should allow whitelisted contracts to stake", async function () {
       await aclRegistry
         .connect(owner)
-        .grantRole(ethers.utils.id("Defender"), defendedHelper.address);
+        .grantRole(ethers.utils.id("ApprovedContract"), defendedHelper.address);
       await expect(defendedHelper.stake(parseEther("1000")))
         .to.emit(staking, "StakingDeposited")
         .withArgs(defendedHelper.address, parseEther("1000"));
