@@ -1,5 +1,4 @@
 import { ChartData } from '@popcorn/ui/src/interfaces/emissions-dashboard';
-import * as convert from 'convert-units';
 import React from 'react';
 import {
   CartesianGrid,
@@ -23,38 +22,39 @@ export interface BiaxialLineChartProps {
 
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
-    const emissionsConverted = convert(payload[1].value).from('mcg').toBest();
     return (
       <div className="bg-gray-50 p-1">
         <p className="text-xs ">{`${label}`}</p>
         <p className="text-xs text-indigo-500">{`Transaction Volume: ${payload[0].value.toLocaleString()}`}</p>
         <p className="text-xs text-green-500">{`CO2 Emissions (${
-          emissionsConverted.unit
-        }): ${Math.round(emissionsConverted.val)}`}</p>
+          payload[0].payload.unit
+        }): ${Math.round(payload[1].value)}`}</p>
       </div>
     );
   }
   return null;
 };
 
-const ChartContentWrapper: React.FC<{ height: number; children: JSX.Element }> =
-  (props) => {
-    return (
-      <div
-        className="w-full flex flex-wrap content-center border-2 border-gray-50 justify-center "
-        style={{
-          objectFit: 'cover',
-          height: props.height,
-          marginTop: 5,
-          marginRight: 30,
-          marginLeft: 30,
-          marginBottom: 5,
-        }}
-      >
-        {props.children}
-      </div>
-    );
-  };
+const ChartContentWrapper: React.FC<{
+  height: number;
+  children: JSX.Element;
+}> = (props) => {
+  return (
+    <div
+      className="w-full flex flex-wrap content-center border-2 border-gray-50 justify-center "
+      style={{
+        objectFit: 'cover',
+        height: props.height,
+        marginTop: 5,
+        marginRight: 30,
+        marginLeft: 30,
+        marginBottom: 5,
+      }}
+    >
+      {props.children}
+    </div>
+  );
+};
 
 export const ChartLoading: React.FC<{ height: number }> = ({ height }) => {
   return (
