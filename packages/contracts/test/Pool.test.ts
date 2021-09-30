@@ -85,7 +85,7 @@ async function deployContracts(): Promise<Contracts> {
     await BlockLockHelper.deploy(pool.address, mockToken.address)
   ).deployed();
 
-  await aclRegistry.grantRole(ethers.utils.id("Comptroller"), owner.address);
+  await aclRegistry.grantRole(ethers.utils.id("DAO"), owner.address);
   await aclRegistry.grantRole(
     ethers.utils.id("ApprovedContract"),
     defendedHelper.address

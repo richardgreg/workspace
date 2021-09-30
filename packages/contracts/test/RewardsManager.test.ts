@@ -138,9 +138,6 @@ async function deployContracts(): Promise<Contracts> {
 
   await aclRegistry
     .connect(owner)
-    .grantRole(ethers.utils.id("Comptroller"), owner.address);
-  await aclRegistry
-    .connect(owner)
     .grantRole(ethers.utils.id("RewardsManager"), rewardsManager.address);
   await aclRegistry
     .connect(owner)

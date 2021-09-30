@@ -57,7 +57,7 @@ describe("Staking", function () {
 
     await aclRegistry
       .connect(owner)
-      .grantRole(ethers.utils.id("Comptroller"), owner.address);
+      .grantRole(ethers.utils.id("DAO"), owner.address);
     await aclRegistry
       .connect(owner)
       .grantRole(ethers.utils.id("ApprovedContract"), owner.address);

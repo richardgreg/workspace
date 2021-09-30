@@ -92,7 +92,7 @@ async function deployContracts(): Promise<Contracts> {
     FRAX_TOKEN_ADDRESS
   )) as MockERC20;
 
-  await aclRegistry.grantRole(ethers.utils.id("Comptroller"), owner.address);
+  await aclRegistry.grantRole(ethers.utils.id("DAO"), owner.address);
   await aclRegistry.grantRole(
     ethers.utils.id("ApprovedContract"),
     zapper.address

@@ -222,10 +222,7 @@ export default async function deploy(ethers): Promise<void> {
       )
     ).deployed();
 
-    await aclRegistry.grantRole(
-      ethers.utils.id("Comptroller"),
-      accounts[0].address
-    );
+    await aclRegistry.grantRole(ethers.utils.id("DAO"), accounts[0].address);
 
     await keeperIncentive
       .connect(accounts[0])

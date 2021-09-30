@@ -263,7 +263,7 @@ contract BeneficiaryVaults is IBeneficiaryVaults, ReentrancyGuard {
   function setBeneficiaryRegistry(IBeneficiaryRegistry beneficiaryRegistry_)
     public
   {
-    aclRegistry.requireRole(keccak256("Comptroller"), msg.sender);
+    aclRegistry.requireRole(keccak256("DAO"), msg.sender);
     require(
       beneficiaryRegistry != beneficiaryRegistry_,
       "Same BeneficiaryRegistry"

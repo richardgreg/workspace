@@ -195,7 +195,6 @@ async function deployContracts(): Promise<Contracts> {
     .approve(hysiBatchInteraction.address, DepositorInitial);
 
   await aclRegistry.grantRole(ethers.utils.id("DAO"), owner.address);
-  await aclRegistry.grantRole(ethers.utils.id("Comptroller"), owner.address);
   await aclRegistry.grantRole(ethers.utils.id("Keeper"), owner.address);
   await aclRegistry.grantRole(
     ethers.utils.id("HysiZapper"),

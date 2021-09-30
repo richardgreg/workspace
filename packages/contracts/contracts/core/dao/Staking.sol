@@ -242,7 +242,7 @@ contract Staking is IStaking, ReentrancyGuard {
   /* ========== RESTRICTED FUNCTIONS ========== */
 
   function init(IRewardsManager _rewardsManager) external {
-    aclRegistry.requireRole(keccak256("Comptroller"), msg.sender);
+    aclRegistry.requireRole(keccak256("DAO"), msg.sender);
     RewardsManager = _rewardsManager;
     initialised = true;
   }
@@ -284,14 +284,14 @@ contract Staking is IStaking, ReentrancyGuard {
   }
 
   function setRewardsManager(IRewardsManager _rewardsManager) external {
-    aclRegistry.requireRole(keccak256("Comptroller"), msg.sender);
+    aclRegistry.requireRole(keccak256("DAO"), msg.sender);
     require(RewardsManager != _rewardsManager, "Same RewardsManager");
     RewardsManager = _rewardsManager;
     emit RewardsManagerChanged(_rewardsManager);
   }
 
   function setRewardsEscrow(IRewardsEscrow _rewardsEscrow) external {
-    aclRegistry.requireRole(keccak256("Comptroller"), msg.sender);
+    aclRegistry.requireRole(keccak256("DAO"), msg.sender);
     require(RewardsEscrow != _rewardsEscrow, "Same RewardsEscrow");
     RewardsEscrow = _rewardsEscrow;
     emit RewardsEscrowChanged(_rewardsEscrow);
@@ -305,7 +305,7 @@ contract Staking is IStaking, ReentrancyGuard {
   {
     require(
       aclRegistry.hasRole(keccak256("RewardsManager"), msg.sender) ||
-        aclRegistry.hasRole(keccak256("Comptroller"), msg.sender),
+        aclRegistry.hasRole(keccak256("DAO"), msg.sender),
       "Not allowed"
     );
     if (block.timestamp >= periodFinish) {
@@ -336,7 +336,7 @@ contract Staking is IStaking, ReentrancyGuard {
     external
     updateReward(address(0))
   {
-    aclRegistry.requireRole(keccak256("Comptroller"), msg.sender);
+    aclRegistry.requireRole(keccak256("DAO"), msg.sender);
     require(timestamp > block.timestamp, "timestamp cant be in the past");
     periodFinish = timestamp;
   }

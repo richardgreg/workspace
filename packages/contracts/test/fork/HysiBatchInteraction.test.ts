@@ -446,10 +446,6 @@ describe("HysiBatchInteraction Network Test", function () {
       owner.address
     );
     await contracts.aclRegistry.grantRole(
-      ethers.utils.id("Comptroller"),
-      owner.address
-    );
-    await contracts.aclRegistry.grantRole(
       ethers.utils.id("Keeper"),
       owner.address
     );
