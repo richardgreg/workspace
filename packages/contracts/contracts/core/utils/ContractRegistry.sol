@@ -11,11 +11,17 @@ import "../interfaces/IContractRegistry.sol";
  * This allows us to update addresses in one central point and reduces constructing and management overhead.
  */
 contract ContractRegistry is IContractRegistry {
+
+  struct Contract {
+    address contract;
+    bytes32 version;
+  }
+
   /* ========== STATE VARIABLES ========== */
 
   IACLRegistry public aclRegistry;
 
-  mapping(bytes32 => address) public contracts;
+  mapping(bytes32 => Contract) public contracts;
   bytes32[] public contractNames;
 
   /* ========== EVENTS ========== */
@@ -39,7 +45,7 @@ contract ContractRegistry is IContractRegistry {
   }
 
   function getContract(bytes32 _name) external view override returns (address) {
-    return contracts[_name];
+    return contracts[_name].contract;
   }
 
   /* ========== MUTATIVE FUNCTIONS ========== */
