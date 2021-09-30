@@ -199,7 +199,7 @@ const IndexPage = (): JSX.Element => {
         refresh={getTransactions}
       />
       <div className="bg-gray-100">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-7xl mx-auto pb-8">
           <header>
             <div className="pt-6 py-5  ">
               <h1 className="text-5xl text-center font-medium leading-tight text-black">
