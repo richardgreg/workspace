@@ -109,7 +109,7 @@ contract RewardsManager is IRewardsManager, Owned, ReentrancyGuard {
     nonReentrant
     returns (uint256[] memory)
   {
-    keeperIncentive.handleKeeperIncentive(contractName, msg.sender);
+    keeperIncentive.handleKeeperIncentive(contractName, 0, msg.sender);
     require(path_.length >= 2, "Invalid swap path");
     require(minAmountOut_ > 0, "Invalid amount");
     require(
@@ -139,7 +139,7 @@ contract RewardsManager is IRewardsManager, Owned, ReentrancyGuard {
    * @dev Contract must have POP balance in order to distribute according to rewardSplits ratio
    */
   function distributeRewards() public nonReentrant {
-    keeperIncentive.handleKeeperIncentive(contractName, msg.sender);
+    keeperIncentive.handleKeeperIncentive(contractName, 1, msg.sender);
     uint256 _availableReward = POP.balanceOf(address(this));
     require(_availableReward > 0, "No POP balance");
 

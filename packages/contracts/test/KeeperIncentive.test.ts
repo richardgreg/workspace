@@ -14,7 +14,6 @@ let owner: SignerWithAddress, nonOwner: SignerWithAddress;
 let mockPop: MockERC20;
 let keeperIncentive: KeeperIncentive;
 let keeperIncentiveHelper: KeeperIncentiveHelper;
-const dayInSec = 86400;
 const incentive = parseEther("10");
 
 describe("Keeper incentives", function () {
@@ -84,6 +83,7 @@ describe("Keeper incentives", function () {
         .connect(nonOwner)
         .updateIncentive(
           utils.formatBytes32String("KeeperIncentiveHelper"),
+          0,
           incentive,
           true,
           false
@@ -114,14 +114,14 @@ describe("Keeper incentives", function () {
     await expect(
       keeperIncentive
         .connect(nonOwner)
-        .toggleApproval(utils.formatBytes32String("KeeperIncentiveHelper"))
+        .toggleApproval(utils.formatBytes32String("KeeperIncentiveHelper"), 0)
     ).to.be.revertedWith(
       "Only the contract governance may perform this action"
     );
     await expect(
       keeperIncentive
         .connect(nonOwner)
-        .toggleIncentive(utils.formatBytes32String("KeeperIncentiveHelper"))
+        .toggleIncentive(utils.formatBytes32String("KeeperIncentiveHelper"), 0)
     ).to.be.revertedWith(
       "Only the contract governance may perform this action"
     );
@@ -144,7 +144,8 @@ describe("Keeper incentives", function () {
       );
     expect(
       await keeperIncentive.incentives(
-        utils.formatBytes32String("KeeperIncentiveHelper")
+        utils.formatBytes32String("KeeperIncentiveHelper"),
+        0
       )
     ).to.deep.equal([incentive, true, false]);
   });
@@ -162,6 +163,7 @@ describe("Keeper incentives", function () {
         .connect(owner)
         .updateIncentive(
           utils.formatBytes32String("KeeperIncentiveHelper"),
+          0,
           parseEther("100"),
           false,
           true
@@ -177,31 +179,34 @@ describe("Keeper incentives", function () {
         );
       expect(
         await keeperIncentive.incentives(
-          utils.formatBytes32String("KeeperIncentiveHelper")
+          utils.formatBytes32String("KeeperIncentiveHelper"),
+          0
         )
       ).to.deep.equal([parseEther("100"), false, true]);
     });
     it("should toggle if the incentive is enabled", async function () {
       const result = await keeperIncentive
         .connect(owner)
-        .toggleIncentive(utils.formatBytes32String("KeeperIncentiveHelper"));
+        .toggleIncentive(utils.formatBytes32String("KeeperIncentiveHelper"), 0);
       expect(result)
         .to.emit(keeperIncentive, "IncentiveToggled")
         .withArgs(utils.formatBytes32String("KeeperIncentiveHelper"), false);
       expect(
         await keeperIncentive.incentives(
-          utils.formatBytes32String("KeeperIncentiveHelper")
+          utils.formatBytes32String("KeeperIncentiveHelper"),
+          0
         )
       ).to.deep.equal([incentive, false, false]);
       const result2 = await keeperIncentive
         .connect(owner)
-        .toggleIncentive(utils.formatBytes32String("KeeperIncentiveHelper"));
+        .toggleIncentive(utils.formatBytes32String("KeeperIncentiveHelper"), 0);
       expect(result2)
         .to.emit(keeperIncentive, "IncentiveToggled")
         .withArgs(utils.formatBytes32String("KeeperIncentiveHelper"), true);
       expect(
         await keeperIncentive.incentives(
-          utils.formatBytes32String("KeeperIncentiveHelper")
+          utils.formatBytes32String("KeeperIncentiveHelper"),
+          0
         )
       ).to.deep.equal([incentive, true, false]);
     });
@@ -273,25 +278,33 @@ describe("Keeper incentives", function () {
         expect(
           await keeperIncentive
             .connect(owner)
-            .toggleApproval(utils.formatBytes32String("KeeperIncentiveHelper"))
+            .toggleApproval(
+              utils.formatBytes32String("KeeperIncentiveHelper"),
+              0
+            )
         )
           .to.emit(keeperIncentive, "ApprovalToggled")
           .withArgs(utils.formatBytes32String("KeeperIncentiveHelper"), true);
         expect(
           await keeperIncentive.incentives(
-            utils.formatBytes32String("KeeperIncentiveHelper")
+            utils.formatBytes32String("KeeperIncentiveHelper"),
+            0
           )
         ).to.deep.equal([incentive, true, true]);
         expect(
           await keeperIncentive
             .connect(owner)
-            .toggleApproval(utils.formatBytes32String("KeeperIncentiveHelper"))
+            .toggleApproval(
+              utils.formatBytes32String("KeeperIncentiveHelper"),
+              0
+            )
         )
           .to.emit(keeperIncentive, "ApprovalToggled")
           .withArgs(utils.formatBytes32String("KeeperIncentiveHelper"), false);
         expect(
           await keeperIncentive.incentives(
-            utils.formatBytes32String("KeeperIncentiveHelper")
+            utils.formatBytes32String("KeeperIncentiveHelper"),
+            0
           )
         ).to.deep.equal([incentive, true, false]);
       });
@@ -329,7 +342,10 @@ describe("Keeper incentives", function () {
       it("should be callable for non approved addresses if the incentive is open to everyone", async function () {
         await keeperIncentive
           .connect(owner)
-          .toggleApproval(utils.formatBytes32String("KeeperIncentiveHelper"));
+          .toggleApproval(
+            utils.formatBytes32String("KeeperIncentiveHelper"),
+            0
+          );
         await mockPop
           .connect(owner)
           .approve(keeperIncentiveHelper.address, parseEther("11"));

@@ -18,7 +18,7 @@ contract KeeperIncentive is Governed {
 
   IERC20 public immutable POP;
   uint256 public incentiveBudget;
-  mapping(bytes32 => Incentive) public incentives;
+  mapping(bytes32 => Incentive[]) public incentives;
   mapping(bytes32 => mapping(address => bool)) public approved;
   mapping(bytes32 => address) public controllerContracts;
 
@@ -51,15 +51,17 @@ contract KeeperIncentive is Governed {
 
   /* ==========  MUTATIVE FUNCTIONS  ========== */
 
-  function handleKeeperIncentive(bytes32 contractName_, address keeper)
-    external
-  {
+  function handleKeeperIncentive(
+    bytes32 contractName_,
+    uint8 i,
+    address keeper
+  ) external {
     require(
       msg.sender == controllerContracts[contractName_],
       "Can only be called by the controlling contract"
     );
 
-    Incentive memory incentive = incentives[contractName_];
+    Incentive memory incentive = incentives[contractName_][i];
 
     if (!incentive.openToEveryone) {
       require(
@@ -90,11 +92,13 @@ contract KeeperIncentive is Governed {
     bool _enabled,
     bool _openToEveryone
   ) public onlyGovernance {
-    incentives[contractName_] = Incentive({
-      reward: _reward,
-      enabled: _enabled,
-      openToEveryone: _openToEveryone
-    });
+    incentives[contractName_].push(
+      Incentive({
+        reward: _reward,
+        enabled: _enabled,
+        openToEveryone: _openToEveryone
+      })
+    );
     emit IncentiveCreated(contractName_, _reward, _openToEveryone);
   }
 
@@ -102,11 +106,12 @@ contract KeeperIncentive is Governed {
 
   function updateIncentive(
     bytes32 contractName_,
+    uint8 i,
     uint256 _reward,
     bool _enabled,
     bool _openToEveryone
   ) external onlyGovernance {
-    Incentive storage incentive = incentives[contractName_];
+    Incentive storage incentive = incentives[contractName_][i];
     uint256 oldReward = incentive.reward;
     bool oldOpenToEveryone = incentive.openToEveryone;
     incentive.reward = _reward;
@@ -137,14 +142,20 @@ contract KeeperIncentive is Governed {
     emit RemovedApproval(contractName_, _account);
   }
 
-  function toggleApproval(bytes32 contractName_) external onlyGovernance {
-    Incentive storage incentive = incentives[contractName_];
+  function toggleApproval(bytes32 contractName_, uint8 i)
+    external
+    onlyGovernance
+  {
+    Incentive storage incentive = incentives[contractName_][i];
     incentive.openToEveryone = !incentive.openToEveryone;
     emit ApprovalToggled(contractName_, incentive.openToEveryone);
   }
 
-  function toggleIncentive(bytes32 contractName_) external onlyGovernance {
-    Incentive storage incentive = incentives[contractName_];
+  function toggleIncentive(bytes32 contractName_, uint8 i)
+    external
+    onlyGovernance
+  {
+    Incentive storage incentive = incentives[contractName_][i];
     incentive.enabled = !incentive.enabled;
     emit IncentiveToggled(contractName_, incentive.enabled);
   }

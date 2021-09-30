@@ -134,6 +134,20 @@ async function deployContracts(): Promise<Contracts> {
   await RewardsManager.deployed();
   await Staking.init(RewardsManager.address);
 
+  await KeeperIncentive.connect(owner).createIncentive(
+    utils.formatBytes32String("RewardsManager"),
+    parseEther("10"),
+    true,
+    false
+  );
+
+  await KeeperIncentive.connect(owner).createIncentive(
+    utils.formatBytes32String("RewardsManager"),
+    parseEther("10"),
+    true,
+    false
+  );
+
   await KeeperIncentive.connect(owner).addControllerContract(
     utils.formatBytes32String("RewardsManager"),
     RewardsManager.address

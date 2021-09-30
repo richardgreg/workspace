@@ -214,6 +214,18 @@ async function prepareContracts(): Promise<void> {
     owner.address,
     currentTimestamp + 60
   );
+  await contracts.KeeperIncentive.connect(owner).createIncentive(
+    utils.formatBytes32String("RewardsManager"),
+    0,
+    true,
+    false
+  );
+  await contracts.KeeperIncentive.connect(owner).createIncentive(
+    utils.formatBytes32String("RewardsManager"),
+    0,
+    true,
+    false
+  );
   await contracts.KeeperIncentive.connect(owner).addControllerContract(
     utils.formatBytes32String("RewardsManager"),
     contracts.RewardsManager.address

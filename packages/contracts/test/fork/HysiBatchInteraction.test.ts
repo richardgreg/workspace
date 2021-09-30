@@ -435,6 +435,14 @@ describe("HysiBatchInteraction Network Test", function () {
     });
     await contracts.keeperIncentive
       .connect(owner)
+      .createIncentive(
+        utils.formatBytes32String("HysiBatchInteraction"),
+        0,
+        true,
+        false
+      );
+    await contracts.keeperIncentive
+      .connect(owner)
       .addControllerContract(
         utils.formatBytes32String("HysiBatchInteraction"),
         contracts.hysiBatchInteraction.address

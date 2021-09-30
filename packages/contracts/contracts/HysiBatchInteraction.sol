@@ -356,7 +356,7 @@ contract HysiBatchInteraction is Owned {
    * @dev handleKeeperIncentive checks if the msg.sender is a permissioned keeper and pays them a reward for calling this function (see KeeperIncentive.sol)
    */
   function batchMint(uint256 minAmountToMint_) external {
-    keeperIncentive.handleKeeperIncentive(contractName, msg.sender);
+    keeperIncentive.handleKeeperIncentive(contractName, 0, msg.sender);
     Batch storage batch = batches[currentMintBatchId];
 
     //Check if there was enough time between the last batch minting and this attempt...
@@ -499,7 +499,7 @@ contract HysiBatchInteraction is Owned {
    * @dev handleKeeperIncentive checks if the msg.sender is a permissioned keeper and pays them a reward for calling this function (see KeeperIncentive.sol)
    */
   function batchRedeem(uint256 min3crvToReceive_) external {
-    keeperIncentive.handleKeeperIncentive(contractName, msg.sender);
+    keeperIncentive.handleKeeperIncentive(contractName, 0, msg.sender);
     Batch storage batch = batches[currentRedeemBatchId];
 
     //Check if there was enough time between the last batch redemption and this attempt...
