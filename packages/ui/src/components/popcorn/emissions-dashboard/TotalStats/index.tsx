@@ -56,6 +56,7 @@ export const TotalStats: React.FC<TotalStatsProps> = ({
             true,
             unit,
           )}
+          readyState={readyState}
         />
       </div>
       <div className="max-w-7xl">

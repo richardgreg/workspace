@@ -52,6 +52,7 @@ export const ContractContainer: React.FC<ContractContainerProps> = ({
             false,
             unit,
           )}
+          readyState={readyState}
         />
       </div>
       <div className="max-w-7xl">
