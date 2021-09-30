@@ -49,6 +49,7 @@ export const TotalStats: React.FC<TotalStatsProps> = ({
             transactionsPreviousPeriod,
             true,
           )}
+          readyState={readyState}
         />
       </div>
       <div className="max-w-7xl">

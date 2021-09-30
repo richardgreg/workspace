@@ -46,6 +46,7 @@ export const ContractContainer: React.FC<ContractContainerProps> = ({
             transactionsPreviousPeriod,
             false,
           )}
+          readyState={readyState}
         />
       </div>
       <div className="max-w-7xl">
