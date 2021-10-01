@@ -3,6 +3,7 @@ import React from 'react';
 import { NavBarProps } from '../../../../interfaces/index';
 import { AddContractModal } from '../AddContractModal';
 import { ContractErrorModal } from '../ContractErrorModal';
+import { DisabledAddContractModal } from '../DisabledAddContractModal';
 
 export const NavBar: React.FC<NavBarProps> = ({
   logo,
@@ -37,7 +38,11 @@ export const NavBar: React.FC<NavBarProps> = ({
           </button>
         </div>
       </div>
-      <AddContractModal {...contractProps} />
+      {process.env.ENABLE_CONTRACT_ADD === 'true' ? (
+        <AddContractModal {...contractProps} />
+      ) : (
+        <DisabledAddContractModal {...contractProps} />
+      )}
       <ContractErrorModal {...contractErrorProps} />
     </div>
   );
