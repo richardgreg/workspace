@@ -5,6 +5,7 @@ import { parseEther } from "ethers/lib/utils";
 import { ethers } from "hardhat";
 import {
   ACLRegistry,
+  ContractRegistry,
   MockERC20,
   Staking,
   StakingDefendedHelper,
@@ -22,6 +23,7 @@ let mockPop: MockERC20;
 let staking: Staking;
 let defendedHelper: StakingDefendedHelper;
 let aclRegistry: ACLRegistry;
+let contractRegistry: ContractRegistry;
 let rewardsEscrow: RewardsEscrow;
 const DAY = 86400;
 
@@ -41,29 +43,60 @@ describe("Staking", function () {
       await (await ethers.getContractFactory("ACLRegistry")).deploy()
     ).deployed();
 
+    contractRegistry = await (
+      await (
+        await ethers.getContractFactory("ContractRegistry")
+      ).deploy(aclRegistry.address)
+    ).deployed();
+
     rewardsEscrow = (await (
       await (
         await ethers.getContractFactory("RewardsEscrow")
-      ).deploy(mockPop.address, aclRegistry.address)
+      ).deploy(contractRegistry.address)
     ).deployed()) as RewardsEscrow;
 
     const stakingFactory = await ethers.getContractFactory("Staking");
     staking = (await stakingFactory.deploy(
-      mockPop.address,
-      rewardsEscrow.address,
-      aclRegistry.address
+      contractRegistry.address
     )) as Staking;
     await staking.deployed();
 
     await aclRegistry
       .connect(owner)
-      .grantRole(ethers.utils.id("Comptroller"), owner.address);
+      .grantRole(ethers.utils.id("DAO"), owner.address);
     await aclRegistry
       .connect(owner)
-      .grantRole(ethers.utils.id("Defender"), owner.address);
+      .grantRole(ethers.utils.id("ApprovedContract"), owner.address);
 
-    await staking.init(rewarder.address);
-    await rewardsEscrow.setStaking(staking.address);
+    await contractRegistry
+      .connect(owner)
+      .addContract(
+        ethers.utils.id("POP"),
+        mockPop.address,
+        ethers.utils.id("1")
+      );
+    await contractRegistry
+      .connect(owner)
+      .addContract(
+        ethers.utils.id("RewardsEscrow"),
+        rewardsEscrow.address,
+        ethers.utils.id("1")
+      );
+    await contractRegistry
+      .connect(owner)
+      .addContract(
+        ethers.utils.id("Staking"),
+        staking.address,
+        ethers.utils.id("1")
+      );
+    await contractRegistry
+      .connect(owner)
+      .addContract(
+        ethers.utils.id("RewardsManager"),
+        rewarder.address,
+        ethers.utils.id("1")
+      );
+
     stakingFund = parseEther("10");
     await mockPop.transfer(staking.address, stakingFund);
     await mockPop.connect(owner).approve(staking.address, parseEther("100000"));
@@ -112,7 +145,7 @@ describe("Staking", function () {
     it("should allow whitelisted contracts to stake", async function () {
       await aclRegistry
         .connect(owner)
-        .grantRole(ethers.utils.id("Defender"), defendedHelper.address);
+        .grantRole(ethers.utils.id("ApprovedContract"), defendedHelper.address);
       await expect(defendedHelper.stake(parseEther("1000")))
         .to.emit(staking, "StakingDeposited")
         .withArgs(defendedHelper.address, parseEther("1000"));
@@ -521,13 +554,8 @@ describe("Staking", function () {
   describe("updatePeriodFinish", function () {
     beforeEach(async function () {
       const Staking = await ethers.getContractFactory("Staking");
-      staking = await Staking.deploy(
-        mockPop.address,
-        rewardsEscrow.address,
-        aclRegistry.address
-      );
+      staking = await Staking.deploy(contractRegistry.address);
       await staking.deployed();
-      staking.init(rewarder.address);
       stakingFund = parseEther("10");
       await mockPop.transfer(staking.address, stakingFund);
       await staking.notifyRewardAmount(stakingFund);

@@ -7,6 +7,7 @@ import { ethers, waffle } from "hardhat";
 import yearnRegistryABI from "../contracts/mocks/abis/yearnRegistry.json";
 import {
   BlockLockHelper,
+  ContractRegistry,
   MockERC20,
   MockYearnV2Vault,
   Pool,
@@ -22,6 +23,7 @@ interface Contracts {
   pool: Pool;
   blockLockHelper: BlockLockHelper;
   defendedHelper: PoolDefendedHelper;
+  contractRegistry: ContractRegistry;
 }
 
 const DepositorInitial = parseEther("100000");
@@ -61,13 +63,18 @@ async function deployContracts(): Promise<Contracts> {
     await (await ethers.getContractFactory("ACLRegistry")).deploy()
   ).deployed();
 
+  const contractRegistry = await (
+    await (
+      await ethers.getContractFactory("ContractRegistry")
+    ).deploy(aclRegistry.address)
+  ).deployed();
+
   const Pool = await ethers.getContractFactory("Pool");
   const pool = await (
     await Pool.deploy(
       mockToken.address,
       mockYearnRegistry.address,
-      rewardsManager.address,
-      aclRegistry.address
+      contractRegistry.address
     )
   ).deployed();
 
@@ -85,15 +92,23 @@ async function deployContracts(): Promise<Contracts> {
     await BlockLockHelper.deploy(pool.address, mockToken.address)
   ).deployed();
 
-  await aclRegistry.grantRole(ethers.utils.id("Comptroller"), owner.address);
+  await aclRegistry.grantRole(ethers.utils.id("DAO"), owner.address);
   await aclRegistry.grantRole(
-    ethers.utils.id("Defender"),
+    ethers.utils.id("ApprovedContract"),
     defendedHelper.address
   );
   await aclRegistry.grantRole(
-    ethers.utils.id("Defender"),
+    ethers.utils.id("ApprovedContract"),
     blockLockHelper.address
   );
+
+  await contractRegistry
+    .connect(owner)
+    .addContract(
+      ethers.utils.id("RewardsManager"),
+      rewardsManager.address,
+      ethers.utils.id("1")
+    );
 
   return {
     mockToken,
@@ -102,6 +117,7 @@ async function deployContracts(): Promise<Contracts> {
     pool,
     blockLockHelper,
     defendedHelper,
+    contractRegistry,
   };
 }
 
@@ -125,8 +141,8 @@ describe("Pool", function () {
       expect(await contracts.pool.token()).to.equal(
         contracts.mockToken.address
       );
-      expect(await contracts.pool.rewardsManager()).to.equal(
-        rewardsManager.address
+      expect(await contracts.pool.contractRegistry()).to.equal(
+        contracts.contractRegistry.address
       );
     });
   });

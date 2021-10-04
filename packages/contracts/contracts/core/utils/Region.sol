@@ -38,7 +38,7 @@ contract Region is IRegion {
     override
   {
     IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
-      .checkRole(keccak256("DAO"), msg.sender);
+      .requireRole(keccak256("DAO"), msg.sender);
     require(regionExists[region_] == false, "region already exists");
     regions.push(region_);
     regionExists[region_] = true;

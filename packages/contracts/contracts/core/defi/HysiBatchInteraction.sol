@@ -760,7 +760,7 @@ contract HysiBatchInteraction {
     CurvePoolTokenPair[] calldata curvePoolTokenPairs_
   ) public {
     IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
-      .checkRole(keccak256("DAO"), msg.sender);
+      .requireRole(keccak256("DAO"), msg.sender);
     _setCurvePoolTokenPairs(yTokenAddresses_, curvePoolTokenPairs_);
   }
 
@@ -787,7 +787,7 @@ contract HysiBatchInteraction {
    */
   function setBatchCooldown(uint256 cooldown_) external {
     IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
-      .checkRole(keccak256("DAO"), msg.sender);
+      .requireRole(keccak256("DAO"), msg.sender);
     batchCooldown = cooldown_;
   }
 
@@ -797,7 +797,7 @@ contract HysiBatchInteraction {
    */
   function setMintThreshold(uint256 threshold_) external {
     IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
-      .checkRole(keccak256("DAO"), msg.sender);
+      .requireRole(keccak256("DAO"), msg.sender);
     mintThreshold = threshold_;
   }
 
@@ -807,7 +807,7 @@ contract HysiBatchInteraction {
    */
   function setRedeemThreshold(uint256 threshold_) external {
     IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
-      .checkRole(keccak256("DAO"), msg.sender);
+      .requireRole(keccak256("DAO"), msg.sender);
     redeemThreshold = threshold_;
   }
 }

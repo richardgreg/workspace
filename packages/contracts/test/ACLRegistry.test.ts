@@ -1,7 +1,11 @@
-import { Contract, ContractTransaction } from "@ethersproject/contracts";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { expect } from "chai";
 import { ethers } from "hardhat";
+import {
+  expectEvent,
+  expectNoEvent,
+  expectRevert,
+} from "../scripts/expectValue";
 import { ACLRegistry } from "../typechain";
 import { ACLRegistryHelper } from "../typechain/ACLRegistryHelper";
 
@@ -18,32 +22,6 @@ let admin: SignerWithAddress,
 
 let aclRegistry: ACLRegistry;
 let aclRegistryHelper: ACLRegistryHelper;
-
-async function expectRevert(
-  call: any,
-  revertReason: string
-): Promise<Chai.AsyncAssertion> {
-  return expect(call).to.be.revertedWith(revertReason);
-}
-
-async function expectEvent(
-  call: ContractTransaction,
-  contract: Contract,
-  event: string,
-  params: any[]
-): Promise<Chai.AsyncAssertion> {
-  return expect(call)
-    .to.emit(contract, event)
-    .withArgs(...params);
-}
-
-async function expectNoEvent(
-  call: ContractTransaction,
-  contract: Contract,
-  event: string
-): Promise<Chai.AsyncAssertion> {
-  return expect(call).to.not.emit(contract, event);
-}
 
 describe("ACLRegistry", () => {
   beforeEach(async () => {

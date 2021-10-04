@@ -151,7 +151,7 @@ contract Pool is AffiliateToken, ReentrancyGuard, Pausable {
 
   function setWithdrawalFee(uint256 withdrawalFee_) external {
     IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
-      .checkRole(keccak256("DAO"), msg.sender);
+      .requireRole(keccak256("DAO"), msg.sender);
     require(withdrawalFee != withdrawalFee_, "Same withdrawalFee");
     uint256 _previousWithdrawalFee = withdrawalFee;
     withdrawalFee = withdrawalFee_;
@@ -160,7 +160,7 @@ contract Pool is AffiliateToken, ReentrancyGuard, Pausable {
 
   function setManagementFee(uint256 managementFee_) external {
     IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
-      .checkRole(keccak256("DAO"), msg.sender);
+      .requireRole(keccak256("DAO"), msg.sender);
     require(managementFee != managementFee_, "Same managementFee");
     uint256 _previousManagementFee = managementFee;
     managementFee = managementFee_;
@@ -169,7 +169,7 @@ contract Pool is AffiliateToken, ReentrancyGuard, Pausable {
 
   function setPerformanceFee(uint256 performanceFee_) external {
     IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
-      .checkRole(keccak256("DAO"), msg.sender);
+      .requireRole(keccak256("DAO"), msg.sender);
     require(performanceFee != performanceFee_, "Same performanceFee");
     uint256 _previousPerformanceFee = performanceFee;
     performanceFee = performanceFee_;
@@ -178,7 +178,7 @@ contract Pool is AffiliateToken, ReentrancyGuard, Pausable {
 
   function withdrawAccruedFees() external {
     IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
-      .checkRole(keccak256("DAO"), msg.sender);
+      .requireRole(keccak256("DAO"), msg.sender);
     uint256 balance = balanceOf(address(this));
     _burn(address(this), balance);
     _withdraw(
@@ -263,13 +263,13 @@ contract Pool is AffiliateToken, ReentrancyGuard, Pausable {
 
   function pauseContract() external {
     IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
-      .checkRole(keccak256("DAO"), msg.sender);
+      .requireRole(keccak256("DAO"), msg.sender);
     _pause();
   }
 
   function unpauseContract() external {
     IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
-      .checkRole(keccak256("DAO"), msg.sender);
+      .requireRole(keccak256("DAO"), msg.sender);
     _unpause();
   }
 

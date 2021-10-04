@@ -57,7 +57,7 @@ contract ContractRegistry is IContractRegistry {
     address _address,
     bytes32 _version
   ) external {
-    aclRegistry.checkRole(keccak256("DAO"), msg.sender);
+    aclRegistry.requireRole(keccak256("DAO"), msg.sender);
     require(
       contracts[_name].contractAddress == address(0),
       "contract already exists"
@@ -72,7 +72,7 @@ contract ContractRegistry is IContractRegistry {
     address _newAddress,
     bytes32 _version
   ) external {
-    aclRegistry.checkRole(keccak256("DAO"), msg.sender);
+    aclRegistry.requireRole(keccak256("DAO"), msg.sender);
     require(
       contracts[_name].contractAddress != address(0),
       "contract doesnt exist"
@@ -85,7 +85,7 @@ contract ContractRegistry is IContractRegistry {
   }
 
   function deleteContract(bytes32 _name, uint256 _contractIndex) external {
-    aclRegistry.checkRole(keccak256("DAO"), msg.sender);
+    aclRegistry.requireRole(keccak256("DAO"), msg.sender);
     require(
       contracts[_name].contractAddress != address(0),
       "contract doesnt exist"

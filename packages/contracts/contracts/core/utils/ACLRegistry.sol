@@ -97,11 +97,11 @@ contract ACLRegistry is IACLRegistry {
     return _roles[role].adminRole;
   }
 
-  function checkRole(bytes32 role, address account) public view override {
+  function requireRole(bytes32 role, address account) public view override {
     require(hasRole(role, account), "you dont have the right role");
   }
 
-  function checkPermission(bytes32 permission, address account)
+  function requirePermission(bytes32 permission, address account)
     public
     view
     override
@@ -215,7 +215,7 @@ contract ACLRegistry is IACLRegistry {
    *
    *  /^AccessControl: account (0x[0-9a-f]{40}) is missing role (0x[0-9a-f]{64})$/
    */
-  function _checkRole(bytes32 role, address account) internal view {
+  function _requireRole(bytes32 role, address account) internal view {
     require(hasRole(role, account), "you dont have the required role");
   }
 
@@ -277,7 +277,7 @@ contract ACLRegistry is IACLRegistry {
    * _Available since v4.1._
    */
   modifier onlyRole(bytes32 role) {
-    _checkRole(role, msg.sender);
+    _requireRole(role, msg.sender);
     _;
   }
 }

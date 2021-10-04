@@ -295,7 +295,7 @@ contract ParticipationReward is ReentrancyGuard {
    */
   function setRewardsBudget(bytes32 contractName_, uint256 amount) external {
     IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
-      .checkRole(keccak256("DAO"), msg.sender);
+      .requireRole(keccak256("DAO"), msg.sender);
     require(amount > 0, "must be larger 0");
     rewardBudgets[contractName_] = amount;
     emit RewardBudgetChanged(contractName_, amount);
@@ -311,7 +311,7 @@ contract ParticipationReward is ReentrancyGuard {
     external
   {
     IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
-      .checkRole(keccak256("DAO"), msg.sender);
+      .requireRole(keccak256("DAO"), msg.sender);
     controllerContracts[contractName_] = contract_;
     rewardsEnabled[contractName_] = true;
     emit ControllerContractAdded(contractName_, contract_);
@@ -324,7 +324,7 @@ contract ParticipationReward is ReentrancyGuard {
    */
   function toggleRewards(bytes32 contractName_) external {
     IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
-      .checkRole(keccak256("DAO"), msg.sender);
+      .requireRole(keccak256("DAO"), msg.sender);
     bool prevState = rewardsEnabled[contractName_];
     rewardsEnabled[contractName_] = !prevState;
     emit RewardsToggled(

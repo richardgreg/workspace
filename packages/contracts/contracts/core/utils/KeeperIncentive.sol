@@ -62,7 +62,7 @@ contract KeeperIncentive {
 
     if (!incentive.openToEveryone) {
       IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
-        .checkRole(keccak256("Keeper"), keeper);
+        .requireRole(keccak256("Keeper"), keeper);
     }
     if (incentive.enabled && incentive.reward <= incentiveBudget) {
       incentiveBudget = incentiveBudget.sub(incentive.reward);
@@ -91,7 +91,7 @@ contract KeeperIncentive {
     bool _openToEveryone
   ) public {
     IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
-      .checkRole(keccak256("DAO"), msg.sender);
+      .requireRole(keccak256("DAO"), msg.sender);
     incentives[contractName_] = Incentive({
       reward: _reward,
       enabled: _enabled,
@@ -109,7 +109,7 @@ contract KeeperIncentive {
     bool _openToEveryone
   ) external {
     IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
-      .checkRole(keccak256("DAO"), msg.sender);
+      .requireRole(keccak256("DAO"), msg.sender);
     Incentive storage incentive = incentives[contractName_];
     uint256 oldReward = incentive.reward;
     bool oldOpenToEveryone = incentive.openToEveryone;
@@ -127,7 +127,7 @@ contract KeeperIncentive {
 
   function toggleApproval(bytes32 contractName_) external {
     IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
-      .checkRole(keccak256("DAO"), msg.sender);
+      .requireRole(keccak256("DAO"), msg.sender);
     Incentive storage incentive = incentives[contractName_];
     incentive.openToEveryone = !incentive.openToEveryone;
     emit ApprovalToggled(contractName_, incentive.openToEveryone);
@@ -135,7 +135,7 @@ contract KeeperIncentive {
 
   function toggleIncentive(bytes32 contractName_) external {
     IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
-      .checkRole(keccak256("DAO"), msg.sender);
+      .requireRole(keccak256("DAO"), msg.sender);
     Incentive storage incentive = incentives[contractName_];
     incentive.enabled = !incentive.enabled;
     emit IncentiveToggled(contractName_, incentive.enabled);
@@ -161,7 +161,7 @@ contract KeeperIncentive {
     external
   {
     IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
-      .checkRole(keccak256("DAO"), msg.sender);
+      .requireRole(keccak256("DAO"), msg.sender);
     controllerContracts[contractName_] = contract_;
     emit ControllerContractAdded(contractName_, contract_);
   }

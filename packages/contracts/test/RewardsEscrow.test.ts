@@ -36,26 +36,49 @@ async function deployContracts(): Promise<Contracts> {
     await (await ethers.getContractFactory("ACLRegistry")).deploy()
   ).deployed();
 
+  const contractRegistry = await (
+    await (
+      await ethers.getContractFactory("ContractRegistry")
+    ).deploy(aclRegistry.address)
+  ).deployed();
+
   const rewardsEscrow = (await (
     await (
       await ethers.getContractFactory("RewardsEscrow")
-    ).deploy(mockPop.address, aclRegistry.address)
+    ).deploy(contractRegistry.address)
   ).deployed()) as RewardsEscrow;
 
   const staking = (await (
     await (
       await ethers.getContractFactory("Staking")
-    ).deploy(mockPop.address, rewardsEscrow.address, aclRegistry.address)
+    ).deploy(contractRegistry.address)
   ).deployed()) as Staking;
+
+  await aclRegistry
+    .connect(owner)
+    .grantRole(ethers.utils.id("DAO"), owner.address);
+
+  await contractRegistry
+    .connect(owner)
+    .addContract(ethers.utils.id("POP"), mockPop.address, ethers.utils.id("1"));
+  await contractRegistry
+    .connect(owner)
+    .addContract(
+      ethers.utils.id("Staking"),
+      staking.address,
+      ethers.utils.id("1")
+    );
+  await contractRegistry
+    .connect(owner)
+    .addContract(
+      ethers.utils.id("RewardsEscrow"),
+      rewardsEscrow.address,
+      ethers.utils.id("1")
+    );
 
   await mockPop.transfer(staking.address, stakingFund);
   await mockPop.connect(owner).approve(staking.address, parseEther("100000"));
 
-  await aclRegistry
-    .connect(owner)
-    .grantRole(ethers.utils.id("Comptroller"), owner.address);
-
-  await staking.init(rewarder.address);
   await staking.notifyRewardAmount(stakingFund);
   await staking.connect(owner).stake(parseEther("1"), 604800);
 
@@ -69,45 +92,6 @@ describe("RewardsEscrow", function () {
   });
 
   describe("restricted functions", function () {
-    it("set staking contract after construction", async function () {
-      await contracts.rewardsEscrow
-        .connect(owner)
-        .setStaking(contracts.staking.address);
-      expect(await contracts.rewardsEscrow.staking()).to.equal(
-        contracts.staking.address
-      );
-    });
-
-    it("update staking contract", async function () {
-      const newStaking = (await (
-        await (
-          await ethers.getContractFactory("Staking")
-        ).deploy(
-          contracts.mockPop.address,
-          contracts.rewardsEscrow.address,
-          contracts.aclRegistry.address
-        )
-      ).deployed()) as Staking;
-      await contracts.rewardsEscrow
-        .connect(owner)
-        .setStaking(contracts.staking.address);
-      expect(await contracts.rewardsEscrow.staking()).to.equal(
-        contracts.staking.address
-      );
-      await contracts.rewardsEscrow
-        .connect(owner)
-        .setStaking(newStaking.address);
-      expect(await contracts.rewardsEscrow.staking()).to.equal(
-        newStaking.address
-      );
-    });
-
-    it("should revert setStaking if not owner", async function () {
-      await expect(
-        contracts.rewardsEscrow.connect(nonOwner).setStaking(nonOwner.address)
-      ).to.be.revertedWith("you dont have the right role");
-    });
-
     it("should revert updateEscrowDuration if not owner", async function () {
       await expect(
         contracts.rewardsEscrow
@@ -124,9 +108,6 @@ describe("RewardsEscrow", function () {
 
   describe("lock", function () {
     beforeEach(async function () {
-      await contracts.rewardsEscrow
-        .connect(owner)
-        .setStaking(contracts.staking.address);
       ethers.provider.send("evm_increaseTime", [302400]);
       ethers.provider.send("evm_mine", []);
     });
@@ -141,7 +122,7 @@ describe("RewardsEscrow", function () {
       const currentBlockNumber = await ethers.provider.getBlockNumber();
       const currentBlock = await ethers.provider._getBlock(currentBlockNumber);
       const result = await contracts.staking.connect(owner).getReward();
-      const lockedAmount = parseEther("3.333355379188604788");
+      const lockedAmount = parseEther("3.333344356260915194");
       const escrowId = await contracts.rewardsEscrow.getEscrowsByUser(
         owner.address
       );
@@ -171,17 +152,14 @@ describe("RewardsEscrow", function () {
 
       const escrow1 = await contracts.rewardsEscrow.escrows(escrowIds[0]);
       const escrow2 = await contracts.rewardsEscrow.escrows(escrowIds[1]);
-      expect(escrow1.balance).to.be.equal(parseEther("3.333355379188604788"));
-      expect(escrow2.balance).to.be.equal(parseEther("3.333300264550156818"));
+      expect(escrow1.balance).to.be.equal(parseEther("3.333344356260915194"));
+      expect(escrow2.balance).to.be.equal(parseEther("3.333311287477846412"));
     });
   });
 
   describe("claim vested rewards", function () {
     context("claim single escrow", function () {
       beforeEach(async function () {
-        await contracts.rewardsEscrow
-          .connect(owner)
-          .setStaking(contracts.staking.address);
         ethers.provider.send("evm_increaseTime", [304800]);
         ethers.provider.send("evm_mine", []);
         await contracts.staking.connect(owner).getReward();
@@ -274,9 +252,6 @@ describe("RewardsEscrow", function () {
     });
     context("claim multiple escrows", function () {
       beforeEach(async function () {
-        await contracts.rewardsEscrow
-          .connect(owner)
-          .setStaking(contracts.staking.address);
         ethers.provider.send("evm_increaseTime", [304800]);
         ethers.provider.send("evm_mine", []);
         await contracts.staking.connect(owner).getReward();

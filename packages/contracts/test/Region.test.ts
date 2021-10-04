@@ -26,11 +26,17 @@ describe("Region", function () {
       await (await ethers.getContractFactory("ACLRegistry")).deploy()
     ).deployed();
 
+    const contractRegistry = await (
+      await (
+        await ethers.getContractFactory("ContractRegistry")
+      ).deploy(aclRegistry.address)
+    ).deployed();
+
     const regionFactory = await ethers.getContractFactory("Region");
     contract = await (
       await regionFactory.deploy(
         mockBeneficiaryVaults.address,
-        aclRegistry.address
+        contractRegistry.address
       )
     ).deployed();
 

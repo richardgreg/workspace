@@ -156,7 +156,7 @@ contract RewardsManager is IRewardsManager, ReentrancyGuard {
 
   function _distributeToStaking(uint256 amount_) internal {
     if (amount_ == 0) return;
-    address staking = contractRegistry.getContract(keccak256("Insurance"));
+    address staking = contractRegistry.getContract(keccak256("Staking"));
 
     IERC20(contractRegistry.getContract(keccak256("POP"))).transfer(
       staking,
@@ -209,7 +209,7 @@ contract RewardsManager is IRewardsManager, ReentrancyGuard {
    */
   function setRewardSplits(uint256[4] calldata splits_) public {
     IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
-      .checkRole(keccak256("DAO"), msg.sender);
+      .requireRole(keccak256("DAO"), msg.sender);
     uint256 _total = 0;
     for (uint8 i = 0; i < 4; i++) {
       require(

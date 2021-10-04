@@ -156,18 +156,34 @@ async function deployContracts(): Promise<Contracts> {
     await (await ethers.getContractFactory("ACLRegistry")).deploy()
   ).deployed();
 
+  const contractRegistry = await (
+    await (
+      await ethers.getContractFactory("ContractRegistry")
+    ).deploy(aclRegistry.address)
+  ).deployed();
+
   const Pool = await ethers.getContractFactory("Pool");
   const pool = await (
     await Pool.deploy(
       mockLPToken.address,
       mockYearnRegistry.address,
-      rewardsManager.address,
-      aclRegistry.address
+      contractRegistry.address
     )
   ).deployed();
 
-  await aclRegistry.grantRole(ethers.utils.id("Comptroller"), owner.address);
-  await aclRegistry.grantRole(ethers.utils.id("Defender"), zapper.address);
+  await aclRegistry.grantRole(ethers.utils.id("DAO"), owner.address);
+  await aclRegistry.grantRole(
+    ethers.utils.id("ApprovedContract"),
+    zapper.address
+  );
+
+  await contractRegistry
+    .connect(owner)
+    .addContract(
+      ethers.utils.id("RewardsManager"),
+      rewardsManager.address,
+      ethers.utils.id("1")
+    );
 
   return {
     mockToken,

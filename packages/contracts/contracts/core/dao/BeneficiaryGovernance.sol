@@ -456,7 +456,7 @@ contract BeneficiaryGovernance {
     uint256 _proposalBond
   ) public {
     IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
-      .checkRole(keccak256("DAO"), msg.sender);
+      .requireRole(keccak256("DAO"), msg.sender);
     DefaultConfigurations.votingPeriod = _votingPeriod;
     DefaultConfigurations.vetoPeriod = _vetoPeriod;
     DefaultConfigurations.proposalBond = _proposalBond;

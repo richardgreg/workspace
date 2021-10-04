@@ -7,6 +7,7 @@ import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 import "../interfaces/IStaking.sol";
 import "../interfaces/IRewardsEscrow.sol";
 import "../interfaces/IContractRegistry.sol";
+import "../interfaces/IACLRegistry.sol";
 
 contract RewardsEscrow is IRewardsEscrow, ReentrancyGuard {
   using SafeMath for uint256;
@@ -144,6 +145,20 @@ contract RewardsEscrow is IRewardsEscrow, ReentrancyGuard {
   }
 
   /* ========== RESTRICTED FUNCTIONS ========== */
+
+  function updateEscrowDuration(uint256 _escrowDuration) external {
+    IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
+      .requireRole(keccak256("DAO"), msg.sender);
+    escrowDuration = _escrowDuration;
+    emit EscrowDurationChanged(_escrowDuration);
+  }
+
+  function updateCliff(uint256 _vestingCliff) external {
+    IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
+      .requireRole(keccak256("DAO"), msg.sender);
+    vestingCliff = _vestingCliff;
+    emit VestingCliffChanged(_vestingCliff);
+  }
 
   /**
    * @notice Underlying function to calculate the rewards that a user gets

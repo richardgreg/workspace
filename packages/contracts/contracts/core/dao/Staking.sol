@@ -317,7 +317,7 @@ contract Staking is IStaking, ReentrancyGuard {
     updateReward(address(0))
   {
     IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
-      .checkRole(keccak256("DAO"), msg.sender);
+      .requireRole(keccak256("DAO"), msg.sender);
     require(timestamp > block.timestamp, "timestamp cant be in the past");
     periodFinish = timestamp;
   }

@@ -4,7 +4,7 @@ import { utils } from "ethers";
 import { parseEther } from "ethers/lib/utils";
 import { ethers, waffle } from "hardhat";
 import {
-  ACLRegistry,
+  ContractRegistry,
   KeeperIncentive,
   KeeperIncentiveHelper,
   MockERC20,
@@ -13,7 +13,7 @@ import {
 let deployTimestamp;
 let owner: SignerWithAddress, nonOwner: SignerWithAddress;
 let mockPop: MockERC20;
-let aclRegistry: ACLRegistry;
+let contractRegistry: ContractRegistry;
 let keeperIncentive: KeeperIncentive;
 let keeperIncentiveHelper: KeeperIncentiveHelper;
 const incentive = parseEther("10");
@@ -28,14 +28,20 @@ describe("Keeper incentives", function () {
     await mockPop.mint(owner.address, parseEther("100"));
     await mockPop.mint(nonOwner.address, parseEther("10"));
 
-    aclRegistry = await (
+    const aclRegistry = await (
       await (await ethers.getContractFactory("ACLRegistry")).deploy()
+    ).deployed();
+
+    contractRegistry = await (
+      await (
+        await ethers.getContractFactory("ContractRegistry")
+      ).deploy(aclRegistry.address)
     ).deployed();
 
     keeperIncentive = await (
       await (
         await ethers.getContractFactory("KeeperIncentive")
-      ).deploy(mockPop.address, aclRegistry.address)
+      ).deploy(contractRegistry.address)
     ).deployed();
 
     deployTimestamp = (await waffle.provider.getBlock("latest")).timestamp + 1;
@@ -51,6 +57,14 @@ describe("Keeper incentives", function () {
     await aclRegistry
       .connect(owner)
       .grantRole(ethers.utils.id("Keeper"), owner.address);
+
+    await contractRegistry
+      .connect(owner)
+      .addContract(
+        ethers.utils.id("POP"),
+        mockPop.address,
+        ethers.utils.id("1")
+      );
 
     await keeperIncentive
       .connect(owner)
@@ -283,7 +297,7 @@ describe("Keeper incentives", function () {
         keeperIncentive = await (
           await (
             await ethers.getContractFactory("KeeperIncentive")
-          ).deploy(mockPop.address, aclRegistry.address)
+          ).deploy(contractRegistry.address)
         ).deployed();
         await keeperIncentive
           .connect(owner)
