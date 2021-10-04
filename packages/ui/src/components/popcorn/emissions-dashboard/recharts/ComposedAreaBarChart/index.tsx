@@ -47,7 +47,7 @@ const CustomTooltip = ({
     return (
       <div className="bg-white rounded p-2 shadow-lg">
         <p className="text-xs font-bold mb-2">{`${format(
-          new Date(label),
+          new Date(payload[0].payload.date),
           'MM/dd/yyyy',
         )}`}</p>
 
