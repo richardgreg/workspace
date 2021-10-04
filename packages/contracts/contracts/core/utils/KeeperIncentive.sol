@@ -3,6 +3,7 @@ pragma solidity >=0.7.0 <0.8.0;
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 import "../interfaces/IACLRegistry.sol";
+import "../interfaces/IContractRegistry.sol";
 
 contract KeeperIncentive {
   using SafeMath for uint256;
@@ -16,8 +17,7 @@ contract KeeperIncentive {
 
   /* ========== STATE VARIABLES ========== */
 
-  IERC20 public immutable POP;
-  IACLRegistry public aclRegistry;
+  IContractRegistry public contractRegistry;
 
   uint256 public incentiveBudget;
   mapping(bytes32 => Incentive) public incentives;
@@ -44,9 +44,8 @@ contract KeeperIncentive {
 
   /* ========== CONSTRUCTOR ========== */
 
-  constructor(IERC20 _pop, IACLRegistry _aclRegistry) public {
-    POP = _pop;
-    aclRegistry = _aclRegistry;
+  constructor(IContractRegistry _contractRegistry) public {
+    contractRegistry = _contractRegistry;
   }
 
   /* ==========  MUTATIVE FUNCTIONS  ========== */
@@ -62,11 +61,15 @@ contract KeeperIncentive {
     Incentive memory incentive = incentives[contractName_];
 
     if (!incentive.openToEveryone) {
-      aclRegistry.checkRole(keccak256("Keeper"), keeper);
+      IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
+        .checkRole(keccak256("Keeper"), keeper);
     }
     if (incentive.enabled && incentive.reward <= incentiveBudget) {
       incentiveBudget = incentiveBudget.sub(incentive.reward);
-      POP.safeTransfer(keeper, incentive.reward);
+      IERC20(contractRegistry.getContract(keccak256("POP"))).safeTransfer(
+        keeper,
+        incentive.reward
+      );
     }
   }
 
@@ -87,7 +90,8 @@ contract KeeperIncentive {
     bool _enabled,
     bool _openToEveryone
   ) public {
-    aclRegistry.checkRole(keccak256("DAO"), msg.sender);
+    IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
+      .checkRole(keccak256("DAO"), msg.sender);
     incentives[contractName_] = Incentive({
       reward: _reward,
       enabled: _enabled,
@@ -104,7 +108,8 @@ contract KeeperIncentive {
     bool _enabled,
     bool _openToEveryone
   ) external {
-    aclRegistry.checkRole(keccak256("DAO"), msg.sender);
+    IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
+      .checkRole(keccak256("DAO"), msg.sender);
     Incentive storage incentive = incentives[contractName_];
     uint256 oldReward = incentive.reward;
     bool oldOpenToEveryone = incentive.openToEveryone;
@@ -121,21 +126,27 @@ contract KeeperIncentive {
   }
 
   function toggleApproval(bytes32 contractName_) external {
-    aclRegistry.checkRole(keccak256("DAO"), msg.sender);
+    IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
+      .checkRole(keccak256("DAO"), msg.sender);
     Incentive storage incentive = incentives[contractName_];
     incentive.openToEveryone = !incentive.openToEveryone;
     emit ApprovalToggled(contractName_, incentive.openToEveryone);
   }
 
   function toggleIncentive(bytes32 contractName_) external {
-    aclRegistry.checkRole(keccak256("DAO"), msg.sender);
+    IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
+      .checkRole(keccak256("DAO"), msg.sender);
     Incentive storage incentive = incentives[contractName_];
     incentive.enabled = !incentive.enabled;
     emit IncentiveToggled(contractName_, incentive.enabled);
   }
 
   function fundIncentive(uint256 _amount) external {
-    POP.safeTransferFrom(msg.sender, address(this), _amount);
+    IERC20(contractRegistry.getContract(keccak256("POP"))).safeTransferFrom(
+      msg.sender,
+      address(this),
+      _amount
+    );
     incentiveBudget = incentiveBudget.add(_amount);
     emit IncentiveFunded(_amount);
   }
@@ -149,7 +160,8 @@ contract KeeperIncentive {
   function addControllerContract(bytes32 contractName_, address contract_)
     external
   {
-    aclRegistry.checkRole(keccak256("DAO"), msg.sender);
+    IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
+      .checkRole(keccak256("DAO"), msg.sender);
     controllerContracts[contractName_] = contract_;
     emit ControllerContractAdded(contractName_, contract_);
   }

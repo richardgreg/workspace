@@ -10,6 +10,7 @@ import "../interfaces/IRandomNumberConsumer.sol";
 import "../interfaces/IRegion.sol";
 import "../interfaces/IACLRegistry.sol";
 import "../utils/ParticipationReward.sol";
+import "../interfaces/IContractRegistry.sol";
 
 contract GrantElections {
   using SafeMath for uint256;
@@ -74,13 +75,7 @@ contract GrantElections {
 
   /* ========== STATE VARIABLES ========== */
 
-  IERC20 internal POP;
-  IRegion internal region;
-  IStaking internal staking;
-  IBeneficiaryRegistry internal beneficiaryRegistry;
-  IRandomNumberConsumer internal randomNumberConsumer;
-  ParticipationReward internal participationReward;
-  IACLRegistry internal aclRegistry;
+  IContractRegistry internal contractRegistry;
 
   bytes32 public immutable contractName = "GrantElections";
 
@@ -103,22 +98,8 @@ contract GrantElections {
 
   /* ========== CONSTRUCTOR ========== */
 
-  constructor(
-    IStaking _staking,
-    IBeneficiaryRegistry _beneficiaryRegistry,
-    IRandomNumberConsumer _randomNumberConsumer,
-    IERC20 _pop,
-    IRegion _region,
-    ParticipationReward _participationReward,
-    IACLRegistry _aclRegistry
-  ) {
-    staking = _staking;
-    beneficiaryRegistry = _beneficiaryRegistry;
-    randomNumberConsumer = _randomNumberConsumer;
-    region = _region;
-    POP = _pop;
-    participationReward = _participationReward;
-    aclRegistry = _aclRegistry;
+  constructor(IContractRegistry _contractRegistry) {
+    contractRegistry = _contractRegistry;
     _setDefaults();
   }
 
@@ -190,7 +171,9 @@ contract GrantElections {
   {
     return
       elections[_electionId].registeredBeneficiaries[_beneficiary] &&
-      beneficiaryRegistry.beneficiaryExists(_beneficiary);
+      IBeneficiaryRegistry(
+        contractRegistry.getContract(keccak256("BeneficiaryRegistry"))
+      ).beneficiaryExists(_beneficiary);
   }
 
   /* ========== MUTATIVE FUNCTIONS ========== */
@@ -198,6 +181,7 @@ contract GrantElections {
   // todo: mint POP for caller to incentivize calling function
   // todo: use bonds to incentivize callers instead of minting
   function initialize(ElectionTerm _grantTerm, bytes32 _region) public {
+    IRegion region = IRegion(contractRegistry.getContract(keccak256("Region")));
     require(region.regionExists(_region), "region doesnt exist");
     uint8 _term = uint8(_grantTerm);
     if (elections.length != 0) {
@@ -235,13 +219,15 @@ contract GrantElections {
     election.electionTerm = _grantTerm;
     election.startTime = block.timestamp;
     election.region = _region;
-    (bool vaultCreated, bytes32 vaultId) = participationReward.initializeVault(
-      contractName,
-      keccak256(abi.encodePacked(_term, block.timestamp)),
-      block.timestamp.add(electionDefaults[_term].registrationPeriod).add(
-        electionDefaults[_term].votingPeriod
-      )
-    );
+    (bool vaultCreated, bytes32 vaultId) = ParticipationReward(
+      contractRegistry.getContract(keccak256("ParticipationReward"))
+    ).initializeVault(
+        contractName,
+        keccak256(abi.encodePacked(_term, block.timestamp)),
+        block.timestamp.add(electionDefaults[_term].registrationPeriod).add(
+          electionDefaults[_term].votingPeriod
+        )
+      );
     if (vaultCreated) {
       election.vaultId = vaultId;
     }
@@ -271,7 +257,9 @@ contract GrantElections {
       "election not open for registration"
     );
     require(
-      beneficiaryRegistry.beneficiaryExists(_beneficiary),
+      IBeneficiaryRegistry(
+        contractRegistry.getContract(keccak256("BeneficiaryRegistry"))
+      ).beneficiaryExists(_beneficiary),
       "address is not eligible for registration"
     );
     require(
@@ -298,12 +286,14 @@ contract GrantElections {
     ) {
       election.electionState = ElectionState.Closed;
       if (election.electionConfiguration.useChainLinkVRF) {
-        randomNumberConsumer.getRandomNumber(
-          _electionId,
-          uint256(
-            keccak256(abi.encode(block.timestamp, blockhash(block.number)))
-          )
-        );
+        IRandomNumberConsumer(
+          contractRegistry.getContract(keccak256("RandomNumberConsumer"))
+        ).getRandomNumber(
+            _electionId,
+            uint256(
+              keccak256(abi.encode(block.timestamp, blockhash(block.number)))
+            )
+          );
       }
     } else if (
       block.timestamp >=
@@ -336,7 +326,9 @@ contract GrantElections {
     );
 
     uint256 _usedVoiceCredits = 0;
-    uint256 _stakedVoiceCredits = staking.getVoiceCredits(msg.sender);
+    uint256 _stakedVoiceCredits = IStaking(
+      contractRegistry.getContract(keccak256("Staking"))
+    ).getVoiceCredits(msg.sender);
 
     require(_stakedVoiceCredits > 0, "must have voice credits from staking");
 
@@ -364,17 +356,20 @@ contract GrantElections {
       "Insufficient voice credits"
     );
     if (election.vaultId != "") {
-      participationReward.addShares(
-        contractName,
-        election.vaultId,
-        msg.sender,
-        _usedVoiceCredits
-      );
+      ParticipationReward(
+        contractRegistry.getContract(keccak256("ParticipationReward"))
+      ).addShares(
+          contractName,
+          election.vaultId,
+          msg.sender,
+          _usedVoiceCredits
+        );
     }
     emit UserVoted(msg.sender, election.electionTerm);
   }
 
   function fundKeeperIncentive(uint256 _amount) public {
+    IERC20 POP = IERC20(contractRegistry.getContract(keccak256("POP")));
     require(POP.balanceOf(msg.sender) >= _amount, "not enough pop");
     POP.safeTransferFrom(msg.sender, address(this), _amount);
     incentiveBudget = incentiveBudget.add(_amount);
@@ -391,7 +386,9 @@ contract GrantElections {
       "election must be closed"
     );
     require(_election.randomNumber == 0, "randomNumber already set");
-    uint256 randomNumber = randomNumberConsumer.getRandomResult(_electionId);
+    uint256 randomNumber = IRandomNumberConsumer(
+      contractRegistry.getContract(keccak256("RandomNumberConsumer"))
+    ).getRandomResult(_electionId);
     require(randomNumber != 0, "random number not yet created");
     _election.randomNumber = randomNumber;
   }
@@ -401,7 +398,8 @@ contract GrantElections {
   function proposeFinalization(uint256 _electionId, bytes32 _merkleRoot)
     external
   {
-    aclRegistry.checkRole(keccak256("ElectionResultProposer"), msg.sender);
+    IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
+      .checkRole(keccak256("ElectionResultProposer"), msg.sender);
 
     Election storage _election = elections[_electionId];
     require(
@@ -423,6 +421,7 @@ contract GrantElections {
       incentiveBudget >= finalizationIncentive &&
       _election.electionState != ElectionState.FinalizationProposed
     ) {
+      IERC20 POP = IERC20(contractRegistry.getContract(keccak256("POP")));
       POP.approve(address(this), finalizationIncentive);
       POP.safeTransferFrom(address(this), msg.sender, finalizationIncentive);
       incentiveBudget = incentiveBudget.sub(finalizationIncentive);
@@ -437,7 +436,8 @@ contract GrantElections {
   function approveFinalization(uint256 _electionId, bytes32 _merkleRoot)
     external
   {
-    aclRegistry.checkRole(keccak256("ElectionResultApprover"), msg.sender);
+    IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
+      .checkRole(keccak256("ElectionResultApprover"), msg.sender);
 
     Election storage election = elections[_electionId];
     require(
@@ -450,25 +450,34 @@ contract GrantElections {
     );
     require(election.merkleRoot == _merkleRoot, "Incorrect root");
 
-    address beneficiaryVault = region.regionVaults(election.region);
+    address beneficiaryVault = IRegion(
+      contractRegistry.getContract(keccak256("Region"))
+    ).regionVaults(election.region);
+
     IBeneficiaryVaults(beneficiaryVault).openVault(
       uint8(election.electionTerm),
       _merkleRoot
     );
-    participationReward.openVault(contractName, election.vaultId);
+
+    ParticipationReward(
+      contractRegistry.getContract(keccak256("ParticipationReward"))
+    ).openVault(contractName, election.vaultId);
+
     election.electionState = ElectionState.Finalized;
 
     emit ElectionFinalized(_electionId, _merkleRoot);
   }
 
   function toggleRegistrationBondRequirement(ElectionTerm _term) external {
-    aclRegistry.checkRole(keccak256("DAO"), msg.sender);
+    IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
+      .checkRole(keccak256("DAO"), msg.sender);
     electionDefaults[uint8(_term)]
       .bondRequirements
       .required = !electionDefaults[uint8(_term)].bondRequirements.required;
   }
 
   function _collectRegistrationBond(Election storage _election) internal {
+    IERC20 POP = IERC20(contractRegistry.getContract(keccak256("POP")));
     if (_election.electionConfiguration.bondRequirements.required == true) {
       require(
         POP.balanceOf(msg.sender) >=
@@ -560,7 +569,8 @@ contract GrantElections {
     bool _enabled,
     ShareType _shareType
   ) public {
-    aclRegistry.checkRole(keccak256("DAO"), msg.sender);
+    IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
+      .checkRole(keccak256("DAO"), msg.sender);
     ElectionConfiguration storage _defaults = electionDefaults[uint8(_term)];
     _defaults.ranking = _ranking;
     _defaults.awardees = _awardees;

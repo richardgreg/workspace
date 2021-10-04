@@ -9,6 +9,7 @@ import "../interfaces/IRegion.sol";
 import "../interfaces/IStaking.sol";
 import "../interfaces/IBeneficiaryRegistry.sol";
 import "../interfaces/IACLRegistry.sol";
+import "../interfaces/IContractRegistry.sol";
 import "../utils/ParticipationReward.sol";
 
 /**
@@ -65,12 +66,7 @@ contract BeneficiaryGovernance {
 
   /* ========== STATE VARIABLES ========== */
 
-  IStaking public staking;
-  IBeneficiaryRegistry public beneficiaryRegistry;
-  IERC20 public POP;
-  IRegion internal region;
-  ParticipationReward public participationReward;
-  IACLRegistry public aclRegistry;
+  IContractRegistry public contractRegistry;
 
   mapping(address => bool) pendingBeneficiaries;
   mapping(address => uint256) beneficiaryProposals;
@@ -99,20 +95,8 @@ contract BeneficiaryGovernance {
 
   /* ========== CONSTRUCTOR ========== */
 
-  constructor(
-    IStaking _staking,
-    IBeneficiaryRegistry _beneficiaryRegistry,
-    IERC20 _pop,
-    IRegion _region,
-    ParticipationReward _participationReward,
-    IACLRegistry _aclRegistry
-  ) {
-    staking = _staking;
-    beneficiaryRegistry = _beneficiaryRegistry;
-    POP = _pop;
-    region = _region;
-    participationReward = _participationReward;
-    aclRegistry = _aclRegistry;
+  constructor(IContractRegistry _contractRegistry) {
+    contractRegistry = _contractRegistry;
     _setDefaults();
   }
 
@@ -196,7 +180,7 @@ contract BeneficiaryGovernance {
     _assertProposalPreconditions(_type, _beneficiary);
 
     if (DefaultConfigurations.proposalBond > 0) {
-      POP.safeTransferFrom(
+      IERC20(contractRegistry.getContract(keccak256("POP"))).safeTransferFrom(
         msg.sender,
         address(this),
         DefaultConfigurations.proposalBond
@@ -223,11 +207,13 @@ contract BeneficiaryGovernance {
     proposal.region = _region;
     proposal.proposalType = _type;
     proposal.configurationOptions = DefaultConfigurations;
-    (bool vaultCreated, bytes32 vaultId) = participationReward.initializeVault(
-      contractName,
-      keccak256(abi.encodePacked(proposalId, block.timestamp)),
-      block.timestamp.add(DefaultConfigurations.votingPeriod)
-    );
+    (bool vaultCreated, bytes32 vaultId) = ParticipationReward(
+      contractRegistry.getContract(keccak256("ParticipationReward"))
+    ).initializeVault(
+        contractName,
+        keccak256(abi.encodePacked(proposalId, block.timestamp)),
+        block.timestamp.add(DefaultConfigurations.votingPeriod)
+      );
     if (vaultCreated) {
       proposal.vaultId = vaultId;
     }
@@ -284,12 +270,9 @@ contract BeneficiaryGovernance {
     }
 
     if (proposal.vaultId != "") {
-      participationReward.addShares(
-        contractName,
-        proposal.vaultId,
-        msg.sender,
-        _voiceCredits
-      );
+      ParticipationReward(
+        contractRegistry.getContract(keccak256("ParticipationReward"))
+      ).addShares(contractName, proposal.vaultId, msg.sender, _voiceCredits);
     }
 
     emit Vote(proposalId, msg.sender, _voiceCredits);
@@ -321,7 +304,9 @@ contract BeneficiaryGovernance {
     _resetBeneficiaryPendingState(proposal.beneficiary);
 
     if (proposal.vaultId != "") {
-      participationReward.openVault(contractName, proposal.vaultId);
+      ParticipationReward(
+        contractRegistry.getContract(keccak256("ParticipationReward"))
+      ).openVault(contractName, proposal.vaultId);
     }
 
     emit Finalize(proposalId);
@@ -343,8 +328,15 @@ contract BeneficiaryGovernance {
     );
     uint256 amount = proposal.configurationOptions.proposalBond;
 
-    POP.approve(address(this), amount);
-    POP.safeTransferFrom(address(this), msg.sender, amount);
+    IERC20(contractRegistry.getContract(keccak256("POP"))).approve(
+      address(this),
+      amount
+    );
+    IERC20(contractRegistry.getContract(keccak256("POP"))).safeTransferFrom(
+      address(this),
+      msg.sender,
+      amount
+    );
 
     emit BondWithdrawn(msg.sender, amount);
   }
@@ -361,7 +353,8 @@ contract BeneficiaryGovernance {
     view
     returns (uint256 _voiceCredits)
   {
-    _voiceCredits = staking.getVoiceCredits(_address);
+    _voiceCredits = IStaking(contractRegistry.getContract(keccak256("Staking")))
+      .getVoiceCredits(_address);
 
     require(_voiceCredits > 0, "must have voice credits from staking");
     return _voiceCredits;
@@ -376,14 +369,18 @@ contract BeneficiaryGovernance {
   ) internal view {
     if (ProposalType.BeneficiaryTakedownProposal == _type) {
       require(
-        beneficiaryRegistry.beneficiaryExists(_beneficiary),
+        IBeneficiaryRegistry(
+          contractRegistry.getContract(keccak256("BeneficiaryRegistry"))
+        ).beneficiaryExists(_beneficiary),
         "Beneficiary doesnt exist!"
       );
     }
     if (ProposalType.BeneficiaryNominationProposal == _type) {
       require(
         !pendingBeneficiaries[_beneficiary] &&
-          !beneficiaryRegistry.beneficiaryExists(_beneficiary),
+          !IBeneficiaryRegistry(
+            contractRegistry.getContract(keccak256("BeneficiaryRegistry"))
+          ).beneficiaryExists(_beneficiary),
         "Beneficiary proposal is pending or already exists!"
       );
     }
@@ -395,15 +392,19 @@ contract BeneficiaryGovernance {
 
   function _handleSuccessfulProposal(Proposal storage proposal) internal {
     if (proposal.proposalType == ProposalType.BeneficiaryNominationProposal) {
-      beneficiaryRegistry.addBeneficiary(
-        proposal.beneficiary,
-        proposal.region,
-        proposal.applicationCid
-      );
+      IBeneficiaryRegistry(
+        contractRegistry.getContract(keccak256("BeneficiaryRegistry"))
+      ).addBeneficiary(
+          proposal.beneficiary,
+          proposal.region,
+          proposal.applicationCid
+        );
     }
 
     if (proposal.proposalType == ProposalType.BeneficiaryTakedownProposal) {
-      beneficiaryRegistry.revokeBeneficiary(proposal.beneficiary);
+      IBeneficiaryRegistry(
+        contractRegistry.getContract(keccak256("BeneficiaryRegistry"))
+      ).revokeBeneficiary(proposal.beneficiary);
     }
   }
 
@@ -454,7 +455,8 @@ contract BeneficiaryGovernance {
     uint256 _vetoPeriod,
     uint256 _proposalBond
   ) public {
-    aclRegistry.checkRole(keccak256("DAO"), msg.sender);
+    IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
+      .checkRole(keccak256("DAO"), msg.sender);
     DefaultConfigurations.votingPeriod = _votingPeriod;
     DefaultConfigurations.vetoPeriod = _vetoPeriod;
     DefaultConfigurations.proposalBond = _proposalBond;
@@ -468,7 +470,9 @@ contract BeneficiaryGovernance {
   }
   modifier enoughBond(address _address) {
     require(
-      POP.balanceOf(_address) >= DefaultConfigurations.proposalBond,
+      IERC20(contractRegistry.getContract(keccak256("POP"))).balanceOf(
+        _address
+      ) >= DefaultConfigurations.proposalBond,
       "proposal bond is not enough"
     );
     _;

@@ -7,6 +7,7 @@ import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 import {BatchType, Batch, IHysiBatchInteraction} from "../interfaces/IHysiBatchInteraction.sol";
 import "../../integrations/interfaces/Curve3Pool.sol";
+import "../interfaces/IContractRegistry.sol";
 
 /*
 This Contract allows user to use and receive stablecoins directly when interacting with HysiBatchInteraction.
@@ -18,7 +19,7 @@ contract HysiBatchZapper {
 
   /* ========== STATE VARIABLES ========== */
 
-  IHysiBatchInteraction private hysiBatchInteraction;
+  IContractRegistry private contractRegistry;
   Curve3Pool private curve3Pool;
   IERC20 private threeCrv;
 
@@ -43,11 +44,11 @@ contract HysiBatchZapper {
   /* ========== CONSTRUCTOR ========== */
 
   constructor(
-    IHysiBatchInteraction hysiBatchInteraction_,
+    IContractRegistry contractRegistry_,
     Curve3Pool curve3Pool_,
     IERC20 threeCrv_
   ) {
-    hysiBatchInteraction = hysiBatchInteraction_;
+    contractRegistry = contractRegistry_;
     curve3Pool = curve3Pool_;
     threeCrv = threeCrv_;
   }
@@ -63,6 +64,9 @@ contract HysiBatchZapper {
   function zapIntoBatch(uint256[3] memory amounts_, uint256 min_mint_amounts_)
     external
   {
+    address hysiBatchInteraction = contractRegistry.getContract(
+      keccak256("HysiBatchInteraction")
+    );
     for (uint8 i; i < amounts_.length; i++) {
       if (amounts_[i] > 0) {
         //Deposit Stables
@@ -89,13 +93,13 @@ contract HysiBatchZapper {
     uint256 threeCrvAmount = threeCrv.balanceOf(address(this));
 
     //Allow hysiBatchInteraction to use 3CRV
-    threeCrv.safeIncreaseAllowance(
-      address(hysiBatchInteraction),
-      threeCrvAmount
-    );
+    threeCrv.safeIncreaseAllowance(hysiBatchInteraction, threeCrvAmount);
 
     //Deposit 3CRV in current mint batch
-    hysiBatchInteraction.depositForMint(threeCrvAmount, msg.sender);
+    IHysiBatchInteraction(hysiBatchInteraction).depositForMint(
+      threeCrvAmount,
+      msg.sender
+    );
     emit ZappedIntoBatch(threeCrvAmount, msg.sender);
   }
 
@@ -114,11 +118,9 @@ contract HysiBatchZapper {
     uint256 min_amount_
   ) external {
     // Allows the zapepr to withdraw 3CRV from batch for the user
-    hysiBatchInteraction.withdrawFromBatch(
-      batchId_,
-      amountToWithdraw_,
-      msg.sender
-    );
+    IHysiBatchInteraction(
+      contractRegistry.getContract(keccak256("HysiBatchInteraction"))
+    ).withdrawFromBatch(batchId_, amountToWithdraw_, msg.sender);
 
     //Burns 3CRV for stables and sends them to the user
     //stableBalance is only returned for the event
@@ -150,6 +152,9 @@ contract HysiBatchZapper {
     uint256 min_amount_
   ) external {
     //We can only deposit 3CRV which come from mintBatches otherwise this could claim HYSI which we cant process here
+    IHysiBatchInteraction hysiBatchInteraction = IHysiBatchInteraction(
+      contractRegistry.getContract(keccak256("HysiBatchInteraction"))
+    );
     require(
       hysiBatchInteraction.batches(batchId_).batchType == BatchType.Redeem,
       "needs to return 3crv"

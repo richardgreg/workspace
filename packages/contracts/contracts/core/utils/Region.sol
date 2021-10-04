@@ -2,9 +2,10 @@ pragma solidity >=0.7.0 <0.8.0;
 
 import "../interfaces/IRegion.sol";
 import "../interfaces/IACLRegistry.sol";
+import "../interfaces/IContractRegistry.sol";
 
 contract Region is IRegion {
-  IACLRegistry public aclRegistry;
+  IContractRegistry public contractRegistry;
 
   bytes32 public immutable override defaultRegion = keccak256("World");
   bytes32[] public regions;
@@ -14,12 +15,14 @@ contract Region is IRegion {
 
   event RegionAdded(bytes32 region);
 
-  constructor(address beneficiaryVault_, IACLRegistry aclRegistry_) public {
+  constructor(address beneficiaryVault_, IContractRegistry contractRegistry_)
+    public
+  {
     regions.push(keccak256("World"));
     regionExists[keccak256("World")] = true;
     beneficiaryVaults.push(beneficiaryVault_);
     regionVaults[keccak256("World")] = beneficiaryVault_;
-    aclRegistry = aclRegistry_;
+    contractRegistry = contractRegistry_;
   }
 
   function getAllRegions() public view override returns (bytes32[] memory) {
@@ -34,7 +37,8 @@ contract Region is IRegion {
     external
     override
   {
-    aclRegistry.checkRole(keccak256("DAO"), msg.sender);
+    IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
+      .checkRole(keccak256("DAO"), msg.sender);
     require(regionExists[region_] == false, "region already exists");
     regions.push(region_);
     regionExists[region_] = true;

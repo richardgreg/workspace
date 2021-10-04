@@ -116,9 +116,9 @@ contract ACLRegistry is IACLRegistry {
     require(hasRole(getRoleAdmin(role), account), "you have to be role admin");
   }
 
-  function defend(address account) public view override {
+  function requireApprovedContractOrEOA(address account) public view override {
     require(
-      hasRole(keccak256("Defender"), account) || account == tx.origin,
+      hasRole(keccak256("ApprovedContract"), account) || account == tx.origin,
       "Access denied for caller"
     );
   }

@@ -6,7 +6,7 @@ import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 import "../interfaces/IStaking.sol";
 import "../interfaces/IRewardsEscrow.sol";
-import "../interfaces/IACLRegistry.sol";
+import "../interfaces/IContractRegistry.sol";
 
 contract RewardsEscrow is IRewardsEscrow, ReentrancyGuard {
   using SafeMath for uint256;
@@ -20,9 +20,7 @@ contract RewardsEscrow is IRewardsEscrow, ReentrancyGuard {
     bool claimed;
   }
 
-  IERC20 public immutable POP;
-  IStaking public staking;
-  IACLRegistry public aclRegistry;
+  IContractRegistry public contractRegistry;
 
   mapping(bytes32 => Escrow) public escrows;
   mapping(address => bytes32[]) public escrowIds;
@@ -32,15 +30,13 @@ contract RewardsEscrow is IRewardsEscrow, ReentrancyGuard {
   /* ========== EVENTS ========== */
   event Locked(address account, uint256 amount);
   event RewardsClaimed(address account_, uint256 amount);
-  event StakingChanged(IStaking _staking);
   event EscrowDurationChanged(uint256 _escrowDuration);
   event VestingCliffChanged(uint256 _vestingCliff);
 
   /* ========== CONSTRUCTOR ========== */
 
-  constructor(IERC20 _pop, IACLRegistry _aclRegistry) {
-    POP = _pop;
-    aclRegistry = _aclRegistry;
+  constructor(IContractRegistry contractRegistry_) {
+    contractRegistry = contractRegistry_;
   }
 
   /* ========== VIEWS ========== */
@@ -79,7 +75,11 @@ contract RewardsEscrow is IRewardsEscrow, ReentrancyGuard {
     override
     nonReentrant
   {
-    require(msg.sender == address(staking), "you cant call this function");
+    IERC20 POP = IERC20(contractRegistry.getContract(keccak256("POP")));
+    require(
+      msg.sender == contractRegistry.getContract(keccak256("Staking")),
+      "you cant call this function"
+    );
     require(amount_ > 0, "amount must be greater than 0");
     require(POP.balanceOf(msg.sender) >= amount_, "insufficient balance");
 
@@ -111,7 +111,10 @@ contract RewardsEscrow is IRewardsEscrow, ReentrancyGuard {
     uint256 reward = _claimReward(msg.sender, escrowId_);
     require(reward > 0, "no rewards");
 
-    POP.safeTransfer(msg.sender, reward);
+    IERC20(contractRegistry.getContract(keccak256("POP"))).safeTransfer(
+      msg.sender,
+      reward
+    );
 
     emit RewardsClaimed(msg.sender, reward);
   }
@@ -132,7 +135,10 @@ contract RewardsEscrow is IRewardsEscrow, ReentrancyGuard {
     }
     require(total > 0, "no rewards");
 
-    POP.safeTransfer(msg.sender, total);
+    IERC20(contractRegistry.getContract(keccak256("POP"))).safeTransfer(
+      msg.sender,
+      total
+    );
 
     emit RewardsClaimed(msg.sender, total);
   }
@@ -173,24 +179,5 @@ contract RewardsEscrow is IRewardsEscrow, ReentrancyGuard {
         ),
         escrow.balance
       );
-  }
-
-  function updateEscrowDuration(uint256 _escrowDuration) external {
-    aclRegistry.checkRole(keccak256("Comptroller"), msg.sender);
-    escrowDuration = _escrowDuration;
-    emit EscrowDurationChanged(_escrowDuration);
-  }
-
-  function updateCliff(uint256 _vestingCliff) external {
-    aclRegistry.checkRole(keccak256("Comptroller"), msg.sender);
-    vestingCliff = _vestingCliff;
-    emit VestingCliffChanged(_vestingCliff);
-  }
-
-  function setStaking(IStaking _staking) external {
-    aclRegistry.checkRole(keccak256("Comptroller"), msg.sender);
-    require(staking != _staking, "Same Staking");
-    staking = _staking;
-    emit StakingChanged(_staking);
   }
 }

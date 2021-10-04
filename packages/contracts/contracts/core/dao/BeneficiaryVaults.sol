@@ -6,9 +6,9 @@ import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 import "@openzeppelin/contracts/cryptography/MerkleProof.sol";
-import "../interfaces/IRegion.sol";
 import "../interfaces/IBeneficiaryVaults.sol";
 import "../interfaces/IBeneficiaryRegistry.sol";
+import "../interfaces/IContractRegistry.sol";
 import "../interfaces/IACLRegistry.sol";
 
 contract BeneficiaryVaults is IBeneficiaryVaults, ReentrancyGuard {
@@ -31,9 +31,7 @@ contract BeneficiaryVaults is IBeneficiaryVaults, ReentrancyGuard {
 
   /* ========== STATE VARIABLES ========== */
 
-  IERC20 public immutable pop;
-  IACLRegistry public aclRegistry;
-  IBeneficiaryRegistry public beneficiaryRegistry;
+  IContractRegistry public contractRegistry;
   uint256 public totalDistributedBalance = 0;
   Vault[3] public vaults;
 
@@ -43,16 +41,11 @@ contract BeneficiaryVaults is IBeneficiaryVaults, ReentrancyGuard {
   event VaultClosed(uint8 vaultId);
   event RewardsAllocated(uint256 amount);
   event RewardClaimed(uint8 vaultId, address beneficiary, uint256 amount);
-  event BeneficiaryRegistryChanged(
-    IBeneficiaryRegistry from,
-    IBeneficiaryRegistry to
-  );
 
   /* ========== CONSTRUCTOR ========== */
 
-  constructor(IERC20 pop_, IACLRegistry aclRegistry_) {
-    pop = pop_;
-    aclRegistry = aclRegistry_;
+  constructor(IContractRegistry contractRegistry_) {
+    contractRegistry = contractRegistry_;
   }
 
   /* ========== VIEWS ========== */
@@ -99,7 +92,8 @@ contract BeneficiaryVaults is IBeneficiaryVaults, ReentrancyGuard {
    * @dev Vault cannot be initialized if it is currently in an open state, otherwise existing data is reset*
    */
   function openVault(uint8 vaultId_, bytes32 merkleRoot_) public override {
-    aclRegistry.checkRole(keccak256("BeneficiaryGovernance"), msg.sender);
+    IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
+      .checkRole(keccak256("BeneficiaryGovernance"), msg.sender);
     require(vaultId_ < 3, "Invalid vault id");
     require(
       vaults[vaultId_].merkleRoot == "" ||
@@ -124,7 +118,8 @@ contract BeneficiaryVaults is IBeneficiaryVaults, ReentrancyGuard {
    * @param vaultId_ Vault ID in range 0-2
    */
   function closeVault(uint8 vaultId_) public override _vaultExists(vaultId_) {
-    aclRegistry.checkRole(keccak256("BeneficiaryGovernance"), msg.sender);
+    IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
+      .checkRole(keccak256("BeneficiaryGovernance"), msg.sender);
     Vault storage vault = vaults[vaultId_];
     require(vault.status == VaultStatus.Open, "Vault must be open");
 
@@ -158,7 +153,9 @@ contract BeneficiaryVaults is IBeneficiaryVaults, ReentrancyGuard {
     require(msg.sender == beneficiary_, "Sender must be beneficiary");
     require(vaults[vaultId_].status == VaultStatus.Open, "Vault must be open");
     require(
-      beneficiaryRegistry.beneficiaryExists(beneficiary_) == true,
+      IBeneficiaryRegistry(
+        contractRegistry.getContract(keccak256("BeneficiaryRegistry"))
+      ).beneficiaryExists(beneficiary_) == true,
       "Beneficiary does not exist"
     );
 
@@ -204,7 +201,10 @@ contract BeneficiaryVaults is IBeneficiaryVaults, ReentrancyGuard {
 
     vault.claimed[beneficiary_] = true;
 
-    pop.transfer(beneficiary_, _reward);
+    IERC20(contractRegistry.getContract(keccak256("POP"))).transfer(
+      beneficiary_,
+      _reward
+    );
 
     emit RewardClaimed(vaultId_, beneficiary_, _reward);
   }
@@ -214,9 +214,9 @@ contract BeneficiaryVaults is IBeneficiaryVaults, ReentrancyGuard {
    * @dev Requires at least one open vault
    */
   function allocateRewards() public override nonReentrant {
-    uint256 availableReward = pop.balanceOf(address(this)).sub(
-      totalDistributedBalance
-    );
+    uint256 availableReward = IERC20(
+      contractRegistry.getContract(keccak256("POP"))
+    ).balanceOf(address(this)).sub(totalDistributedBalance);
     require(availableReward > 0, "no rewards available");
 
     uint8 _openVaultCount = _getOpenVaultCount();
@@ -251,26 +251,6 @@ contract BeneficiaryVaults is IBeneficiaryVaults, ReentrancyGuard {
       }
     }
     return _openVaultCount;
-  }
-
-  /* ========== SETTER ========== */
-
-  /**
-   * @notice Overrides existing BeneficiaryRegistry contract
-   * @param beneficiaryRegistry_ Address of new BeneficiaryRegistry contract
-   * @dev Must implement IBeneficiaryRegistry and cannot be same as existing
-   */
-  function setBeneficiaryRegistry(IBeneficiaryRegistry beneficiaryRegistry_)
-    public
-  {
-    aclRegistry.checkRole(keccak256("Comptroller"), msg.sender);
-    require(
-      beneficiaryRegistry != beneficiaryRegistry_,
-      "Same BeneficiaryRegistry"
-    );
-    IBeneficiaryRegistry _beneficiaryRegistry = beneficiaryRegistry;
-    beneficiaryRegistry = beneficiaryRegistry_;
-    emit BeneficiaryRegistryChanged(_beneficiaryRegistry, beneficiaryRegistry);
   }
 
   /* ========== MODIFIERS ========== */

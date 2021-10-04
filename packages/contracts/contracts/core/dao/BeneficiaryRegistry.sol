@@ -5,6 +5,7 @@ pragma solidity >=0.7.0 <=0.8.3;
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "../interfaces/IBeneficiaryRegistry.sol";
 import "../interfaces/IACLRegistry.sol";
+import "../interfaces/IContractRegistry.sol";
 
 contract BeneficiaryRegistry is IBeneficiaryRegistry {
   struct Beneficiary {
@@ -15,7 +16,7 @@ contract BeneficiaryRegistry is IBeneficiaryRegistry {
 
   /* ========== STATE VARIABLES ========== */
 
-  IACLRegistry private aclRegistry;
+  IContractRegistry private contractRegistry;
 
   mapping(address => Beneficiary) private beneficiariesMap;
   address[] private beneficiariesList;
@@ -30,8 +31,8 @@ contract BeneficiaryRegistry is IBeneficiaryRegistry {
 
   /* ========== CONSTRUCTOR ========== */
 
-  constructor(IACLRegistry _aclRegistry) {
-    aclRegistry = _aclRegistry;
+  constructor(IContractRegistry _contractRegistry) {
+    contractRegistry = _contractRegistry;
   }
 
   /* ========== VIEW FUNCTIONS ========== */
@@ -72,7 +73,8 @@ contract BeneficiaryRegistry is IBeneficiaryRegistry {
     bytes32 region,
     bytes calldata applicationCid
   ) external override {
-    aclRegistry.checkRole(keccak256("BeneficiaryGovernance"), msg.sender);
+    IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
+      .checkRole(keccak256("BeneficiaryGovernance"), msg.sender);
     require(account == address(account), "invalid address");
     require(applicationCid.length > 0, "!application");
     require(!beneficiaryExists(account), "exists");
@@ -91,6 +93,9 @@ contract BeneficiaryRegistry is IBeneficiaryRegistry {
    * @notice remove a beneficiary from the registry. (callable only by council)
    */
   function revokeBeneficiary(address _address) external override {
+    IACLRegistry aclRegistry = IACLRegistry(
+      contractRegistry.getContract(keccak256("ACLRegistry"))
+    );
     require(
       aclRegistry.hasRole(keccak256("BeneficiaryGovernance"), msg.sender) ||
         (aclRegistry.hasRole(keccak256("Council"), msg.sender) &&

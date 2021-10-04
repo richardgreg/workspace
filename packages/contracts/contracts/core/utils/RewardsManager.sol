@@ -16,6 +16,7 @@ import "../interfaces/IInsurance.sol";
 import "../interfaces/IBeneficiaryVaults.sol";
 import "../interfaces/IRewardsManager.sol";
 import "../interfaces/IACLRegistry.sol";
+import "../interfaces/IContractRegistry.sol";
 
 /**
  * @title Popcorn Rewards Manager
@@ -37,13 +38,7 @@ contract RewardsManager is IRewardsManager, ReentrancyGuard {
   uint256 public constant SWAP_TIMEOUT = 600;
   bytes32 public immutable contractName = "RewardsManager";
 
-  IERC20 public POP;
-  IStaking public staking;
-  ITreasury public treasury;
-  IInsurance public insurance;
-  IRegion public region;
-  IACLRegistry public aclRegistry;
-  KeeperIncentive public keeperIncentive;
+  IContractRegistry public contractRegistry;
   IUniswapV2Router02 public immutable uniswapV2Router;
 
   uint256[4] public rewardSplits;
@@ -58,30 +53,15 @@ contract RewardsManager is IRewardsManager, ReentrancyGuard {
   event RewardsDistributed(uint256 amount);
   event RewardSplitsUpdated(uint256[4] splits);
   event TokenSwapped(address token, uint256 amountIn, uint256 amountOut);
-  event StakingChanged(IStaking from, IStaking to);
-  event TreasuryChanged(ITreasury from, ITreasury to);
-  event InsuranceChanged(IInsurance from, IInsurance to);
   event RegionChanged(IRegion from, IRegion to);
 
   /* ========== CONSTRUCTOR ========== */
 
   constructor(
-    IERC20 pop_,
-    IStaking staking_,
-    ITreasury treasury_,
-    IInsurance insurance_,
-    IRegion region_,
-    IACLRegistry aclRegistry_,
-    KeeperIncentive keeperIncentive_,
+    IContractRegistry contractRegistry_,
     IUniswapV2Router02 uniswapV2Router_
   ) {
-    POP = pop_;
-    staking = staking_;
-    treasury = treasury_;
-    insurance = insurance_;
-    region = region_;
-    aclRegistry = aclRegistry_;
-    keeperIncentive = keeperIncentive_;
+    contractRegistry = contractRegistry_;
     uniswapV2Router = uniswapV2Router_;
     rewardLimits[uint8(RewardTargets.Staking)] = [20e18, 80e18];
     rewardLimits[uint8(RewardTargets.Treasury)] = [10e18, 80e18];
@@ -112,11 +92,12 @@ contract RewardsManager is IRewardsManager, ReentrancyGuard {
     nonReentrant
     returns (uint256[] memory)
   {
-    keeperIncentive.handleKeeperIncentive(contractName, msg.sender);
+    KeeperIncentive(contractRegistry.getContract(keccak256("KeeperIncentive")))
+      .handleKeeperIncentive(contractName, msg.sender);
     require(path_.length >= 2, "Invalid swap path");
     require(minAmountOut_ > 0, "Invalid amount");
     require(
-      path_[path_.length - 1] == address(POP),
+      path_[path_.length - 1] == contractRegistry.getContract(keccak256("POP")),
       "POP must be last in path"
     );
 
@@ -142,8 +123,11 @@ contract RewardsManager is IRewardsManager, ReentrancyGuard {
    * @dev Contract must have POP balance in order to distribute according to rewardSplits ratio
    */
   function distributeRewards() public nonReentrant {
-    keeperIncentive.handleKeeperIncentive(contractName, msg.sender);
-    uint256 _availableReward = POP.balanceOf(address(this));
+    KeeperIncentive(contractRegistry.getContract(keccak256("KeeperIncentive")))
+      .handleKeeperIncentive(contractName, msg.sender);
+    uint256 _availableReward = IERC20(
+      contractRegistry.getContract(keccak256("POP"))
+    ).balanceOf(address(this));
     require(_availableReward > 0, "No POP balance");
 
     //@todo check edge case precision overflow
@@ -172,27 +156,43 @@ contract RewardsManager is IRewardsManager, ReentrancyGuard {
 
   function _distributeToStaking(uint256 amount_) internal {
     if (amount_ == 0) return;
-    POP.transfer(address(staking), amount_);
-    staking.notifyRewardAmount(amount_);
-    emit StakingDeposited(address(staking), amount_);
+    address staking = contractRegistry.getContract(keccak256("Insurance"));
+
+    IERC20(contractRegistry.getContract(keccak256("POP"))).transfer(
+      staking,
+      amount_
+    );
+    IStaking(staking).notifyRewardAmount(amount_);
+    emit StakingDeposited(staking, amount_);
   }
 
   function _distributeToTreasury(uint256 amount_) internal {
     if (amount_ == 0) return;
-    POP.transfer(address(treasury), amount_);
-    emit TreasuryDeposited(address(treasury), amount_);
+    address treasury = contractRegistry.getContract(keccak256("Treasury"));
+    IERC20(contractRegistry.getContract(keccak256("POP"))).transfer(
+      treasury,
+      amount_
+    );
+    emit TreasuryDeposited(treasury, amount_);
   }
 
   function _distributeToInsurance(uint256 amount_) internal {
     if (amount_ == 0) return;
-    POP.transfer(address(insurance), amount_);
-    emit InsuranceDeposited(address(insurance), amount_);
+    address insurance = contractRegistry.getContract(keccak256("Insurance"));
+    IERC20(contractRegistry.getContract(keccak256("POP"))).transfer(
+      insurance,
+      amount_
+    );
+    emit InsuranceDeposited(insurance, amount_);
   }
 
   function _distributeToVaults(uint256 amount_) internal {
     if (amount_ == 0) return;
     //This might lead to a gas overflow since the region array is unbound
-    address[] memory regionVaults = region.getAllVaults();
+    IERC20 POP = IERC20(contractRegistry.getContract(keccak256("POP")));
+    address[] memory regionVaults = IRegion(
+      contractRegistry.getContract(keccak256("Region"))
+    ).getAllVaults();
     uint256 split = amount_.div(regionVaults.length);
     for (uint256 i; i < regionVaults.length; i++) {
       POP.transfer(regionVaults[i], split);
@@ -203,64 +203,13 @@ contract RewardsManager is IRewardsManager, ReentrancyGuard {
   /* ========== SETTER ========== */
 
   /**
-   * @notice Overrides existing Staking contract
-   * @param staking_ Address of new Staking contract
-   * @dev Must implement IStaking and cannot be same as existing
-   */
-  function setStaking(IStaking staking_) public {
-    aclRegistry.checkRole(keccak256("Comptroller"), msg.sender);
-    require(staking != staking_, "Same Staking");
-    IStaking _previousStaking = staking;
-    staking = staking_;
-    emit StakingChanged(_previousStaking, staking);
-  }
-
-  /**
-   * @notice Overrides existing Treasury contract
-   * @param treasury_ Address of new Treasury contract
-   * @dev Must implement ITreasury and cannot be same as existing
-   */
-  function setTreasury(ITreasury treasury_) public {
-    aclRegistry.checkRole(keccak256("Comptroller"), msg.sender);
-    require(treasury != treasury_, "Same Treasury");
-    ITreasury _previousTreasury = treasury;
-    treasury = treasury_;
-    emit TreasuryChanged(_previousTreasury, treasury);
-  }
-
-  /**
-   * @notice Overrides existing Insurance contract
-   * @param insurance_ Address of new Insurance contract
-   * @dev Must implement IInsurance and cannot be same as existing
-   */
-  function setInsurance(IInsurance insurance_) public {
-    aclRegistry.checkRole(keccak256("Comptroller"), msg.sender);
-    require(insurance != insurance_, "Same Insurance");
-    IInsurance _previousInsurance = insurance;
-    insurance = insurance_;
-    emit InsuranceChanged(_previousInsurance, insurance_);
-  }
-
-  /**
-   * @notice Overrides existing Region contract
-   * @param region_ Address of new Region contract
-   * @dev Must implement IRegion and cannot be same as existing
-   */
-  function setRegion(IRegion region_) public {
-    aclRegistry.checkRole(keccak256("Comptroller"), msg.sender);
-    require(region != region_, "Same Region");
-    IRegion _previousRegion = region;
-    region = region_;
-    emit RegionChanged(_previousRegion, region_);
-  }
-
-  /**
    * @notice Set new reward distribution allocations
    * @param splits_ Array of RewardTargets enumerated uint256 values within rewardLimits range
    * @dev Values must be within rewardsLimit range, specified in percent to 18 decimal place precision
    */
   function setRewardSplits(uint256[4] calldata splits_) public {
-    aclRegistry.checkRole(keccak256("Comptroller"), msg.sender);
+    IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
+      .checkRole(keccak256("DAO"), msg.sender);
     uint256 _total = 0;
     for (uint8 i = 0; i < 4; i++) {
       require(

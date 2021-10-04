@@ -5,6 +5,7 @@ import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 import "../interfaces/IACLRegistry.sol";
+import "../interfaces/IContractRegistry.sol";
 
 contract ParticipationReward is ReentrancyGuard {
   using SafeMath for uint256;
@@ -25,8 +26,7 @@ contract ParticipationReward is ReentrancyGuard {
     mapping(address => bool) claimed;
   }
 
-  IERC20 public immutable POP;
-  IACLRegistry public aclRegistry;
+  IContractRegistry public contractRegistry;
 
   uint256 public rewardBalance;
   uint256 public totalVaultsBudget;
@@ -50,9 +50,8 @@ contract ParticipationReward is ReentrancyGuard {
 
   /* ========== CONSTRUCTOR ========== */
 
-  constructor(IERC20 _pop, IACLRegistry _aclRegistry) {
-    POP = _pop;
-    aclRegistry = _aclRegistry;
+  constructor(IContractRegistry _contractRegistry) {
+    contractRegistry = _contractRegistry;
   }
 
   /* ========== VIEWS ========== */
@@ -216,7 +215,10 @@ contract ParticipationReward is ReentrancyGuard {
     totalVaultsBudget = totalVaultsBudget.sub(reward);
     rewardBalance = rewardBalance.sub(reward);
 
-    POP.safeTransfer(msg.sender, reward);
+    IERC20(contractRegistry.getContract(keccak256("POP"))).safeTransfer(
+      msg.sender,
+      reward
+    );
 
     emit RewardsClaimed(msg.sender, reward);
   }
@@ -248,7 +250,10 @@ contract ParticipationReward is ReentrancyGuard {
     totalVaultsBudget = totalVaultsBudget.sub(total);
     rewardBalance = rewardBalance.sub(total);
 
-    POP.safeTransfer(msg.sender, total);
+    IERC20(contractRegistry.getContract(keccak256("POP"))).safeTransfer(
+      msg.sender,
+      total
+    );
 
     emit RewardsClaimed(msg.sender, total);
   }
@@ -289,7 +294,8 @@ contract ParticipationReward is ReentrancyGuard {
    * @dev Every controller contract has their own rewardsBudget to set indivual rewards per controller contract
    */
   function setRewardsBudget(bytes32 contractName_, uint256 amount) external {
-    aclRegistry.checkRole(keccak256("DAO"), msg.sender);
+    IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
+      .checkRole(keccak256("DAO"), msg.sender);
     require(amount > 0, "must be larger 0");
     rewardBudgets[contractName_] = amount;
     emit RewardBudgetChanged(contractName_, amount);
@@ -304,7 +310,8 @@ contract ParticipationReward is ReentrancyGuard {
   function addControllerContract(bytes32 contractName_, address contract_)
     external
   {
-    aclRegistry.checkRole(keccak256("DAO"), msg.sender);
+    IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
+      .checkRole(keccak256("DAO"), msg.sender);
     controllerContracts[contractName_] = contract_;
     rewardsEnabled[contractName_] = true;
     emit ControllerContractAdded(contractName_, contract_);
@@ -316,7 +323,8 @@ contract ParticipationReward is ReentrancyGuard {
    * @dev all critical functions to init/open vaults and add shares to them can only be called by controller contracts
    */
   function toggleRewards(bytes32 contractName_) external {
-    aclRegistry.checkRole(keccak256("DAO"), msg.sender);
+    IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
+      .checkRole(keccak256("DAO"), msg.sender);
     bool prevState = rewardsEnabled[contractName_];
     rewardsEnabled[contractName_] = !prevState;
     emit RewardsToggled(
@@ -333,7 +341,11 @@ contract ParticipationReward is ReentrancyGuard {
    */
   function contributeReward(uint256 amount) external {
     require(amount > 0, "must be larger 0");
-    POP.safeTransferFrom(msg.sender, address(this), amount);
+    IERC20(contractRegistry.getContract(keccak256("POP"))).safeTransferFrom(
+      msg.sender,
+      address(this),
+      amount
+    );
     rewardBalance = rewardBalance.add(amount);
     emit RewardBalanceIncreased(msg.sender, amount);
   }
