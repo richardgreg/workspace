@@ -15,7 +15,6 @@ import {
 } from 'recharts';
 import { getEmptyChartData } from '../../dummyEmissionsData';
 import Spinner from '../../Spinner';
-import './styling.css';
 
 export interface ComposedBarChartProps {
   data?: ChartData[];
@@ -30,11 +29,18 @@ export interface ComposedBarChartProps {
   co2EmissionDataKey?: string;
 }
 
+export interface CustomTooltipProps extends TooltipProps<string, string> {
+  transactionsColor: string;
+  co2EmissionColor: string;
+}
+
 const CustomTooltip = ({
   active,
   payload,
   label,
-}: TooltipProps<string, string>) => {
+  transactionsColor,
+  co2EmissionColor,
+}: CustomTooltipProps) => {
   if (active && payload && payload.length) {
     const emissionsConverted = convert(payload[1].value).from('mcg').toBest();
 
@@ -47,13 +53,19 @@ const CustomTooltip = ({
 
         <ul className="m-0 p-0 space-y-2">
           <li className="flex gap-2 m-0 p-0">
-            <div className={`w-4 h-4 border bg-indigo-500`}></div>
+            <div
+              className={`w-4 h-4 border `}
+              style={{ background: transactionsColor }}
+            ></div>
 
             <div className="text-xs">{`Transaction: ${payload[0].value.toLocaleString()}`}</div>
           </li>
           {emissionsConverted !== null && (
             <li className="flex gap-2">
-              <div className={`w-4 h-4 border bg-green-500`}></div>
+              <div
+                className={`w-4 h-4 border `}
+                style={{ background: co2EmissionColor }}
+              ></div>
               <div className="text-xs">{`CO2 Emissions: ${Math.round(
                 emissionsConverted.val,
               )}${emissionsConverted.unit}`}</div>
@@ -71,7 +83,17 @@ const ChartContentWrapper: React.FC<
   React.PropsWithChildren<ComposedBarChartProps>
 > = (props) => {
   return (
-    <div className="w-full flex flex-wrap content-center border-2 border-gray-50 justify-center ">
+    <div
+      className="w-full flex flex-wrap content-center border-2 border-gray-50 justify-center "
+      style={{
+        objectFit: 'cover',
+        height: props.height,
+        marginTop: 5,
+        marginRight: 30,
+        marginLeft: 30,
+        marginBottom: 5,
+      }}
+    >
       {props.children}
     </div>
   );
@@ -114,7 +136,7 @@ export const ComposedBarChart: React.FC<ComposedBarChartProps> = ({
   co2EmissionDataKey = 'co2Emissions',
 }) => {
   const containsData =
-    data.reduce((pr, cu) => {
+    data?.reduce((pr, cu) => {
       return pr + cu.co2Emissions;
     }, 0) > 0;
 
@@ -150,9 +172,10 @@ export const ComposedBarChart: React.FC<ComposedBarChartProps> = ({
           type="monotone"
           dataKey={co2EmissionDataKey}
           yAxisId="right-emissions"
-          stroke={areaColor}
+          stroke="transparent"
           fill={areaColor}
           activeDot={{ r: 0 }}
+          x={10}
         />
 
         <Bar
@@ -167,10 +190,18 @@ export const ComposedBarChart: React.FC<ComposedBarChartProps> = ({
           dataKey={transactionsDataKey}
           fill="transparent"
           stroke="transparent"
-          activeDot={{ r: 6 }}
+          activeDot={{ r: 6, fill: 'red', stroke: 'white', strokeWidth: 3 }}
         />
 
-        <Tooltip content={<CustomTooltip />} />
+        <Tooltip
+          cursor={{ stroke: 'red', strokeDasharray: 5 }}
+          content={
+            <CustomTooltip
+              transactionsColor={barColor}
+              co2EmissionColor={areaColor}
+            />
+          }
+        />
       </ComposedChart>
     </ResponsiveContainer>
   ) : (

@@ -25,10 +25,11 @@ type ComposedBarChartControls = {
 } & Partial<ComposedBarChartProps>;
 
 const ChartTemplate: Story<ComposedBarChartControls> = (args) => {
-  const data =
-    args.dataSet === 'dummy'
-      ? getDummyEmissionData()
-      : mockEmissionsData[args.dataSet];
+  const data = args.data
+    ? args.data
+    : args.dataSet === 'dummy'
+    ? getDummyEmissionData()
+    : mockEmissionsData[args.dataSet];
 
   return <ComposedBarChart {...args} data={data} />;
 };
@@ -49,7 +50,7 @@ Complete.args = {
 
 Complete.argTypes = {
   dataSet: {
-    options: ['ex1', 'ex2', 'ex3', 'ex4', 'ex5', 'dummy'],
+    options: ['ex1', 'ex2', 'ex3', 'ex4', 'ex5', 'dummy', 'empty'],
     control: { type: 'select' },
   },
 };
