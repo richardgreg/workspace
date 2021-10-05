@@ -144,6 +144,7 @@ export const handler = async (event, context) => {
     const res = await database
       .collection('transactions')
       .bulkWrite(bulkUpdateOps);
+    client.close();
     if (res.result.ok !== 1) {
       return {
         statusCode: 500,
