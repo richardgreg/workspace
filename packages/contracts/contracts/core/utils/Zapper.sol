@@ -6,10 +6,10 @@ import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "../interfaces/IPool.sol";
-import "../../integrations/interfaces/CurveAddressProvider.sol";
-import "../../integrations/interfaces/CurveRegistry.sol";
-import "../../integrations/interfaces/CurveMetapool.sol";
-import "../../integrations/interfaces/Curve3Pool.sol";
+import "../../externals/interfaces/CurveAddressProvider.sol";
+import "../../externals/interfaces/CurveRegistry.sol";
+import "../../externals/interfaces/CurveMetapool.sol";
+import "../../externals/interfaces/Curve3Pool.sol";
 
 contract Zapper {
   using SafeERC20 for IERC20;

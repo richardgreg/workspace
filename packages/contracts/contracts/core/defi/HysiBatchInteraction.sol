@@ -9,10 +9,10 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/math/Math.sol";
 import "../interfaces/IACLRegistry.sol";
-import "../../integrations/interfaces/YearnVault.sol";
-import "../../integrations/interfaces/BasicIssuanceModule.sol";
-import "../../integrations/interfaces/ISetToken.sol";
-import "../../integrations/interfaces/CurveContracts.sol";
+import "../../externals/interfaces/YearnVault.sol";
+import "../../externals/interfaces/BasicIssuanceModule.sol";
+import "../../externals/interfaces/ISetToken.sol";
+import "../../externals/interfaces/CurveContracts.sol";
 import "../interfaces/IContractRegistry.sol";
 import "../utils/KeeperIncentive.sol";
 

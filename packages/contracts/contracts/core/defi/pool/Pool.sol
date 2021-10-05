@@ -11,7 +11,7 @@ import "./AffiliateToken.sol";
 import "../../interfaces/IERC20Metadata.sol";
 import "../../interfaces/IACLRegistry.sol";
 import "../../interfaces/IContractRegistry.sol";
-import "../../../integrations/interfaces/CurveContracts.sol";
+import "../../../externals/interfaces/CurveContracts.sol";
 
 contract Pool is AffiliateToken, ReentrancyGuard, Pausable {
   using SafeMath for uint256;

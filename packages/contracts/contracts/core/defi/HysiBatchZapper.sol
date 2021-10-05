@@ -6,7 +6,7 @@ pragma experimental ABIEncoderV2;
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 import {BatchType, Batch, IHysiBatchInteraction} from "../interfaces/IHysiBatchInteraction.sol";
-import "../../integrations/interfaces/Curve3Pool.sol";
+import "../../externals/interfaces/Curve3Pool.sol";
 import "../interfaces/IContractRegistry.sol";
 
 /*
