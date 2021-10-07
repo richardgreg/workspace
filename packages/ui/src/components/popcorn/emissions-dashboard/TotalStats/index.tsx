@@ -53,6 +53,8 @@ export const TotalStats: React.FC<TotalStatsProps> = ({
             transactionsPreviousPeriod,
             true,
             unit,
+            startDate,
+            endDate,
           )}
           readyState={readyState}
         />

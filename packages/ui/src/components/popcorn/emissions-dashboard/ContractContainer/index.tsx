@@ -50,6 +50,8 @@ export const ContractContainer: React.FC<ContractContainerProps> = ({
             transactionsPreviousPeriod,
             false,
             unit,
+            startDate,
+            endDate,
           )}
           readyState={readyState}
         />

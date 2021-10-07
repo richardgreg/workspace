@@ -96,13 +96,33 @@ export const getStatCardData = (
   transactionsPreviousPeriod: Transaction[],
   isTotalStats: boolean,
   unit: string,
+  startDate: Date,
+  endDate: Date,
 ): StatCardData[] => {
-  const totalEmissionsCurrentPeriod = Math.round(
-    transactionsCurrentPeriod.reduce((acc, cu) => acc + cu.emissions, 0),
-  );
-  const totalEmissionsPreviousPeriod = Math.round(
-    transactionsPreviousPeriod.reduce((acc, cu) => acc + cu.emissions, 0),
-  );
+  const dateRangeInDays = getNumDaysBetweenTwoDates(startDate, endDate);
+  const granularity = getGranularity(dateRangeInDays);
+  const period = getPeriod(granularity, dateRangeInDays);
+  const dataCur = aggregator
+    .setCollection(transactionsCurrentPeriod)
+    .setPeriod(period)
+    .setGranularity(granularity)
+    .setGroupBy('date')
+    .setEndTime(endDate.toISOString())
+    .aggregate()
+    .select(0, period);
+
+  const dataPrev = aggregator
+    .setCollection(transactionsPreviousPeriod)
+    .setPeriod(period)
+    .setGranularity(granularity)
+    .setGroupBy('date')
+    .setEndTime(startDate.toISOString())
+    .aggregate()
+    .select(0, period);
+  const totalEmissionsCurrentPeriod = Math.round(dataCur.sum('emissions'));
+  const totalEmissionsPreviousPeriod = Math.round(dataPrev.sum('emissions'));
+  const totalTransactionVolCurrentPeriod = dataCur.count();
+  const totalTransactionVolPreviousPeriod = dataPrev.count();
   const emissionsChangePercentChange =
     totalEmissionsPreviousPeriod === 0
       ? `N/A`
@@ -111,8 +131,6 @@ export const getStatCardData = (
           totalEmissionsCurrentPeriod,
         )}%`;
 
-  const totalTransactionVolCurrentPeriod = transactionsCurrentPeriod.length;
-  const totalTransactionVolPreviousPeriod = transactionsPreviousPeriod.length;
   const transactionVolPercentChange =
     totalTransactionVolPreviousPeriod === 0
       ? `N/A`
@@ -148,25 +166,9 @@ export const getStatCardData = (
     ];
   }
   const averageGasPriceCurrentPeriod =
-    transactionsCurrentPeriod.length === 0
-      ? 0
-      : Math.round(
-          transactionsPreviousPeriod.reduce(
-            (acc, cu) => acc + Number(cu.gasPrice),
-            0,
-          ) /
-            (GWEI_TO_ETH * transactionsCurrentPeriod.length),
-        );
+    dataCur.sum('gasPrice') / (GWEI_TO_ETH * dataCur.count());
   const averageGasPricePreviousPeriod =
-    transactionsPreviousPeriod.length === 0
-      ? 0
-      : Math.round(
-          transactionsPreviousPeriod.reduce(
-            (acc, cu) => acc + Number(cu.gasPrice),
-            0,
-          ) /
-            (GWEI_TO_ETH * transactionsPreviousPeriod.length),
-        );
+    dataPrev.sum('gasPrice') / (GWEI_TO_ETH * dataPrev.count());
 
   const gasPricePercentChange =
     averageGasPricePreviousPeriod === 0
@@ -201,7 +203,7 @@ export const getStatCardData = (
     {
       id: 3,
       name: 'Average Gas Price',
-      stat: averageGasPriceCurrentPeriod,
+      stat: Math.round(averageGasPriceCurrentPeriod),
       icon: Wind,
       change: gasPricePercentChange,
       changeType:
