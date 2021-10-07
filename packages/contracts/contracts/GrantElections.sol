@@ -219,8 +219,11 @@ contract GrantElections is ParticipationReward {
       }
     }
     address beneficiaryVault = region.regionVaults(_region);
-    if (IBeneficiaryVaults(beneficiaryVault).vaultExists(_term)) {
-      IBeneficiaryVaults(beneficiaryVault).closeVault(_term);
+    uint256 activeVaultId = IBeneficiaryVaults(beneficiaryVault).activeVaults(
+      _term
+    );
+    if (IBeneficiaryVaults(beneficiaryVault).vaultCanBeClosed(_term)) {
+      IBeneficiaryVaults(beneficiaryVault).closeVault(activeVaultId);
     }
 
     uint256 electionId = elections.length;
@@ -444,6 +447,7 @@ contract GrantElections is ParticipationReward {
 
     address beneficiaryVault = region.regionVaults(election.region);
     IBeneficiaryVaults(beneficiaryVault).openVault(
+      _electionId,
       uint8(election.electionTerm),
       _merkleRoot
     );
