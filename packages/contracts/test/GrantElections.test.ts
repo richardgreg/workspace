@@ -536,7 +536,7 @@ describe("GrantElections", function () {
 
       await expect(result)
         .to.emit(contracts.beneficiaryVaults, "VaultClosed")
-        .withArgs(electionId);
+        .withArgs(GRANT_TERM.QUARTER);
 
       const activeElectionId = await contracts.grantElections.activeElections(
         DEFAULT_REGION,
@@ -880,7 +880,7 @@ describe("GrantElections", function () {
             .withArgs(electionId, merkleRoot);
           expect(result)
             .to.emit(contracts.beneficiaryVaults, "VaultOpened")
-            .withArgs(electionId, GRANT_TERM.MONTH, merkleRoot);
+            .withArgs(0, merkleRoot);
           const election = await contracts.grantElections.elections(electionId);
           expect(election.electionState).to.equal(4);
         });
