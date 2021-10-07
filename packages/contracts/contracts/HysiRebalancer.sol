@@ -62,9 +62,6 @@ contract HysiRebalancer is ModuleBase, ReentrancyGuard {
    * Initializes this module to the SetToken. Only callable by the SetToken's manager.
    *
    * @param _setToken                 Instance of the SetToken to initialize
-       
-    
-
    */
   function initialize(
     ISetToken _setToken,

@@ -225,6 +225,9 @@ describe("HysiRebalancer", function () {
   });
   beforeEach(async () => {
     contracts = await deployContracts();
+    await contracts.hysi
+      .connect(signer)
+      .addModule(contracts.hysiRebalancer.address);
   });
   describe("initalize", function () {
     it("sets correct values", async () => {
