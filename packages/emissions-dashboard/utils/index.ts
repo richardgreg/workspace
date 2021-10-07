@@ -169,14 +169,14 @@ export const getStatCardData = (
     dataCur.sum('gasPrice') / (GWEI_TO_ETH * dataCur.count());
   const averageGasPricePreviousPeriod =
     dataPrev.sum('gasPrice') / (GWEI_TO_ETH * dataPrev.count());
-
-  const gasPricePercentChange =
-    averageGasPricePreviousPeriod === 0
-      ? `N/A`
-      : `${percentChange(
-          averageGasPricePreviousPeriod,
-          averageGasPriceCurrentPeriod,
-        )}%`;
+  const gasPricePercentChange = isNaN(averageGasPricePreviousPeriod)
+    ? `N/A`
+    : isNaN(averageGasPriceCurrentPeriod)
+    ? '100%'
+    : `${percentChange(
+        averageGasPricePreviousPeriod,
+        averageGasPriceCurrentPeriod,
+      )}%`;
   return [
     {
       id: 1,

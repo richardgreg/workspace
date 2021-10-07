@@ -132,7 +132,6 @@ const IndexPage = (): JSX.Element => {
 
   const addContract = async (contract: Contract): Promise<void> => {
     let message: string;
-    console.log({ contract });
     if (!contract.name) {
       message = `The contract name cannot be blank`;
     } else if (!contract.address) {
