@@ -57,7 +57,7 @@ export const ContractContainer: React.FC<ContractContainerProps> = ({
       <div className="max-w-7xl">
         <div className="grid grid-cols-1 gap-4 lg:col-span-2">
           <div className="rounded-lg bg-white overflow-hidden shadow py-6">
-            {readyState === 'loading' && <ChartLoading height={300} />}
+            {readyState === 'loading' && <ChartLoading height={224} />}
             {readyState === 'done' && (
               <ComposedBarChart
                 data={getChartData(
@@ -69,7 +69,7 @@ export const ContractContainer: React.FC<ContractContainerProps> = ({
                 height={224}
               />
             )}
-            {readyState === 'error' && <ChartError height={300} />}
+            {readyState === 'error' && <ChartError height={224} />}
           </div>
         </div>
       </div>

@@ -44,12 +44,12 @@ export const getNumSecondsByGranularity = (granularity: string): number => {
 };
 
 export const getInterpolatedDate = (
-  endDate: Date,
+  startDate: Date,
   granularity: string,
   count: number,
 ): Date => {
   const numSecondsByGranularity = getNumSecondsByGranularity(granularity);
-  const startTimestamp = endDate.getTime() - count * numSecondsByGranularity;
+  const startTimestamp = startDate.getTime() + count * numSecondsByGranularity;
   return new Date(startTimestamp);
 };
 
@@ -71,7 +71,7 @@ export const getChartData = (
     .aggregate();
   return new Array(period).fill(undefined).map((x, i) => {
     const dataForRange = data.select(period - i - 1, period - i);
-    const date = getInterpolatedDate(endDate, granularity, i);
+    const date = getInterpolatedDate(startDate, granularity, i);
     const numTransactions = dataForRange.count();
     const gasUsed = dataForRange.sum('gasUsed');
     const totalGasPrice = dataForRange.sum('gasPrice') / GWEI_TO_ETH;
