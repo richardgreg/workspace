@@ -11,6 +11,7 @@ import "../interfaces/IRegion.sol";
 import "../interfaces/IACLRegistry.sol";
 import "../utils/ParticipationReward.sol";
 import "../interfaces/IContractRegistry.sol";
+import "../utils/KeeperIncentive.sol";
 
 contract GrantElections {
   using SafeMath for uint256;
@@ -82,7 +83,6 @@ contract GrantElections {
   Election[] public elections;
   mapping(bytes32 => uint256[3]) public activeElections;
   ElectionConfiguration[3] public electionDefaults;
-  uint256 public incentiveBudget;
 
   /* ========== EVENTS ========== */
 
@@ -368,13 +368,6 @@ contract GrantElections {
     emit UserVoted(msg.sender, election.electionTerm);
   }
 
-  function fundKeeperIncentive(uint256 _amount) public {
-    IERC20 POP = IERC20(contractRegistry.getContract(keccak256("POP")));
-    require(POP.balanceOf(msg.sender) >= _amount, "not enough pop");
-    POP.safeTransferFrom(msg.sender, address(this), _amount);
-    incentiveBudget = incentiveBudget.add(_amount);
-  }
-
   function getRandomNumber(uint256 _electionId) public {
     Election storage _election = elections[_electionId];
     require(
@@ -413,19 +406,15 @@ contract GrantElections {
       require(_election.randomNumber != 0, "randomNumber required");
     }
 
+    if (_election.electionState != ElectionState.FinalizationProposed) {
+      KeeperIncentive(
+        contractRegistry.getContract(keccak256("KeeperIncentive"))
+      ).handleKeeperIncentive(contractName, msg.sender);
+    }
+
     uint256 finalizationIncentive = electionDefaults[
       uint8(_election.electionTerm)
     ].finalizationIncentive;
-
-    if (
-      incentiveBudget >= finalizationIncentive &&
-      _election.electionState != ElectionState.FinalizationProposed
-    ) {
-      IERC20 POP = IERC20(contractRegistry.getContract(keccak256("POP")));
-      POP.approve(address(this), finalizationIncentive);
-      POP.safeTransferFrom(address(this), msg.sender, finalizationIncentive);
-      incentiveBudget = incentiveBudget.sub(finalizationIncentive);
-    }
 
     _election.merkleRoot = _merkleRoot;
     _election.electionState = ElectionState.FinalizationProposed;
@@ -449,6 +438,9 @@ contract GrantElections {
       "finalization not yet proposed"
     );
     require(election.merkleRoot == _merkleRoot, "Incorrect root");
+
+    KeeperIncentive(contractRegistry.getContract(keccak256("KeeperIncentive")))
+      .handleKeeperIncentive(contractName, msg.sender);
 
     address beneficiaryVault = IRegion(
       contractRegistry.getContract(keccak256("Region"))
