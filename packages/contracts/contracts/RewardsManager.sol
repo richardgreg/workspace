@@ -67,7 +67,7 @@ contract RewardsManager is
   /* ========== CONSTRUCTOR ========== */
 
   constructor(
-    ERC20 pop_,
+    IERC20 pop_,
     IStaking staking_,
     ITreasury treasury_,
     IInsurance insurance_,
