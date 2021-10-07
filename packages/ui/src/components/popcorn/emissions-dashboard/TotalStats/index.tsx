@@ -7,10 +7,10 @@ import {
   Transaction,
 } from '../../../../interfaces/emissions-dashboard';
 import {
-  BiaxialLineChart,
   ChartError,
   ChartLoading,
-} from '../recharts/BiaxialLineChart';
+  ComposedBarChart,
+} from '../recharts/ComposedAreaBarChart';
 import { StatsCards } from '../StatsCards';
 
 interface TotalStatsProps {
@@ -56,7 +56,7 @@ export const TotalStats: React.FC<TotalStatsProps> = ({
           <div className="rounded-lg bg-white overflow-hidden shadow py-6">
             {readyState === 'loading' && <ChartLoading height={300} />}
             {readyState === 'done' && (
-              <BiaxialLineChart
+              <ComposedBarChart
                 data={getChartData(
                   transactionsCurrentPeriod,
                   startDate,
