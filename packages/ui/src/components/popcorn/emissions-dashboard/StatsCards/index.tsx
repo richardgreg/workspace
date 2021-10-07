@@ -1,8 +1,10 @@
 import { ArrowSmDownIcon, ArrowSmUpIcon } from '@heroicons/react/solid';
 import React from 'react';
+import { getStatCardData } from '../../../../../../emissions-dashboard/utils';
 import {
   ChartReadyState,
   StatCardData,
+  Transaction,
 } from '../../../../interfaces/emissions-dashboard';
 import Spinner from '../Spinner';
 
@@ -11,9 +13,14 @@ function classNames(...classes) {
 }
 
 interface StatsCardProps {
-  stats: StatCardData[];
   iconCol?: string;
   readyState: ChartReadyState;
+  transactionsCurrentPeriod: Transaction[];
+  transactionsPreviousPeriod: Transaction[];
+  isTotal: boolean;
+  unit: string;
+  startDate: Date;
+  endDate: Date;
 }
 
 const loadingCard = (item: StatCardData) => {
@@ -38,10 +45,23 @@ const errorCard = () => {
 };
 
 export const StatsCards: React.FC<StatsCardProps> = ({
-  stats,
   iconCol,
   readyState,
+  transactionsCurrentPeriod,
+  transactionsPreviousPeriod,
+  isTotal,
+  unit,
+  startDate,
+  endDate,
 }): JSX.Element => {
+  const stats = getStatCardData(
+    transactionsCurrentPeriod,
+    transactionsPreviousPeriod,
+    isTotal,
+    unit,
+    startDate,
+    endDate,
+  );
   return (
     <div className="grid justify-items-stretch">
       <dl className="justify-self-start mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -69,7 +89,7 @@ export const StatsCards: React.FC<StatsCardProps> = ({
               </dt>
               <dd className="ml-16 pb-6 flex items-baseline sm:pb-7">
                 <p className="text-2xl font-semibold text-gray-900">
-                  {item.stat.toLocaleString()}
+                  {item.statCur.toLocaleString()}
                 </p>
                 <p
                   className={classNames(

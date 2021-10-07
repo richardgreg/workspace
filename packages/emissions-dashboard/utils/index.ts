@@ -139,31 +139,35 @@ export const getStatCardData = (
           totalTransactionVolCurrentPeriod,
         )}%`;
 
+  const statCardData: StatCardData[] = [
+    {
+      id: 1,
+      name: `CO2 Emissions (${unit})`,
+      statCur: convert(totalEmissionsCurrentPeriod).from('mcg').to(unit),
+      statPrev: convert(totalEmissionsPreviousPeriod).from('mcg').to(unit),
+      icon: CloudIcon,
+      change: emissionsChangePercentChange,
+      changeType:
+        totalEmissionsCurrentPeriod > totalEmissionsPreviousPeriod
+          ? 'increase'
+          : 'decrease',
+    },
+    {
+      id: 2,
+      name: 'Transactions',
+      statCur: totalTransactionVolCurrentPeriod,
+      statPrev: totalTransactionVolPreviousPeriod,
+      icon: Globe,
+      change: transactionVolPercentChange,
+      changeType:
+        totalTransactionVolCurrentPeriod > totalTransactionVolPreviousPeriod
+          ? 'increase'
+          : 'decrease',
+    },
+  ];
+
   if (!isTotalStats) {
-    return [
-      {
-        id: 1,
-        name: `CO2 Emissions (${unit})`,
-        stat: convert(totalEmissionsCurrentPeriod).from('mcg').to(unit),
-        icon: CloudIcon,
-        change: emissionsChangePercentChange,
-        changeType:
-          totalEmissionsCurrentPeriod > totalEmissionsPreviousPeriod
-            ? 'increase'
-            : 'decrease',
-      },
-      {
-        id: 2,
-        name: 'Transactions',
-        stat: totalTransactionVolCurrentPeriod,
-        icon: Globe,
-        change: transactionVolPercentChange,
-        changeType:
-          totalTransactionVolCurrentPeriod > totalTransactionVolPreviousPeriod
-            ? 'increase'
-            : 'decrease',
-      },
-    ];
+    return statCardData;
   }
   const averageGasPriceCurrentPeriod =
     dataCur.sum('gasPrice') / (GWEI_TO_ETH * dataCur.count());
@@ -177,39 +181,16 @@ export const getStatCardData = (
         averageGasPricePreviousPeriod,
         averageGasPriceCurrentPeriod,
       )}%`;
-  return [
-    {
-      id: 1,
-      name: `CO2 Emissions (${unit})`,
-      stat: convert(totalEmissionsCurrentPeriod).from('mcg').to(unit),
-      icon: CloudIcon,
-      change: emissionsChangePercentChange,
-      changeType:
-        totalEmissionsCurrentPeriod > totalEmissionsPreviousPeriod
-          ? 'increase'
-          : 'decrease',
-    },
-    {
-      id: 2,
-      name: 'Transactions',
-      stat: totalTransactionVolCurrentPeriod,
-      icon: Globe,
-      change: transactionVolPercentChange,
-      changeType:
-        totalTransactionVolCurrentPeriod > totalTransactionVolPreviousPeriod
-          ? 'increase'
-          : 'decrease',
-    },
-    {
-      id: 3,
-      name: 'Average Gas Price',
-      stat: Math.round(averageGasPriceCurrentPeriod),
-      icon: Wind,
-      change: gasPricePercentChange,
-      changeType:
-        averageGasPriceCurrentPeriod > averageGasPricePreviousPeriod
-          ? 'increase'
-          : 'decrease',
-    },
-  ];
+  return statCardData.concat({
+    id: 3,
+    name: 'Average Gas Price',
+    statCur: Math.round(averageGasPriceCurrentPeriod),
+    statPrev: Math.round(averageGasPricePreviousPeriod),
+    icon: Wind,
+    change: gasPricePercentChange,
+    changeType:
+      averageGasPriceCurrentPeriod > averageGasPricePreviousPeriod
+        ? 'increase'
+        : 'decrease',
+  });
 };

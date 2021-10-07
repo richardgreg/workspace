@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  getChartData,
-  getStatCardData,
-} from '../../../../../../emissions-dashboard/utils';
+import { getChartData } from '../../../../../../emissions-dashboard/utils';
 import { getMassUnitForTxns } from '../../../../../../emissions-dashboard/utils/getMassUnitForTxns';
 import {
   ChartReadyState,
@@ -65,14 +62,12 @@ export const ContractContainer: React.FC<ContractContainerProps> = ({
 
       <div className="mb-5">
         <StatsCards
-          stats={getStatCardData(
-            transactionsCurrentPeriod,
-            transactionsPreviousPeriod,
-            isTotal,
-            unit,
-            startDate,
-            endDate,
-          )}
+          transactionsCurrentPeriod={transactionsCurrentPeriod}
+          transactionsPreviousPeriod={transactionsPreviousPeriod}
+          isTotal={isTotal}
+          unit={unit}
+          startDate={startDate}
+          endDate={endDate}
           readyState={readyState}
           iconCol={barColor}
         />
