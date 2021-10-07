@@ -1,5 +1,4 @@
 import { ChartData } from '@popcorn/ui/src/interfaces/emissions-dashboard';
-import * as convert from 'convert-units';
 import { format } from 'date-fns';
 import React from 'react';
 import {
@@ -42,15 +41,12 @@ const CustomTooltip = ({
   co2EmissionColor,
 }: CustomTooltipProps) => {
   if (active && payload && payload.length) {
-    const emissionsConverted = convert(payload[1].value).from('mcg').toBest();
-
     return (
       <div className="bg-white rounded p-2 shadow-lg">
         <p className="text-xs font-bold mb-2">{`${format(
           new Date(payload[0].payload.date),
-          'hh:mm dd/MM/yyyy',
+          'dd/MM/yyyy hh:mm',
         )}`}</p>
-
         <ul className="m-0 p-0 space-y-2">
           <li className="flex gap-2 m-0 p-0">
             <div
@@ -58,19 +54,17 @@ const CustomTooltip = ({
               style={{ background: transactionsColor }}
             ></div>
 
-            <div className="text-xs">{`Transaction: ${payload[0].value.toLocaleString()}`}</div>
+            <div className="text-xs">{`Transaction: ${payload[0].payload.numTransactions.toLocaleString()}`}</div>
           </li>
-          {emissionsConverted !== null && (
-            <li className="flex gap-2">
-              <div
-                className={`w-4 h-4 border `}
-                style={{ background: co2EmissionColor }}
-              ></div>
-              <div className="text-xs">{`CO2 Emissions: ${Math.round(
-                emissionsConverted.val,
-              )}${emissionsConverted.unit}`}</div>
-            </li>
-          )}
+          <li className="flex gap-2">
+            <div
+              className={`w-4 h-4 border `}
+              style={{ background: co2EmissionColor }}
+            ></div>
+            <div className="text-xs">{`CO2 Emissions (${
+              payload[0].payload.unit
+            }): ${Math.round(payload[0].payload.co2Emissions)}`}</div>
+          </li>
         </ul>
       </div>
     );
