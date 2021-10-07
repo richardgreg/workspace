@@ -625,12 +625,12 @@ describe("RewardsManager", function () {
         swapReward
       );
       expect(await contracts.POP.balanceOf(owner.address)).to.equal(
-        parseEther("17.5")
+        parseEther("20")
       );
 
       await contracts.RewardsManager.connect(owner).distributeRewards();
       expect(await contracts.POP.balanceOf(owner.address)).to.equal(
-        parseEther("25")
+        parseEther("30")
       );
     });
   });
