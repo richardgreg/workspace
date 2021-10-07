@@ -39,10 +39,10 @@ const IndexPage = (): JSX.Element => {
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [contracts, setContracts] = useState<Contract[]>(DEFAULT_CONTRACTS);
   const [previousPeriodStartDate, setPreviousPeriodStartDate] = useState<Date>(
-    new Date(DateTime.now().minus({ months: 2 }).toISO()),
+    new Date(DateTime.now().minus({ days: 20 }).toISO()),
   );
   const [startDate, setStartDate] = useState<Date>(
-    new Date(DateTime.now().minus({ months: 1 }).toISO()),
+    new Date(DateTime.now().minus({ days: 10 }).toISO()),
   );
   const [endDate, setEndDate] = useState<Date>(new Date());
   const [readyState, setReadyState] = useState<ChartReadyState>('loading');
