@@ -90,7 +90,7 @@ contract BeneficiaryGovernance {
 
   /**
    * @dev maps beneficiary addresses to the proposal id/index
-   * todo: update to map beneficiary addresses to an array of proposal ids otherwise their would be an incomplete mapping if values get overwritten
+   * todo: update to map beneficiary addresses to an array of proposal ids otherwise there would be an incomplete mapping if values get overwritten
    */
   mapping(address => uint256) public beneficiaryProposals;
 
