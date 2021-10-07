@@ -1,7 +1,7 @@
 import { Dialog, Transition } from '@headlessui/react';
-import FacebookPixel from 'components/FacebookPixel';
 import { CatPool } from '@popcorn/ui/components/CatPool';
 import { Rocket } from '@popcorn/ui/components/Rocket';
+import FacebookPixel from 'components/FacebookPixel';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { Fragment, useEffect, useState } from 'react';
@@ -514,8 +514,9 @@ const IndexPage = () => {
                 </a>
               </Link>
               <p className="font-medium text-base w-7/12 py-4">
-                Popcorn is a carbon-neutral crypto savings account where fees
-                fund educational, environmental and open source initiatives
+                Popcorn is a new eco-friendly paradigm for DeFi, where users can
+                earn high yield on their crypto assets while creating real world
+                impact.
               </p>
               <div className="flex flex-row space-x-4 items-center">
                 <Link href="https://github.com/popcorndao" passHref>
@@ -593,7 +594,6 @@ const IndexPage = () => {
         {menuVisible && (
           <div className="absolute z-10 w-screen">
             <div className="relative mx-auto mt-4 w-11/12 rounded-lg shadow-md bg-white px-4 pt-4 pb-6">
-
               <div className="flex flex-row justify-between items-center">
                 <Link href="/" passHref>
                   <a>
@@ -950,8 +950,9 @@ const IndexPage = () => {
               </a>
             </Link>
             <p className="font-medium text-base py-4">
-              Popcorn is a carbon-neutral crypto savings account where fees fund
-              educational, environmental and open source initiatives
+              Popcorn is a new eco-friendly paradigm for DeFi, where users can
+              earn high yield on their crypto assets while creating real world
+              impact.
             </p>
             <div className="flex flex-row space-x-4 items-center">
               <Link href="https://github.com/popcorndao" passHref>
