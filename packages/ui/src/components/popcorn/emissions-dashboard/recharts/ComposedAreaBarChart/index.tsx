@@ -174,7 +174,7 @@ export const ComposedBarChart: React.FC<ComposedBarChartProps> = ({
           hide={true}
         />
 
-        <CartesianGrid horizontal={false} stroke={gridColor} />
+        <CartesianGrid stroke={gridColor} horizontalPoints={[5, height - 5]} />
 
         <Area
           type="monotone"
