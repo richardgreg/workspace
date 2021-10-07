@@ -32,7 +32,6 @@ contract KeeperIncentive is Governed {
   event RemovedApproval(address account);
   event ApprovalToggled(uint256 incentiveId, bool openToEveryone);
   event IncentiveToggled(uint256 incentiveId, bool enabled);
-  event BurnFundet(uint256 amount);
   event Burned(uint256 amount);
   event BurnRateChanged(uint256 oldRate, uint256 newRate);
 
