@@ -48,7 +48,7 @@ const CustomTooltip = ({
       <div className="bg-white rounded p-2 shadow-lg">
         <p className="text-xs font-bold mb-2">{`${format(
           new Date(payload[0].payload.date),
-          'MM/dd/yyyy',
+          'hh:mm dd/MM/yyyy',
         )}`}</p>
 
         <ul className="m-0 p-0 space-y-2">
@@ -129,8 +129,8 @@ export const ComposedBarChart: React.FC<ComposedBarChartProps> = ({
   data,
   height,
   topPadding = 10,
-  areaColor = '#C7D2FE',
-  barColor = '#4F46E5',
+  areaColor = '#ddebfd',
+  barColor = '#4884f4',
   gridColor = '#E0E0E0',
   transactionsDataKey = 'numTransactions',
   co2EmissionDataKey = 'co2Emissions',
@@ -146,7 +146,15 @@ export const ComposedBarChart: React.FC<ComposedBarChartProps> = ({
       width="100%"
       height={height}
     >
-      <ComposedChart data={data}>
+      <ComposedChart
+        data={data}
+        margin={{
+          top: 5,
+          right: 30,
+          left: 30,
+          bottom: 5,
+        }}
+      >
         <XAxis dataKey={transactionsDataKey} hide={true}></XAxis>
 
         <YAxis
