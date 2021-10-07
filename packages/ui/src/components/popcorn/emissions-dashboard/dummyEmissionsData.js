@@ -12,6 +12,7 @@ export const getDummyEmissionData = () => {
       endBlock: 100000,
       startBlock: 10000,
       gasUsed: 10000,
+      unit: 'mcg',
     };
   });
 };

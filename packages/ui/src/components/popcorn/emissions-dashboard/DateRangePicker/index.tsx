@@ -62,7 +62,9 @@ export const CalendarInput: React.FC<CalendarInputProps> = ({
     let selected = DateTime.fromFormat(`${year}-${month}-${day}`, 'yyyy-M-d');
     dateRef.current.value = selected.toFormat('yyyy/MM/dd');
     if (onChange) {
-      onChange(selected.toJSDate());
+      const dateValue = new Date(`${year}-${month}-${day}`);
+      dateValue.setUTCHours(24); // Set time to midnight on date selected (UTC)
+      onChange(dateValue);
     }
     setSelectedDate(selected);
     setShowCalendar(false);
@@ -164,7 +166,7 @@ export const CalendarInput: React.FC<CalendarInputProps> = ({
   }, []);
 
   return (
-    <div className="container mx-auto px-4 py-2">
+    <div className="px-1 py-2">
       <div className="w-72">
         {label && (
           <label

@@ -1,7 +1,9 @@
+import { useEffect, useState } from 'react';
 import {
   getChartData,
   getStatCardData,
 } from '../../../../../../emissions-dashboard/utils';
+import { getMassUnitForTxns } from '../../../../../../emissions-dashboard/utils/getMassUnitForTxns';
 import {
   ChartReadyState,
   Transaction,
@@ -28,27 +30,31 @@ export const TotalStats: React.FC<TotalStatsProps> = ({
   endDate,
   readyState,
 }): JSX.Element => {
+  const [unit, setUnit] = useState<string>('mcg');
+  useEffect(() => {
+    setUnit(getMassUnitForTxns(transactionsCurrentPeriod));
+  }, [transactionsCurrentPeriod, transactionsPreviousPeriod]);
   return (
-    <div className="py-10 self-center">
-      <div className="max-w-7xl">
-        <div className="mt-2 mb-5">
-          <dt>
-            <h1 className="text-3xl font-bold leading-tight text-gray-900">
-              Total Stats
-            </h1>
-          </dt>
-          <dd className=" text-base text-gray-500">
-            ({startDate.toUTCString()})
-          </dd>
-        </div>
+    <div>
+      <div className="mt-2 mb-5">
+        <dt>
+          <h1 className="text-3xl font-medium leading-tight text-gray-900">
+            Total Stats
+          </h1>
+        </dt>
+        <dd className=" text-base text-gray-500">
+          ({startDate.toUTCString()})
+        </dd>
       </div>
-      <div className="max-w-7xl mb-5">
+      <div className="mb-5">
         <StatsCards
           stats={getStatCardData(
             transactionsCurrentPeriod,
             transactionsPreviousPeriod,
             true,
+            unit,
           )}
+          readyState={readyState}
         />
       </div>
       <div className="max-w-7xl">
@@ -61,6 +67,7 @@ export const TotalStats: React.FC<TotalStatsProps> = ({
                   transactionsCurrentPeriod,
                   startDate,
                   endDate,
+                  unit,
                 )}
                 height={300}
               />

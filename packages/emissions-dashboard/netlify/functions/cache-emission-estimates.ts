@@ -29,7 +29,7 @@ export const handler = async (event, context) => {
     const dbRes = await database
       .collection('patch-estimates')
       .updateOne(query, update, options);
-    console.log({ dbRes });
+    client.close();
     return {
       statusCode: 200,
       body: `Successfully cached patch estimate for ${date.toDateString()}`,
