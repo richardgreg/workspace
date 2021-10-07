@@ -7,7 +7,7 @@ export const percentChange = (a: number, b: number): number => {
       delta = b * 100;
     }
   } else {
-    delta = -a * 100;
+    delta = 100;
   }
   return Math.round(delta * 100) / 100;
 };
