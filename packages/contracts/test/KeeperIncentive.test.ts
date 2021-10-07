@@ -76,21 +76,6 @@ describe("Keeper incentives", function () {
     ).to.be.revertedWith(
       "Only the contract governance may perform this action"
     );
-    await expect(
-      keeperIncentiveHelper.connect(nonOwner).setBurnRate(0)
-    ).to.be.revertedWith(
-      "Only the contract governance may perform this action"
-    );
-  });
-  it("should adjust the burn rate", async function () {
-    expect(
-      await keeperIncentiveHelper.connect(owner).setBurnRate(parseEther("0.1"))
-    )
-      .to.emit(keeperIncentiveHelper, "BurnRateChanged")
-      .withArgs(parseEther("0.25"), parseEther("0.1"));
-    expect(await keeperIncentiveHelper.burnRate()).to.be.equal(
-      parseEther("0.1")
-    );
   });
   describe("change incentives", function () {
     it("should change the whole incentive", async function () {
@@ -209,7 +194,7 @@ describe("Keeper incentives", function () {
         .to.emit(keeperIncentiveHelper, "FunctionCalled")
         .withArgs(owner.address);
       const newBalance = await mockPop.balanceOf(owner.address);
-      expect(newBalance).to.deep.equal(oldBalance.add(incentive.mul(3).div(4)));
+      expect(newBalance).to.deep.equal(oldBalance.add(incentive));
     });
     it("should not pay out rewards if the incentive budget is not high enough", async function () {
       const oldBalance = await mockPop.balanceOf(owner.address);
@@ -243,7 +228,7 @@ describe("Keeper incentives", function () {
           .to.emit(keeperIncentiveHelper, "FunctionCalled")
           .withArgs(nonOwner.address);
         const newbalance = await mockPop.balanceOf(nonOwner.address);
-        expect(newbalance).to.equal(oldBalance.add(incentive.mul(3).div(4)));
+        expect(newbalance).to.equal(oldBalance.add(incentive));
       });
     });
     context("should not do anything ", function () {
