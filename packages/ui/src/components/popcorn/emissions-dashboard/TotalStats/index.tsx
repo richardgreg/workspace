@@ -21,6 +21,8 @@ interface TotalStatsProps {
   startDate: Date;
   endDate: Date;
   readyState: ChartReadyState;
+  barColor?: string;
+  areaColor?: string;
 }
 
 export const TotalStats: React.FC<TotalStatsProps> = ({
@@ -29,6 +31,8 @@ export const TotalStats: React.FC<TotalStatsProps> = ({
   startDate,
   endDate,
   readyState,
+  barColor = '#4084f2',
+  areaColor = '#dbeafd',
 }): JSX.Element => {
   const [unit, setUnit] = useState<string>('mcg');
   useEffect(() => {
@@ -57,6 +61,7 @@ export const TotalStats: React.FC<TotalStatsProps> = ({
             endDate,
           )}
           readyState={readyState}
+          iconCol={barColor}
         />
       </div>
       <div className="max-w-7xl">
@@ -72,6 +77,8 @@ export const TotalStats: React.FC<TotalStatsProps> = ({
                   unit,
                 )}
                 height={300}
+                barColor={barColor}
+                areaColor={areaColor}
               />
             )}
             {readyState === 'error' && <ChartError height={300} />}

@@ -33,6 +33,14 @@ const DEFAULT_CONTRACTS = [
   },
 ];
 
+const CHART_COLORS = [
+  { barColor: '#24b7a7', areaColor: '#ccfbf0' },
+  { barColor: '#eb4c98', areaColor: '#fde6f3' },
+  { barColor: '#f6732b', areaColor: '#feedd7' },
+  { barColor: '#4084f2', areaColor: '#dbeafd' },
+  { barColor: '#24b7a7', areaColor: '#ccfbf0' },
+];
+
 const IndexPage = (): JSX.Element => {
   const router = useRouter();
   const [open, setOpen] = useState<boolean>(false);
@@ -211,8 +219,10 @@ const IndexPage = (): JSX.Element => {
             startDate={startDate}
             readyState={readyState}
             endDate={endDate}
+            areaColor={CHART_COLORS[3].areaColor}
+            barColor={CHART_COLORS[3].barColor}
           />
-          {contracts.map((contract) => {
+          {contracts.map((contract, index) => {
             return (
               <ContractContainer
                 transactionsPreviousPeriod={transactionsPreviousPeriod.filter(
@@ -225,6 +235,8 @@ const IndexPage = (): JSX.Element => {
                 endDate={endDate}
                 startDate={startDate}
                 readyState={readyState}
+                areaColor={CHART_COLORS[index].areaColor}
+                barColor={CHART_COLORS[index].barColor}
               />
             );
           })}

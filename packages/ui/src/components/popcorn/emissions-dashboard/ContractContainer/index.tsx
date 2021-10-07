@@ -23,6 +23,8 @@ interface ContractContainerProps {
   endDate: Date;
   contract: Contract;
   readyState: ChartReadyState;
+  barColor?: string;
+  areaColor?: string;
 }
 
 export const ContractContainer: React.FC<ContractContainerProps> = ({
@@ -32,6 +34,8 @@ export const ContractContainer: React.FC<ContractContainerProps> = ({
   endDate,
   contract,
   readyState,
+  barColor = '#4084f2',
+  areaColor = '#dbeafd',
 }): JSX.Element => {
   const [unit, setUnit] = useState<string>('mcg');
   useEffect(() => {
@@ -54,6 +58,7 @@ export const ContractContainer: React.FC<ContractContainerProps> = ({
             endDate,
           )}
           readyState={readyState}
+          iconCol={barColor}
         />
       </div>
       <div className="max-w-7xl">
@@ -69,6 +74,8 @@ export const ContractContainer: React.FC<ContractContainerProps> = ({
                   unit,
                 )}
                 height={224}
+                barColor={barColor}
+                areaColor={areaColor}
               />
             )}
             {readyState === 'error' && <ChartError height={224} />}
