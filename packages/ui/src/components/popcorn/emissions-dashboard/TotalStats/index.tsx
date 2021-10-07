@@ -9,10 +9,10 @@ import {
   Transaction,
 } from '../../../../interfaces/emissions-dashboard';
 import {
-  BiaxialLineChart,
   ChartError,
   ChartLoading,
-} from '../recharts/BiaxialLineChart';
+  ComposedBarChart,
+} from '../recharts/ComposedAreaBarChart';
 import { StatsCards } from '../StatsCards';
 
 interface TotalStatsProps {
@@ -53,25 +53,30 @@ export const TotalStats: React.FC<TotalStatsProps> = ({
             transactionsPreviousPeriod,
             true,
             unit,
+            startDate,
+            endDate,
           )}
           readyState={readyState}
         />
       </div>
-
-      <div className="rounded-lg bg-white overflow-hidden shadow py-6">
-        {readyState === 'loading' && <ChartLoading height={300} />}
-        {readyState === 'done' && (
-          <BiaxialLineChart
-            data={getChartData(
-              transactionsCurrentPeriod,
-              startDate,
-              endDate,
-              unit,
+      <div className="max-w-7xl">
+        <div className="grid grid-cols-1 gap-4 lg:col-span-2">
+          <div className="rounded-lg bg-white overflow-hidden shadow py-6">
+            {readyState === 'loading' && <ChartLoading height={300} />}
+            {readyState === 'done' && (
+              <ComposedBarChart
+                data={getChartData(
+                  transactionsCurrentPeriod,
+                  startDate,
+                  endDate,
+                  unit,
+                )}
+                height={300}
+              />
             )}
-            height={300}
-          />
-        )}
-        {readyState === 'error' && <ChartError height={300} />}
+            {readyState === 'error' && <ChartError height={300} />}
+          </div>
+        </div>
       </div>
     </div>
   );

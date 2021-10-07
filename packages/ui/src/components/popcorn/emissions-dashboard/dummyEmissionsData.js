@@ -8,7 +8,7 @@ export const getDummyEmissionData = () => {
           : Math.floor(10 * Math.random()),
       numTransactions: Math.floor(1000 * Math.random()),
       averageGasPrice: 10,
-      blockStartDate: new Date().toDateString(),
+      date: new Date().toDateString(),
       endBlock: 100000,
       startBlock: 10000,
       gasUsed: 10000,
