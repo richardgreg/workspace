@@ -9,7 +9,6 @@ import {
   getDummyTxnsPreviousPeriod,
 } from '../../dummyTxns';
 import { NavBar } from '../../NavBar';
-import { TotalStats } from '../../TotalStats';
 
 const updateDates = (startDate: Date, endDate: Date): void => {};
 const EmissionsDashboardPage = () => {
@@ -20,12 +19,13 @@ const EmissionsDashboardPage = () => {
         endDate={new Date()}
         startDate={new Date(DateTime.now().minus({ months: 1 }).toISO())}
       />
-      <TotalStats
+      <ContractContainer
         readyState={'done'}
         transactionsCurrentPeriod={getDummyTxnsCurrentPeriod()}
         transactionsPreviousPeriod={getDummyTxnsPreviousPeriod()}
         endDate={new Date()}
         startDate={new Date(DateTime.now().minus({ months: 1 }).toISO())}
+        isTotal={true}
       />
       <Divider />
       {new Array(4).fill(undefined).map((x) => {

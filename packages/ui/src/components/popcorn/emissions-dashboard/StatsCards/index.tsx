@@ -39,7 +39,7 @@ const errorCard = () => {
 
 export const StatsCards: React.FC<StatsCardProps> = ({
   stats,
-  iconCol = 'bg-indigo-500',
+  iconCol,
   readyState,
 }): JSX.Element => {
   return (

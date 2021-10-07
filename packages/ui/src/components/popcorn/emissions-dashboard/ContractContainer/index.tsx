@@ -21,10 +21,12 @@ interface ContractContainerProps {
   transactionsPreviousPeriod: Transaction[];
   startDate: Date;
   endDate: Date;
-  contract: Contract;
+  contract?: Contract;
   readyState: ChartReadyState;
   barColor?: string;
   areaColor?: string;
+  isTotal?: boolean;
+  height?: number;
 }
 
 export const ContractContainer: React.FC<ContractContainerProps> = ({
@@ -36,6 +38,8 @@ export const ContractContainer: React.FC<ContractContainerProps> = ({
   readyState,
   barColor = '#4084f2',
   areaColor = '#dbeafd',
+  isTotal = false,
+  height = 224,
 }): JSX.Element => {
   const [unit, setUnit] = useState<string>('mcg');
   useEffect(() => {
@@ -43,8 +47,20 @@ export const ContractContainer: React.FC<ContractContainerProps> = ({
   }, [transactionsCurrentPeriod, transactionsPreviousPeriod]);
   return (
     <div className="mb-5 mt-12">
+      {isTotal && (
+        <>
+          <dt>
+            <h1 className="text-3xl font-medium leading-tight text-gray-900">
+              Total Stats
+            </h1>
+          </dt>
+          <dd className=" text-base text-gray-500">
+            ({startDate.toUTCString()})
+          </dd>
+        </>
+      )}
       <h1 className="text-3xl font-medium leading-tight text-gray-900">
-        {contract.name}
+        {contract?.name}
       </h1>
 
       <div className="mb-5">
@@ -52,7 +68,7 @@ export const ContractContainer: React.FC<ContractContainerProps> = ({
           stats={getStatCardData(
             transactionsCurrentPeriod,
             transactionsPreviousPeriod,
-            false,
+            isTotal,
             unit,
             startDate,
             endDate,
@@ -73,7 +89,7 @@ export const ContractContainer: React.FC<ContractContainerProps> = ({
                   endDate,
                   unit,
                 )}
-                height={224}
+                height={height}
                 barColor={barColor}
                 areaColor={areaColor}
               />

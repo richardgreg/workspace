@@ -1,7 +1,6 @@
 import { ContractContainer } from '@popcorn/ui/components/popcorn/emissions-dashboard/ContractContainer/index';
 import { DateRangePicker } from '@popcorn/ui/components/popcorn/emissions-dashboard/DateRangePicker';
 import { NavBar } from '@popcorn/ui/components/popcorn/emissions-dashboard/NavBar';
-import { TotalStats } from '@popcorn/ui/components/popcorn/emissions-dashboard/TotalStats/index';
 import {
   ChartReadyState,
   Contract,
@@ -212,7 +211,7 @@ const IndexPage = (): JSX.Element => {
             startDate={startDate}
             endDate={endDate}
           />
-          <TotalStats
+          <ContractContainer
             transactionsPreviousPeriod={transactionsPreviousPeriod}
             transactionsCurrentPeriod={transactionsCurrentPeriod}
             startDate={startDate}
@@ -220,6 +219,8 @@ const IndexPage = (): JSX.Element => {
             endDate={endDate}
             areaColor={CHART_COLORS[3].areaColor}
             barColor={CHART_COLORS[3].barColor}
+            isTotal={true}
+            height={300}
           />
           {contracts.map((contract, index) => {
             return (
