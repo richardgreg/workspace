@@ -191,6 +191,7 @@ export const ComposedBarChart: React.FC<ComposedBarChartProps> = ({
           yAxisId="right-transactions"
           dataKey={transactionsDataKey}
           fill={barColor}
+          maxBarSize={50}
         />
         <Area
           type="monotone"
