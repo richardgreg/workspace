@@ -1,6 +1,5 @@
 import { ArrowSmDownIcon, ArrowSmUpIcon } from '@heroicons/react/solid';
 import React from 'react';
-import ReactTooltip from 'react-tooltip';
 import { getStatCardData } from '../../../../../../emissions-dashboard/utils';
 import {
   ChartReadyState,
@@ -8,6 +7,7 @@ import {
   Transaction,
 } from '../../../../interfaces/emissions-dashboard';
 import Spinner from '../Spinner';
+import StatCardTooltip from '../StatCardTooltip';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
@@ -127,33 +127,13 @@ export const StatsCards: React.FC<StatsCardProps> = ({
                   </p>
                 </dd>
               </div>
-              <ReactTooltip
-                id={contractName + item.name}
-                place="bottom"
-                effect="solid"
-                type="light"
-                className="shadow-lg border border-gray-50 p-1 w-160"
-              >
-                <p className="font-bold text-center">Previous Period</p>
-                <p className="text-sm text-gray-800">
-                  {previousPeriodStartDate.toUTCString() + ' - '}
-                </p>
-                <p className="text-sm text-gray-800">
-                  {startDate.toUTCString()}
-                </p>
-                <p className="text-sm text-gray-500">
-                  {item.statPrev.toLocaleString()}
-                </p>
-                <p className="font-bold text-center">Selected Period</p>
-                <p className="text-sm text-gray-800">
-                  {startDate.toUTCString() + ' - '}
-                </p>
-                <p className="text-sm text-gray-800">{endDate.toUTCString()}</p>
-                <p className="text-sm text-gray-500">
-                  {' '}
-                  {item.statCur.toLocaleString()}
-                </p>
-              </ReactTooltip>
+              <StatCardTooltip
+                contractName={contractName}
+                item={item}
+                previousPeriodStartDate={previousPeriodStartDate}
+                startDate={startDate}
+                endDate={endDate}
+              />
             </div>
           ))}
         {readyState === 'error' && errorCard()}
