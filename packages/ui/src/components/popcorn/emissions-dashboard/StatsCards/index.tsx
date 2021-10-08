@@ -1,5 +1,6 @@
 import { ArrowSmDownIcon, ArrowSmUpIcon } from '@heroicons/react/solid';
 import React from 'react';
+import ReactTooltip from 'react-tooltip';
 import { getStatCardData } from '../../../../../../emissions-dashboard/utils';
 import {
   ChartReadyState,
@@ -19,8 +20,10 @@ interface StatsCardProps {
   transactionsPreviousPeriod: Transaction[];
   isTotal: boolean;
   unit: string;
+  previousPeriodStartDate: Date;
   startDate: Date;
   endDate: Date;
+  contractName: string;
 }
 
 const loadingCard = (item: StatCardData) => {
@@ -51,8 +54,10 @@ export const StatsCards: React.FC<StatsCardProps> = ({
   transactionsPreviousPeriod,
   isTotal,
   unit,
+  previousPeriodStartDate,
   startDate,
   endDate,
+  contractName,
 }): JSX.Element => {
   const stats = getStatCardData(
     transactionsCurrentPeriod,
@@ -66,57 +71,89 @@ export const StatsCards: React.FC<StatsCardProps> = ({
     <div className="grid justify-items-stretch">
       <dl className="justify-self-start mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {readyState === 'loading' && stats.map((item) => loadingCard(item))}
-
         {readyState === 'done' &&
-          stats.map((item) => (
-            <div
-              key={item.name}
-              className="relative h-24 w-64 bg-white pt-5 px-4 pb-12 sm:pt-6 sm:px-6 shadow rounded-lg overflow-hidden"
-            >
-              <dt>
-                <div
-                  className={`absolute rounded-md p-3`}
-                  style={{ background: iconCol }}
-                >
-                  <item.icon
-                    className="h-6 w-6 text-white"
-                    aria-hidden="true"
-                  />
-                </div>
-                <p className="ml-16 text-sm font-medium text-gray-500 truncate">
-                  {item.name}
+          stats.map((item, index) => (
+            <div>
+              <div
+                data-tip
+                data-for={contractName + item.name}
+                key={item.name}
+                className="relative h-24 w-64 bg-white pt-5 px-4 pb-12 sm:pt-6 sm:px-6 shadow rounded-lg overflow-hidden"
+              >
+                <dt>
+                  <div
+                    className={`absolute rounded-md p-3`}
+                    style={{ background: iconCol }}
+                  >
+                    <item.icon
+                      className="h-6 w-6 text-white"
+                      aria-hidden="true"
+                    />
+                  </div>
+                  <p className="ml-16 text-sm font-medium text-gray-500 truncate">
+                    {item.name}
+                  </p>
+                </dt>
+                <dd className="ml-16 pb-6 flex items-baseline sm:pb-7">
+                  <p className="text-2xl font-semibold text-gray-900">
+                    {item.statCur.toLocaleString()}
+                  </p>
+                  <p
+                    className={classNames(
+                      item.changeType === 'increase'
+                        ? 'text-green-600'
+                        : 'text-red-600',
+                      'ml-2 flex items-baseline text-sm font-semibold',
+                    )}
+                  >
+                    {item.changeType === 'increase' ? (
+                      <ArrowSmUpIcon
+                        className="self-center flex-shrink-0 h-5 w-5 text-green-500"
+                        aria-hidden="true"
+                      />
+                    ) : (
+                      <ArrowSmDownIcon
+                        className="self-center flex-shrink-0 h-5 w-5 text-red-500"
+                        aria-hidden="true"
+                      />
+                    )}
+                    <span className="sr-only">
+                      {item.changeType === 'increase'
+                        ? 'Increased'
+                        : 'Decreased'}{' '}
+                      by
+                    </span>
+                    {item.change}
+                  </p>
+                </dd>
+              </div>
+              <ReactTooltip
+                id={contractName + item.name}
+                place="bottom"
+                effect="solid"
+                type="light"
+                className="shadow-lg border border-gray-50 p-1 w-160"
+              >
+                <p className="font-bold text-center">Previous Period</p>
+                <p className="text-sm text-gray-800">
+                  {previousPeriodStartDate.toUTCString() + ' - '}
                 </p>
-              </dt>
-              <dd className="ml-16 pb-6 flex items-baseline sm:pb-7">
-                <p className="text-2xl font-semibold text-gray-900">
+                <p className="text-sm text-gray-800">
+                  {startDate.toUTCString()}
+                </p>
+                <p className="text-sm text-gray-500">
+                  {item.statPrev.toLocaleString()}
+                </p>
+                <p className="font-bold text-center">Selected Period</p>
+                <p className="text-sm text-gray-800">
+                  {startDate.toUTCString() + ' - '}
+                </p>
+                <p className="text-sm text-gray-800">{endDate.toUTCString()}</p>
+                <p className="text-sm text-gray-500">
+                  {' '}
                   {item.statCur.toLocaleString()}
                 </p>
-                <p
-                  className={classNames(
-                    item.changeType === 'increase'
-                      ? 'text-green-600'
-                      : 'text-red-600',
-                    'ml-2 flex items-baseline text-sm font-semibold',
-                  )}
-                >
-                  {item.changeType === 'increase' ? (
-                    <ArrowSmUpIcon
-                      className="self-center flex-shrink-0 h-5 w-5 text-green-500"
-                      aria-hidden="true"
-                    />
-                  ) : (
-                    <ArrowSmDownIcon
-                      className="self-center flex-shrink-0 h-5 w-5 text-red-500"
-                      aria-hidden="true"
-                    />
-                  )}
-                  <span className="sr-only">
-                    {item.changeType === 'increase' ? 'Increased' : 'Decreased'}{' '}
-                    by
-                  </span>
-                  {item.change}
-                </p>
-              </dd>
+              </ReactTooltip>
             </div>
           ))}
         {readyState === 'error' && errorCard()}

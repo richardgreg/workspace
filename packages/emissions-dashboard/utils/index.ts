@@ -165,7 +165,6 @@ export const getStatCardData = (
           : 'decrease',
     },
   ];
-
   if (!isTotalStats) {
     return statCardData;
   }
