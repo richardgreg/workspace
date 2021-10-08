@@ -43,7 +43,7 @@ export const ContractContainer: React.FC<ContractContainerProps> = ({
 }): JSX.Element => {
   const [unit, setUnit] = useState<string>('mcg');
   useEffect(() => {
-    setUnit(getMassUnitForTxns(transactionsCurrentPeriod));
+    setUnit(getMassUnitForTxns(transactionsCurrentPeriod, startDate, endDate));
   }, [transactionsCurrentPeriod, transactionsPreviousPeriod]);
   return (
     <div className="mb-5 mt-12">

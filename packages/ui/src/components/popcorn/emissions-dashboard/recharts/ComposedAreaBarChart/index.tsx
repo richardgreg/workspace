@@ -63,7 +63,9 @@ const CustomTooltip = ({
             ></div>
             <div className="text-xs">{`CO2 Emissions (${
               payload[0].payload.unit
-            }): ${Math.round(payload[0].payload.co2Emissions)}`}</div>
+            }): ${
+              Math.round(payload[0].payload.co2Emissions * 100) / 100
+            }`}</div>
           </li>
         </ul>
       </div>
