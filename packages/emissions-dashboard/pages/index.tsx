@@ -11,26 +11,7 @@ import { DateTime } from 'luxon';
 import { useRouter } from 'next/router';
 import fetch from 'node-fetch';
 import React, { useEffect, useState } from 'react';
-
-const DEFAULT_CONTRACTS = [
-  { name: 'POP', address: '0xd0cd466b34a24fcb2f87676278af2005ca8a78c4' },
-  {
-    name: 'yvCurve-USDN',
-    address: '0x3b96d491f067912d18563d56858ba7d6ec67a6fa',
-  },
-  {
-    name: 'yvCurve-DUSD',
-    address: '0x30fcf7c6cdfc46ec237783d94fc78553e79d4e9c',
-  },
-  {
-    name: 'yvCurve-FRAX',
-    address: '0xb4ada607b9d6b2c9ee07a275e9616b84ac560139',
-  },
-  {
-    name: 'yvCurve-UST',
-    address: '0x1c6a9783f812b3af3abbf7de64c3cd7cc7d1af44',
-  },
-];
+import * as DEFAULT_CONTRACTS from './defaultContracts.json';
 
 const CHART_COLORS = [
   { barColor: '#24b7a7', areaColor: '#ccfbf0' },
@@ -44,7 +25,9 @@ const IndexPage = (): JSX.Element => {
   const router = useRouter();
   const [open, setOpen] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
-  const [contracts, setContracts] = useState<Contract[]>(DEFAULT_CONTRACTS);
+  const [contracts, setContracts] = useState<Contract[]>(
+    DEFAULT_CONTRACTS.defaultContracts,
+  );
   const [previousPeriodStartDate, setPreviousPeriodStartDate] = useState<Date>(
     new Date(DateTime.now().minus({ days: 20 }).toISO()),
   );
