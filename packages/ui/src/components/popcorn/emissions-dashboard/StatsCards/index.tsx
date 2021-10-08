@@ -132,7 +132,6 @@ export const StatsCards: React.FC<StatsCardProps> = ({
                 item={item}
                 previousPeriodStartDate={previousPeriodStartDate}
                 startDate={startDate}
-                endDate={endDate}
               />
             </div>
           ))}
