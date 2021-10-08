@@ -132,7 +132,7 @@ contract HysiBatchInteraction is Owned, KeeperIncentive {
     uint256 mintThreshold_,
     uint256 redeemThreshold_,
     address governance_,
-    IERC20 pop_
+    ERC20 pop_
   ) Owned(msg.sender) KeeperIncentive(governance_, pop_) {
     require(address(threeCrv_) != address(0));
     require(address(setToken_) != address(0));
