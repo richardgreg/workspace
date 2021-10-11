@@ -200,6 +200,24 @@ async function deployContracts(): Promise<Contracts> {
 
   await keeperIncentive
     .connect(owner)
+    .createIncentive(
+      utils.formatBytes32String("RewardsManager"),
+      parseEther("10"),
+      true,
+      false
+    );
+
+  await keeperIncentive
+    .connect(owner)
+    .createIncentive(
+      utils.formatBytes32String("RewardsManager"),
+      parseEther("10"),
+      true,
+      false
+    );
+
+  await keeperIncentive
+    .connect(owner)
     .addControllerContract(
       utils.formatBytes32String("RewardsManager"),
       rewardsManager.address
@@ -611,12 +629,12 @@ describe("RewardsManager", function () {
           swapReward
         );
       expect(await contracts.pop.balanceOf(owner.address)).to.equal(
-        parseEther("20")
+        parseEther("17.5")
       );
 
       await contracts.rewardsManager.connect(owner).distributeRewards();
       expect(await contracts.pop.balanceOf(owner.address)).to.equal(
-        parseEther("30")
+        parseEther("25")
       );
     });
   });

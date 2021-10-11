@@ -351,7 +351,7 @@ contract HysiBatchInteraction {
    */
   function batchMint(uint256 minAmountToMint_) external {
     KeeperIncentive(contractRegistry.getContract(keccak256("KeeperIncentive")))
-      .handleKeeperIncentive(contractName, msg.sender);
+      .handleKeeperIncentive(contractName, 0, msg.sender);
     Batch storage batch = batches[currentMintBatchId];
 
     //Check if there was enough time between the last batch minting and this attempt...
@@ -495,7 +495,7 @@ contract HysiBatchInteraction {
    */
   function batchRedeem(uint256 min3crvToReceive_) external {
     KeeperIncentive(contractRegistry.getContract(keccak256("KeeperIncentive")))
-      .handleKeeperIncentive(contractName, msg.sender);
+      .handleKeeperIncentive(contractName, 1, msg.sender);
     Batch storage batch = batches[currentRedeemBatchId];
 
     //Check if there was enough time between the last batch redemption and this attempt...

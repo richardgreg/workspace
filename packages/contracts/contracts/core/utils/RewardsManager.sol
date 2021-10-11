@@ -93,7 +93,7 @@ contract RewardsManager is IRewardsManager, ReentrancyGuard {
     returns (uint256[] memory)
   {
     KeeperIncentive(contractRegistry.getContract(keccak256("KeeperIncentive")))
-      .handleKeeperIncentive(contractName, msg.sender);
+      .handleKeeperIncentive(contractName, 0, msg.sender);
     require(path_.length >= 2, "Invalid swap path");
     require(minAmountOut_ > 0, "Invalid amount");
     require(
@@ -124,7 +124,7 @@ contract RewardsManager is IRewardsManager, ReentrancyGuard {
    */
   function distributeRewards() public nonReentrant {
     KeeperIncentive(contractRegistry.getContract(keccak256("KeeperIncentive")))
-      .handleKeeperIncentive(contractName, msg.sender);
+      .handleKeeperIncentive(contractName, 1, msg.sender);
     uint256 _availableReward = IERC20(
       contractRegistry.getContract(keccak256("POP"))
     ).balanceOf(address(this));

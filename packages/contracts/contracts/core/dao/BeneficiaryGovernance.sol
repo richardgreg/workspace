@@ -200,7 +200,12 @@ contract BeneficiaryGovernance {
     enoughBond(msg.sender)
     returns (uint256)
   {
-    //require(region.regionExists(_region), "region doesnt exist");
+    require(
+      IRegion(contractRegistry.getContract(keccak256("Region"))).regionExists(
+        _region
+      ),
+      "region doesnt exist"
+    );
     _assertProposalPreconditions(_type, _beneficiary);
 
     if (DefaultConfigurations.proposalBond > 0) {

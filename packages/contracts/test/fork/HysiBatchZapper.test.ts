@@ -28,6 +28,7 @@ import {
 const provider = waffle.provider;
 
 interface Contracts {
+  pop: ERC20;
   dai: ERC20;
   usdc: ERC20;
   usdt: ERC20;
@@ -241,11 +242,11 @@ async function deployContracts(): Promise<Contracts> {
     await (await ethers.getContractFactory("ACLRegistry")).deploy()
   ).deployed();
 
-  const contractRegistry = (await (
+  const contractRegistry = await (
     await (
       await ethers.getContractFactory("ContractRegistry")
     ).deploy(aclRegistry.address)
-  ).deployed()) as ContractRegistry;
+  ).deployed();
 
   const keeperIncentive = await (
     await (
@@ -300,6 +301,7 @@ async function deployContracts(): Promise<Contracts> {
   ).deployed();
 
   return {
+    pop,
     dai,
     usdc,
     usdt,
@@ -351,6 +353,13 @@ const deployAndAssignContracts = async () => {
   await contracts.contractRegistry
     .connect(owner)
     .addContract(
+      ethers.utils.id("POP"),
+      contracts.pop.address,
+      ethers.utils.id("1")
+    );
+  await contracts.contractRegistry
+    .connect(owner)
+    .addContract(
       ethers.utils.id("KeeperIncentive"),
       contracts.keeperIncentive.address,
       ethers.utils.id("1")
@@ -363,18 +372,34 @@ const deployAndAssignContracts = async () => {
       ethers.utils.id("1")
     );
 
-  await contracts.faucet.sendTokens(
-    contracts.dai.address,
-    4,
-    depositor.address
-  );
-
+  await contracts.keeperIncentive
+    .connect(owner)
+    .createIncentive(
+      utils.formatBytes32String("HysiBatchInteraction"),
+      0,
+      true,
+      false
+    );
+  await contracts.keeperIncentive
+    .connect(owner)
+    .createIncentive(
+      utils.formatBytes32String("HysiBatchInteraction"),
+      0,
+      true,
+      false
+    );
   await contracts.keeperIncentive
     .connect(owner)
     .addControllerContract(
       utils.formatBytes32String("HysiBatchInteraction"),
       contracts.hysiBatchInteraction.address
     );
+
+  await contracts.faucet.sendTokens(
+    contracts.dai.address,
+    4,
+    depositor.address
+  );
 
   DepositorInitial = await contracts.dai.balanceOf(depositor.address);
   await contracts.faucet.sendThreeCrv(100, depositor.address);
