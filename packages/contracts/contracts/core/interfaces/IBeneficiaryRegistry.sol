@@ -7,7 +7,7 @@ interface IBeneficiaryRegistry {
 
   function addBeneficiary(
     address _address,
-    bytes2 region,
+    bytes32 region,
     bytes calldata applicationCid
   ) external;
 

@@ -4,11 +4,11 @@ import "@openzeppelin/contracts/math/Math.sol";
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
-import "./lib/Owned.sol";
-import "./Interfaces/IStaking.sol";
-import "./Interfaces/IRewardsEscrow.sol";
+import "../interfaces/IStaking.sol";
+import "../interfaces/IRewardsEscrow.sol";
+import "../interfaces/IACLRegistry.sol";
 
-contract RewardsEscrow is IRewardsEscrow, Owned, ReentrancyGuard {
+contract RewardsEscrow is IRewardsEscrow, ReentrancyGuard {
   using SafeMath for uint256;
   using SafeERC20 for IERC20;
 
@@ -22,6 +22,8 @@ contract RewardsEscrow is IRewardsEscrow, Owned, ReentrancyGuard {
 
   IERC20 public immutable POP;
   IStaking public staking;
+  IACLRegistry public aclRegistry;
+
   mapping(bytes32 => Escrow) public escrows;
   mapping(address => bytes32[]) public escrowIds;
   uint256 public escrowDuration = 90 days;
@@ -36,8 +38,9 @@ contract RewardsEscrow is IRewardsEscrow, Owned, ReentrancyGuard {
 
   /* ========== CONSTRUCTOR ========== */
 
-  constructor(IERC20 _pop) Owned(msg.sender) {
+  constructor(IERC20 _pop, IACLRegistry _aclRegistry) {
     POP = _pop;
+    aclRegistry = _aclRegistry;
   }
 
   /* ========== VIEWS ========== */
@@ -172,17 +175,20 @@ contract RewardsEscrow is IRewardsEscrow, Owned, ReentrancyGuard {
       );
   }
 
-  function updateEscrowDuration(uint256 _escrowDuration) external onlyOwner {
+  function updateEscrowDuration(uint256 _escrowDuration) external {
+    aclRegistry.requireRole(keccak256("DAO"), msg.sender);
     escrowDuration = _escrowDuration;
     emit EscrowDurationChanged(_escrowDuration);
   }
 
-  function updateCliff(uint256 _vestingCliff) external onlyOwner {
+  function updateCliff(uint256 _vestingCliff) external {
+    aclRegistry.requireRole(keccak256("DAO"), msg.sender);
     vestingCliff = _vestingCliff;
     emit VestingCliffChanged(_vestingCliff);
   }
 
-  function setStaking(IStaking _staking) external onlyOwner {
+  function setStaking(IStaking _staking) external {
+    aclRegistry.requireRole(keccak256("DAO"), msg.sender);
     require(staking != _staking, "Same Staking");
     staking = _staking;
     emit StakingChanged(_staking);

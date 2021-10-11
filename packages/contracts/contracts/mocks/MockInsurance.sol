@@ -2,7 +2,7 @@
 
 pragma solidity >=0.6.0 <0.8.0;
 
-import "../Interfaces/IInsurance.sol";
+import "../core/interfaces/IInsurance.sol";
 
 contract MockInsurance is IInsurance {
   //mock until actual Insurance

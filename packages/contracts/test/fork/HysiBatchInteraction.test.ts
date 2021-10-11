@@ -13,6 +13,7 @@ import SetTokenAbi from "../../lib/SetToken/vendor/set-protocol/artifacts/SetTok
 import { BasicIssuanceModule } from "../../lib/SetToken/vendor/set-protocol/types/BasicIssuanceModule";
 import { SetToken } from "../../lib/SetToken/vendor/set-protocol/types/SetToken";
 import {
+  ACLRegistry,
   CurveMetapool,
   ERC20,
   Faucet,
@@ -46,6 +47,7 @@ interface Contracts {
   hysiBatchInteraction: HysiBatchInteraction;
   keeperIncentive: KeeperIncentive;
   faucet: Faucet;
+  aclRegistry: ACLRegistry;
 }
 
 enum BatchType {
@@ -228,10 +230,14 @@ async function deployContracts(): Promise<Contracts> {
     SET_BASIC_ISSUANCE_MODULE_ADDRESS
   )) as unknown as BasicIssuanceModule;
 
+  const aclRegistry = await (
+    await (await ethers.getContractFactory("ACLRegistry")).deploy()
+  ).deployed();
+
   const keeperIncentive = await (
     await (
       await ethers.getContractFactory("KeeperIncentive")
-    ).deploy(mockPop.address, owner.address)
+    ).deploy(mockPop.address, aclRegistry.address)
   ).deployed();
 
   //Deploy HysiBatchInteraction
@@ -245,6 +251,7 @@ async function deployContracts(): Promise<Contracts> {
       HYSI_TOKEN_ADDRESS,
       SET_BASIC_ISSUANCE_MODULE_ADDRESS,
       keeperIncentive.address,
+      aclRegistry.address,
       [
         YDUSD_TOKEN_ADDRESS,
         YFRAX_TOKEN_ADDRESS,
@@ -297,6 +304,7 @@ async function deployContracts(): Promise<Contracts> {
     hysiBatchInteraction,
     keeperIncentive,
     faucet,
+    aclRegistry,
   };
 }
 const getMinAmountOfHYSIToMint = async (): Promise<BigNumber> => {
@@ -433,6 +441,14 @@ describe("HysiBatchInteraction Network Test", function () {
     [depositor, depositor1, depositor2, depositor3].forEach(async (account) => {
       await contracts.faucet.sendThreeCrv(10000, account.address);
     });
+    await contracts.aclRegistry.grantRole(
+      ethers.utils.id("DAO"),
+      owner.address
+    );
+    await contracts.aclRegistry.grantRole(
+      ethers.utils.id("Keeper"),
+      owner.address
+    );
     await contracts.keeperIncentive
       .connect(owner)
       .createIncentive(
@@ -446,12 +462,6 @@ describe("HysiBatchInteraction Network Test", function () {
       .addControllerContract(
         utils.formatBytes32String("HysiBatchInteraction"),
         contracts.hysiBatchInteraction.address
-      );
-    await contracts.keeperIncentive
-      .connect(owner)
-      .approveAccount(
-        utils.formatBytes32String("HysiBatchInteraction"),
-        owner.address
       );
   });
 
@@ -689,7 +699,7 @@ describe("HysiBatchInteraction Network Test", function () {
 
           await expect(
             contracts.hysiBatchInteraction.connect(depositor).batchMint(0)
-          ).to.be.revertedWith("you are not approved as a keeper");
+          ).to.be.revertedWith("you dont have the right role");
         });
       });
       context("success", function () {
@@ -1019,7 +1029,7 @@ describe("HysiBatchInteraction Network Test", function () {
 
           await expect(
             contracts.hysiBatchInteraction.connect(depositor).batchRedeem(0)
-          ).to.be.revertedWith("you are not approved as a keeper");
+          ).to.be.revertedWith("you dont have the right role");
         });
         it("reverts when amount of 3crv to receive is less than slippage tolerance", async function () {
           this.timeout(25000);

@@ -5,17 +5,17 @@ pragma experimental ABIEncoderV2;
 
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
-import "./Interfaces/IRegion.sol";
-import "./Interfaces/IStaking.sol";
-import "./Interfaces/IBeneficiaryRegistry.sol";
-import "./ParticipationReward.sol";
-import "./Governed.sol";
+import "../interfaces/IRegion.sol";
+import "../interfaces/IStaking.sol";
+import "../interfaces/IBeneficiaryRegistry.sol";
+import "../interfaces/IACLRegistry.sol";
+import "../utils/ParticipationReward.sol";
 
 /**
  * @title BeneficiaryGovernance
  * @notice This contract is for submitting beneficiary nomination proposals and beneficiary takedown proposals
  */
-contract BeneficiaryGovernance is Governed {
+contract BeneficiaryGovernance {
   using SafeMath for uint256;
   using SafeERC20 for IERC20;
 
@@ -54,7 +54,7 @@ contract BeneficiaryGovernance is Governed {
     bytes applicationCid;
     address proposer;
     uint256 startTime;
-    bytes2 region;
+    bytes32 region;
     uint256 yesCount;
     uint256 noCount;
     uint256 voterCount;
@@ -70,6 +70,7 @@ contract BeneficiaryGovernance is Governed {
   IERC20 public POP;
   IRegion internal region;
   ParticipationReward public participationReward;
+  IACLRegistry public aclRegistry;
 
   mapping(address => bool) pendingBeneficiaries;
   mapping(address => uint256) beneficiaryProposals;
@@ -104,13 +105,14 @@ contract BeneficiaryGovernance is Governed {
     IERC20 _pop,
     IRegion _region,
     ParticipationReward _participationReward,
-    address _governance
-  ) Governed(_governance) {
+    IACLRegistry _aclRegistry
+  ) {
     staking = _staking;
     beneficiaryRegistry = _beneficiaryRegistry;
     POP = _pop;
     region = _region;
     participationReward = _participationReward;
+    aclRegistry = _aclRegistry;
     _setDefaults();
   }
 
@@ -181,7 +183,7 @@ contract BeneficiaryGovernance is Governed {
    */
   function createProposal(
     address _beneficiary,
-    bytes2 _region,
+    bytes32 _region,
     bytes calldata _applicationCid,
     ProposalType _type
   )
@@ -190,7 +192,7 @@ contract BeneficiaryGovernance is Governed {
     enoughBond(msg.sender)
     returns (uint256)
   {
-    //require(region.regionExists(_region), "region doesnt exist");
+    require(region.regionExists(_region), "region doesnt exist");
     _assertProposalPreconditions(_type, _beneficiary);
 
     if (DefaultConfigurations.proposalBond > 0) {
@@ -451,7 +453,8 @@ contract BeneficiaryGovernance is Governed {
     uint256 _votingPeriod,
     uint256 _vetoPeriod,
     uint256 _proposalBond
-  ) public onlyGovernance {
+  ) public {
+    aclRegistry.requireRole(keccak256("DAO"), msg.sender);
     DefaultConfigurations.votingPeriod = _votingPeriod;
     DefaultConfigurations.vetoPeriod = _vetoPeriod;
     DefaultConfigurations.proposalBond = _proposalBond;

@@ -121,10 +121,14 @@ async function deployContracts(): Promise<Contracts> {
     ).deploy([mockYearnVaultUSDX.address, mockYearnVaultUST.address], [50, 50])
   ).deployed()) as MockBasicIssuanceModule;
 
+  const aclRegistry = await (
+    await (await ethers.getContractFactory("ACLRegistry")).deploy()
+  ).deployed();
+
   const keeperIncentive = await (
     await (
       await ethers.getContractFactory("KeeperIncentive")
-    ).deploy(mockPop.address, owner.address)
+    ).deploy(mockPop.address, aclRegistry.address)
   ).deployed();
 
   const hysiBatchInteraction = (await (
@@ -136,6 +140,7 @@ async function deployContracts(): Promise<Contracts> {
       mockSetToken.address,
       mockBasicIssuanceModule.address,
       keeperIncentive.address,
+      aclRegistry.address,
       [mockYearnVaultUSDX.address, mockYearnVaultUST.address],
       [
         {
@@ -189,7 +194,12 @@ async function deployContracts(): Promise<Contracts> {
     .connect(depositor)
     .approve(hysiBatchInteraction.address, DepositorInitial);
 
-  await hysiBatchInteraction.connect(owner).setZapper(hysiBatchZapper.address);
+  await aclRegistry.grantRole(ethers.utils.id("DAO"), owner.address);
+  await aclRegistry.grantRole(ethers.utils.id("Keeper"), owner.address);
+  await aclRegistry.grantRole(
+    ethers.utils.id("HysiZapper"),
+    hysiBatchZapper.address
+  );
 
   await keeperIncentive
     .connect(owner)
@@ -199,17 +209,12 @@ async function deployContracts(): Promise<Contracts> {
       true,
       false
     );
+
   await keeperIncentive
     .connect(owner)
     .addControllerContract(
       utils.formatBytes32String("HysiBatchInteraction"),
       hysiBatchInteraction.address
-    );
-  await keeperIncentive
-    .connect(owner)
-    .approveAccount(
-      utils.formatBytes32String("HysiBatchInteraction"),
-      owner.address
     );
 
   return {

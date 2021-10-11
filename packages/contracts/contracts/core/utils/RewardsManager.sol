@@ -8,20 +8,20 @@ import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 import "@openzeppelin/contracts/cryptography/MerkleProof.sol";
 import "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol";
-import "./lib/Owned.sol";
 import "./KeeperIncentive.sol";
-import "./Interfaces/IRegion.sol";
-import "./Interfaces/IStaking.sol";
-import "./Interfaces/ITreasury.sol";
-import "./Interfaces/IInsurance.sol";
-import "./Interfaces/IBeneficiaryVaults.sol";
-import "./Interfaces/IRewardsManager.sol";
+import "../interfaces/IRegion.sol";
+import "../interfaces/IStaking.sol";
+import "../interfaces/ITreasury.sol";
+import "../interfaces/IInsurance.sol";
+import "../interfaces/IBeneficiaryVaults.sol";
+import "../interfaces/IRewardsManager.sol";
+import "../interfaces/IACLRegistry.sol";
 
 /**
  * @title Popcorn Rewards Manager
  * @notice Manages distribution of POP rewards to Popcorn Treasury, DAO Staking, and Beneficiaries
  */
-contract RewardsManager is IRewardsManager, Owned, ReentrancyGuard {
+contract RewardsManager is IRewardsManager, ReentrancyGuard {
   using SafeMath for uint256;
   using SafeERC20 for IERC20;
 
@@ -42,6 +42,7 @@ contract RewardsManager is IRewardsManager, Owned, ReentrancyGuard {
   ITreasury public treasury;
   IInsurance public insurance;
   IRegion public region;
+  IACLRegistry public aclRegistry;
   KeeperIncentive public keeperIncentive;
   IUniswapV2Router02 public immutable uniswapV2Router;
 
@@ -70,14 +71,16 @@ contract RewardsManager is IRewardsManager, Owned, ReentrancyGuard {
     ITreasury treasury_,
     IInsurance insurance_,
     IRegion region_,
+    IACLRegistry aclRegistry_,
     KeeperIncentive keeperIncentive_,
     IUniswapV2Router02 uniswapV2Router_
-  ) Owned(msg.sender) {
+  ) {
     POP = pop_;
     staking = staking_;
     treasury = treasury_;
     insurance = insurance_;
     region = region_;
+    aclRegistry = aclRegistry_;
     keeperIncentive = keeperIncentive_;
     uniswapV2Router = uniswapV2Router_;
     rewardLimits[uint8(RewardTargets.Staking)] = [20e18, 80e18];
@@ -204,7 +207,8 @@ contract RewardsManager is IRewardsManager, Owned, ReentrancyGuard {
    * @param staking_ Address of new Staking contract
    * @dev Must implement IStaking and cannot be same as existing
    */
-  function setStaking(IStaking staking_) public onlyOwner {
+  function setStaking(IStaking staking_) public {
+    aclRegistry.requireRole(keccak256("DAO"), msg.sender);
     require(staking != staking_, "Same Staking");
     IStaking _previousStaking = staking;
     staking = staking_;
@@ -216,7 +220,8 @@ contract RewardsManager is IRewardsManager, Owned, ReentrancyGuard {
    * @param treasury_ Address of new Treasury contract
    * @dev Must implement ITreasury and cannot be same as existing
    */
-  function setTreasury(ITreasury treasury_) public onlyOwner {
+  function setTreasury(ITreasury treasury_) public {
+    aclRegistry.requireRole(keccak256("DAO"), msg.sender);
     require(treasury != treasury_, "Same Treasury");
     ITreasury _previousTreasury = treasury;
     treasury = treasury_;
@@ -228,7 +233,8 @@ contract RewardsManager is IRewardsManager, Owned, ReentrancyGuard {
    * @param insurance_ Address of new Insurance contract
    * @dev Must implement IInsurance and cannot be same as existing
    */
-  function setInsurance(IInsurance insurance_) public onlyOwner {
+  function setInsurance(IInsurance insurance_) public {
+    aclRegistry.requireRole(keccak256("DAO"), msg.sender);
     require(insurance != insurance_, "Same Insurance");
     IInsurance _previousInsurance = insurance;
     insurance = insurance_;
@@ -240,7 +246,8 @@ contract RewardsManager is IRewardsManager, Owned, ReentrancyGuard {
    * @param region_ Address of new Region contract
    * @dev Must implement IRegion and cannot be same as existing
    */
-  function setRegion(IRegion region_) public onlyOwner {
+  function setRegion(IRegion region_) public {
+    aclRegistry.requireRole(keccak256("DAO"), msg.sender);
     require(region != region_, "Same Region");
     IRegion _previousRegion = region;
     region = region_;
@@ -252,7 +259,8 @@ contract RewardsManager is IRewardsManager, Owned, ReentrancyGuard {
    * @param splits_ Array of RewardTargets enumerated uint256 values within rewardLimits range
    * @dev Values must be within rewardsLimit range, specified in percent to 18 decimal place precision
    */
-  function setRewardSplits(uint256[4] calldata splits_) public onlyOwner {
+  function setRewardSplits(uint256[4] calldata splits_) public {
+    aclRegistry.requireRole(keccak256("DAO"), msg.sender);
     uint256 _total = 0;
     for (uint8 i = 0; i < 4; i++) {
       require(

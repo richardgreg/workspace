@@ -4,7 +4,7 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 import "@openzeppelin/contracts/math/SafeMath.sol";
 
-import "../KeeperIncentive.sol";
+import "../core/utils/KeeperIncentive.sol";
 
 contract KeeperIncentiveHelper {
   using SafeERC20 for IERC20;

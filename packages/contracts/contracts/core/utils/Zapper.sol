@@ -5,11 +5,11 @@ pragma solidity >=0.7.0 <0.8.0;
 import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/math/SafeMath.sol";
-import "./Interfaces/IPool.sol";
-import "./Interfaces/Integrations/CurveAddressProvider.sol";
-import "./Interfaces/Integrations/CurveRegistry.sol";
-import "./Interfaces/Integrations/CurveMetapool.sol";
-import "./Interfaces/Integrations/Curve3Pool.sol";
+import "../interfaces/IPool.sol";
+import "../../integrations/interfaces/CurveAddressProvider.sol";
+import "../../integrations/interfaces/CurveRegistry.sol";
+import "../../integrations/interfaces/CurveMetapool.sol";
+import "../../integrations/interfaces/Curve3Pool.sol";
 
 contract Zapper {
   using SafeERC20 for IERC20;
@@ -110,9 +110,9 @@ contract Zapper {
         amount
       );
       lpTokens = CurveMetapool(curveMetapoolAddress(popcornPool)).add_liquidity(
-        [amount, 0],
-        0
-      );
+          [amount, 0],
+          0
+        );
     } else {
       IERC20(depositToken).safeIncreaseAllowance(
         curveBasepoolAddress(popcornPool),
@@ -132,9 +132,9 @@ contract Zapper {
         threeCrvLPTokens
       );
       lpTokens = CurveMetapool(curveMetapoolAddress(popcornPool)).add_liquidity(
-        [0, threeCrvLPTokens],
-        0
-      );
+          [0, threeCrvLPTokens],
+          0
+        );
     }
     IERC20(token(popcornPool)).safeIncreaseAllowance(popcornPool, lpTokens);
     uint256 shares = IPool(popcornPool).depositFor(lpTokens, msg.sender);
@@ -159,7 +159,7 @@ contract Zapper {
     uint256 withdrawal;
     if (tokenIndex(popcornPool, withdrawalToken) == 0) {
       withdrawal = CurveMetapool(curveMetapoolAddress(popcornPool))
-      .remove_liquidity_one_coin(lpTokens, 0, 0);
+        .remove_liquidity_one_coin(lpTokens, 0, 0);
     } else {
       uint256 threeCrvWithdrawal = CurveMetapool(
         curveMetapoolAddress(popcornPool)

@@ -4,12 +4,13 @@ import bluebird from "bluebird";
 import { expect } from "chai";
 import { parseEther } from "ethers/lib/utils";
 import { ethers, waffle } from "hardhat";
-import { MockERC20, Staking } from "../typechain";
+import { ACLRegistry, MockERC20, Staking } from "../typechain";
 import { RewardsEscrow } from "../typechain/RewardsEscrow";
 
 interface Contracts {
   mockPop: MockERC20;
   staking: Staking;
+  aclRegistry: ACLRegistry;
   rewardsEscrow: RewardsEscrow;
 }
 
@@ -31,44 +32,34 @@ async function deployContracts(): Promise<Contracts> {
   await mockPop.mint(owner.address, parseEther("500"));
   await mockPop.mint(nonOwner.address, parseEther("10"));
 
+  const aclRegistry = await (
+    await (await ethers.getContractFactory("ACLRegistry")).deploy()
+  ).deployed();
+
   const rewardsEscrow = (await (
     await (
       await ethers.getContractFactory("RewardsEscrow")
-    ).deploy(mockPop.address)
+    ).deploy(mockPop.address, aclRegistry.address)
   ).deployed()) as RewardsEscrow;
 
   const staking = (await (
     await (
       await ethers.getContractFactory("Staking")
-    ).deploy(mockPop.address, rewardsEscrow.address)
+    ).deploy(mockPop.address, rewardsEscrow.address, aclRegistry.address)
   ).deployed()) as Staking;
 
   await mockPop.transfer(staking.address, stakingFund);
   await mockPop.connect(owner).approve(staking.address, parseEther("100000"));
 
+  await aclRegistry
+    .connect(owner)
+    .grantRole(ethers.utils.id("DAO"), owner.address);
+
   await staking.init(rewarder.address);
   await staking.notifyRewardAmount(stakingFund);
   await staking.connect(owner).stake(parseEther("1"), 604800);
 
-  return { mockPop, staking, rewardsEscrow };
-}
-
-async function addEscrow(): Promise<void> {
-  ethers.provider.send("evm_increaseTime", [1 * dayInSec]);
-  ethers.provider.send("evm_mine", []);
-  console.log(
-    "before",
-    await (
-      await contracts.staking.getWithdrawableBalance(owner.address)
-    ).toString()
-  );
-  await contracts.staking.connect(owner).getReward();
-  console.log(
-    "after",
-    await (
-      await contracts.staking.getWithdrawableBalance(owner.address)
-    ).toString()
-  );
+  return { mockPop, staking, aclRegistry, rewardsEscrow };
 }
 
 describe("RewardsEscrow", function () {
@@ -91,7 +82,11 @@ describe("RewardsEscrow", function () {
       const newStaking = (await (
         await (
           await ethers.getContractFactory("Staking")
-        ).deploy(contracts.mockPop.address, contracts.rewardsEscrow.address)
+        ).deploy(
+          contracts.mockPop.address,
+          contracts.rewardsEscrow.address,
+          contracts.aclRegistry.address
+        )
       ).deployed()) as Staking;
       await contracts.rewardsEscrow
         .connect(owner)
@@ -110,7 +105,7 @@ describe("RewardsEscrow", function () {
     it("should revert setStaking if not owner", async function () {
       await expect(
         contracts.rewardsEscrow.connect(nonOwner).setStaking(nonOwner.address)
-      ).to.be.revertedWith("Only the contract owner may perform this action");
+      ).to.be.revertedWith("you dont have the right role");
     });
 
     it("should revert updateEscrowDuration if not owner", async function () {
@@ -118,7 +113,7 @@ describe("RewardsEscrow", function () {
         contracts.rewardsEscrow
           .connect(nonOwner)
           .updateEscrowDuration(nonOwner.address)
-      ).to.be.revertedWith("Only the contract owner may perform this action");
+      ).to.be.revertedWith("you dont have the right role");
     });
 
     it("update escrow duration", async function () {

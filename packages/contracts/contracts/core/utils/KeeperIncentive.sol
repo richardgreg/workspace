@@ -3,9 +3,9 @@ pragma solidity >=0.7.0 <0.8.0;
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
-import "./Governed.sol";
+import "../interfaces/IACLRegistry.sol";
 
-contract KeeperIncentive is Governed {
+contract KeeperIncentive {
   using SafeMath for uint256;
   using SafeERC20 for IERC20;
 
@@ -18,9 +18,10 @@ contract KeeperIncentive is Governed {
   /* ========== STATE VARIABLES ========== */
 
   IERC20 public immutable POP;
+  IACLRegistry public aclRegistry;
+
   uint256 public incentiveBudget;
   mapping(bytes32 => Incentive[]) public incentives;
-  mapping(bytes32 => mapping(address => bool)) public approved;
   mapping(bytes32 => address) public controllerContracts;
   uint256 public burnRate;
   address internal immutable burnAddress =
@@ -41,8 +42,6 @@ contract KeeperIncentive is Governed {
     bool newOpenToEveryone
   );
   event IncentiveFunded(uint256 amount);
-  event Approved(bytes32 contractName, address account);
-  event RemovedApproval(bytes32 contractName, address account);
   event ApprovalToggled(bytes32 contractName, bool openToEveryone);
   event IncentiveToggled(bytes32 contractName, bool enabled);
   event ControllerContractAdded(bytes32 contractName, address contractAddress);
@@ -51,8 +50,9 @@ contract KeeperIncentive is Governed {
 
   /* ========== CONSTRUCTOR ========== */
 
-  constructor(IERC20 _pop, address _governance) public Governed(_governance) {
+  constructor(IERC20 _pop, IACLRegistry _aclRegistry) public {
     POP = _pop;
+    aclRegistry = _aclRegistry;
     burnRate = 25e16; // 25% of intentive.reward
   }
 
@@ -63,6 +63,7 @@ contract KeeperIncentive is Governed {
     uint8 i,
     address keeper
   ) external {
+    //TODO add contractRegistry check
     require(
       msg.sender == controllerContracts[contractName_],
       "Can only be called by the controlling contract"
@@ -71,10 +72,7 @@ contract KeeperIncentive is Governed {
     Incentive memory incentive = incentives[contractName_][i];
 
     if (!incentive.openToEveryone) {
-      require(
-        approved[contractName_][keeper],
-        "you are not approved as a keeper"
-      );
+      aclRegistry.requireRole(keccak256("Keeper"), keeper);
     }
     if (incentive.enabled && incentive.reward <= incentiveBudget) {
       incentiveBudget = incentiveBudget.sub(incentive.reward);
@@ -101,7 +99,8 @@ contract KeeperIncentive is Governed {
     uint256 _reward,
     bool _enabled,
     bool _openToEveryone
-  ) public onlyGovernance {
+  ) public {
+    aclRegistry.requireRole(keccak256("DAO"), msg.sender);
     incentives[contractName_].push(
       Incentive({
         reward: _reward,
@@ -116,7 +115,8 @@ contract KeeperIncentive is Governed {
    * @notice Sets the current burn rate as a percentage of the incentive reward.
    * @param _burnRate Percentage in Mantissa. (1e14 = 1 Basis Point)
    */
-  function setBurnRate(uint256 _burnRate) external onlyGovernance {
+  function setBurnRate(uint256 _burnRate) external {
+    aclRegistry.requireRole(keccak256("DAO"), msg.sender);
     emit BurnRateChanged(burnRate, _burnRate);
     burnRate = _burnRate;
   }
@@ -129,7 +129,8 @@ contract KeeperIncentive is Governed {
     uint256 _reward,
     bool _enabled,
     bool _openToEveryone
-  ) external onlyGovernance {
+  ) external {
+    aclRegistry.requireRole(keccak256("DAO"), msg.sender);
     Incentive storage incentive = incentives[contractName_][i];
     uint256 oldReward = incentive.reward;
     bool oldOpenToEveryone = incentive.openToEveryone;
@@ -145,35 +146,15 @@ contract KeeperIncentive is Governed {
     );
   }
 
-  function approveAccount(bytes32 contractName_, address _account)
-    external
-    onlyGovernance
-  {
-    approved[contractName_][_account] = true;
-    emit Approved(contractName_, _account);
-  }
-
-  function removeApproval(bytes32 contractName_, address _account)
-    external
-    onlyGovernance
-  {
-    approved[contractName_][_account] = false;
-    emit RemovedApproval(contractName_, _account);
-  }
-
-  function toggleApproval(bytes32 contractName_, uint8 i)
-    external
-    onlyGovernance
-  {
+  function toggleApproval(bytes32 contractName_, uint8 i) external {
+    aclRegistry.requireRole(keccak256("DAO"), msg.sender);
     Incentive storage incentive = incentives[contractName_][i];
     incentive.openToEveryone = !incentive.openToEveryone;
     emit ApprovalToggled(contractName_, incentive.openToEveryone);
   }
 
-  function toggleIncentive(bytes32 contractName_, uint8 i)
-    external
-    onlyGovernance
-  {
+  function toggleIncentive(bytes32 contractName_, uint8 i) external {
+    aclRegistry.requireRole(keccak256("DAO"), msg.sender);
     Incentive storage incentive = incentives[contractName_][i];
     incentive.enabled = !incentive.enabled;
     emit IncentiveToggled(contractName_, incentive.enabled);
@@ -193,8 +174,8 @@ contract KeeperIncentive is Governed {
    */
   function addControllerContract(bytes32 contractName_, address contract_)
     external
-    onlyGovernance
   {
+    aclRegistry.requireRole(keccak256("DAO"), msg.sender);
     controllerContracts[contractName_] = contract_;
     emit ControllerContractAdded(contractName_, contract_);
   }

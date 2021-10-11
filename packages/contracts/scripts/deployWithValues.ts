@@ -3,7 +3,7 @@ import { ElectionTerm, ProposalType } from "@popcorn/contracts/adapters";
 import { getBytes32FromIpfsHash } from "@popcorn/utils";
 import bluebird from "bluebird";
 import { deployContract } from "ethereum-waffle";
-import { Contract, utils } from "ethers";
+import { Contract, ethers, utils } from "ethers";
 import { parseEther } from "ethers/lib/utils";
 import getCreatedProposalId from "../adapters/GrantElection/getCreatedProposalId";
 import GrantElectionAdapter, {
@@ -17,7 +17,7 @@ const UniswapV2PairJSON = require("../artifactsUniswap/UniswapV2Pair.json");
 
 // This script creates two beneficiaries and one quarterly grant that they are both eligible for. Run this
 // Run this instead of the normal deploy.js script
-const DEFAULT_REGION = "0x5757";
+const DEFAULT_REGION = ethers.utils.id("World");
 
 const VOTE_PERIOD_IN_SECONDS = 30;
 
@@ -38,6 +38,7 @@ interface Contracts {
   rewardsEscrow: Contract;
   participationReward: Contract;
   keeperIncentive: Contract;
+  aclRegistry: Contract;
 }
 
 enum Vote {
@@ -84,6 +85,10 @@ export default async function deploy(ethers): Promise<void> {
   const deployContracts = async (): Promise<void> => {
     console.log("deploying contracts ...");
 
+    const aclRegistry = await (
+      await (await ethers.getContractFactory("ACLRegistry")).deploy()
+    ).deployed();
+
     const mockPop = await (
       await (
         await ethers.getContractFactory("MockERC20")
@@ -93,19 +98,19 @@ export default async function deploy(ethers): Promise<void> {
     const beneficiaryVaults = await (
       await (
         await ethers.getContractFactory("BeneficiaryVaults")
-      ).deploy(mockPop.address)
+      ).deploy(mockPop.address, aclRegistry.address)
     ).deployed();
 
     const region = await (
       await (
         await ethers.getContractFactory("Region")
-      ).deploy(beneficiaryVaults.address)
+      ).deploy(beneficiaryVaults.address, aclRegistry.address)
     ).deployed();
 
     const beneficiaryRegistry = await (
       await (
         await ethers.getContractFactory("BeneficiaryRegistry")
-      ).deploy(region.address)
+      ).deploy(aclRegistry.address)
     ).deployed();
 
     const mock3CRV = await (
@@ -121,19 +126,19 @@ export default async function deploy(ethers): Promise<void> {
     const rewardsEscrow = await (
       await (
         await ethers.getContractFactory("RewardsEscrow")
-      ).deploy(mockPop.address)
+      ).deploy(mockPop.address, aclRegistry.address)
     ).deployed();
 
     const staking = await (
       await (
         await ethers.getContractFactory("Staking")
-      ).deploy(mockPop.address, rewardsEscrow.address)
+      ).deploy(mockPop.address, rewardsEscrow.address, aclRegistry.address)
     ).deployed();
 
     const keeperIncentive = await (
       await (
         await ethers.getContractFactory("KeeperIncentive")
-      ).deploy(mockPop.address, accounts[0].address)
+      ).deploy(mockPop.address, aclRegistry.address)
     ).deployed();
 
     const uniswapFactory = await deployContract(
@@ -168,12 +173,11 @@ export default async function deploy(ethers): Promise<void> {
         treasuryFund.address,
         insuranceFund.address,
         beneficiaryVaults.address,
+        aclRegistry.address,
         keeperIncentive.address,
         uniswapRouter.address
       )
     ).deployed();
-
-    await staking.connect(accounts[0]).init(rewardsManager.address);
 
     const randomNumberConsumer = await (
       await (
@@ -188,7 +192,7 @@ export default async function deploy(ethers): Promise<void> {
     const participationReward = await (
       await (
         await ethers.getContractFactory("ParticipationReward")
-      ).deploy(mockPop.address, accounts[0].address)
+      ).deploy(mockPop.address, aclRegistry.address)
     ).deployed();
 
     const beneficiaryGovernance = await (
@@ -200,7 +204,7 @@ export default async function deploy(ethers): Promise<void> {
         mockPop.address,
         region.address,
         participationReward.address,
-        accounts[0].address
+        aclRegistry.address
       )
     ).deployed();
 
@@ -214,9 +218,11 @@ export default async function deploy(ethers): Promise<void> {
         mockPop.address,
         region.address,
         participationReward.address,
-        accounts[0].address
+        aclRegistry.address
       )
     ).deployed();
+
+    await aclRegistry.grantRole(ethers.utils.id("DAO"), accounts[0].address);
 
     await keeperIncentive
       .connect(accounts[0])
@@ -243,6 +249,8 @@ export default async function deploy(ethers): Promise<void> {
         false
       );
 
+    await staking.connect(accounts[0]).init(rewardsManager.address);
+
     contracts = {
       beneficiaryRegistry,
       mockPop,
@@ -260,27 +268,46 @@ export default async function deploy(ethers): Promise<void> {
       region,
       participationReward,
       keeperIncentive,
+      aclRegistry,
     };
   };
 
-  const prepareKeeperIncentives = async (): Promise<void> => {
-    console.log("prepare keeper incentives...");
+  const setRoles = async (): Promise<void> => {
+    console.log("create and set roles");
+    await contracts.aclRegistry.grantRole(
+      ethers.utils.id("DAO"),
+      accounts[0].address
+    );
+    await contracts.aclRegistry.grantRole(
+      ethers.utils.id("Keeper"),
+      accounts[0].address
+    );
+    await contracts.aclRegistry.grantRole(
+      ethers.utils.id("BeneficiaryGovernance"),
+      accounts[0].address
+    );
+    await contracts.aclRegistry.grantRole(
+      ethers.utils.id("BeneficiaryGovernance"),
+      contracts.beneficiaryGovernance.address
+    );
+    await contracts.aclRegistry.grantRole(
+      ethers.utils.id("BeneficiaryGovernance"),
+      contracts.grantElections.address
+    );
+    await contracts.aclRegistry.grantRole(
+      ethers.utils.id("RewardsManager"),
+      contracts.rewardsManager.address
+    );
+  };
+
+  const addingControllerContracts = async (): Promise<void> => {
+    console.log("adding controller contracts to ParticipationReward ...");
     await contracts.keeperIncentive
       .connect(accounts[0])
       .addControllerContract(
         utils.formatBytes32String("RewardsManager"),
         contracts.rewardsManager.address
       );
-    await contracts.keeperIncentive
-      .connect(accounts[0])
-      .approveAccount(
-        utils.formatBytes32String("RewardsManager"),
-        accounts[0].address
-      );
-  };
-
-  const addingControllerContracts = async (): Promise<void> => {
-    console.log("adding controller contracts to ParticipationReward ...");
     await contracts.participationReward
       .connect(accounts[0])
       .addControllerContract(
@@ -431,12 +458,6 @@ export default async function deploy(ethers): Promise<void> {
         .connect(voter)
         .stake(utils.parseEther("1000"), 86400 * 365 * 4);
     });
-  };
-
-  const transferBeneficiaryRegistryOwnership = async (): Promise<void> => {
-    await contracts.beneficiaryRegistry.transferOwnership(
-      contracts.beneficiaryGovernance.address
-    );
   };
 
   const updateProposalSettings = async (): Promise<void> => {
@@ -996,15 +1017,14 @@ ADDR_REWARDS_ESCROW=${contracts.rewardsEscrow.address}
   await setSigners();
   await giveBeneficiariesETH();
   await deployContracts();
+  await setRoles();
   await addingControllerContracts();
-  await prepareKeeperIncentives();
   await addBeneficiariesToRegistry();
   await mintPOP();
   await approveForStaking();
   await prepareUniswap();
   await fundRewardsManager();
   await stakePOP();
-  await transferBeneficiaryRegistryOwnership();
   await updateProposalSettings();
   await addFinalizedProposalsAndBeneficiariesToRegistry();
   await initializeMonthlyElection();
