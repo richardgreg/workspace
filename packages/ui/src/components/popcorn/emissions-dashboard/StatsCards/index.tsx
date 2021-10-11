@@ -1,3 +1,4 @@
+import { InformationCircleIcon } from '@heroicons/react/outline';
 import { ArrowSmDownIcon, ArrowSmUpIcon } from '@heroicons/react/solid';
 import React from 'react';
 import { getStatCardData } from '../../../../../../emissions-dashboard/utils';
@@ -79,7 +80,7 @@ export const StatsCards: React.FC<StatsCardProps> = ({
                 data-tip
                 data-for={contractName + item.name}
                 key={item.name}
-                className="relative h-24 w-64 bg-white pt-5 px-4 pb-12 sm:pt-6 sm:px-6 shadow rounded-lg overflow-hidden"
+                className="relative h-24 w-84 bg-white pt-5 px-4 pb-12 sm:pt-6 sm:px-6 shadow rounded-lg overflow-hidden"
               >
                 <dt>
                   <div
@@ -91,9 +92,12 @@ export const StatsCards: React.FC<StatsCardProps> = ({
                       aria-hidden="true"
                     />
                   </div>
-                  <p className="ml-16 text-sm font-medium text-gray-500 truncate">
-                    {item.name}
-                  </p>
+                  <div className="flex flex-row justify-between">
+                    <p className="ml-16 text-sm font-medium text-gray-500 truncate">
+                      {item.name}
+                    </p>
+                    <InformationCircleIcon className="h-5 w-5 text-gray-500" />
+                  </div>
                 </dt>
                 <dd className="ml-16 pb-6 flex items-baseline sm:pb-7">
                   <p className="text-2xl font-semibold text-gray-900">
