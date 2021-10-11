@@ -1,17 +1,17 @@
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
+import { expect } from "chai";
+import { deployMockContract, MockContract } from "ethereum-waffle";
+import { BigNumber } from "ethers";
+import { parseEther } from "ethers/lib/utils";
+import { ethers, waffle } from "hardhat";
+import yearnRegistryABI from "../contracts/mocks/abis/yearnRegistry.json";
 import {
   BlockLockHelper,
-  PoolDefendedHelper,
+  ContractRegistry,
   MockERC20,
   MockYearnV2Vault,
   Pool,
 } from "../typechain";
-import { expect } from "chai";
-import { waffle, ethers } from "hardhat";
-import { parseEther } from "ethers/lib/utils";
-import { BigNumber } from "ethers";
-import { deployMockContract, MockContract } from "ethereum-waffle";
-import yearnRegistryABI from "../contracts/mocks/abis/yearnRegistry.json";
 
 const provider = waffle.provider;
 
@@ -22,6 +22,7 @@ interface Contracts {
   pool: Pool;
   blockLockHelper: BlockLockHelper;
   defendedHelper: PoolDefendedHelper;
+  contractRegistry: ContractRegistry;
 }
 
 const DepositorInitial = parseEther("100000");
@@ -57,12 +58,22 @@ async function deployContracts(): Promise<Contracts> {
   await mockYearnRegistry.mock.numVaults.returns(1);
   await mockYearnRegistry.mock.vaults.returns(mockYearnVault.address);
 
+  const aclRegistry = await (
+    await (await ethers.getContractFactory("ACLRegistry")).deploy()
+  ).deployed();
+
+  const contractRegistry = await (
+    await (
+      await ethers.getContractFactory("ContractRegistry")
+    ).deploy(aclRegistry.address)
+  ).deployed();
+
   const Pool = await ethers.getContractFactory("Pool");
   const pool = await (
     await Pool.deploy(
       mockToken.address,
       mockYearnRegistry.address,
-      rewardsManager.address
+      contractRegistry.address
     )
   ).deployed();
 
@@ -80,7 +91,23 @@ async function deployContracts(): Promise<Contracts> {
     await BlockLockHelper.deploy(pool.address, mockToken.address)
   ).deployed();
 
-  await pool.approveContractAccess(blockLockHelper.address);
+  await aclRegistry.grantRole(ethers.utils.id("DAO"), owner.address);
+  await aclRegistry.grantRole(
+    ethers.utils.id("ApprovedContract"),
+    defendedHelper.address
+  );
+  await aclRegistry.grantRole(
+    ethers.utils.id("ApprovedContract"),
+    blockLockHelper.address
+  );
+
+  await contractRegistry
+    .connect(owner)
+    .addContract(
+      ethers.utils.id("RewardsManager"),
+      rewardsManager.address,
+      ethers.utils.id("1")
+    );
 
   return {
     mockToken,
@@ -89,6 +116,7 @@ async function deployContracts(): Promise<Contracts> {
     pool,
     blockLockHelper,
     defendedHelper,
+    contractRegistry,
   };
 }
 
@@ -112,8 +140,8 @@ describe("Pool", function () {
       expect(await contracts.pool.token()).to.equal(
         contracts.mockToken.address
       );
-      expect(await contracts.pool.rewardsManager()).to.equal(
-        rewardsManager.address
+      expect(await contracts.pool.contractRegistry()).to.equal(
+        contracts.contractRegistry.address
       );
     });
   });
@@ -179,16 +207,22 @@ describe("Pool", function () {
 
     it("should not allow non-whitelisted contracts to deposit", async function () {
       let amount = parseEther("1000");
-      await expect(contracts.defendedHelper.deposit(amount)).to.revertedWith(
+      const PoolDefendedHelper = await ethers.getContractFactory(
+        "PoolDefendedHelper"
+      );
+      const defendedHelper = await (
+        await PoolDefendedHelper.deploy(
+          contracts.mockToken.address,
+          contracts.pool.address
+        )
+      ).deployed();
+      await expect(defendedHelper.deposit(amount)).to.revertedWith(
         "Access denied for caller"
       );
     });
 
     it("should allow whitelisted contracts to deposit", async function () {
       let amount = parseEther("1000");
-      await contracts.pool.approveContractAccess(
-        contracts.defendedHelper.address
-      );
       await contracts.defendedHelper.deposit(amount);
       expect(
         await contracts.mockYearnVault.balanceOf(contracts.pool.address)
@@ -1385,7 +1419,7 @@ describe("Pool", function () {
     it("non-owner cannot set withdrawalFee", async function () {
       expect(
         contracts.pool.connect(depositor).setWithdrawalFee(20)
-      ).to.be.revertedWith("Ownable: caller is not the owner");
+      ).to.be.revertedWith("you dont have the right role");
     });
 
     it("owner can set managementFee", async function () {
@@ -1396,7 +1430,7 @@ describe("Pool", function () {
     it("non-owner cannot set managementFee", async function () {
       expect(
         contracts.pool.connect(depositor).setManagementFee(500)
-      ).to.be.revertedWith("Ownable: caller is not the owner");
+      ).to.be.revertedWith("you dont have the right role");
     });
 
     it("owner can set performanceFee", async function () {
@@ -1407,7 +1441,7 @@ describe("Pool", function () {
     it("non-owner cannot set performanceFee", async function () {
       expect(
         contracts.pool.connect(depositor).setPerformanceFee(500)
-      ).to.be.revertedWith("Ownable: caller is not the owner");
+      ).to.be.revertedWith("you dont have the right role");
     });
 
     it("owner can pause the contract", async function () {
@@ -1420,7 +1454,7 @@ describe("Pool", function () {
     it("non-owner cannot pause the contract", async function () {
       expect(
         contracts.pool.connect(depositor).pauseContract()
-      ).to.be.revertedWith("Ownable: caller is not the owner");
+      ).to.be.revertedWith("you dont have the right role");
     });
 
     it("deposits to the pool should not be allowed when paused", async function () {

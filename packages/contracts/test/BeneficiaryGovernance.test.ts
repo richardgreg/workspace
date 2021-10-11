@@ -1,12 +1,15 @@
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { expect } from "chai";
 import { MockContract } from "ethereum-waffle";
+import { utils } from "ethers";
 import { parseEther } from "ethers/lib/utils";
 import { ethers, waffle } from "hardhat";
 import {
   BeneficiaryGovernance,
   BeneficiaryRegistry,
+  ContractRegistry,
   MockERC20,
+  ParticipationReward,
   Region,
 } from "../typechain";
 
@@ -15,6 +18,8 @@ interface Contracts {
   mockStaking: MockContract;
   mockBeneficiaryRegistry: MockContract;
   region: Region;
+  participationReward: ParticipationReward;
+  contractRegistry: ContractRegistry;
   beneficiaryGovernance: BeneficiaryGovernance;
   beneficiaryRegistry?: BeneficiaryRegistry;
 }
@@ -44,9 +49,19 @@ const ProposalStatus = {
   Failed: 4,
 };
 const ONE_DAY = 86400;
-const DEFAULT_REGION = "0x5757";
+const DEFAULT_REGION = ethers.utils.id("World");
 
 async function deployContracts(): Promise<Contracts> {
+  const aclRegistry = await (
+    await (await ethers.getContractFactory("ACLRegistry")).deploy()
+  ).deployed();
+
+  const contractRegistry = await (
+    await (
+      await ethers.getContractFactory("ContractRegistry")
+    ).deploy(aclRegistry.address)
+  ).deployed();
+
   const MockERC20 = await ethers.getContractFactory("MockERC20");
   const mockPop = await (
     await MockERC20.deploy("TestPOP", "TPOP", 18)
@@ -82,41 +97,107 @@ async function deployContracts(): Promise<Contracts> {
 
   const region = await (
     await ethers.getContractFactory("Region")
-  ).deploy(mockBeneficiaryVaults.address);
+  ).deploy(mockBeneficiaryVaults.address, aclRegistry.address);
   await region.deployed();
+
+  const participationReward = await (
+    await ethers.getContractFactory("ParticipationReward")
+  ).deploy(contractRegistry.address);
+  await participationReward.deployed();
 
   const BeneficiaryGovernance = await ethers.getContractFactory(
     "BeneficiaryGovernance"
   );
   const beneficiaryGovernance = await (
-    await BeneficiaryGovernance.deploy(
-      mockStaking.address,
-      mockBeneficiaryRegistry.address,
-      mockPop.address,
-      region.address,
-      owner.address
-    )
+    await BeneficiaryGovernance.deploy(contractRegistry.address)
   ).deployed();
+
+  await aclRegistry
+    .connect(owner)
+    .grantRole(ethers.utils.id("DAO"), owner.address);
+
+  await aclRegistry
+    .connect(owner)
+    .grantRole(
+      ethers.utils.id("BeneficiaryGovernance"),
+      beneficiaryGovernance.address
+    );
+
+  await participationReward
+    .connect(owner)
+    .addControllerContract(
+      utils.formatBytes32String("BeneficiaryGovernance"),
+      beneficiaryGovernance.address
+    );
+
+  await contractRegistry
+    .connect(owner)
+    .addContract(ethers.utils.id("POP"), mockPop.address, ethers.utils.id("1"));
+  await contractRegistry
+    .connect(owner)
+    .addContract(
+      ethers.utils.id("Staking"),
+      mockStaking.address,
+      ethers.utils.id("1")
+    );
+  await contractRegistry
+    .connect(owner)
+    .addContract(
+      ethers.utils.id("BeneficiaryRegistry"),
+      mockBeneficiaryRegistry.address,
+      ethers.utils.id("1")
+    );
+  await contractRegistry
+    .connect(owner)
+    .addContract(
+      ethers.utils.id("BeneficiaryVaults"),
+      mockBeneficiaryVaults.address,
+      ethers.utils.id("1")
+    );
+  await contractRegistry
+    .connect(owner)
+    .addContract(
+      ethers.utils.id("Region"),
+      region.address,
+      ethers.utils.id("1")
+    );
+  await contractRegistry
+    .connect(owner)
+    .addContract(
+      ethers.utils.id("ParticipationReward"),
+      participationReward.address,
+      ethers.utils.id("1")
+    );
 
   await mockPop
     .connect(owner)
-    .approve(beneficiaryGovernance.address, parseEther("100000"));
-  await beneficiaryGovernance
-    .connect(owner)
-    .contributeReward(parseEther("2000"));
+    .approve(participationReward.address, parseEther("100000"));
+  await participationReward.connect(owner).contributeReward(parseEther("2000"));
+
+  await mockPop
+    .connect(proposer1)
+    .approve(beneficiaryGovernance.address, parseEther("3000"));
+  await mockPop
+    .connect(proposer2)
+    .approve(beneficiaryGovernance.address, parseEther("3000"));
+  await mockPop
+    .connect(proposer3)
+    .approve(beneficiaryGovernance.address, parseEther("3000"));
 
   return {
     mockPop,
     mockStaking,
     mockBeneficiaryRegistry,
     region,
+    participationReward,
+    contractRegistry,
     beneficiaryGovernance,
   };
 }
 
 describe("BeneficiaryGovernance", function () {
   const PROPOSALID = 0;
-  before(async function () {
+  beforeEach(async function () {
     [
       owner,
       governance,
@@ -161,10 +242,6 @@ describe("BeneficiaryGovernance", function () {
       await contracts.mockBeneficiaryRegistry.mock.beneficiaryExists.returns(
         false
       );
-
-      await contracts.mockPop
-        .connect(proposer2)
-        .approve(contracts.beneficiaryGovernance.address, parseEther("3000"));
       const currentBlock = await waffle.provider.getBlock("latest");
 
       const result = await contracts.beneficiaryGovernance
@@ -185,7 +262,7 @@ describe("BeneficiaryGovernance", function () {
           ethers.utils.formatBytes32String("testCid")
         );
       expect(result)
-        .to.emit(contracts.beneficiaryGovernance, "VaultInitialized")
+        .to.emit(contracts.participationReward, "VaultInitialized")
         .withArgs(
           ethers.utils.solidityKeccak256(
             ["uint256", "uint256"],
@@ -212,9 +289,6 @@ describe("BeneficiaryGovernance", function () {
       ).to.equal(1);
     });
     it("should prevent to create proposal with not enough bond", async function () {
-      await contracts.mockPop
-        .connect(proposer1)
-        .approve(contracts.beneficiaryGovernance.address, parseEther("1500"));
       await expect(
         contracts.beneficiaryGovernance
           .connect(proposer1)
@@ -227,12 +301,17 @@ describe("BeneficiaryGovernance", function () {
       ).to.be.revertedWith("proposal bond is not enough");
     });
     it("should prevent to create a BNP proposal for a pending beneficiary proposal", async function () {
-      await contracts.mockPop
-        .connect(proposer3)
-        .approve(contracts.beneficiaryGovernance.address, parseEther("3000"));
       await contracts.mockBeneficiaryRegistry.mock.beneficiaryExists.returns(
         false
       );
+      await contracts.beneficiaryGovernance
+        .connect(proposer2)
+        .createProposal(
+          beneficiary.address,
+          DEFAULT_REGION,
+          ethers.utils.formatBytes32String("testCid"),
+          ProposalType.BNP
+        );
 
       await expect(
         contracts.beneficiaryGovernance
@@ -248,9 +327,9 @@ describe("BeneficiaryGovernance", function () {
       );
     });
     it("should prevent to create a BTP proposal for an address which hasn't been registered before", async function () {
-      await contracts.mockPop
-        .connect(proposer3)
-        .approve(contracts.beneficiaryGovernance.address, parseEther("3000"));
+      await contracts.mockBeneficiaryRegistry.mock.beneficiaryExists.returns(
+        false
+      );
       await expect(
         contracts.beneficiaryGovernance
           .connect(proposer3)
@@ -266,9 +345,6 @@ describe("BeneficiaryGovernance", function () {
       await contracts.mockBeneficiaryRegistry.mock.beneficiaryExists.returns(
         true
       );
-      await contracts.mockPop
-        .connect(proposer3)
-        .approve(contracts.beneficiaryGovernance.address, parseEther("3000"));
       await expect(
         contracts.beneficiaryGovernance
           .connect(proposer3)
@@ -304,9 +380,12 @@ describe("BeneficiaryGovernance", function () {
       );
     });
     it("should not initialize a vault when the needed budget is larger than rewardBudget", async function () {
-      await contracts.beneficiaryGovernance
+      await contracts.participationReward
         .connect(owner)
-        .setRewardsBudget(parseEther("3000"));
+        .setRewardsBudget(
+          utils.formatBytes32String("BeneficiaryGovernance"),
+          parseEther("3000")
+        );
       await contracts.mockBeneficiaryRegistry.mock.beneficiaryExists.returns(
         false
       );
@@ -327,51 +406,22 @@ describe("BeneficiaryGovernance", function () {
         "ProposalCreated"
       );
       expect(result).to.not.emit(
-        contracts.beneficiaryGovernance,
+        contracts.participationReward,
         "VaultInitialized"
       );
     });
   });
   describe("voting", function () {
     beforeEach(async function () {
-      const Staking = await ethers.getContractFactory("Staking");
-      contracts.mockStaking = await waffle.deployMockContract(
-        owner,
-        Staking.interface.format() as any
-      );
-
-      const BeneficiaryRegistry = await ethers.getContractFactory(
-        "BeneficiaryRegistry"
-      );
-      contracts.mockBeneficiaryRegistry = await waffle.deployMockContract(
-        owner,
-        BeneficiaryRegistry.interface.format() as any
-      );
-
-      const MockERC20 = await ethers.getContractFactory("MockERC20");
-      contracts.mockPop = await MockERC20.deploy("TestPOP", "TPOP", 18);
-      await contracts.mockPop.mint(beneficiary.address, parseEther("50"));
-      await contracts.mockPop.mint(proposer1.address, parseEther("2000"));
-      await contracts.mockPop.mint(proposer2.address, parseEther("2000"));
-      await contracts.mockPop.mint(voter1.address, parseEther("50"));
-      const BeneficiaryNomination = await ethers.getContractFactory(
-        "BeneficiaryGovernance"
-      );
-      contracts.beneficiaryGovernance = await BeneficiaryNomination.deploy(
-        contracts.mockStaking.address,
-        contracts.mockBeneficiaryRegistry.address,
-        contracts.mockPop.address,
-        contracts.region.address,
-        owner.address
-      );
-      await contracts.beneficiaryGovernance.deployed();
-      // create a BNP proposal
       await contracts.mockBeneficiaryRegistry.mock.beneficiaryExists.returns(
         false
       );
       await contracts.mockPop
-        .connect(proposer1)
-        .approve(contracts.beneficiaryGovernance.address, parseEther("2000"));
+        .connect(owner)
+        .mint(proposer1.address, parseEther("2000"));
+      await contracts.mockPop
+        .connect(owner)
+        .mint(proposer2.address, parseEther("2000"));
       await contracts.beneficiaryGovernance
         .connect(proposer1)
         .createProposal(
@@ -384,9 +434,6 @@ describe("BeneficiaryGovernance", function () {
       await contracts.mockBeneficiaryRegistry.mock.beneficiaryExists.returns(
         true
       );
-      await contracts.mockPop
-        .connect(proposer2)
-        .approve(contracts.beneficiaryGovernance.address, parseEther("2000"));
       await contracts.beneficiaryGovernance
         .connect(proposer2)
         .createProposal(
@@ -590,46 +637,23 @@ describe("BeneficiaryGovernance", function () {
   });
   describe("finalize", function () {
     beforeEach(async function () {
-      const Staking = await ethers.getContractFactory("Staking");
-      contracts.mockStaking = await waffle.deployMockContract(
-        governance,
-        Staking.interface.format() as any
-      );
-
-      const MockERC20 = await ethers.getContractFactory("MockERC20");
-      contracts.mockPop = await MockERC20.deploy("TestPOP", "TPOP", 18);
-      await contracts.mockPop.mint(beneficiary.address, parseEther("50"));
-      await contracts.mockPop.mint(governance.address, parseEther("50"));
-      await contracts.mockPop.mint(beneficiary2.address, parseEther("50"));
-      await contracts.mockPop.mint(proposer1.address, parseEther("2000"));
-      await contracts.mockPop.mint(proposer2.address, parseEther("2000"));
+      await contracts.mockPop
+        .connect(owner)
+        .mint(proposer1.address, parseEther("2000"));
 
       const BeneficiaryRegistry = await ethers.getContractFactory(
         "BeneficiaryRegistry"
       );
       contracts.beneficiaryRegistry = await (
-        await BeneficiaryRegistry.deploy(contracts.region.address)
+        await BeneficiaryRegistry.deploy(contracts.contractRegistry.address)
       ).deployed();
 
-      const BeneficiaryNomination = await ethers.getContractFactory(
-        "BeneficiaryGovernance"
+      await contracts.contractRegistry.updateContract(
+        ethers.utils.id("BeneficiaryRegistry"),
+        contracts.beneficiaryRegistry.address,
+        ethers.utils.id("1")
       );
-      contracts.beneficiaryGovernance = await (
-        await BeneficiaryNomination.deploy(
-          contracts.mockStaking.address,
-          contracts.beneficiaryRegistry.address,
-          contracts.mockPop.address,
-          contracts.region.address,
-          governance.address
-        )
-      ).deployed();
 
-      // pass the Beneficiary governance contract address as the governance address for the beneficiary registry contract
-
-      // create a BNP proposal
-      await contracts.mockPop
-        .connect(proposer1)
-        .approve(contracts.beneficiaryGovernance.address, parseEther("2000"));
       await contracts.beneficiaryGovernance
         .connect(proposer1)
         .createProposal(
@@ -734,10 +758,6 @@ describe("BeneficiaryGovernance", function () {
       ).to.be.revertedWith("Finalization not allowed");
     });
     it("should register the beneficiary after a successful BNP voting", async function () {
-      await contracts.beneficiaryRegistry.transferOwnership(
-        contracts.beneficiaryGovernance.address
-      );
-
       //three yes votes
       await contracts.mockStaking.mock.getVoiceCredits.returns(20);
       await contracts.beneficiaryGovernance
@@ -777,10 +797,6 @@ describe("BeneficiaryGovernance", function () {
       ).to.equal(true);
     });
     it("should remove beneficiary after a successful BTP voting", async function () {
-      await contracts.beneficiaryRegistry.transferOwnership(
-        contracts.beneficiaryGovernance.address
-      );
-      // register beneficiary:
       //three yes votes
       await contracts.mockStaking.mock.getVoiceCredits.returns(80);
       await contracts.beneficiaryGovernance
@@ -863,46 +879,23 @@ describe("BeneficiaryGovernance", function () {
 
   describe("claimBond", function () {
     beforeEach(async function () {
-      const Staking = await ethers.getContractFactory("Staking");
-      contracts.mockStaking = await waffle.deployMockContract(
-        governance,
-        Staking.interface.format() as any
-      );
-
-      const MockERC20 = await ethers.getContractFactory("MockERC20");
-      contracts.mockPop = await MockERC20.deploy("TestPOP", "TPOP", 18);
-      await contracts.mockPop.mint(beneficiary.address, parseEther("50"));
-      await contracts.mockPop.mint(governance.address, parseEther("50"));
-      await contracts.mockPop.mint(beneficiary2.address, parseEther("50"));
-      await contracts.mockPop.mint(proposer1.address, parseEther("2000"));
-      await contracts.mockPop.mint(proposer2.address, parseEther("2000"));
+      await contracts.mockPop
+        .connect(owner)
+        .mint(proposer1.address, parseEther("2000"));
 
       const BeneficiaryRegistry = await ethers.getContractFactory(
         "BeneficiaryRegistry"
       );
       contracts.beneficiaryRegistry = await (
-        await BeneficiaryRegistry.deploy(contracts.region.address)
+        await BeneficiaryRegistry.deploy(contracts.contractRegistry.address)
       ).deployed();
 
-      const BeneficiaryNomination = await ethers.getContractFactory(
-        "BeneficiaryGovernance"
+      await contracts.contractRegistry.updateContract(
+        ethers.utils.id("BeneficiaryRegistry"),
+        contracts.beneficiaryRegistry.address,
+        ethers.utils.id("1")
       );
-      contracts.beneficiaryGovernance = await (
-        await BeneficiaryNomination.deploy(
-          contracts.mockStaking.address,
-          contracts.beneficiaryRegistry.address,
-          contracts.mockPop.address,
-          contracts.region.address,
-          governance.address
-        )
-      ).deployed();
-
-      // pass the Beneficiary governance contract address as the governance address for the beneficiary registry contract
-
       // create a BNP proposal
-      await contracts.mockPop
-        .connect(proposer1)
-        .approve(contracts.beneficiaryGovernance.address, parseEther("2000"));
       await contracts.beneficiaryGovernance
         .connect(proposer1)
         .createProposal(
@@ -947,10 +940,6 @@ describe("BeneficiaryGovernance", function () {
       ).to.be.revertedWith("Proposal failed or is processing!");
     });
     it("should be able to claim bond after a proposal passed.", async function () {
-      await contracts.beneficiaryRegistry.transferOwnership(
-        contracts.beneficiaryGovernance.address
-      );
-
       //three yes votes
       await contracts.mockStaking.mock.getVoiceCredits.returns(20);
       await contracts.beneficiaryGovernance
@@ -996,7 +985,7 @@ describe("BeneficiaryGovernance", function () {
 
       expect(
         await contracts.mockPop.connect(proposer1).balanceOf(proposer1.address)
-      ).to.equal(parseEther("2000"));
+      ).to.equal(parseEther("1500").add(amount));
     });
   });
 });

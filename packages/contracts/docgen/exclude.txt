@@ -1,5 +1,5 @@
 mocks
-lib
-Interfaces
+externals
 test_helpers
-pool
+core/interfaces
+core/defi/pool
