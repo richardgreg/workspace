@@ -6,6 +6,7 @@ import "./Governed.sol";
 
 contract KeeperIncentive is Governed {
   using SafeMath for uint256;
+  using SafeERC20 for IERC20;
 
   struct Incentive {
     uint256 reward; //pop reward for calling the function
