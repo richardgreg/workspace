@@ -4,14 +4,15 @@ import React from 'react';
 import { ContractContainer } from '../../ContractContainer';
 import { DateRangePicker } from '../../DateRangePicker';
 import { Divider } from '../../Divider';
-import {
-  getDummyTxnsCurrentPeriod,
-  getDummyTxnsPreviousPeriod,
-} from '../../dummyTxns';
+import { getDummyTxns } from '../../dummyTxns';
 import { NavBar } from '../../NavBar';
 
 const updateDates = (startDate: Date, endDate: Date): void => {};
 const EmissionsDashboardPage = () => {
+  const startDate = new Date(DateTime.now().minus({ months: 1 }).toISO());
+  const previousPeriodStartDate = new Date(
+    DateTime.now().minus({ months: 2 }).toISO(),
+  );
   return (
     <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 ">
       <DateRangePicker
@@ -21,10 +22,11 @@ const EmissionsDashboardPage = () => {
       />
       <ContractContainer
         readyState={'done'}
-        transactionsCurrentPeriod={getDummyTxnsCurrentPeriod()}
-        transactionsPreviousPeriod={getDummyTxnsPreviousPeriod()}
+        transactionsCurrentPeriod={getDummyTxns(startDate)}
+        transactionsPreviousPeriod={getDummyTxns(previousPeriodStartDate)}
         endDate={new Date()}
-        startDate={new Date(DateTime.now().minus({ months: 1 }).toISO())}
+        startDate={startDate}
+        previousPeriodStartDate={previousPeriodStartDate}
         isTotal={true}
       />
       <Divider />
@@ -32,11 +34,12 @@ const EmissionsDashboardPage = () => {
         return (
           <ContractContainer
             readyState={'done'}
-            transactionsCurrentPeriod={getDummyTxnsCurrentPeriod()}
-            transactionsPreviousPeriod={getDummyTxnsPreviousPeriod()}
-            contract={{ name: 'POP', address: '0x' }}
+            transactionsCurrentPeriod={getDummyTxns(startDate)}
+            transactionsPreviousPeriod={getDummyTxns(previousPeriodStartDate)}
             endDate={new Date()}
-            startDate={new Date(DateTime.now().minus({ months: 1 }).toISO())}
+            startDate={startDate}
+            previousPeriodStartDate={previousPeriodStartDate}
+            contract={{ name: 'POP', address: '0x' }}
           />
         );
       })}

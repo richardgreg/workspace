@@ -54,6 +54,9 @@ Primary.args = {
     new Date(DateTime.now().minus({ months: 2 }).toISO()),
   ),
   startDate: new Date(DateTime.now().minus({ months: 1 }).toISO()),
+  previousPeriodStartDate: new Date(
+    DateTime.now().minus({ months: 2 }).toISO(),
+  ),
   endDate: new Date(),
   contract: { name: 'POP', address: '0x' },
 };
@@ -67,6 +70,9 @@ Loading.args = {
     new Date(DateTime.now().minus({ months: 2 }).toISO()),
   ),
   startDate: new Date(DateTime.now().minus({ months: 1 }).toISO()),
+  previousPeriodStartDate: new Date(
+    DateTime.now().minus({ months: 2 }).toISO(),
+  ),
   endDate: new Date(),
   contract: { name: 'POP', address: '0x' },
 };
