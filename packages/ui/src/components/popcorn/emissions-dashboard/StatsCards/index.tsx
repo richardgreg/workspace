@@ -59,6 +59,7 @@ export const StatsCards: React.FC<StatsCardProps> = ({
   endDate,
   contractName,
 }): JSX.Element => {
+  console.log({ transactionsCurrentPeriod });
   const stats = getStatCardData(
     transactionsCurrentPeriod,
     transactionsPreviousPeriod,

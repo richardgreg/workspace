@@ -1,12 +1,10 @@
 import { CloudIcon, TrendingUpIcon } from '@heroicons/react/outline';
 import { Meta, Story } from '@storybook/react/types-6-0';
+import { DateTime } from 'luxon';
 import React from 'react';
 import { Contract } from '../../../../interfaces/emissions-dashboard';
 import { EmissionSummaryStats } from '../../../../interfaces/index';
-import {
-  getDummyTxnsCurrentPeriod,
-  getDummyTxnsPreviousPeriod,
-} from '../dummyTxns';
+import { getDummyTxns } from '../dummyTxns';
 import { ContractContainer } from './index';
 
 const statCardData: EmissionSummaryStats[] = [
@@ -49,18 +47,26 @@ const Template: Story = (args) => <ContractContainer {...args} />;
 export const Primary = Template.bind({});
 Primary.args = {
   readyState: 'done',
-  transactionsCurrentPeriod: getDummyTxnsCurrentPeriod(),
-  transactionsPreviousPeriod: getDummyTxnsPreviousPeriod(),
-  startDate: new Date('2021/08/01'),
-  endDate: new Date('2021/08/02'),
+  transactionsCurrentPeriod: getDummyTxns(
+    new Date(DateTime.now().minus({ months: 1 }).toISO()),
+  ),
+  transactionsPreviousPeriod: getDummyTxns(
+    new Date(DateTime.now().minus({ months: 2 }).toISO()),
+  ),
+  startDate: new Date(DateTime.now().minus({ months: 1 }).toISO()),
+  endDate: new Date(),
   contract: { name: 'POP', address: '0x' },
 };
 export const Loading = Template.bind({});
 Loading.args = {
   readyState: 'loading',
-  transactionsCurrentPeriod: getDummyTxnsCurrentPeriod(),
-  transactionsPreviousPeriod: getDummyTxnsPreviousPeriod(),
-  startDate: new Date('2021/08/01'),
-  endDate: new Date('2021/08/02'),
+  transactionsCurrentPeriod: getDummyTxns(
+    new Date(DateTime.now().minus({ months: 1 }).toISO()),
+  ),
+  transactionsPreviousPeriod: getDummyTxns(
+    new Date(DateTime.now().minus({ months: 2 }).toISO()),
+  ),
+  startDate: new Date(DateTime.now().minus({ months: 1 }).toISO()),
+  endDate: new Date(),
   contract: { name: 'POP', address: '0x' },
 };

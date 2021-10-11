@@ -1,11 +1,13 @@
 import { Transaction } from '../../../interfaces/emissions-dashboard';
 
-export const getDummyTxnsCurrentPeriod = (): Transaction[] => {
+export const getDummyTxns = (start: Date): Transaction[] => {
+  start.setDate(start.getDate() + 3);
   return [
     {
       blockNumber: '12937430',
       timeStamp: '1627790907',
-      hash: '0xe2fa4c8a02f6ff8cc7f83461a221ebbdbcd1e060f35babc0bc24ef5613414bbc',
+      hash:
+        '0xe2fa4c8a02f6ff8cc7f83461a221ebbdbcd1e060f35babc0bc24ef5613414bbc',
       nonce: '6263',
       blockHash:
         '0x2380d19cb16f8581c60c3e1956ba5001bf68807e54a3362aca4acc94587b8929',
@@ -24,12 +26,13 @@ export const getDummyTxnsCurrentPeriod = (): Transaction[] => {
       gasUsed: '60355',
       confirmations: '293083',
       emissions: 14.010950870345,
-      date: new Date('2021-08-01T04:08:27.000Z'),
+      date: start,
     },
     {
       blockNumber: '12942411',
       timeStamp: '1627858521',
-      hash: '0x8d676f1a585a29fa66c5c907d8dde43df9ecdff6e4368f20590d034b9ce5597a',
+      hash:
+        '0x8d676f1a585a29fa66c5c907d8dde43df9ecdff6e4368f20590d034b9ce5597a',
       nonce: '1302',
       blockHash:
         '0x59807a1ac05f4ce7ab73cbb2abf4169a2c9379084da0d5ffb2a1cb7c70065f4b',
@@ -48,12 +51,13 @@ export const getDummyTxnsCurrentPeriod = (): Transaction[] => {
       gasUsed: String(77455),
       confirmations: '288102',
       emissions: 18.067176304135,
-      date: new Date('2021-08-01T22:55:21.000Z'),
+      date: start,
     },
     {
       blockNumber: '12936375',
       timeStamp: '1627776487',
-      hash: '0x60e79121f85637ea57005bc5e91c147e45f7928bedda384f4e377cf45fe0c7e4',
+      hash:
+        '0x60e79121f85637ea57005bc5e91c147e45f7928bedda384f4e377cf45fe0c7e4',
       nonce: '1168',
       blockHash:
         '0x66056942a521049454064c1f677a4486c3e90df75bf7e13614b6fda699197bf7',
@@ -72,12 +76,13 @@ export const getDummyTxnsCurrentPeriod = (): Transaction[] => {
       gasUsed: '60355',
       confirmations: '294138',
       emissions: 14.010950870345,
-      date: new Date('2021-08-01T00:08:07.000Z'),
+      date: start,
     },
     {
       blockNumber: '12940940',
       timeStamp: '1627838515',
-      hash: '0x160be572e12c54a6a167dfa1d3eb2dce98ae70446d2a1ec99b0c4de08bb5d74f',
+      hash:
+        '0x160be572e12c54a6a167dfa1d3eb2dce98ae70446d2a1ec99b0c4de08bb5d74f',
       nonce: '140',
       blockHash:
         '0xf830ae9cfbee1bbcf2832884c1abb9666fefd2969273a983b5a057c44ee2adcd',
@@ -96,12 +101,13 @@ export const getDummyTxnsCurrentPeriod = (): Transaction[] => {
       gasUsed: '87542',
       confirmations: '289573',
       emissions: 20.420072919974,
-      date: new Date('2021-08-01T17:21:55.000Z'),
+      date: start,
     },
     {
       blockNumber: '12940933',
       timeStamp: '1627838427',
-      hash: '0x0ef44929b3862e7b55e7ea004f924339d71668303f07e8037aa9c6e101238a78',
+      hash:
+        '0x0ef44929b3862e7b55e7ea004f924339d71668303f07e8037aa9c6e101238a78',
       nonce: '139',
       blockHash:
         '0x3f79d522e1c1b9bc80ca7c4aabf8ad7987b54128f93604304c35c53dcfa7f461',
@@ -120,12 +126,13 @@ export const getDummyTxnsCurrentPeriod = (): Transaction[] => {
       gasUsed: '49050',
       confirmations: '289580',
       emissions: 11.44141756785,
-      date: new Date('2021-08-01T17:20:27.000Z'),
+      date: start,
     },
     {
       blockNumber: '12940218',
       timeStamp: '1627828619',
-      hash: '0xe7c1b4f555e4575b9c86e060ad14cbe0988344a835e0fd21fa780d08e64159c6',
+      hash:
+        '0xe7c1b4f555e4575b9c86e060ad14cbe0988344a835e0fd21fa780d08e64159c6',
       nonce: '197',
       blockHash:
         '0x8108f71d60beb0828f5c20b4d938018e435a0610612ace02da7eff9735bab598',
@@ -144,12 +151,13 @@ export const getDummyTxnsCurrentPeriod = (): Transaction[] => {
       gasUsed: '87542',
       confirmations: '290295',
       emissions: 20.420072919974,
-      date: new Date('2021-08-01T14:36:59.000Z'),
+      date: start,
     },
     {
       blockNumber: '12938036',
       timeStamp: '1627799375',
-      hash: '0x6f473d2e71403cee69d44998bb79f2a1b713e367085cc0e062f83d6bf596e8a4',
+      hash:
+        '0x6f473d2e71403cee69d44998bb79f2a1b713e367085cc0e062f83d6bf596e8a4',
       nonce: '49',
       blockHash:
         '0x276c90f52e3e2c40b778e4e5c16ab2a4cf028df28832af7af4ef83a0b2b4ada5',
@@ -168,12 +176,13 @@ export const getDummyTxnsCurrentPeriod = (): Transaction[] => {
       gasUsed: '49026',
       confirmations: '292477',
       emissions: 11.381010311813998,
-      date: new Date('2021-08-01T06:29:35.000Z'),
+      date: start,
     },
     {
       blockNumber: '12937048',
       timeStamp: '1627785557',
-      hash: '0x003c81b2fa0ac89ba65cc14fa5b9fbb9b76c19fba8ed665b470abc303a7dc9d3',
+      hash:
+        '0x003c81b2fa0ac89ba65cc14fa5b9fbb9b76c19fba8ed665b470abc303a7dc9d3',
       nonce: '517',
       blockHash:
         '0x3535f1081601ce0e3498cdab40f7cd5773728ab840685449d7d03ed12c9ecc1f',
@@ -192,204 +201,7 @@ export const getDummyTxnsCurrentPeriod = (): Transaction[] => {
       gasUsed: '664638',
       confirmations: '293465',
       emissions: 154.290619908282,
-      date: new Date('2021-08-01T02:39:17.000Z'),
-    },
-  ];
-};
-
-export const getDummyTxnsPreviousPeriod = (): Transaction[] => {
-  return [
-    {
-      blockNumber: '12937430',
-      timeStamp: '1627790907',
-      hash: '0xe2fa4c8a02f6ff8cc7f83461a221ebbdbcd1e060f35babc0bc24ef5613414bbc',
-      nonce: '6263',
-      blockHash:
-        '0x2380d19cb16f8581c60c3e1956ba5001bf68807e54a3362aca4acc94587b8929',
-      transactionIndex: '20',
-      from: '0xb19be18a7d279432f607676acd34c62ff932daba',
-      to: '0x3b96d491f067912d18563d56858ba7d6ec67a6fa',
-      value: '0',
-      gas: '147870',
-      gasPrice: '31003100000',
-      isError: '0',
-      txreceipt_status: '1',
-      input:
-        '0xb6b55f2500000000000000000000000000000000000000000000072f4d337e55848176da',
-      contractAddress: '',
-      cumulativeGasUsed: '5735235',
-      gasUsed: '60355',
-      confirmations: '293083',
-      emissions: 14.010950870345,
-      date: new Date('2021-08-01T04:08:27.000Z'),
-    },
-    {
-      blockNumber: '12942411',
-      timeStamp: '1627858521',
-      hash: '0x8d676f1a585a29fa66c5c907d8dde43df9ecdff6e4368f20590d034b9ce5597a',
-      nonce: '1302',
-      blockHash:
-        '0x59807a1ac05f4ce7ab73cbb2abf4169a2c9379084da0d5ffb2a1cb7c70065f4b',
-      transactionIndex: '104',
-      from: '0x5815d8951967e202d9b5380fed6c9f0a7fc71c5c',
-      to: '0x3b96d491f067912d18563d56858ba7d6ec67a6fa',
-      value: '0',
-      gas: '173926',
-      gasPrice: String(46000000000),
-      isError: '0',
-      txreceipt_status: '1',
-      input:
-        '0xb6b55f2500000000000000000000000000000000000000000000094b7289038bb143e629',
-      contractAddress: '',
-      cumulativeGasUsed: '3696794',
-      gasUsed: String(77455),
-      confirmations: '288102',
-      emissions: 18.067176304135,
-      date: new Date('2021-08-01T22:55:21.000Z'),
-    },
-    {
-      blockNumber: '12936375',
-      timeStamp: '1627776487',
-      hash: '0x60e79121f85637ea57005bc5e91c147e45f7928bedda384f4e377cf45fe0c7e4',
-      nonce: '1168',
-      blockHash:
-        '0x66056942a521049454064c1f677a4486c3e90df75bf7e13614b6fda699197bf7',
-      transactionIndex: '138',
-      from: '0x724f321c4efed5e3c7cca40168610c258c82d02f',
-      to: '0x3b96d491f067912d18563d56858ba7d6ec67a6fa',
-      value: '0',
-      gas: '147870',
-      gasPrice: '27000000000',
-      isError: '0',
-      txreceipt_status: '1',
-      input:
-        '0xb6b55f25000000000000000000000000000000000000000000001497509f91d6439098ab',
-      contractAddress: '',
-      cumulativeGasUsed: '11843885',
-      gasUsed: '60355',
-      confirmations: '294138',
-      emissions: 14.010950870345,
-      date: new Date('2021-08-01T00:08:07.000Z'),
-    },
-    {
-      blockNumber: '12940940',
-      timeStamp: '1627838515',
-      hash: '0x160be572e12c54a6a167dfa1d3eb2dce98ae70446d2a1ec99b0c4de08bb5d74f',
-      nonce: '140',
-      blockHash:
-        '0xf830ae9cfbee1bbcf2832884c1abb9666fefd2969273a983b5a057c44ee2adcd',
-      transactionIndex: '198',
-      from: '0x9fab4eb78a085d1230c1b889853450efb090cbb6',
-      to: '0x3b96d491f067912d18563d56858ba7d6ec67a6fa',
-      value: '0',
-      gas: '166440',
-      gasPrice: '36000001459',
-      isError: '0',
-      txreceipt_status: '1',
-      input:
-        '0x2e1a7d4d000000000000000000000000000000000000000000000630a582a7e64e1aadca',
-      contractAddress: '',
-      cumulativeGasUsed: '13753270',
-      gasUsed: '87542',
-      confirmations: '289573',
-      emissions: 20.420072919974,
-      date: new Date('2021-08-01T17:21:55.000Z'),
-    },
-    {
-      blockNumber: '12940933',
-      timeStamp: '1627838427',
-      hash: '0x0ef44929b3862e7b55e7ea004f924339d71668303f07e8037aa9c6e101238a78',
-      nonce: '139',
-      blockHash:
-        '0x3f79d522e1c1b9bc80ca7c4aabf8ad7987b54128f93604304c35c53dcfa7f461',
-      transactionIndex: '114',
-      from: '0x9fab4eb78a085d1230c1b889853450efb090cbb6',
-      to: '0x3b96d491f067912d18563d56858ba7d6ec67a6fa',
-      value: '0',
-      gas: '74107',
-      gasPrice: '27000000000',
-      isError: '0',
-      txreceipt_status: '1',
-      input:
-        '0x095ea7b3000000000000000000000000d6b88257e91e4e4d4e990b3a858c849ef2dfde8c000000000000000000000000000000000000000000004619201c6b507cc75822',
-      contractAddress: '',
-      cumulativeGasUsed: '11532859',
-      gasUsed: '49050',
-      confirmations: '289580',
-      emissions: 11.44141756785,
-      date: new Date('2021-08-01T17:20:27.000Z'),
-    },
-    {
-      blockNumber: '12940218',
-      timeStamp: '1627828619',
-      hash: '0xe7c1b4f555e4575b9c86e060ad14cbe0988344a835e0fd21fa780d08e64159c6',
-      nonce: '197',
-      blockHash:
-        '0x8108f71d60beb0828f5c20b4d938018e435a0610612ace02da7eff9735bab598',
-      transactionIndex: '11',
-      from: '0x8903a20f78ca08cfa55346c8ff596c33f4208f3f',
-      to: '0x3b96d491f067912d18563d56858ba7d6ec67a6fa',
-      value: '0',
-      gas: '166440',
-      gasPrice: '26000000000',
-      isError: '0',
-      txreceipt_status: '1',
-      input:
-        '0x2e1a7d4d00000000000000000000000000000000000000000000023441bd8b7cff1a6c40',
-      contractAddress: '',
-      cumulativeGasUsed: '552845',
-      gasUsed: '87542',
-      confirmations: '290295',
-      emissions: 20.420072919974,
-      date: new Date('2021-08-01T14:36:59.000Z'),
-    },
-    {
-      blockNumber: '12938036',
-      timeStamp: '1627799375',
-      hash: '0x6f473d2e71403cee69d44998bb79f2a1b713e367085cc0e062f83d6bf596e8a4',
-      nonce: '49',
-      blockHash:
-        '0x276c90f52e3e2c40b778e4e5c16ab2a4cf028df28832af7af4ef83a0b2b4ada5',
-      transactionIndex: '70',
-      from: '0x011853d64dc3aedfe934d61972ab525e4f2552ff',
-      to: '0xb4ada607b9d6b2c9ee07a275e9616b84ac560139',
-      value: '0',
-      gas: '74107',
-      gasPrice: '25000000000',
-      isError: '0',
-      txreceipt_status: '1',
-      input:
-        '0x095ea7b3000000000000000000000000d6b88257e91e4e4d4e990b3a858c849ef2dfde8c00000000000000000000000000000000000000000000065a4da25d3016c00000',
-      contractAddress: '',
-      cumulativeGasUsed: '6021412',
-      gasUsed: '49026',
-      confirmations: '292477',
-      emissions: 11.381010311813998,
-      date: new Date('2021-08-01T06:29:35.000Z'),
-    },
-    {
-      blockNumber: '12937048',
-      timeStamp: '1627785557',
-      hash: '0x003c81b2fa0ac89ba65cc14fa5b9fbb9b76c19fba8ed665b470abc303a7dc9d3',
-      nonce: '517',
-      blockHash:
-        '0x3535f1081601ce0e3498cdab40f7cd5773728ab840685449d7d03ed12c9ecc1f',
-      transactionIndex: '126',
-      from: '0xa083afa219bb7d21c5a72cacaadb99cc1da6dd98',
-      to: '0xb4ada607b9d6b2c9ee07a275e9616b84ac560139',
-      value: '0',
-      gas: '1243158',
-      gasPrice: '23000000000',
-      isError: '0',
-      txreceipt_status: '1',
-      input:
-        '0x2e1a7d4d00000000000000000000000000000000000000000000227fe1469d2cca24112f',
-      contractAddress: '',
-      cumulativeGasUsed: '12053445',
-      gasUsed: '664638',
-      confirmations: '293465',
-      emissions: 154.290619908282,
-      date: new Date('2021-08-01T02:39:17.000Z'),
+      date: start,
     },
   ];
 };
