@@ -65,7 +65,7 @@ contract RewardsManager is IRewardsManager, Owned, ReentrancyGuard {
   /* ========== CONSTRUCTOR ========== */
 
   constructor(
-    IERC20 pop_,
+    ERC20 pop_,
     IStaking staking_,
     ITreasury treasury_,
     IInsurance insurance_,
