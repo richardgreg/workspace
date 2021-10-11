@@ -264,7 +264,7 @@ const IndexPage = () => {
           <p className="text-2xl font-landing text-gray-500">
             Put your cryptoassets to work
           </p>
-          <div className="w-full flex flex-wrap xl:flex-row justify-between mt-16">
+          <div className="w-full flex flex-wrap flex-row justify-between mt-16">
             <div className="w-1/2 xl:w-1/4 flex-grow-0 flex-shrink-0 mb-12 xl:mb-0">
               <div className="w-11/12 h-104 rounded-xl shadow-2xl flex flex-col items-center">
                 <div className="w-36 h-36 rounded-full bg-primary mt-12 flex items-center">
@@ -735,7 +735,7 @@ const IndexPage = () => {
             Put your cryptoassets to work
           </p>
           <div className="w-11/12 mx-auto justify-between flex flex-col space-y-12 mt-12">
-            <div className="flex-grow-0 flex-shrink-0 h-104 rounded-xl shadow-2xl flex flex-col items-center">
+            <div className="flex-grow-0 flex-shrink-0 md:h-96 rounded-xl shadow-2xl flex flex-col items-center">
               <div className="w-36 h-36 rounded-full bg-primary mt-12 flex items-center">
                 <img
                   src="/images/metamaskCat.svg"
@@ -744,12 +744,12 @@ const IndexPage = () => {
                 ></img>
               </div>
               <h3 className="font-medium text-2xl pt-8 py-4">Connect</h3>
-              <p className="w-3/4 text-center text-lg text-gray-500">
+              <p className="w-3/4 text-center text-lg text-gray-500 mb-16">
                 Connect your Metamask wallet with Popcorn
               </p>
             </div>
 
-            <div className="flex-grow-0 flex-shrink-0 h-104 rounded-xl shadow-2xl flex flex-col items-center">
+            <div className="flex-grow-0 flex-shrink-0 md:h-96 rounded-xl shadow-2xl flex flex-col items-center">
               <div className="w-36 h-36 rounded-full bg-primary mt-12 flex items-center">
                 <img
                   src="/images/vault.svg"
@@ -758,11 +758,11 @@ const IndexPage = () => {
                 ></img>
               </div>
               <h3 className="font-medium text-2xl pt-8 py-4">Deposit</h3>
-              <p className="w-3/4 text-center text-lg text-gray-500">
+              <p className="w-3/4 text-center text-lg text-gray-500 mb-16">
                 Deposit your crypto and choose a product or strategy
               </p>
             </div>
-            <div className="flex-grow-0 flex-shrink-0 h-104 rounded-xl shadow-2xl flex flex-col items-center">
+            <div className="flex-grow-0 flex-shrink-0 md:h-96 rounded-xl shadow-2xl flex flex-col items-center">
               <div className="w-36 h-36 rounded-full bg-primary mt-12 flex items-center">
                 <img
                   src="/images/popcornVault.svg"
@@ -771,12 +771,12 @@ const IndexPage = () => {
                 ></img>
               </div>
               <h3 className="font-medium text-2xl pt-8 py-4">Do well</h3>
-              <p className="w-3/4 text-center text-lg text-gray-500">
+              <p className="w-3/4 text-center text-lg text-gray-500 mb-16">
                 Earn competitive returns on your crypto assets
               </p>
             </div>
 
-            <div className="flex-grow-0 flex-shrink-0 h-104 rounded-xl shadow-2xl flex flex-col items-center">
+            <div className="flex-grow-0 flex-shrink-0 md:h-96 rounded-xl shadow-2xl flex flex-col items-center">
               <div className="w-36 h-36 rounded-full bg-primary mt-12 flex items-center">
                 <img
                   src="/images/catMail.svg"
@@ -785,7 +785,7 @@ const IndexPage = () => {
                 ></img>
               </div>
               <h3 className="font-medium text-2xl pt-8 py-4">Do good</h3>
-              <p className="w-3/4 text-center text-lg text-gray-500">
+              <p className="w-3/4 text-center text-lg text-gray-500 mb-16">
                 Choose which social impact organization you’d like to help
               </p>
             </div>
