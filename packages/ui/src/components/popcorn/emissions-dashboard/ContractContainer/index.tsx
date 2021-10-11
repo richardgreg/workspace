@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  getChartData,
-  getStatCardData,
-} from '../../../../../../emissions-dashboard/utils';
+import { getChartData } from '../../../../../../emissions-dashboard/utils';
 import { getMassUnitForTxns } from '../../../../../../emissions-dashboard/utils/getMassUnitForTxns';
 import {
   ChartReadyState,
@@ -19,6 +16,7 @@ import { StatsCards } from '../StatsCards';
 interface ContractContainerProps {
   transactionsCurrentPeriod: Transaction[];
   transactionsPreviousPeriod: Transaction[];
+  previousPeriodStartDate: Date;
   startDate: Date;
   endDate: Date;
   contract?: Contract;
@@ -32,6 +30,7 @@ interface ContractContainerProps {
 export const ContractContainer: React.FC<ContractContainerProps> = ({
   transactionsCurrentPeriod,
   transactionsPreviousPeriod,
+  previousPeriodStartDate,
   startDate,
   endDate,
   contract,
@@ -65,16 +64,16 @@ export const ContractContainer: React.FC<ContractContainerProps> = ({
 
       <div className="mb-5">
         <StatsCards
-          stats={getStatCardData(
-            transactionsCurrentPeriod,
-            transactionsPreviousPeriod,
-            isTotal,
-            unit,
-            startDate,
-            endDate,
-          )}
+          transactionsCurrentPeriod={transactionsCurrentPeriod}
+          transactionsPreviousPeriod={transactionsPreviousPeriod}
+          isTotal={isTotal}
+          unit={unit}
+          previousPeriodStartDate={previousPeriodStartDate}
+          startDate={startDate}
+          endDate={endDate}
           readyState={readyState}
           iconCol={barColor}
+          contractName={isTotal ? 'total' : contract.name}
         />
       </div>
       <div className="max-w-7xl">

@@ -223,9 +223,10 @@ const IndexPage = (): JSX.Element => {
           <ContractContainer
             transactionsPreviousPeriod={transactionsPreviousPeriod}
             transactionsCurrentPeriod={transactionsCurrentPeriod}
+            previousPeriodStartDate={previousPeriodStartDate}
             startDate={startDate}
-            readyState={readyState}
             endDate={endDate}
+            readyState={readyState}
             areaColor={CHART_COLORS[3].areaColor}
             barColor={CHART_COLORS[3].barColor}
             isTotal={true}
@@ -241,6 +242,7 @@ const IndexPage = (): JSX.Element => {
                   (txn) => txn.to === contract.address,
                 )}
                 contract={contract}
+                previousPeriodStartDate={previousPeriodStartDate}
                 endDate={endDate}
                 startDate={startDate}
                 readyState={readyState}

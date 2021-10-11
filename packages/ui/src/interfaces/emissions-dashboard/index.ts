@@ -26,7 +26,8 @@ export interface StatCardData {
   icon: Icon | ((props: React.ComponentProps<'svg'>) => JSX.Element);
   id: number;
   name: string;
-  stat: number;
+  statCur: number;
+  statPrev: number;
 }
 
 export interface Transaction {
