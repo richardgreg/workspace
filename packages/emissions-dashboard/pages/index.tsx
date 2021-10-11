@@ -1,3 +1,4 @@
+import { SpeakerphoneIcon } from '@heroicons/react/outline';
 import { ContractContainer } from '@popcorn/ui/components/popcorn/emissions-dashboard/ContractContainer/index';
 import { DateRangePicker } from '@popcorn/ui/components/popcorn/emissions-dashboard/DateRangePicker';
 import { NavBar } from '@popcorn/ui/components/popcorn/emissions-dashboard/NavBar';
@@ -199,18 +200,26 @@ const IndexPage = (): JSX.Element => {
       />
       <div className="bg-gray-100">
         <div className="max-w-7xl mx-auto pb-8">
-          <header>
-            <div className="pt-6 py-5  ">
-              <h1 className="text-5xl text-center font-medium leading-tight text-black">
+          <div className="flex flex-row justify-between">
+            <div className="mt-8">
+              <span
+                className="inline-flex items-center pl-6 pr-10 py-4 rounded-full text-lg font-semibold "
+                style={{ color: '#364ab4', background: '#d7e7fe' }}
+              >
+                <SpeakerphoneIcon
+                  className="-ml-1 mr-4 h-6 w-6"
+                  style={{ color: '#364ab4' }}
+                />
                 Smart Contract Emissions Dashboard
-              </h1>
+              </span>
             </div>
-          </header>
-          <DateRangePicker
-            updateDates={updateDates}
-            startDate={startDate}
-            endDate={endDate}
-          />
+            <DateRangePicker
+              updateDates={updateDates}
+              startDate={startDate}
+              endDate={endDate}
+            />
+          </div>
+
           <ContractContainer
             transactionsPreviousPeriod={transactionsPreviousPeriod}
             transactionsCurrentPeriod={transactionsCurrentPeriod}
