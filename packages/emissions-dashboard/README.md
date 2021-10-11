@@ -61,9 +61,11 @@ Install packages: `yarn install`
 
 ## Getting started with Development
 
-1. Copy `.env.example` to `.env` and update it with DB URL connection string, Infura API, Patch, Etherscan API endpoints.
+At the moment, it's not possible to bootstrap the project. We are developing an initialisation script to make this possible.
 
-2. Run `yarn run emissions-db:start` to start the Next.js app and connect it to a local Netlify instance.
+<!-- 1. Copy `.env.example` to `.env` and update it with DB URL connection string, Infura API, Patch, Etherscan API endpoints.
+
+2. Run `yarn run emissions-db:start` to start the Next.js app and connect it to a local Netlify instance. -->
 
 ## Default Service Locations
 
