@@ -12,8 +12,6 @@ interface Curve3Pool {
     uint256 min_amount
   ) external;
 
-  function get_virtual_price() external view returns (uint256);
-
   function calc_withdraw_one_coin(uint256 _token_amount, int128 i)
     external
     view

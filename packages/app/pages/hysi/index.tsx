@@ -214,7 +214,7 @@ export default function BatchHysi(): JSX.Element {
         toast.loading('Depositing 3CRV...');
         const res = await contracts.batchHysi
           .connect(library.getSigner())
-          .depositForMint(depositAmount)
+          .depositForMint(depositAmount, account)
           .then((res) => {
             res.wait().then((res) => {
               toast.dismiss();
@@ -271,7 +271,7 @@ export default function BatchHysi(): JSX.Element {
     toast.loading('Claiming Batch...');
     await contracts.batchHysi
       .connect(library.getSigner())
-      .claim(batchId)
+      .claim(batchId, account)
       .then((res) => {
         res.wait().then((res) => {
           toast.dismiss();
@@ -293,7 +293,7 @@ export default function BatchHysi(): JSX.Element {
     toast.loading('Withdrawing from Batch...');
     await contracts.batchHysi
       .connect(library.getSigner())
-      .withdrawFromBatch(batchId, amount)
+      .withdrawFromBatch(batchId, amount, account)
       .then((res) => {
         res.wait().then((res) => {
           toast.dismiss();
