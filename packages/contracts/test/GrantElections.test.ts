@@ -86,43 +86,37 @@ async function deployContracts(): Promise<Contracts> {
     )
   ).deployed();
 
-  await mockPop
-    .connect(owner)
-    .transfer(randomNumberHelper.address, parseEther("500"));
-
   const aclRegistry = await (
     await (await ethers.getContractFactory("ACLRegistry")).deploy()
+  ).deployed();
+
+  const contractRegistry = await (
+    await (
+      await ethers.getContractFactory("ContractRegistry")
+    ).deploy(aclRegistry.address)
   ).deployed();
 
   const beneficiaryVaults = await (
     await (
       await ethers.getContractFactory("BeneficiaryVaults")
-    ).deploy(mockPop.address, aclRegistry.address)
+    ).deploy(contractRegistry.address)
   ).deployed();
 
   const region = await (
     await (
       await ethers.getContractFactory("Region")
-    ).deploy(beneficiaryVaults.address, aclRegistry.address)
+    ).deploy(beneficiaryVaults.address, contractRegistry.address)
   ).deployed();
 
   const participationReward = await (
     await ethers.getContractFactory("ParticipationReward")
-  ).deploy(mockPop.address, aclRegistry.address);
+  ).deploy(contractRegistry.address);
   await participationReward.deployed();
 
   const grantElections = (await (
     await (
       await ethers.getContractFactory("GrantElections")
-    ).deploy(
-      mockStaking.address,
-      mockBeneficiaryRegistry.address,
-      randomNumberHelper.address,
-      mockPop.address,
-      region.address,
-      participationReward.address,
-      aclRegistry.address
-    )
+    ).deploy(contractRegistry.address)
   ).deployed()) as GrantElections;
 
   await aclRegistry
@@ -144,23 +138,70 @@ async function deployContracts(): Promise<Contracts> {
       grantElections.address
     );
 
+  await contractRegistry
+    .connect(owner)
+    .addContract(ethers.utils.id("POP"), mockPop.address, ethers.utils.id("1"));
+  await contractRegistry
+    .connect(owner)
+    .addContract(
+      ethers.utils.id("BeneficiaryVaults"),
+      beneficiaryVaults.address,
+      ethers.utils.id("1")
+    );
+  await contractRegistry
+    .connect(owner)
+    .addContract(
+      ethers.utils.id("Staking"),
+      mockStaking.address,
+      ethers.utils.id("1")
+    );
+  await contractRegistry
+    .connect(owner)
+    .addContract(
+      ethers.utils.id("BeneficiaryRegistry"),
+      mockBeneficiaryRegistry.address,
+      ethers.utils.id("1")
+    );
+  await contractRegistry
+    .connect(owner)
+    .addContract(
+      ethers.utils.id("RandomNumberConsumer"),
+      randomNumberHelper.address,
+      ethers.utils.id("1")
+    );
+  await contractRegistry
+    .connect(owner)
+    .addContract(
+      ethers.utils.id("ParticipationReward"),
+      participationReward.address,
+      ethers.utils.id("1")
+    );
+  await contractRegistry
+    .connect(owner)
+    .addContract(
+      ethers.utils.id("Region"),
+      region.address,
+      ethers.utils.id("1")
+    );
+
+  await mockPop
+    .connect(owner)
+    .transfer(randomNumberHelper.address, parseEther("500"));
   await mockPop
     .connect(owner)
     .approve(participationReward.address, parseEther("100000"));
   await mockPop
     .connect(owner)
     .approve(grantElections.address, parseEther("100000"));
+
   await participationReward.connect(owner).contributeReward(parseEther("2000"));
+
   await participationReward
     .connect(governance)
     .addControllerContract(
       utils.formatBytes32String("GrantElections"),
       grantElections.address
     );
-
-  await beneficiaryVaults
-    .connect(owner)
-    .setBeneficiaryRegistry(mockBeneficiaryRegistry.address);
 
   return {
     mockPop,

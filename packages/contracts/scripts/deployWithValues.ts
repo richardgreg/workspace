@@ -39,6 +39,7 @@ interface Contracts {
   participationReward: Contract;
   keeperIncentive: Contract;
   aclRegistry: Contract;
+  contractRegistry: Contract;
 }
 
 enum Vote {
@@ -89,6 +90,12 @@ export default async function deploy(ethers): Promise<void> {
       await (await ethers.getContractFactory("ACLRegistry")).deploy()
     ).deployed();
 
+    const contractRegistry = await (
+      await (
+        await ethers.getContractFactory("ContractRegistry")
+      ).deploy(aclRegistry.address)
+    ).deployed();
+
     const mockPop = await (
       await (
         await ethers.getContractFactory("MockERC20")
@@ -98,19 +105,19 @@ export default async function deploy(ethers): Promise<void> {
     const beneficiaryVaults = await (
       await (
         await ethers.getContractFactory("BeneficiaryVaults")
-      ).deploy(mockPop.address, aclRegistry.address)
+      ).deploy(contractRegistry.address)
     ).deployed();
 
     const region = await (
       await (
         await ethers.getContractFactory("Region")
-      ).deploy(beneficiaryVaults.address, aclRegistry.address)
+      ).deploy(beneficiaryVaults.address, contractRegistry.address)
     ).deployed();
 
     const beneficiaryRegistry = await (
       await (
         await ethers.getContractFactory("BeneficiaryRegistry")
-      ).deploy(aclRegistry.address)
+      ).deploy(contractRegistry.address)
     ).deployed();
 
     const mock3CRV = await (
@@ -126,19 +133,19 @@ export default async function deploy(ethers): Promise<void> {
     const rewardsEscrow = await (
       await (
         await ethers.getContractFactory("RewardsEscrow")
-      ).deploy(mockPop.address, aclRegistry.address)
+      ).deploy(contractRegistry.address)
     ).deployed();
 
     const staking = await (
       await (
         await ethers.getContractFactory("Staking")
-      ).deploy(mockPop.address, rewardsEscrow.address, aclRegistry.address)
+      ).deploy(contractRegistry.address)
     ).deployed();
 
     const keeperIncentive = await (
       await (
         await ethers.getContractFactory("KeeperIncentive")
-      ).deploy(mockPop.address, aclRegistry.address)
+      ).deploy(contractRegistry.address)
     ).deployed();
 
     const uniswapFactory = await deployContract(
@@ -167,16 +174,7 @@ export default async function deploy(ethers): Promise<void> {
     const rewardsManager = await (
       await (
         await ethers.getContractFactory("RewardsManager")
-      ).deploy(
-        mockPop.address,
-        staking.address,
-        treasuryFund.address,
-        insuranceFund.address,
-        beneficiaryVaults.address,
-        aclRegistry.address,
-        keeperIncentive.address,
-        uniswapRouter.address
-      )
+      ).deploy(contractRegistry.address, uniswapRouter.address)
     ).deployed();
 
     const randomNumberConsumer = await (
@@ -192,64 +190,86 @@ export default async function deploy(ethers): Promise<void> {
     const participationReward = await (
       await (
         await ethers.getContractFactory("ParticipationReward")
-      ).deploy(mockPop.address, aclRegistry.address)
+      ).deploy(contractRegistry.address)
     ).deployed();
 
     const beneficiaryGovernance = await (
       await (
         await ethers.getContractFactory("BeneficiaryGovernance")
-      ).deploy(
-        staking.address,
-        beneficiaryRegistry.address,
-        mockPop.address,
-        region.address,
-        participationReward.address,
-        aclRegistry.address
-      )
+      ).deploy(contractRegistry.address)
     ).deployed();
 
     const grantElections = await (
       await (
         await ethers.getContractFactory("GrantElections")
-      ).deploy(
-        staking.address,
-        beneficiaryRegistry.address,
-        randomNumberConsumer.address,
-        mockPop.address,
-        region.address,
-        participationReward.address,
-        aclRegistry.address
-      )
+      ).deploy(contractRegistry.address)
     ).deployed();
 
     await aclRegistry.grantRole(ethers.utils.id("DAO"), accounts[0].address);
 
-    await keeperIncentive
+    await contractRegistry
       .connect(accounts[0])
-      .createIncentive(
-        utils.formatBytes32String("RewardsManager"),
-        0,
-        true,
-        false
+      .addContract(
+        ethers.utils.id("POP"),
+        mockPop.address,
+        ethers.utils.id("1")
       );
-    await keeperIncentive
+    await contractRegistry
       .connect(accounts[0])
-      .createIncentive(
-        utils.formatBytes32String("RewardsManager"),
-        0,
-        true,
-        false
+      .addContract(
+        ethers.utils.id("Region"),
+        region.address,
+        ethers.utils.id("1")
       );
-    await keeperIncentive
+    await contractRegistry
       .connect(accounts[0])
-      .createIncentive(
-        utils.formatBytes32String("HysiBatchInteraction"),
-        0,
-        true,
-        false
+      .addContract(
+        ethers.utils.id("Staking"),
+        staking.address,
+        ethers.utils.id("1")
       );
-
-    await staking.connect(accounts[0]).init(rewardsManager.address);
+    await contractRegistry
+      .connect(accounts[0])
+      .addContract(
+        ethers.utils.id("RewardsEscrow"),
+        rewardsEscrow.address,
+        ethers.utils.id("1")
+      );
+    await contractRegistry
+      .connect(accounts[0])
+      .addContract(
+        ethers.utils.id("RewardsManager"),
+        rewardsManager.address,
+        ethers.utils.id("1")
+      );
+    await contractRegistry
+      .connect(accounts[0])
+      .addContract(
+        ethers.utils.id("KeeperIncentive"),
+        keeperIncentive.address,
+        ethers.utils.id("1")
+      );
+    await contractRegistry
+      .connect(accounts[0])
+      .addContract(
+        ethers.utils.id("ParticipationReward"),
+        participationReward.address,
+        ethers.utils.id("1")
+      );
+    await contractRegistry
+      .connect(accounts[0])
+      .addContract(
+        ethers.utils.id("BeneficiaryRegistry"),
+        beneficiaryRegistry.address,
+        ethers.utils.id("1")
+      );
+    await contractRegistry
+      .connect(accounts[0])
+      .addContract(
+        ethers.utils.id("RandomNumberConsumer"),
+        randomNumberConsumer.address,
+        ethers.utils.id("1")
+      );
 
     contracts = {
       beneficiaryRegistry,
@@ -269,6 +289,7 @@ export default async function deploy(ethers): Promise<void> {
       participationReward,
       keeperIncentive,
       aclRegistry,
+      contractRegistry,
     };
   };
 

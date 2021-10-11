@@ -9,10 +9,11 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/math/Math.sol";
 import "../interfaces/IACLRegistry.sol";
-import "../../integrations/interfaces/YearnVault.sol";
-import "../../integrations/interfaces/BasicIssuanceModule.sol";
-import "../../integrations/interfaces/ISetToken.sol";
-import "../../integrations/interfaces/CurveContracts.sol";
+import "../../externals/interfaces/YearnVault.sol";
+import "../../externals/interfaces/BasicIssuanceModule.sol";
+import "../../externals/interfaces/ISetToken.sol";
+import "../../externals/interfaces/CurveContracts.sol";
+import "../interfaces/IContractRegistry.sol";
 import "../utils/KeeperIncentive.sol";
 
 /*
@@ -72,12 +73,10 @@ contract HysiBatchInteraction {
 
   bytes32 public immutable contractName = "HysiBatchInteraction";
 
-  IERC20 public POP;
+  IContractRegistry public contractRegistry;
+  ISetToken public setToken;
   IERC20 public threeCrv;
   BasicIssuanceModule public setBasicIssuanceModule;
-  KeeperIncentive public keeperIncentive;
-  IACLRegistry public aclRegistry;
-  ISetToken public setToken;
   mapping(address => CurvePoolTokenPair) public curvePoolTokenPairs;
 
   /**
@@ -127,29 +126,20 @@ contract HysiBatchInteraction {
   /* ========== CONSTRUCTOR ========== */
 
   constructor(
-    IERC20 pop_,
-    IERC20 threeCrv_,
+    IContractRegistry contractRegistry_,
     ISetToken setToken_,
+    IERC20 threeCrv_,
     BasicIssuanceModule basicIssuanceModule_,
-    KeeperIncentive keeperIncentive_,
-    IACLRegistry aclRegistry_,
     address[] memory yTokenAddresses_,
     CurvePoolTokenPair[] memory curvePoolTokenPairs_,
     uint256 batchCooldown_,
     uint256 mintThreshold_,
     uint256 redeemThreshold_
   ) {
-    require(address(pop_) != address(0));
-    require(address(threeCrv_) != address(0));
-    require(address(setToken_) != address(0));
-    require(address(basicIssuanceModule_) != address(0));
-    require(address(basicIssuanceModule_) != address(0));
-    POP = pop_;
-    threeCrv = threeCrv_;
+    contractRegistry = contractRegistry_;
     setToken = setToken_;
+    threeCrv = threeCrv_;
     setBasicIssuanceModule = basicIssuanceModule_;
-    keeperIncentive = keeperIncentive_;
-    aclRegistry = aclRegistry_;
 
     _setCurvePoolTokenPairs(yTokenAddresses_, curvePoolTokenPairs_);
 
@@ -186,7 +176,8 @@ contract HysiBatchInteraction {
    */
   function depositForMint(uint256 amount_, address depositFor_) external {
     require(
-      aclRegistry.hasRole(keccak256("HysiZapper"), msg.sender) ||
+      IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
+        .hasRole(keccak256("HysiZapper"), msg.sender) ||
         msg.sender == depositFor_,
       "you cant transfer other funds"
     );
@@ -359,7 +350,8 @@ contract HysiBatchInteraction {
    * @dev handleKeeperIncentive checks if the msg.sender is a permissioned keeper and pays them a reward for calling this function (see KeeperIncentive.sol)
    */
   function batchMint(uint256 minAmountToMint_) external {
-    keeperIncentive.handleKeeperIncentive(contractName, 0, msg.sender);
+    KeeperIncentive(contractRegistry.getContract(keccak256("KeeperIncentive")))
+      .handleKeeperIncentive(contractName, 0, msg.sender);
     Batch storage batch = batches[currentMintBatchId];
 
     //Check if there was enough time between the last batch minting and this attempt...
@@ -502,7 +494,8 @@ contract HysiBatchInteraction {
    * @dev handleKeeperIncentive checks if the msg.sender is a permissioned keeper and pays them a reward for calling this function (see KeeperIncentive.sol)
    */
   function batchRedeem(uint256 min3crvToReceive_) external {
-    keeperIncentive.handleKeeperIncentive(contractName, 0, msg.sender);
+    KeeperIncentive(contractRegistry.getContract(keccak256("KeeperIncentive")))
+      .handleKeeperIncentive(contractName, 1, msg.sender);
     Batch storage batch = batches[currentRedeemBatchId];
 
     //Check if there was enough time between the last batch redemption and this attempt...
@@ -604,8 +597,8 @@ contract HysiBatchInteraction {
   function _getRecipient(address account_) internal returns (address) {
     //Make sure that only zapper can withdraw from someone else
     require(
-      aclRegistry.hasRole(keccak256("HysiZapper"), msg.sender) ||
-        msg.sender == account_,
+      IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
+        .hasRole(keccak256("HysiZapper"), msg.sender) || msg.sender == account_,
       "you cant transfer other funds"
     );
 
@@ -613,7 +606,10 @@ contract HysiBatchInteraction {
     address recipient = account_;
 
     //set the recipient to zapper if its called by the zapper
-    if (aclRegistry.hasRole(keccak256("HysiZapper"), msg.sender)) {
+    if (
+      IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
+        .hasRole(keccak256("HysiZapper"), msg.sender)
+    ) {
       recipient = msg.sender;
     }
     return recipient;
@@ -763,7 +759,8 @@ contract HysiBatchInteraction {
     address[] memory yTokenAddresses_,
     CurvePoolTokenPair[] calldata curvePoolTokenPairs_
   ) public {
-    aclRegistry.requireRole(keccak256("DAO"), msg.sender);
+    IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
+      .requireRole(keccak256("DAO"), msg.sender);
     _setCurvePoolTokenPairs(yTokenAddresses_, curvePoolTokenPairs_);
   }
 
@@ -789,7 +786,8 @@ contract HysiBatchInteraction {
    * @dev The cooldown is the same for redeem and mint batches
    */
   function setBatchCooldown(uint256 cooldown_) external {
-    aclRegistry.requireRole(keccak256("DAO"), msg.sender);
+    IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
+      .requireRole(keccak256("DAO"), msg.sender);
     batchCooldown = cooldown_;
   }
 
@@ -798,7 +796,8 @@ contract HysiBatchInteraction {
    * @param threshold_ Amount of 3CRV necessary to mint immediately
    */
   function setMintThreshold(uint256 threshold_) external {
-    aclRegistry.requireRole(keccak256("DAO"), msg.sender);
+    IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
+      .requireRole(keccak256("DAO"), msg.sender);
     mintThreshold = threshold_;
   }
 
@@ -807,7 +806,8 @@ contract HysiBatchInteraction {
    * @param threshold_ Amount of HYSI necessary to mint immediately
    */
   function setRedeemThreshold(uint256 threshold_) external {
-    aclRegistry.requireRole(keccak256("DAO"), msg.sender);
+    IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
+      .requireRole(keccak256("DAO"), msg.sender);
     redeemThreshold = threshold_;
   }
 }

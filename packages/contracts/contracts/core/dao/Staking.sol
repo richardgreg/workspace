@@ -10,6 +10,7 @@ import "../interfaces/IStaking.sol";
 import "../interfaces/IRewardsManager.sol";
 import "../interfaces/IRewardsEscrow.sol";
 import "../interfaces/IACLRegistry.sol";
+import "../interfaces/IContractRegistry.sol";
 
 contract Staking is IStaking, ReentrancyGuard {
   using SafeMath for uint256;
@@ -22,12 +23,8 @@ contract Staking is IStaking, ReentrancyGuard {
     uint256 _end;
   }
 
-  IERC20 public immutable POP;
-  IRewardsManager public RewardsManager;
-  IRewardsEscrow public RewardsEscrow;
-  IACLRegistry public aclRegistry;
+  IContractRegistry public contractRegistry;
 
-  bool public initialised = false;
   uint256 public periodFinish = 0;
   uint256 public rewardRate = 0;
   uint256 public rewardsDuration = 7 days;
@@ -46,19 +43,11 @@ contract Staking is IStaking, ReentrancyGuard {
   event StakingWithdrawn(address _address, uint256 amount);
   event RewardPaid(address _address, uint256 reward);
   event RewardAdded(uint256 reward);
-  event RewardsManagerChanged(IRewardsManager _rewardsManager);
-  event RewardsEscrowChanged(IRewardsEscrow _rewardsEscrow);
 
   /* ========== CONSTRUCTOR ========== */
 
-  constructor(
-    IERC20 _pop,
-    IRewardsEscrow _rewardsEscrow,
-    IACLRegistry _aclRegistry
-  ) {
-    POP = _pop;
-    RewardsEscrow = _rewardsEscrow;
-    aclRegistry = _aclRegistry;
+  constructor(IContractRegistry _contractRegistry) {
+    contractRegistry = _contractRegistry;
   }
 
   /* ========== VIEWS ========== */
@@ -143,11 +132,12 @@ contract Staking is IStaking, ReentrancyGuard {
     external
     override
     nonReentrant
-    isInitialised
     updateReward(msg.sender)
   {
-    aclRegistry.requireApprovedContractOrEOA(msg.sender);
+    IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
+      .requireApprovedContractOrEOA(msg.sender);
     uint256 _currentTime = block.timestamp;
+    IERC20 POP = IERC20(contractRegistry.getContract(keccak256("POP")));
     require(amount > 0, "amount must be greater than 0");
     require(lengthOfTime >= 7 days, "must lock tokens for at least 1 week");
     require(
@@ -185,6 +175,7 @@ contract Staking is IStaking, ReentrancyGuard {
 
   function increaseStake(uint256 amount) external {
     uint256 _currentTime = block.timestamp;
+    IERC20 POP = IERC20(contractRegistry.getContract(keccak256("POP")));
     require(amount > 0, "amount must be greater than 0");
     require(POP.balanceOf(msg.sender) >= amount, "insufficient balance");
     require(lockedBalances[msg.sender]._balance > 0, "no lockedBalance exists");
@@ -210,7 +201,10 @@ contract Staking is IStaking, ReentrancyGuard {
     require(lockedBalances[msg.sender]._balance > 0, "insufficient balance");
     require(amount <= getWithdrawableBalance(msg.sender));
 
-    POP.safeTransfer(msg.sender, amount);
+    IERC20(contractRegistry.getContract(keccak256("POP"))).safeTransfer(
+      msg.sender,
+      amount
+    );
 
     totalLocked = totalLocked.sub(amount);
     _clearWithdrawnFromLocked(amount);
@@ -226,9 +220,14 @@ contract Staking is IStaking, ReentrancyGuard {
       uint256 payout = reward.div(uint256(3));
       uint256 escrowed = payout.mul(uint256(2));
 
+      IERC20 POP = IERC20(contractRegistry.getContract(keccak256("POP")));
+      address rewardsEscrow = contractRegistry.getContract(
+        keccak256("RewardsEscrow")
+      );
+
       POP.safeTransfer(msg.sender, payout);
-      POP.safeIncreaseAllowance(address(RewardsEscrow), escrowed);
-      RewardsEscrow.lock(msg.sender, escrowed);
+      POP.safeIncreaseAllowance(rewardsEscrow, escrowed);
+      IRewardsEscrow(rewardsEscrow).lock(msg.sender, escrowed);
 
       emit RewardPaid(msg.sender, payout);
     }
@@ -240,12 +239,6 @@ contract Staking is IStaking, ReentrancyGuard {
   }
 
   /* ========== RESTRICTED FUNCTIONS ========== */
-
-  function init(IRewardsManager _rewardsManager) external {
-    aclRegistry.requireRole(keccak256("DAO"), msg.sender);
-    RewardsManager = _rewardsManager;
-    initialised = true;
-  }
 
   // todo: multiply voice credits by 10000 to deal with exponent math- is it needed?
   function recalculateVoiceCredits(address _address) public {
@@ -283,29 +276,15 @@ contract Staking is IStaking, ReentrancyGuard {
     }
   }
 
-  function setRewardsManager(IRewardsManager _rewardsManager) external {
-    aclRegistry.requireRole(keccak256("DAO"), msg.sender);
-    require(RewardsManager != _rewardsManager, "Same RewardsManager");
-    RewardsManager = _rewardsManager;
-    emit RewardsManagerChanged(_rewardsManager);
-  }
-
-  function setRewardsEscrow(IRewardsEscrow _rewardsEscrow) external {
-    aclRegistry.requireRole(keccak256("DAO"), msg.sender);
-    require(RewardsEscrow != _rewardsEscrow, "Same RewardsEscrow");
-    RewardsEscrow = _rewardsEscrow;
-    emit RewardsEscrowChanged(_rewardsEscrow);
-  }
-
   function notifyRewardAmount(uint256 reward)
     external
     override
     updateReward(address(0))
-    isInitialised
   {
     require(
-      aclRegistry.hasRole(keccak256("RewardsManager"), msg.sender) ||
-        aclRegistry.hasRole(keccak256("DAO"), msg.sender),
+      msg.sender == contractRegistry.getContract(keccak256("RewardsManager")) ||
+        IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
+          .hasRole(keccak256("DAO"), msg.sender),
       "Not allowed"
     );
     if (block.timestamp >= periodFinish) {
@@ -320,7 +299,8 @@ contract Staking is IStaking, ReentrancyGuard {
     // This keeps the reward rate in the right range, preventing overflows due to
     // very high values of rewardRate in the earned and rewardsPerToken functions;
     // Reward + leftover must be less than 2^256 / 10^18 to avoid overflow.
-    uint256 balance = POP.balanceOf(address(this));
+    uint256 balance = IERC20(contractRegistry.getContract(keccak256("POP")))
+      .balanceOf(address(this));
     require(
       rewardRate <= balance.div(rewardsDuration),
       "Provided reward too high"
@@ -336,7 +316,8 @@ contract Staking is IStaking, ReentrancyGuard {
     external
     updateReward(address(0))
   {
-    aclRegistry.requireRole(keccak256("DAO"), msg.sender);
+    IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
+      .requireRole(keccak256("DAO"), msg.sender);
     require(timestamp > block.timestamp, "timestamp cant be in the past");
     periodFinish = timestamp;
   }
@@ -350,11 +331,6 @@ contract Staking is IStaking, ReentrancyGuard {
       rewards[account] = earned(account);
       userRewardPerTokenPaid[account] = rewardPerTokenStored;
     }
-    _;
-  }
-
-  modifier isInitialised() {
-    require(initialised == true, "must initialise contract");
     _;
   }
 }

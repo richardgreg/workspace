@@ -14,6 +14,7 @@ import { BasicIssuanceModule } from "../../lib/SetToken/vendor/set-protocol/type
 import { SetToken } from "../../lib/SetToken/vendor/set-protocol/types/SetToken";
 import {
   ACLRegistry,
+  ContractRegistry,
   Curve3Pool,
   CurveMetapool,
   ERC20,
@@ -27,6 +28,7 @@ import {
 const provider = waffle.provider;
 
 interface Contracts {
+  pop: ERC20;
   dai: ERC20;
   usdc: ERC20;
   usdt: ERC20;
@@ -51,6 +53,7 @@ interface Contracts {
   keeperIncentive: KeeperIncentive;
   faucet: Faucet;
   aclRegistry: ACLRegistry;
+  contractRegistry: ContractRegistry;
   hysiBatchZapper: HysiBatchZapper;
 }
 
@@ -239,10 +242,16 @@ async function deployContracts(): Promise<Contracts> {
     await (await ethers.getContractFactory("ACLRegistry")).deploy()
   ).deployed();
 
+  const contractRegistry = await (
+    await (
+      await ethers.getContractFactory("ContractRegistry")
+    ).deploy(aclRegistry.address)
+  ).deployed();
+
   const keeperIncentive = await (
     await (
       await ethers.getContractFactory("KeeperIncentive")
-    ).deploy(pop.address, aclRegistry.address)
+    ).deploy(contractRegistry.address)
   ).deployed();
 
   //Deploy HysiBatchInteraction
@@ -251,12 +260,10 @@ async function deployContracts(): Promise<Contracts> {
   );
   const hysiBatchInteraction = await (
     await HysiBatchInteraction.deploy(
-      pop.address,
-      THREE_CRV_TOKEN_ADDRESS,
+      contractRegistry.address,
       HYSI_TOKEN_ADDRESS,
+      THREE_CRV_TOKEN_ADDRESS,
       SET_BASIC_ISSUANCE_MODULE_ADDRESS,
-      keeperIncentive.address,
-      aclRegistry.address,
       [
         YDUSD_TOKEN_ADDRESS,
         YFRAX_TOKEN_ADDRESS,
@@ -290,10 +297,11 @@ async function deployContracts(): Promise<Contracts> {
   const hysiBatchZapper = await (
     await (
       await ethers.getContractFactory("HysiBatchZapper")
-    ).deploy(hysiBatchInteraction.address, threePool.address, threeCrv.address)
+    ).deploy(contractRegistry.address, threePool.address, threeCrv.address)
   ).deployed();
 
   return {
+    pop,
     dai,
     usdc,
     usdt,
@@ -318,6 +326,7 @@ async function deployContracts(): Promise<Contracts> {
     keeperIncentive,
     faucet,
     aclRegistry,
+    contractRegistry,
     hysiBatchZapper,
   };
 }
@@ -340,11 +349,37 @@ const deployAndAssignContracts = async () => {
     ethers.utils.id("HysiZapper"),
     contracts.hysiBatchZapper.address
   );
-  await contracts.faucet.sendTokens(
-    contracts.dai.address,
-    4,
-    depositor.address
-  );
+
+  await contracts.contractRegistry
+    .connect(owner)
+    .addContract(
+      ethers.utils.id("POP"),
+      contracts.pop.address,
+      ethers.utils.id("1")
+    );
+  await contracts.contractRegistry
+    .connect(owner)
+    .addContract(
+      ethers.utils.id("KeeperIncentive"),
+      contracts.keeperIncentive.address,
+      ethers.utils.id("1")
+    );
+  await contracts.contractRegistry
+    .connect(owner)
+    .addContract(
+      ethers.utils.id("HysiBatchInteraction"),
+      contracts.hysiBatchInteraction.address,
+      ethers.utils.id("1")
+    );
+
+  await contracts.keeperIncentive
+    .connect(owner)
+    .createIncentive(
+      utils.formatBytes32String("HysiBatchInteraction"),
+      0,
+      true,
+      false
+    );
   await contracts.keeperIncentive
     .connect(owner)
     .createIncentive(
@@ -360,14 +395,11 @@ const deployAndAssignContracts = async () => {
       contracts.hysiBatchInteraction.address
     );
 
-  await contracts.keeperIncentive
-    .connect(owner)
-    .createIncentive(
-      utils.formatBytes32String("HysiBatchInteraction"),
-      0,
-      true,
-      false
-    );
+  await contracts.faucet.sendTokens(
+    contracts.dai.address,
+    4,
+    depositor.address
+  );
 
   DepositorInitial = await contracts.dai.balanceOf(depositor.address);
   await contracts.faucet.sendThreeCrv(100, depositor.address);

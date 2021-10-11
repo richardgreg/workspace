@@ -125,22 +125,26 @@ async function deployContracts(): Promise<Contracts> {
     await (await ethers.getContractFactory("ACLRegistry")).deploy()
   ).deployed();
 
+  const contractRegistry = await (
+    await (
+      await ethers.getContractFactory("ContractRegistry")
+    ).deploy(aclRegistry.address)
+  ).deployed();
+
   const keeperIncentive = await (
     await (
       await ethers.getContractFactory("KeeperIncentive")
-    ).deploy(mockPop.address, aclRegistry.address)
+    ).deploy(contractRegistry.address)
   ).deployed();
 
   const hysiBatchInteraction = (await (
     await (
       await ethers.getContractFactory("HysiBatchInteraction")
     ).deploy(
-      mockPop.address,
-      mock3Crv.address,
+      contractRegistry.address,
       mockSetToken.address,
+      mock3Crv.address,
       mockBasicIssuanceModule.address,
-      keeperIncentive.address,
-      aclRegistry.address,
       [mockYearnVaultUSDX.address, mockYearnVaultUST.address],
       [
         {
@@ -162,7 +166,7 @@ async function deployContracts(): Promise<Contracts> {
     await (
       await ethers.getContractFactory("HysiBatchZapper")
     ).deploy(
-      hysiBatchInteraction.address,
+      contractRegistry.address,
       mockCurveThreePool.address,
       mock3Crv.address
     )
@@ -201,6 +205,32 @@ async function deployContracts(): Promise<Contracts> {
     hysiBatchZapper.address
   );
 
+  await contractRegistry
+    .connect(owner)
+    .addContract(ethers.utils.id("POP"), mockPop.address, ethers.utils.id("1"));
+  await contractRegistry
+    .connect(owner)
+    .addContract(
+      ethers.utils.id("KeeperIncentive"),
+      keeperIncentive.address,
+      ethers.utils.id("1")
+    );
+  await contractRegistry
+    .connect(owner)
+    .addContract(
+      ethers.utils.id("HysiBatchInteraction"),
+      hysiBatchInteraction.address,
+      ethers.utils.id("1")
+    );
+
+  await keeperIncentive
+    .connect(owner)
+    .createIncentive(
+      utils.formatBytes32String("HysiBatchInteraction"),
+      0,
+      true,
+      false
+    );
   await keeperIncentive
     .connect(owner)
     .createIncentive(

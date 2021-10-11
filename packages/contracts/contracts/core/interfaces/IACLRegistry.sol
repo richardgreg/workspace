@@ -115,7 +115,7 @@ interface IACLRegistry {
 
   function requireRole(bytes32 role, address account) external view;
 
-  function checkPermission(bytes32 permission, address account) external view;
+  function requirePermission(bytes32 permission, address account) external view;
 
   function isRoleAdmin(bytes32 role, address account) external view;
 }

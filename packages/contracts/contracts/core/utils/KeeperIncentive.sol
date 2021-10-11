@@ -4,6 +4,7 @@ import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 import "../interfaces/IACLRegistry.sol";
+import "../interfaces/IContractRegistry.sol";
 
 contract KeeperIncentive {
   using SafeMath for uint256;
@@ -17,8 +18,7 @@ contract KeeperIncentive {
 
   /* ========== STATE VARIABLES ========== */
 
-  IERC20 public immutable POP;
-  IACLRegistry public aclRegistry;
+  IContractRegistry public contractRegistry;
 
   uint256 public incentiveBudget;
   mapping(bytes32 => Incentive[]) public incentives;
@@ -50,10 +50,9 @@ contract KeeperIncentive {
 
   /* ========== CONSTRUCTOR ========== */
 
-  constructor(IERC20 _pop, IACLRegistry _aclRegistry) public {
-    POP = _pop;
-    aclRegistry = _aclRegistry;
-    burnRate = 25e16; // 25% of intentive.reward
+  constructor(IContractRegistry _contractRegistry) public {
+    contractRegistry = _contractRegistry;
+    burnRate = 25e16;
   }
 
   /* ==========  MUTATIVE FUNCTIONS  ========== */
@@ -63,7 +62,6 @@ contract KeeperIncentive {
     uint8 i,
     address keeper
   ) external {
-    //TODO add contractRegistry check
     require(
       msg.sender == controllerContracts[contractName_],
       "Can only be called by the controlling contract"
@@ -72,13 +70,17 @@ contract KeeperIncentive {
     Incentive memory incentive = incentives[contractName_][i];
 
     if (!incentive.openToEveryone) {
-      aclRegistry.requireRole(keccak256("Keeper"), keeper);
+      IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
+        .requireRole(keccak256("Keeper"), keeper);
     }
     if (incentive.enabled && incentive.reward <= incentiveBudget) {
       incentiveBudget = incentiveBudget.sub(incentive.reward);
       uint256 amountToBurn = incentive.reward.mul(burnRate).div(1e18);
       uint256 incentivePayout = incentive.reward.sub(amountToBurn);
-      POP.safeTransfer(keeper, incentivePayout);
+      IERC20(contractRegistry.getContract(keccak256("POP"))).safeTransfer(
+        keeper,
+        incentivePayout
+      );
       _burn(amountToBurn);
     }
   }
@@ -100,7 +102,8 @@ contract KeeperIncentive {
     bool _enabled,
     bool _openToEveryone
   ) public {
-    aclRegistry.requireRole(keccak256("DAO"), msg.sender);
+    IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
+      .requireRole(keccak256("DAO"), msg.sender);
     incentives[contractName_].push(
       Incentive({
         reward: _reward,
@@ -109,16 +112,6 @@ contract KeeperIncentive {
       })
     );
     emit IncentiveCreated(contractName_, _reward, _openToEveryone);
-  }
-
-  /**
-   * @notice Sets the current burn rate as a percentage of the incentive reward.
-   * @param _burnRate Percentage in Mantissa. (1e14 = 1 Basis Point)
-   */
-  function setBurnRate(uint256 _burnRate) external {
-    aclRegistry.requireRole(keccak256("DAO"), msg.sender);
-    emit BurnRateChanged(burnRate, _burnRate);
-    burnRate = _burnRate;
   }
 
   /* ========== RESTRICTED FUNCTIONS ========== */
@@ -130,7 +123,8 @@ contract KeeperIncentive {
     bool _enabled,
     bool _openToEveryone
   ) external {
-    aclRegistry.requireRole(keccak256("DAO"), msg.sender);
+    IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
+      .requireRole(keccak256("DAO"), msg.sender);
     Incentive storage incentive = incentives[contractName_][i];
     uint256 oldReward = incentive.reward;
     bool oldOpenToEveryone = incentive.openToEveryone;
@@ -147,21 +141,27 @@ contract KeeperIncentive {
   }
 
   function toggleApproval(bytes32 contractName_, uint8 i) external {
-    aclRegistry.requireRole(keccak256("DAO"), msg.sender);
+    IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
+      .requireRole(keccak256("DAO"), msg.sender);
     Incentive storage incentive = incentives[contractName_][i];
     incentive.openToEveryone = !incentive.openToEveryone;
     emit ApprovalToggled(contractName_, incentive.openToEveryone);
   }
 
   function toggleIncentive(bytes32 contractName_, uint8 i) external {
-    aclRegistry.requireRole(keccak256("DAO"), msg.sender);
+    IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
+      .requireRole(keccak256("DAO"), msg.sender);
     Incentive storage incentive = incentives[contractName_][i];
     incentive.enabled = !incentive.enabled;
     emit IncentiveToggled(contractName_, incentive.enabled);
   }
 
   function fundIncentive(uint256 _amount) external {
-    POP.transferFrom(msg.sender, address(this), _amount);
+    IERC20(contractRegistry.getContract(keccak256("POP"))).safeTransferFrom(
+      msg.sender,
+      address(this),
+      _amount
+    );
     incentiveBudget = incentiveBudget.add(_amount);
     emit IncentiveFunded(_amount);
   }
@@ -175,13 +175,28 @@ contract KeeperIncentive {
   function addControllerContract(bytes32 contractName_, address contract_)
     external
   {
-    aclRegistry.requireRole(keccak256("DAO"), msg.sender);
+    IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
+      .requireRole(keccak256("DAO"), msg.sender);
     controllerContracts[contractName_] = contract_;
     emit ControllerContractAdded(contractName_, contract_);
   }
 
+  /**
+   * @notice Sets the current burn rate as a percentage of the incentive reward.
+   * @param _burnRate Percentage in Mantissa. (1e14 = 1 Basis Point)
+   */
+  function updateBurnRate(uint256 _burnRate) external {
+    IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
+      .requireRole(keccak256("DAO"), msg.sender);
+    emit BurnRateChanged(burnRate, _burnRate);
+    burnRate = _burnRate;
+  }
+
   function _burn(uint256 _amount) internal {
-    POP.transfer(burnAddress, _amount);
+    IERC20(contractRegistry.getContract(keccak256("POP"))).transfer(
+      burnAddress,
+      _amount
+    );
     emit Burned(_amount);
   }
 }

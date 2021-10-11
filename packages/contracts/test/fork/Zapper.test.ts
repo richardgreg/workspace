@@ -62,13 +62,18 @@ async function deployContracts(): Promise<Contracts> {
     await (await ethers.getContractFactory("ACLRegistry")).deploy()
   ).deployed();
 
+  const contractRegistry = await (
+    await (
+      await ethers.getContractFactory("ContractRegistry")
+    ).deploy(aclRegistry.address)
+  ).deployed();
+
   const Pool = await ethers.getContractFactory("Pool");
   const fraxPool = await (
     await Pool.deploy(
       FRAX_LP_TOKEN_ADDRESS,
       YEARN_REGISTRY_ADDRESS,
-      rewardsManager.address,
-      aclRegistry.address
+      contractRegistry.address
     )
   ).deployed();
 
@@ -76,8 +81,7 @@ async function deployContracts(): Promise<Contracts> {
     await Pool.deploy(
       USDN_LP_TOKEN_ADDRESS,
       YEARN_REGISTRY_ADDRESS,
-      rewardsManager.address,
-      aclRegistry.address
+      contractRegistry.address
     )
   ).deployed();
 
@@ -110,6 +114,12 @@ async function deployContracts(): Promise<Contracts> {
   await aclRegistry.grantRole(
     ethers.utils.id("ApprovedContract"),
     zapper.address
+  );
+
+  await contractRegistry.addContract(
+    ethers.utils.id("RewardsManager"),
+    rewardsManager.address,
+    ethers.utils.id("1")
   );
 
   return {

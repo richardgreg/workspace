@@ -18,10 +18,16 @@ describe("BeneficiaryRegistry", function () {
       await (await ethers.getContractFactory("ACLRegistry")).deploy()
     ).deployed();
 
+    const contractRegistry = await (
+      await (
+        await ethers.getContractFactory("ContractRegistry")
+      ).deploy(aclRegistry.address)
+    ).deployed();
+
     registry = await (
       await (
         await ethers.getContractFactory("BeneficiaryRegistry")
-      ).deploy(aclRegistry.address)
+      ).deploy(contractRegistry.address)
     ).deployed();
 
     await aclRegistry

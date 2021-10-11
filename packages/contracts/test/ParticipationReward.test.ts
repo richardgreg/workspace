@@ -64,10 +64,16 @@ async function deployContracts(): Promise<Contracts> {
     await (await ethers.getContractFactory("ACLRegistry")).deploy()
   ).deployed();
 
+  const contractRegistry = await (
+    await (
+      await ethers.getContractFactory("ContractRegistry")
+    ).deploy(aclRegistry.address)
+  ).deployed();
+
   const participationReward = await (
     await (
       await ethers.getContractFactory("ParticipationReward")
-    ).deploy(mockPop.address, aclRegistry.address)
+    ).deploy(contractRegistry.address)
   ).deployed();
 
   const participationRewardHelper = await (
@@ -79,6 +85,10 @@ async function deployContracts(): Promise<Contracts> {
   await aclRegistry
     .connect(owner)
     .grantRole(ethers.utils.id("DAO"), governance.address);
+
+  await contractRegistry
+    .connect(governance)
+    .addContract(ethers.utils.id("POP"), mockPop.address, ethers.utils.id("1"));
 
   await mockPop
     .connect(owner)

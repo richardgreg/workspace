@@ -9,6 +9,7 @@ import IUniswapV2Router02 from "../artifacts/@uniswap/v2-periphery/contracts/int
 import {
   ACLRegistry,
   BeneficiaryVaults,
+  ContractRegistry,
   KeeperIncentive,
   MockERC20,
   Region,
@@ -29,6 +30,7 @@ interface Contracts {
   region: Region;
   keeperIncentive: KeeperIncentive;
   aclRegistry: ACLRegistry;
+  contractRegistry: ContractRegistry;
 }
 
 const RewardSplits = {
@@ -72,16 +74,22 @@ async function deployContracts(): Promise<Contracts> {
     await (await ethers.getContractFactory("ACLRegistry")).deploy()
   ).deployed();
 
+  const contractRegistry = await (
+    await (
+      await ethers.getContractFactory("ContractRegistry")
+    ).deploy(aclRegistry.address)
+  ).deployed();
+
   const rewardsEscrow = (await (
     await (
       await ethers.getContractFactory("RewardsEscrow")
-    ).deploy(pop.address, aclRegistry.address)
+    ).deploy(contractRegistry.address)
   ).deployed()) as RewardsEscrow;
 
   const staking = await (
     await (
       await ethers.getContractFactory("Staking")
-    ).deploy(pop.address, rewardsEscrow.address, aclRegistry.address)
+    ).deploy(contractRegistry.address)
   ).deployed();
 
   const mockBeneficiaryRegistryFactory = await ethers.getContractFactory(
@@ -96,19 +104,19 @@ async function deployContracts(): Promise<Contracts> {
     "BeneficiaryVaults"
   );
   const beneficiaryVaults = await (
-    await beneficiaryVaultsFactory.deploy(pop.address, aclRegistry.address)
+    await beneficiaryVaultsFactory.deploy(contractRegistry.address)
   ).deployed();
 
   const region = await (
     await (
       await ethers.getContractFactory("Region")
-    ).deploy(beneficiaryVaults.address, aclRegistry.address)
+    ).deploy(beneficiaryVaults.address, contractRegistry.address)
   ).deployed();
 
   const keeperIncentive = await (
     await (
       await ethers.getContractFactory("KeeperIncentive")
-    ).deploy(pop.address, aclRegistry.address)
+    ).deploy(contractRegistry.address)
   ).deployed();
 
   const mockUniswapV2Factory = await waffle.deployMockContract(
@@ -125,20 +133,11 @@ async function deployContracts(): Promise<Contracts> {
     "RewardsManager"
   );
   const rewardsManager = await rewardsManagerFactory.deploy(
-    pop.address,
-    staking.address,
-    treasury.address,
-    insurance.address,
-    region.address,
-    aclRegistry.address,
-    keeperIncentive.address,
+    contractRegistry.address,
     mockUniswapV2Router.address
   );
   await rewardsManager.deployed();
 
-  await aclRegistry
-    .connect(owner)
-    .grantRole(ethers.utils.id("RewardsManager"), rewardsManager.address);
   await aclRegistry
     .connect(owner)
     .grantRole(ethers.utils.id("DAO"), owner.address);
@@ -146,11 +145,58 @@ async function deployContracts(): Promise<Contracts> {
     .connect(owner)
     .grantRole(ethers.utils.id("Keeper"), owner.address);
 
-  await staking.init(rewardsManager.address);
-
-  await beneficiaryVaults
+  await contractRegistry
     .connect(owner)
-    .setBeneficiaryRegistry(mockBeneficiaryRegistry.address);
+    .addContract(ethers.utils.id("POP"), pop.address, ethers.utils.id("1"));
+  await contractRegistry
+    .connect(owner)
+    .addContract(
+      ethers.utils.id("Region"),
+      region.address,
+      ethers.utils.id("1")
+    );
+  await contractRegistry
+    .connect(owner)
+    .addContract(
+      ethers.utils.id("Insurance"),
+      insurance.address,
+      ethers.utils.id("1")
+    );
+  await contractRegistry
+    .connect(owner)
+    .addContract(
+      ethers.utils.id("Treasury"),
+      treasury.address,
+      ethers.utils.id("1")
+    );
+  await contractRegistry
+    .connect(owner)
+    .addContract(
+      ethers.utils.id("Staking"),
+      staking.address,
+      ethers.utils.id("1")
+    );
+  await contractRegistry
+    .connect(owner)
+    .addContract(
+      ethers.utils.id("RewardsEscrow"),
+      rewardsEscrow.address,
+      ethers.utils.id("1")
+    );
+  await contractRegistry
+    .connect(owner)
+    .addContract(
+      ethers.utils.id("RewardsManager"),
+      rewardsManager.address,
+      ethers.utils.id("1")
+    );
+  await contractRegistry
+    .connect(owner)
+    .addContract(
+      ethers.utils.id("KeeperIncentive"),
+      keeperIncentive.address,
+      ethers.utils.id("1")
+    );
 
   await keeperIncentive
     .connect(owner)
@@ -193,6 +239,7 @@ async function deployContracts(): Promise<Contracts> {
     region,
     keeperIncentive,
     aclRegistry,
+    contractRegistry,
   };
 }
 
@@ -203,20 +250,8 @@ describe("RewardsManager", function () {
   });
 
   it("should be constructed with correct addresses", async function () {
-    expect(await contracts.rewardsManager.POP()).to.equal(
-      contracts.pop.address
-    );
-    expect(await contracts.rewardsManager.staking()).to.equal(
-      contracts.staking.address
-    );
-    expect(await contracts.rewardsManager.treasury()).to.equal(
-      contracts.treasury.address
-    );
-    expect(await contracts.rewardsManager.insurance()).to.equal(
-      contracts.insurance.address
-    );
-    expect(await contracts.rewardsManager.region()).to.equal(
-      contracts.region.address
+    expect(await contracts.rewardsManager.contractRegistry()).to.equal(
+      contracts.contractRegistry.address
     );
     expect(await contracts.rewardsManager.uniswapV2Router()).to.equal(
       contracts.mockUniswapV2Router.address
@@ -310,91 +345,6 @@ describe("RewardsManager", function () {
       expect(await contracts.rewardsManager.rewardSplits(3)).to.equal(
         parseEther("60")
       );
-    });
-  });
-
-  it("should revert setting to same Staking", async function () {
-    await expect(
-      contracts.rewardsManager.setStaking(contracts.staking.address)
-    ).to.be.revertedWith("Same Staking");
-  });
-
-  it("should revert setting to same Treasury", async function () {
-    await expect(
-      contracts.rewardsManager.setTreasury(contracts.treasury.address)
-    ).to.be.revertedWith("Same Treasury");
-  });
-
-  it("should revert setting to same Insurance", async function () {
-    await expect(
-      contracts.rewardsManager.setInsurance(contracts.insurance.address)
-    ).to.be.revertedWith("Same Insurance");
-  });
-
-  it("should revert setting to same Region", async function () {
-    await expect(
-      contracts.rewardsManager.setRegion(contracts.region.address)
-    ).to.be.revertedWith("Same Region");
-  });
-
-  describe("sets new dependent contracts", function () {
-    let result;
-    it("sets new Staking", async function () {
-      const newStaking = await waffle.deployMockContract(
-        owner,
-        contracts.staking.interface.format() as any[]
-      );
-      result = await contracts.rewardsManager.setStaking(newStaking.address);
-      expect(await contracts.rewardsManager.staking()).to.equal(
-        newStaking.address
-      );
-      expect(result)
-        .to.emit(contracts.rewardsManager, "StakingChanged")
-        .withArgs(contracts.staking.address, newStaking.address);
-    });
-
-    it("sets new Insurance", async function () {
-      const newInsurance = await waffle.deployMockContract(
-        owner,
-        contracts.insurance.interface.format() as any[]
-      );
-      result = await contracts.rewardsManager.setInsurance(
-        newInsurance.address
-      );
-      expect(await contracts.rewardsManager.insurance()).to.equal(
-        newInsurance.address
-      );
-      expect(result)
-        .to.emit(contracts.rewardsManager, "InsuranceChanged")
-        .withArgs(contracts.insurance.address, newInsurance.address);
-    });
-
-    it("sets new Treasury", async function () {
-      const newTreasury = await waffle.deployMockContract(
-        owner,
-        contracts.treasury.interface.format() as any[]
-      );
-      result = await contracts.rewardsManager.setTreasury(newTreasury.address);
-      expect(await contracts.rewardsManager.treasury()).to.equal(
-        newTreasury.address
-      );
-      expect(result)
-        .to.emit(contracts.rewardsManager, "TreasuryChanged")
-        .withArgs(contracts.treasury.address, newTreasury.address);
-    });
-
-    it("sets new Region", async function () {
-      const newRegion = await waffle.deployMockContract(
-        owner,
-        contracts.region.interface.format() as any[]
-      );
-      result = await contracts.rewardsManager.setRegion(newRegion.address);
-      expect(await contracts.rewardsManager.region()).to.equal(
-        newRegion.address
-      );
-      expect(result)
-        .to.emit(contracts.rewardsManager, "RegionChanged")
-        .withArgs(contracts.region.address, newRegion.address);
     });
   });
 

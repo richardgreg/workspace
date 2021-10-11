@@ -101,7 +101,7 @@ contract ACLRegistry is IACLRegistry {
     require(hasRole(role, account), "you dont have the right role");
   }
 
-  function checkPermission(bytes32 permission, address account)
+  function requirePermission(bytes32 permission, address account)
     public
     view
     override

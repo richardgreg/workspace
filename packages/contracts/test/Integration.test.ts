@@ -9,6 +9,7 @@ import {
   ACLRegistry,
   BeneficiaryRegistry,
   BeneficiaryVaults,
+  ContractRegistry,
   IUniswapV2Pair,
   KeeperIncentive,
   MockERC20,
@@ -49,6 +50,7 @@ interface Contracts {
   testERC20Pair: IUniswapV2Pair;
   rewardsEscrow: RewardsEscrow;
   keeperIncentive: KeeperIncentive;
+  contractRegistry: ContractRegistry;
 }
 
 async function deployContracts(): Promise<Contracts> {
@@ -80,40 +82,46 @@ async function deployContracts(): Promise<Contracts> {
     await (await ethers.getContractFactory("ACLRegistry")).deploy()
   ).deployed();
 
+  const contractRegistry = await (
+    await (
+      await ethers.getContractFactory("ContractRegistry")
+    ).deploy(aclRegistry.address)
+  ).deployed();
+
   const beneficiaryVaults = await (
     await (
       await ethers.getContractFactory("BeneficiaryVaults")
-    ).deploy(pop.address, aclRegistry.address)
+    ).deploy(contractRegistry.address)
   ).deployed();
 
   const region = await (
     await (
       await ethers.getContractFactory("Region")
-    ).deploy(beneficiaryVaults.address, aclRegistry.address)
+    ).deploy(beneficiaryVaults.address, contractRegistry.address)
   ).deployed();
 
   const beneficiaryRegistry = await (
     await (
       await ethers.getContractFactory("BeneficiaryRegistry")
-    ).deploy(region.address)
+    ).deploy(contractRegistry.address)
   ).deployed();
 
   const rewardsEscrow = (await (
     await (
       await ethers.getContractFactory("RewardsEscrow")
-    ).deploy(pop.address, aclRegistry.address)
+    ).deploy(contractRegistry.address)
   ).deployed()) as RewardsEscrow;
 
   const staking = (await (
     await (
       await ethers.getContractFactory("Staking")
-    ).deploy(pop.address, rewardsEscrow.address, aclRegistry.address)
+    ).deploy(contractRegistry.address)
   ).deployed()) as Staking;
 
   const keeperIncentive = await (
     await (
       await ethers.getContractFactory("KeeperIncentive")
-    ).deploy(pop.address, aclRegistry.address)
+    ).deploy(contractRegistry.address)
   ).deployed();
 
   const factoryV2 = await deployContract(owner, UniswapV2FactoryJSON, [
@@ -130,16 +138,7 @@ async function deployContracts(): Promise<Contracts> {
   const rewardsManager = (await (
     await (
       await ethers.getContractFactory("RewardsManager")
-    ).deploy(
-      pop.address,
-      staking.address,
-      treasury.address,
-      insurance.address,
-      region.address,
-      aclRegistry.address,
-      keeperIncentive.address,
-      uniswapRouter.address
-    )
+    ).deploy(contractRegistry.address, uniswapRouter.address)
   ).deployed()) as RewardsManager;
 
   await factoryV2.createPair(weth.address, pop.address);
@@ -190,11 +189,65 @@ async function deployContracts(): Promise<Contracts> {
       false
     );
 
-  await staking.init(rewardsManager.address);
-
-  await beneficiaryVaults
+  await contractRegistry
     .connect(owner)
-    .setBeneficiaryRegistry(beneficiaryRegistry.address);
+    .addContract(ethers.utils.id("POP"), pop.address, ethers.utils.id("1"));
+  await contractRegistry
+    .connect(owner)
+    .addContract(
+      ethers.utils.id("Region"),
+      region.address,
+      ethers.utils.id("1")
+    );
+  await contractRegistry
+    .connect(owner)
+    .addContract(
+      ethers.utils.id("Insurance"),
+      insurance.address,
+      ethers.utils.id("1")
+    );
+  await contractRegistry
+    .connect(owner)
+    .addContract(
+      ethers.utils.id("Treasury"),
+      treasury.address,
+      ethers.utils.id("1")
+    );
+  await contractRegistry
+    .connect(owner)
+    .addContract(
+      ethers.utils.id("BeneficiaryRegistry"),
+      beneficiaryRegistry.address,
+      ethers.utils.id("1")
+    );
+  await contractRegistry
+    .connect(owner)
+    .addContract(
+      ethers.utils.id("Staking"),
+      staking.address,
+      ethers.utils.id("1")
+    );
+  await contractRegistry
+    .connect(owner)
+    .addContract(
+      ethers.utils.id("RewardsEscrow"),
+      rewardsEscrow.address,
+      ethers.utils.id("1")
+    );
+  await contractRegistry
+    .connect(owner)
+    .addContract(
+      ethers.utils.id("RewardsManager"),
+      rewardsManager.address,
+      ethers.utils.id("1")
+    );
+  await contractRegistry
+    .connect(owner)
+    .addContract(
+      ethers.utils.id("KeeperIncentive"),
+      keeperIncentive.address,
+      ethers.utils.id("1")
+    );
 
   return {
     pop,
@@ -213,6 +266,7 @@ async function deployContracts(): Promise<Contracts> {
     testERC20Pair,
     rewardsEscrow,
     keeperIncentive,
+    contractRegistry,
   };
 }
 
@@ -371,7 +425,11 @@ describe("Integration", function () {
         parseEther("100")
       );
 
-      await contracts.rewardsManager.setInsurance(newInsurance.address);
+      await contracts.contractRegistry.updateContract(
+        ethers.utils.id("Insurance"),
+        newInsurance.address,
+        ethers.utils.id("1")
+      );
       await contracts.rewardsManager.distributeRewards();
       expect(
         await contracts.pop.balanceOf(contracts.insurance.address)
@@ -404,7 +462,11 @@ describe("Integration", function () {
         parseEther("100")
       );
 
-      await contracts.rewardsManager.setTreasury(newTreasury.address);
+      await contracts.contractRegistry.updateContract(
+        ethers.utils.id("Treasury"),
+        newTreasury.address,
+        ethers.utils.id("1")
+      );
       await contracts.rewardsManager.distributeRewards();
       expect(
         await contracts.pop.balanceOf(contracts.treasury.address)
@@ -418,13 +480,8 @@ describe("Integration", function () {
       const newStaking = await (
         await (
           await ethers.getContractFactory("Staking")
-        ).deploy(
-          contracts.pop.address,
-          contracts.rewardsEscrow.address,
-          contracts.aclRegistry.address
-        )
+        ).deploy(contracts.contractRegistry.address)
       ).deployed();
-      await newStaking.init(contracts.rewardsManager.address);
 
       await contracts.rewardsManager.distributeRewards();
       expect(await contracts.pop.balanceOf(contracts.staking.address)).to.equal(
@@ -445,7 +502,11 @@ describe("Integration", function () {
         parseEther("100")
       );
 
-      await contracts.rewardsManager.setStaking(newStaking.address);
+      await contracts.contractRegistry.updateContract(
+        ethers.utils.id("Staking"),
+        newStaking.address,
+        ethers.utils.id("1")
+      );
       await contracts.rewardsManager.distributeRewards();
       expect(await contracts.pop.balanceOf(contracts.staking.address)).to.equal(
         parseEther("32")
@@ -459,11 +520,9 @@ describe("Integration", function () {
       const newBeneficiaryVaults = await (
         await (
           await ethers.getContractFactory("BeneficiaryVaults")
-        ).deploy(contracts.pop.address, contracts.aclRegistry.address)
+        ).deploy(contracts.contractRegistry.address)
       ).deployed();
-      await newBeneficiaryVaults
-        .connect(owner)
-        .setBeneficiaryRegistry(contracts.beneficiaryRegistry.address);
+
       await contracts.region
         .connect(owner)
         .addRegion(ethers.utils.id("NewRegion"), newBeneficiaryVaults.address);

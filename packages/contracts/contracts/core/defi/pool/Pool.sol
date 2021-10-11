@@ -10,14 +10,14 @@ import "@openzeppelin/contracts/utils/Pausable.sol";
 import "./AffiliateToken.sol";
 import "../../interfaces/IERC20Metadata.sol";
 import "../../interfaces/IACLRegistry.sol";
-import "../../../integrations/interfaces/CurveContracts.sol";
+import "../../interfaces/IContractRegistry.sol";
+import "../../../externals/interfaces/CurveContracts.sol";
 
 contract Pool is AffiliateToken, ReentrancyGuard, Pausable {
   using SafeMath for uint256;
   using SafeERC20 for IERC20;
 
-  IACLRegistry public aclRegistry;
-  address public rewardsManager;
+  IContractRegistry public contractRegistry;
 
   uint256 constant BPS_DENOMINATOR = 10_000;
   uint256 constant MINUTES_PER_YEAR = 525_600;
@@ -42,8 +42,7 @@ contract Pool is AffiliateToken, ReentrancyGuard, Pausable {
   constructor(
     address token_,
     address yearnRegistry_,
-    address rewardsManager_,
-    IACLRegistry aclRegistry_
+    IContractRegistry contractRegistry_
   )
     public
     AffiliateToken(
@@ -57,10 +56,8 @@ contract Pool is AffiliateToken, ReentrancyGuard, Pausable {
   {
     require(address(yearnRegistry_) != address(0));
     require(address(token_) != address(0));
-    require(rewardsManager_ != address(0));
 
-    rewardsManager = rewardsManager_;
-    aclRegistry = aclRegistry_;
+    contractRegistry = contractRegistry_;
     feesUpdatedAt = block.timestamp;
   }
 
@@ -77,7 +74,8 @@ contract Pool is AffiliateToken, ReentrancyGuard, Pausable {
     blockLocked
     returns (uint256)
   {
-    aclRegistry.requireApprovedContractOrEOA(msg.sender);
+    IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
+      .requireApprovedContractOrEOA(msg.sender);
     require(amount <= token.balanceOf(msg.sender), "Insufficient balance");
     _lockForBlock(msg.sender);
     _takeFees();
@@ -99,7 +97,8 @@ contract Pool is AffiliateToken, ReentrancyGuard, Pausable {
     blockLocked
     returns (uint256)
   {
-    aclRegistry.requireApprovedContractOrEOA(msg.sender);
+    IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
+      .requireApprovedContractOrEOA(msg.sender);
     require(amount <= token.balanceOf(msg.sender), "Insufficient balance");
     _lockForBlock(msg.sender);
     _takeFees();
@@ -129,6 +128,9 @@ contract Pool is AffiliateToken, ReentrancyGuard, Pausable {
     uint256 withdrawalShares = amount.sub(feeShares);
     uint256 fee = valueFor(feeShares);
     uint256 withdrawal = valueFor(withdrawalShares);
+    address rewardsManager = contractRegistry.getContract(
+      keccak256("RewardsManager")
+    );
 
     _burn(msg.sender, amount);
     _withdraw(address(this), msg.sender, withdrawal, true);
@@ -148,7 +150,8 @@ contract Pool is AffiliateToken, ReentrancyGuard, Pausable {
   }
 
   function setWithdrawalFee(uint256 withdrawalFee_) external {
-    aclRegistry.requireRole(keccak256("DAO"), msg.sender);
+    IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
+      .requireRole(keccak256("DAO"), msg.sender);
     require(withdrawalFee != withdrawalFee_, "Same withdrawalFee");
     uint256 _previousWithdrawalFee = withdrawalFee;
     withdrawalFee = withdrawalFee_;
@@ -156,7 +159,8 @@ contract Pool is AffiliateToken, ReentrancyGuard, Pausable {
   }
 
   function setManagementFee(uint256 managementFee_) external {
-    aclRegistry.requireRole(keccak256("DAO"), msg.sender);
+    IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
+      .requireRole(keccak256("DAO"), msg.sender);
     require(managementFee != managementFee_, "Same managementFee");
     uint256 _previousManagementFee = managementFee;
     managementFee = managementFee_;
@@ -164,7 +168,8 @@ contract Pool is AffiliateToken, ReentrancyGuard, Pausable {
   }
 
   function setPerformanceFee(uint256 performanceFee_) external {
-    aclRegistry.requireRole(keccak256("DAO"), msg.sender);
+    IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
+      .requireRole(keccak256("DAO"), msg.sender);
     require(performanceFee != performanceFee_, "Same performanceFee");
     uint256 _previousPerformanceFee = performanceFee;
     performanceFee = performanceFee_;
@@ -172,10 +177,16 @@ contract Pool is AffiliateToken, ReentrancyGuard, Pausable {
   }
 
   function withdrawAccruedFees() external {
-    aclRegistry.requireRole(keccak256("DAO"), msg.sender);
+    IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
+      .requireRole(keccak256("DAO"), msg.sender);
     uint256 balance = balanceOf(address(this));
     _burn(address(this), balance);
-    _withdraw(address(this), rewardsManager, valueFor(balance), true);
+    _withdraw(
+      address(this),
+      contractRegistry.getContract(keccak256("RewardsManager")),
+      valueFor(balance),
+      true
+    );
   }
 
   function pricePerPoolToken() public view returns (uint256) {
@@ -251,12 +262,14 @@ contract Pool is AffiliateToken, ReentrancyGuard, Pausable {
   }
 
   function pauseContract() external {
-    aclRegistry.requireRole(keccak256("DAO"), msg.sender);
+    IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
+      .requireRole(keccak256("DAO"), msg.sender);
     _pause();
   }
 
   function unpauseContract() external {
-    aclRegistry.requireRole(keccak256("DAO"), msg.sender);
+    IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
+      .requireRole(keccak256("DAO"), msg.sender);
     _unpause();
   }
 

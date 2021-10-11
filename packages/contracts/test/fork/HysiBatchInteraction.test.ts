@@ -14,6 +14,7 @@ import { BasicIssuanceModule } from "../../lib/SetToken/vendor/set-protocol/type
 import { SetToken } from "../../lib/SetToken/vendor/set-protocol/types/SetToken";
 import {
   ACLRegistry,
+  ContractRegistry,
   CurveMetapool,
   ERC20,
   Faucet,
@@ -48,6 +49,7 @@ interface Contracts {
   keeperIncentive: KeeperIncentive;
   faucet: Faucet;
   aclRegistry: ACLRegistry;
+  contractRegistry: ContractRegistry;
 }
 
 enum BatchType {
@@ -234,10 +236,16 @@ async function deployContracts(): Promise<Contracts> {
     await (await ethers.getContractFactory("ACLRegistry")).deploy()
   ).deployed();
 
+  const contractRegistry = await (
+    await (
+      await ethers.getContractFactory("ContractRegistry")
+    ).deploy(aclRegistry.address)
+  ).deployed();
+
   const keeperIncentive = await (
     await (
       await ethers.getContractFactory("KeeperIncentive")
-    ).deploy(mockPop.address, aclRegistry.address)
+    ).deploy(contractRegistry.address)
   ).deployed();
 
   //Deploy HysiBatchInteraction
@@ -246,12 +254,10 @@ async function deployContracts(): Promise<Contracts> {
   );
   const hysiBatchInteraction = await (
     await HysiBatchInteraction.deploy(
-      mockPop.address,
-      THREE_CRV_TOKEN_ADDRESS,
+      contractRegistry.address,
       HYSI_TOKEN_ADDRESS,
+      THREE_CRV_TOKEN_ADDRESS,
       SET_BASIC_ISSUANCE_MODULE_ADDRESS,
-      keeperIncentive.address,
-      aclRegistry.address,
       [
         YDUSD_TOKEN_ADDRESS,
         YFRAX_TOKEN_ADDRESS,
@@ -305,6 +311,7 @@ async function deployContracts(): Promise<Contracts> {
     keeperIncentive,
     faucet,
     aclRegistry,
+    contractRegistry,
   };
 }
 const getMinAmountOfHYSIToMint = async (): Promise<BigNumber> => {
@@ -449,6 +456,22 @@ describe("HysiBatchInteraction Network Test", function () {
       ethers.utils.id("Keeper"),
       owner.address
     );
+
+    await contracts.contractRegistry
+      .connect(owner)
+      .addContract(
+        ethers.utils.id("POP"),
+        contracts.mockPop.address,
+        ethers.utils.id("1")
+      );
+    await contracts.contractRegistry
+      .connect(owner)
+      .addContract(
+        ethers.utils.id("KeeperIncentive"),
+        contracts.keeperIncentive.address,
+        ethers.utils.id("1")
+      );
+
     await contracts.keeperIncentive
       .connect(owner)
       .createIncentive(
@@ -457,6 +480,15 @@ describe("HysiBatchInteraction Network Test", function () {
         true,
         false
       );
+    await contracts.keeperIncentive
+      .connect(owner)
+      .createIncentive(
+        utils.formatBytes32String("HysiBatchInteraction"),
+        0,
+        true,
+        false
+      );
+
     await contracts.keeperIncentive
       .connect(owner)
       .addControllerContract(
