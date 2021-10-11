@@ -11,7 +11,7 @@ import "./Interfaces/IRegion.sol";
 import "./Governed.sol";
 import "./ParticipationReward.sol";
 
-contract GrantElections is ParticipationReward {
+contract GrantElections is Governed {
   using SafeMath for uint256;
   using SafeERC20 for IERC20;
 
@@ -74,10 +74,14 @@ contract GrantElections is ParticipationReward {
 
   /* ========== STATE VARIABLES ========== */
 
+  IERC20 internal POP;
   IRegion internal region;
   IStaking internal staking;
   IBeneficiaryRegistry internal beneficiaryRegistry;
   IRandomNumberConsumer internal randomNumberConsumer;
+  ParticipationReward internal participationReward;
+
+  bytes32 public immutable contractName = "GrantElections";
 
   Election[] public elections;
   mapping(bytes2 => uint256[3]) public activeElections;
@@ -111,12 +115,15 @@ contract GrantElections is ParticipationReward {
     IRandomNumberConsumer _randomNumberConsumer,
     IERC20 _pop,
     IRegion _region,
+    ParticipationReward _participationReward,
     address _governance
-  ) ParticipationReward(_pop, _governance) {
+  ) Governed(_governance) {
     staking = _staking;
     beneficiaryRegistry = _beneficiaryRegistry;
     randomNumberConsumer = _randomNumberConsumer;
     region = _region;
+    POP = _pop;
+    participationReward = _participationReward;
     _setDefaults();
   }
 
@@ -236,7 +243,8 @@ contract GrantElections is ParticipationReward {
     election.electionTerm = _grantTerm;
     election.startTime = block.timestamp;
     election.region = _region;
-    (bool vaultCreated, bytes32 vaultId) = _initializeVault(
+    (bool vaultCreated, bytes32 vaultId) = participationReward.initializeVault(
+      contractName,
       keccak256(abi.encodePacked(_term, block.timestamp)),
       block.timestamp.add(electionDefaults[_term].registrationPeriod).add(
         electionDefaults[_term].votingPeriod
@@ -364,7 +372,12 @@ contract GrantElections is ParticipationReward {
       "Insufficient voice credits"
     );
     if (election.vaultId != "") {
-      _addShares(election.vaultId, msg.sender, _usedVoiceCredits);
+      participationReward.addShares(
+        contractName,
+        election.vaultId,
+        msg.sender,
+        _usedVoiceCredits
+      );
     }
     emit UserVoted(msg.sender, election.electionTerm);
   }
@@ -451,7 +464,7 @@ contract GrantElections is ParticipationReward {
       uint8(election.electionTerm),
       _merkleRoot
     );
-    _openVault(election.vaultId);
+    participationReward.openVault(contractName, election.vaultId);
     election.electionState = ElectionState.Finalized;
 
     emit ElectionFinalized(_electionId, _merkleRoot);

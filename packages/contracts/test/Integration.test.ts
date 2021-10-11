@@ -3,11 +3,13 @@ import { parseEther } from "@ethersproject/units";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { expect } from "chai";
 import { deployContract } from "ethereum-waffle";
+import { utils } from "ethers";
 import { ethers, waffle } from "hardhat";
 import {
   BeneficiaryRegistry,
   BeneficiaryVaults,
   IUniswapV2Pair,
+  KeeperIncentive,
   MockERC20,
   Region,
   RewardsEscrow,
@@ -46,6 +48,7 @@ interface Contracts {
   WETHPair: IUniswapV2Pair;
   TestERC20Pair: IUniswapV2Pair;
   RewardsEscrow: RewardsEscrow;
+  KeeperIncentive: KeeperIncentive;
 }
 
 async function deployContracts(): Promise<Contracts> {
@@ -105,6 +108,12 @@ async function deployContracts(): Promise<Contracts> {
     ).deploy(POP.address, RewardsEscrow.address)
   ).deployed()) as Staking;
 
+  const KeeperIncentive = await (
+    await (
+      await ethers.getContractFactory("KeeperIncentive")
+    ).deploy(POP.address, owner.address)
+  ).deployed();
+
   const factoryV2 = await deployContract(owner, UniswapV2FactoryJSON, [
     owner.address,
   ]);
@@ -125,6 +134,7 @@ async function deployContracts(): Promise<Contracts> {
       Treasury.address,
       Insurance.address,
       Region.address,
+      KeeperIncentive.address,
       UniswapRouter.address
     )
   ).deployed()) as RewardsManager;
@@ -150,6 +160,7 @@ async function deployContracts(): Promise<Contracts> {
     JSON.stringify(UniswapV2PairJSON.abi),
     owner
   ) as unknown as IUniswapV2Pair;
+
   return {
     POP,
     TestERC20,
@@ -165,6 +176,7 @@ async function deployContracts(): Promise<Contracts> {
     WETHPair,
     TestERC20Pair,
     RewardsEscrow,
+    KeeperIncentive,
   };
 }
 
@@ -201,6 +213,26 @@ async function prepareContracts(): Promise<void> {
     parseEther("1000"),
     owner.address,
     currentTimestamp + 60
+  );
+  await contracts.KeeperIncentive.connect(owner).createIncentive(
+    utils.formatBytes32String("RewardsManager"),
+    0,
+    true,
+    false
+  );
+  await contracts.KeeperIncentive.connect(owner).createIncentive(
+    utils.formatBytes32String("RewardsManager"),
+    0,
+    true,
+    false
+  );
+  await contracts.KeeperIncentive.connect(owner).addControllerContract(
+    utils.formatBytes32String("RewardsManager"),
+    contracts.RewardsManager.address
+  );
+  await contracts.KeeperIncentive.connect(owner).approveAccount(
+    utils.formatBytes32String("RewardsManager"),
+    owner.address
   );
 }
 

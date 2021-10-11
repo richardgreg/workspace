@@ -15,7 +15,7 @@ import "./Governed.sol";
  * @title BeneficiaryGovernance
  * @notice This contract is for submitting beneficiary nomination proposals and beneficiary takedown proposals
  */
-contract BeneficiaryGovernance is ParticipationReward {
+contract BeneficiaryGovernance is Governed {
   using SafeMath for uint256;
   using SafeERC20 for IERC20;
 
@@ -65,9 +65,11 @@ contract BeneficiaryGovernance is ParticipationReward {
 
   /* ========== STATE VARIABLES ========== */
 
-  IRegion internal region;
   IStaking public staking;
   IBeneficiaryRegistry public beneficiaryRegistry;
+  IERC20 public POP;
+  IRegion internal region;
+  ParticipationReward public participationReward;
 
   mapping(address => bool) pendingBeneficiaries;
   mapping(address => uint256) beneficiaryProposals;
@@ -76,6 +78,7 @@ contract BeneficiaryGovernance is ParticipationReward {
   uint256[] public nominations;
   uint256[] public takedowns;
   ConfigurationOptions public DefaultConfigurations;
+  bytes32 public immutable contractName = "BeneficiaryGovernance";
 
   /* ========== EVENTS ========== */
 
@@ -100,11 +103,14 @@ contract BeneficiaryGovernance is ParticipationReward {
     IBeneficiaryRegistry _beneficiaryRegistry,
     IERC20 _pop,
     IRegion _region,
+    ParticipationReward _participationReward,
     address _governance
-  ) ParticipationReward(_pop, _governance) {
+  ) Governed(_governance) {
     staking = _staking;
     beneficiaryRegistry = _beneficiaryRegistry;
+    POP = _pop;
     region = _region;
+    participationReward = _participationReward;
     _setDefaults();
   }
 
@@ -215,7 +221,8 @@ contract BeneficiaryGovernance is ParticipationReward {
     proposal.region = _region;
     proposal.proposalType = _type;
     proposal.configurationOptions = DefaultConfigurations;
-    (bool vaultCreated, bytes32 vaultId) = _initializeVault(
+    (bool vaultCreated, bytes32 vaultId) = participationReward.initializeVault(
+      contractName,
       keccak256(abi.encodePacked(proposalId, block.timestamp)),
       block.timestamp.add(DefaultConfigurations.votingPeriod)
     );
@@ -275,7 +282,12 @@ contract BeneficiaryGovernance is ParticipationReward {
     }
 
     if (proposal.vaultId != "") {
-      _addShares(proposal.vaultId, msg.sender, _voiceCredits);
+      participationReward.addShares(
+        contractName,
+        proposal.vaultId,
+        msg.sender,
+        _voiceCredits
+      );
     }
 
     emit Vote(proposalId, msg.sender, _voiceCredits);
@@ -307,7 +319,7 @@ contract BeneficiaryGovernance is ParticipationReward {
     _resetBeneficiaryPendingState(proposal.beneficiary);
 
     if (proposal.vaultId != "") {
-      _openVault(proposal.vaultId);
+      participationReward.openVault(contractName, proposal.vaultId);
     }
 
     emit Finalize(proposalId);

@@ -3,7 +3,7 @@ import { parseEther } from "@ethersproject/units";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { GrantElectionAdapter } from "@popcorn/contracts/adapters";
 import { expect } from "chai";
-import { BigNumber } from "ethers";
+import { BigNumber, utils } from "ethers";
 import { ethers, waffle } from "hardhat";
 import {
   ElectionMetadata,
@@ -14,6 +14,7 @@ import {
   BeneficiaryVaults,
   GrantElections,
   MockERC20,
+  ParticipationReward,
   RandomNumberHelper,
 } from "../typechain";
 
@@ -23,6 +24,7 @@ interface Contracts {
   mockBeneficiaryRegistry: MockContract;
   beneficiaryVaults: BeneficiaryVaults;
   randomNumberHelper: RandomNumberHelper;
+  participationReward: ParticipationReward;
   grantElections: GrantElections;
 }
 
@@ -108,6 +110,11 @@ async function deployContracts(): Promise<Contracts> {
     ).deploy(beneficiaryVaults.address)
   ).deployed();
 
+  const participationReward = await (
+    await ethers.getContractFactory("ParticipationReward")
+  ).deploy(mockPop.address, governance.address);
+  await participationReward.deployed();
+
   const grantElections = (await (
     await (
       await ethers.getContractFactory("GrantElections")
@@ -117,14 +124,24 @@ async function deployContracts(): Promise<Contracts> {
       randomNumberHelper.address,
       mockPop.address,
       region.address,
+      participationReward.address,
       governance.address
     )
   ).deployed()) as GrantElections;
 
   await mockPop
     .connect(owner)
+    .approve(participationReward.address, parseEther("100000"));
+  await mockPop
+    .connect(owner)
     .approve(grantElections.address, parseEther("100000"));
-  await grantElections.connect(owner).contributeReward(parseEther("2000"));
+  await participationReward.connect(owner).contributeReward(parseEther("2000"));
+  await participationReward
+    .connect(governance)
+    .addControllerContract(
+      utils.formatBytes32String("GrantElections"),
+      grantElections.address
+    );
   await beneficiaryVaults.transferOwnership(grantElections.address);
 
   return {
@@ -133,6 +150,7 @@ async function deployContracts(): Promise<Contracts> {
     mockBeneficiaryRegistry,
     beneficiaryVaults,
     randomNumberHelper,
+    participationReward,
     grantElections,
   };
 }
@@ -569,7 +587,7 @@ describe("GrantElections", function () {
       const popBalanceForElection = await contracts.mockPop.balanceOf(
         contracts.grantElections.address
       );
-      expect(popBalanceForElection).to.equal(parseEther("3000"));
+      expect(popBalanceForElection).to.equal(parseEther("1000"));
     });
   });
 
@@ -588,7 +606,7 @@ describe("GrantElections", function () {
           currentBlock.timestamp + 1
         );
       expect(result)
-        .to.emit(contracts.grantElections, "VaultInitialized")
+        .to.emit(contracts.participationReward, "VaultInitialized")
         .withArgs(
           ethers.utils.solidityKeccak256(
             ["uint8", "uint256"],
@@ -698,9 +716,12 @@ describe("GrantElections", function () {
       expect(activeElectionId).to.equal(electionId + 1);
     });
     it("should not initialize a vault even the needed budget is larger than rewardBudget", async function () {
-      await contracts.grantElections
+      await contracts.participationReward
         .connect(governance)
-        .setRewardsBudget(parseEther("3000"));
+        .setRewardsBudget(
+          utils.formatBytes32String("GrantElections"),
+          parseEther("3000")
+        );
       const currentBlock = await waffle.provider.getBlock("latest");
       const result = await contracts.grantElections.initialize(
         GRANT_TERM.QUARTER,
@@ -713,7 +734,10 @@ describe("GrantElections", function () {
           DEFAULT_REGION,
           currentBlock.timestamp + 1
         );
-      expect(result).to.not.emit(contracts.grantElections, "VaultInitialized");
+      expect(result).to.not.emit(
+        contracts.participationReward,
+        "VaultInitialized"
+      );
       const election = await contracts.grantElections.elections(electionId);
       expect(election.vaultId).to.equal(
         "0x0000000000000000000000000000000000000000000000000000000000000000"

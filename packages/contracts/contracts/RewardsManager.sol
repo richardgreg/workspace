@@ -21,12 +21,7 @@ import "./Interfaces/IRewardsManager.sol";
  * @title Popcorn Rewards Manager
  * @notice Manages distribution of POP rewards to Popcorn Treasury, DAO Staking, and Beneficiaries
  */
-contract RewardsManager is
-  IRewardsManager,
-  Owned,
-  ReentrancyGuard,
-  KeeperIncentive
-{
+contract RewardsManager is IRewardsManager, Owned, ReentrancyGuard {
   using SafeMath for uint256;
   using SafeERC20 for IERC20;
 
@@ -40,11 +35,14 @@ contract RewardsManager is
   /* ========== STATE VARIABLES ========== */
 
   uint256 public constant SWAP_TIMEOUT = 600;
+  bytes32 public immutable contractName = "RewardsManager";
 
+  IERC20 public POP;
   IStaking public staking;
   ITreasury public treasury;
   IInsurance public insurance;
   IRegion public region;
+  KeeperIncentive public keeperIncentive;
   IUniswapV2Router02 public immutable uniswapV2Router;
 
   uint256[4] public rewardSplits;
@@ -72,12 +70,15 @@ contract RewardsManager is
     ITreasury treasury_,
     IInsurance insurance_,
     IRegion region_,
+    KeeperIncentive keeperIncentive_,
     IUniswapV2Router02 uniswapV2Router_
-  ) Owned(msg.sender) KeeperIncentive(msg.sender, pop_) {
+  ) Owned(msg.sender) {
+    POP = pop_;
     staking = staking_;
     treasury = treasury_;
     insurance = insurance_;
     region = region_;
+    keeperIncentive = keeperIncentive_;
     uniswapV2Router = uniswapV2Router_;
     rewardLimits[uint8(RewardTargets.Staking)] = [20e18, 80e18];
     rewardLimits[uint8(RewardTargets.Treasury)] = [10e18, 80e18];
@@ -106,9 +107,9 @@ contract RewardsManager is
   function swapTokenForRewards(address[] calldata path_, uint256 minAmountOut_)
     public
     nonReentrant
-    keeperIncentive(0)
     returns (uint256[] memory)
   {
+    keeperIncentive.handleKeeperIncentive(contractName, 0, msg.sender);
     require(path_.length >= 2, "Invalid swap path");
     require(minAmountOut_ > 0, "Invalid amount");
     require(
@@ -137,7 +138,8 @@ contract RewardsManager is
    * @notice Distribute POP rewards to dependent RewardTarget contracts
    * @dev Contract must have POP balance in order to distribute according to rewardSplits ratio
    */
-  function distributeRewards() public nonReentrant keeperIncentive(0) {
+  function distributeRewards() public nonReentrant {
+    keeperIncentive.handleKeeperIncentive(contractName, 1, msg.sender);
     uint256 _availableReward = POP.balanceOf(address(this));
     require(_availableReward > 0, "No POP balance");
 

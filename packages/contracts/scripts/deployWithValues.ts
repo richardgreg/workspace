@@ -36,6 +36,8 @@ interface Contracts {
   beneficiaryGovernance: Contract;
   region: Contract;
   rewardsEscrow: Contract;
+  participationReward: Contract;
+  keeperIncentive: Contract;
 }
 
 enum Vote {
@@ -128,6 +130,12 @@ export default async function deploy(ethers): Promise<void> {
       ).deploy(mockPop.address, rewardsEscrow.address)
     ).deployed();
 
+    const keeperIncentive = await (
+      await (
+        await ethers.getContractFactory("KeeperIncentive")
+      ).deploy(mockPop.address, accounts[0].address)
+    ).deployed();
+
     const uniswapFactory = await deployContract(
       accounts[0],
       UniswapV2FactoryJSON,
@@ -160,6 +168,7 @@ export default async function deploy(ethers): Promise<void> {
         treasuryFund.address,
         insuranceFund.address,
         beneficiaryVaults.address,
+        keeperIncentive.address,
         uniswapRouter.address
       )
     ).deployed();
@@ -176,6 +185,12 @@ export default async function deploy(ethers): Promise<void> {
       )
     ).deployed();
 
+    const participationReward = await (
+      await (
+        await ethers.getContractFactory("ParticipationReward")
+      ).deploy(mockPop.address, accounts[0].address)
+    ).deployed();
+
     const beneficiaryGovernance = await (
       await (
         await ethers.getContractFactory("BeneficiaryGovernance")
@@ -184,6 +199,7 @@ export default async function deploy(ethers): Promise<void> {
         beneficiaryRegistry.address,
         mockPop.address,
         region.address,
+        participationReward.address,
         accounts[0].address
       )
     ).deployed();
@@ -197,9 +213,35 @@ export default async function deploy(ethers): Promise<void> {
         randomNumberConsumer.address,
         mockPop.address,
         region.address,
+        participationReward.address,
         accounts[0].address
       )
     ).deployed();
+
+    await keeperIncentive
+      .connect(accounts[0])
+      .createIncentive(
+        utils.formatBytes32String("RewardsManager"),
+        0,
+        true,
+        false
+      );
+    await keeperIncentive
+      .connect(accounts[0])
+      .createIncentive(
+        utils.formatBytes32String("RewardsManager"),
+        0,
+        true,
+        false
+      );
+    await keeperIncentive
+      .connect(accounts[0])
+      .createIncentive(
+        utils.formatBytes32String("HysiBatchInteraction"),
+        0,
+        true,
+        false
+      );
 
     contracts = {
       beneficiaryRegistry,
@@ -216,7 +258,41 @@ export default async function deploy(ethers): Promise<void> {
       uniswapPair,
       beneficiaryGovernance,
       region,
+      participationReward,
+      keeperIncentive,
     };
+  };
+
+  const prepareKeeperIncentives = async (): Promise<void> => {
+    console.log("prepare keeper incentives...");
+    await contracts.keeperIncentive
+      .connect(accounts[0])
+      .addControllerContract(
+        utils.formatBytes32String("RewardsManager"),
+        contracts.rewardsManager.address
+      );
+    await contracts.keeperIncentive
+      .connect(accounts[0])
+      .approveAccount(
+        utils.formatBytes32String("RewardsManager"),
+        accounts[0].address
+      );
+  };
+
+  const addingControllerContracts = async (): Promise<void> => {
+    console.log("adding controller contracts to ParticipationReward ...");
+    await contracts.participationReward
+      .connect(accounts[0])
+      .addControllerContract(
+        utils.formatBytes32String("BeneficiaryGovernance"),
+        contracts.beneficiaryGovernance.address
+      );
+    await contracts.participationReward
+      .connect(accounts[0])
+      .addControllerContract(
+        utils.formatBytes32String("GrantElections"),
+        contracts.grantElections.address
+      );
   };
 
   const addBeneficiariesToRegistry = async (): Promise<void> => {
@@ -920,6 +996,8 @@ ADDR_REWARDS_ESCROW=${contracts.rewardsEscrow.address}
   await setSigners();
   await giveBeneficiariesETH();
   await deployContracts();
+  await addingControllerContracts();
+  await prepareKeeperIncentives();
   await addBeneficiariesToRegistry();
   await mintPOP();
   await approveForStaking();

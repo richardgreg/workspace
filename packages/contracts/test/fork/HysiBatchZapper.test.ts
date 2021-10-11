@@ -1,6 +1,7 @@
 import { BigNumber } from "@ethersproject/bignumber";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { expect } from "chai";
+import { utils } from "ethers";
 import { parseEther } from "ethers/lib/utils";
 import { ethers, network, waffle } from "hardhat";
 import HysiBatchInteractionAdapter, {
@@ -18,6 +19,7 @@ import {
   Faucet,
   HysiBatchInteraction,
   HysiBatchZapper,
+  KeeperIncentive,
   MockYearnV2Vault,
 } from "../../typechain";
 
@@ -45,6 +47,7 @@ interface Contracts {
   setToken: SetToken; // alias for hysi
   basicIssuanceModule: BasicIssuanceModule;
   hysiBatchInteraction: HysiBatchInteraction;
+  keeperIncentive: KeeperIncentive;
   faucet: Faucet;
   hysiBatchZapper: HysiBatchZapper;
 }
@@ -230,15 +233,23 @@ async function deployContracts(): Promise<Contracts> {
     SET_BASIC_ISSUANCE_MODULE_ADDRESS
   )) as unknown as BasicIssuanceModule;
 
+  const keeperIncentive = await (
+    await (
+      await ethers.getContractFactory("KeeperIncentive")
+    ).deploy(pop.address, owner.address)
+  ).deployed();
+
   //Deploy HysiBatchInteraction
   const HysiBatchInteraction = await ethers.getContractFactory(
     "HysiBatchInteraction"
   );
   const hysiBatchInteraction = await (
     await HysiBatchInteraction.deploy(
+      pop.address,
       THREE_CRV_TOKEN_ADDRESS,
       HYSI_TOKEN_ADDRESS,
       SET_BASIC_ISSUANCE_MODULE_ADDRESS,
+      keeperIncentive.address,
       [
         YDUSD_TOKEN_ADDRESS,
         YFRAX_TOKEN_ADDRESS,
@@ -265,9 +276,7 @@ async function deployContracts(): Promise<Contracts> {
       ],
       2500,
       parseEther("200"),
-      parseEther("1"),
-      owner.address,
-      pop.address
+      parseEther("1")
     )
   ).deployed();
 
@@ -299,6 +308,7 @@ async function deployContracts(): Promise<Contracts> {
     setToken: hysi,
     basicIssuanceModule,
     hysiBatchInteraction,
+    keeperIncentive,
     faucet,
     hysiBatchZapper,
   };
@@ -319,6 +329,27 @@ const deployAndAssignContracts = async () => {
     4,
     depositor.address
   );
+  await contracts.keeperIncentive
+    .connect(owner)
+    .createIncentive(
+      utils.formatBytes32String("HysiBatchInteraction"),
+      0,
+      true,
+      false
+    );
+  await contracts.keeperIncentive
+    .connect(owner)
+    .addControllerContract(
+      utils.formatBytes32String("HysiBatchInteraction"),
+      contracts.hysiBatchInteraction.address
+    );
+  await contracts.keeperIncentive
+    .connect(owner)
+    .approveAccount(
+      utils.formatBytes32String("HysiBatchInteraction"),
+      owner.address
+    );
+
   DepositorInitial = await contracts.dai.balanceOf(depositor.address);
   await contracts.faucet.sendThreeCrv(100, depositor.address);
   await contracts.dai

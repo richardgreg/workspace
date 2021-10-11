@@ -26,14 +26,16 @@ contract ParticipationReward is Governed, ReentrancyGuard {
   }
 
   IERC20 public immutable POP;
-  uint256 public rewardBudget;
   uint256 public rewardBalance;
   uint256 public totalVaultsBudget;
+  mapping(bytes32 => uint256) public rewardBudgets;
   mapping(bytes32 => Vault) public vaults;
   mapping(address => bytes32[]) public userVaults;
+  mapping(bytes32 => address) public controllerContracts;
+  mapping(bytes32 => bool) public rewardsEnabled;
 
   /* ========== EVENTS ========== */
-  event RewardBudgetChanged(uint256 amount);
+  event RewardBudgetChanged(bytes32 contractName_, uint256 amount);
   event VaultInitialized(bytes32 vaultId);
   event VaultOpened(bytes32 vaultId);
   event VaultClosed(bytes32 vaultId);
@@ -41,6 +43,8 @@ contract ParticipationReward is Governed, ReentrancyGuard {
   event RewardsClaimed(address account_, uint256 amount);
   event SharesAdded(bytes32 vaultId_, address account_, uint256 shares_);
   event RewardBalanceIncreased(address account, uint256 amount);
+  event ControllerContractAdded(bytes32 contractName_, address contract_);
+  event RewardsToggled(bytes32 contractName_, bool prevState, bool newState);
 
   /* ========== CONSTRUCTOR ========== */
 
@@ -106,18 +110,26 @@ contract ParticipationReward is Governed, ReentrancyGuard {
 
   /**
    * @notice Initializes a vault for voting claims
+   * @param contractName_ Name of contract that uses ParticipationRewards in bytes32
    * @param vaultId_ Bytes32
    * @param endTime_ Unix timestamp in seconds after which a vault can be closed
    * @dev There must be enough funds in this contract to support opening another vault
    */
-  function _initializeVault(bytes32 vaultId_, uint256 endTime_)
-    internal
-    returns (bool, bytes32)
-  {
+  function initializeVault(
+    bytes32 contractName_,
+    bytes32 vaultId_,
+    uint256 endTime_
+  ) external onlyControllerContract(contractName_) returns (bool, bytes32) {
+    require(
+      rewardsEnabled[contractName_],
+      "participationRewards are not enabled for this contract"
+    );
     require(vaults[vaultId_].endTime == 0, "Vault must not exist");
     require(endTime_ > block.timestamp, "end must be in the future");
 
-    uint256 expectedVaultBudget = totalVaultsBudget.add(rewardBudget);
+    uint256 expectedVaultBudget = totalVaultsBudget.add(
+      rewardBudgets[contractName_]
+    );
     if (expectedVaultBudget > rewardBalance || rewardBalance == 0) {
       return (false, "");
     }
@@ -126,7 +138,7 @@ contract ParticipationReward is Governed, ReentrancyGuard {
 
     Vault storage vault = vaults[vaultId_];
     vault.endTime = endTime_;
-    vault.tokenBalance = rewardBudget;
+    vault.tokenBalance = rewardBudgets[contractName_];
 
     emit VaultInitialized(vaultId_);
     return (true, vaultId_);
@@ -135,9 +147,14 @@ contract ParticipationReward is Governed, ReentrancyGuard {
   /**
    * @notice Open a vault it can receive rewards and accept claims
    * @dev Vault must be in an initialized state
+   * @param contractName_ the controller contract
    * @param vaultId_ Vault ID in bytes32
    */
-  function _openVault(bytes32 vaultId_) internal vaultExists(vaultId_) {
+  function openVault(bytes32 contractName_, bytes32 vaultId_)
+    external
+    onlyControllerContract(contractName_)
+    vaultExists(vaultId_)
+  {
     require(
       vaults[vaultId_].status == VaultStatus.Init,
       "Vault must be initialized"
@@ -146,7 +163,7 @@ contract ParticipationReward is Governed, ReentrancyGuard {
       vaults[vaultId_].endTime <= block.timestamp,
       "wait till endTime is over"
     );
-
+    //TODO should vaults also be mapped to contracts? Currently contract A could technically open vaults for contract B the only protection against that is governance who decides which contracts get added
     vaults[vaultId_].status = VaultStatus.Open;
 
     emit VaultOpened(vaultId_);
@@ -154,16 +171,18 @@ contract ParticipationReward is Governed, ReentrancyGuard {
 
   /**
    * @notice Adds Shares of an account to the current vault
+   * @param contractName_ the controller contract
    * @param vaultId_ Bytes32
    * @param account_ address
    * @param shares_ uint256
    * @dev This will be called by contracts after an account has voted in order to add them to the vault of the specified election.
    */
-  function _addShares(
+  function addShares(
+    bytes32 contractName_,
     bytes32 vaultId_,
     address account_,
     uint256 shares_
-  ) internal vaultExists(vaultId_) {
+  ) external onlyControllerContract(contractName_) vaultExists(vaultId_) {
     require(
       vaults[vaultId_].status == VaultStatus.Init,
       "Vault must be initialized"
@@ -261,13 +280,48 @@ contract ParticipationReward is Governed, ReentrancyGuard {
 
   /**
    * @notice Sets the budget of rewards in POP per vault
+   * @param contractName_ the name of the controller contract in bytes32
    * @param amount uint256 reward amount in POP per vault
-   * @dev When opening a vault this contract must have enough POP to fund the rewardBudget of the new vault
+   * @dev When opening a vault this contract must have enough POP to fund the rewardBudgets of the new vault
+   * @dev Every controller contract has their own rewardsBudget to set indivual rewards per controller contract
    */
-  function setRewardsBudget(uint256 amount) external onlyGovernance {
+  function setRewardsBudget(bytes32 contractName_, uint256 amount)
+    external
+    onlyGovernance
+  {
     require(amount > 0, "must be larger 0");
-    rewardBudget = amount;
-    emit RewardBudgetChanged(amount);
+    rewardBudgets[contractName_] = amount;
+    emit RewardBudgetChanged(contractName_, amount);
+  }
+
+  /**
+   * @notice In order to allow a contract to use ParticipationReward they need to be added as a controller contract
+   * @param contractName_ the name of the controller contract in bytes32
+   * @param contract_ the address of the controller contract
+   * @dev all critical functions to init/open vaults and add shares to them can only be called by controller contracts
+   */
+  function addControllerContract(bytes32 contractName_, address contract_)
+    external
+    onlyGovernance
+  {
+    controllerContracts[contractName_] = contract_;
+    rewardsEnabled[contractName_] = true;
+    emit ControllerContractAdded(contractName_, contract_);
+  }
+
+  /**
+   * @notice Governance can disable rewards for a controller contract in order to stop an unused contract to leech rewards
+   * @param contractName_ the address of the controller contract
+   * @dev all critical functions to init/open vaults and add shares to them can only be called by controller contracts
+   */
+  function toggleRewards(bytes32 contractName_) external onlyGovernance {
+    bool prevState = rewardsEnabled[contractName_];
+    rewardsEnabled[contractName_] = !prevState;
+    emit RewardsToggled(
+      contractName_,
+      prevState,
+      rewardsEnabled[contractName_]
+    );
   }
 
   /**
@@ -290,6 +344,18 @@ contract ParticipationReward is Governed, ReentrancyGuard {
    */
   modifier vaultExists(bytes32 vaultId_) {
     require(vaults[vaultId_].endTime > 0, "Uninitialized vault slot");
+    _;
+  }
+
+  /**
+   * @notice Checks if the msg.sender is the controllerContract
+   * @param contractName_ Bytes32
+   */
+  modifier onlyControllerContract(bytes32 contractName_) {
+    require(
+      msg.sender == controllerContracts[contractName_],
+      "Can only be called by the controlling contract"
+    );
     _;
   }
 }

@@ -2,6 +2,7 @@ import { BigNumber } from "@ethersproject/bignumber";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import bluebird from "bluebird";
 import { expect } from "chai";
+import { utils } from "ethers";
 import { parseEther } from "ethers/lib/utils";
 import { ethers, waffle } from "hardhat";
 import HysiBatchInteractionAdapter from "../adapters/HYSIBatchInteraction/HYSIBatchInteractionAdapter";
@@ -103,13 +104,21 @@ async function deployContracts(): Promise<Contracts> {
     ).deploy([mockYearnVaultUSDX.address, mockYearnVaultUST.address], [50, 50])
   ).deployed()) as MockBasicIssuanceModule;
 
+  const keeperIncentive = await (
+    await (
+      await ethers.getContractFactory("KeeperIncentive")
+    ).deploy(mockPop.address, owner.address)
+  ).deployed();
+
   const hysiBatchInteraction = (await (
     await (
       await ethers.getContractFactory("HysiBatchInteraction")
     ).deploy(
+      mockPop.address,
       mock3Crv.address,
       mockSetToken.address,
       mockBasicIssuanceModule.address,
+      keeperIncentive.address,
       [mockYearnVaultUSDX.address, mockYearnVaultUST.address],
       [
         {
@@ -123,11 +132,30 @@ async function deployContracts(): Promise<Contracts> {
       ],
       1800,
       parseEther("20000"),
-      parseEther("200"),
-      owner.address,
-      mockPop.address
+      parseEther("200")
     )
   ).deployed()) as HysiBatchInteraction;
+
+  await keeperIncentive
+    .connect(owner)
+    .createIncentive(
+      utils.formatBytes32String("HysiBatchInteraction"),
+      0,
+      true,
+      false
+    );
+  await keeperIncentive
+    .connect(owner)
+    .addControllerContract(
+      utils.formatBytes32String("HysiBatchInteraction"),
+      hysiBatchInteraction.address
+    );
+  await keeperIncentive
+    .connect(owner)
+    .approveAccount(
+      utils.formatBytes32String("HysiBatchInteraction"),
+      owner.address
+    );
 
   return {
     mock3Crv,

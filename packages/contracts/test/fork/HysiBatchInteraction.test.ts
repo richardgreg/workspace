@@ -1,7 +1,7 @@
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import bluebird from "bluebird";
 import { expect } from "chai";
-import { BigNumber } from "ethers";
+import { BigNumber, utils } from "ethers";
 import { parseEther } from "ethers/lib/utils";
 import { ethers, network, waffle } from "hardhat";
 import HysiBatchInteractionAdapter, {
@@ -17,6 +17,7 @@ import {
   ERC20,
   Faucet,
   HysiBatchInteraction,
+  KeeperIncentive,
   MockERC20,
   MockYearnV2Vault,
 } from "../../typechain";
@@ -43,6 +44,7 @@ interface Contracts {
   setToken: SetToken; // alias for hysi
   basicIssuanceModule: BasicIssuanceModule;
   hysiBatchInteraction: HysiBatchInteraction;
+  keeperIncentive: KeeperIncentive;
   faucet: Faucet;
 }
 
@@ -226,15 +228,23 @@ async function deployContracts(): Promise<Contracts> {
     SET_BASIC_ISSUANCE_MODULE_ADDRESS
   )) as unknown as BasicIssuanceModule;
 
+  const keeperIncentive = await (
+    await (
+      await ethers.getContractFactory("KeeperIncentive")
+    ).deploy(mockPop.address, owner.address)
+  ).deployed();
+
   //Deploy HysiBatchInteraction
   const HysiBatchInteraction = await ethers.getContractFactory(
     "HysiBatchInteraction"
   );
   const hysiBatchInteraction = await (
     await HysiBatchInteraction.deploy(
+      mockPop.address,
       THREE_CRV_TOKEN_ADDRESS,
       HYSI_TOKEN_ADDRESS,
       SET_BASIC_ISSUANCE_MODULE_ADDRESS,
+      keeperIncentive.address,
       [
         YDUSD_TOKEN_ADDRESS,
         YFRAX_TOKEN_ADDRESS,
@@ -261,9 +271,7 @@ async function deployContracts(): Promise<Contracts> {
       ],
       2500,
       parseEther("200"),
-      parseEther("1"),
-      owner.address,
-      mockPop.address
+      parseEther("1")
     )
   ).deployed();
 
@@ -287,6 +295,7 @@ async function deployContracts(): Promise<Contracts> {
     setToken: hysi,
     basicIssuanceModule,
     hysiBatchInteraction,
+    keeperIncentive,
     faucet,
   };
 }
@@ -424,6 +433,26 @@ describe("HysiBatchInteraction Network Test", function () {
     [depositor, depositor1, depositor2, depositor3].forEach(async (account) => {
       await contracts.faucet.sendThreeCrv(10000, account.address);
     });
+    await contracts.keeperIncentive
+      .connect(owner)
+      .createIncentive(
+        utils.formatBytes32String("HysiBatchInteraction"),
+        0,
+        true,
+        false
+      );
+    await contracts.keeperIncentive
+      .connect(owner)
+      .addControllerContract(
+        utils.formatBytes32String("HysiBatchInteraction"),
+        contracts.hysiBatchInteraction.address
+      );
+    await contracts.keeperIncentive
+      .connect(owner)
+      .approveAccount(
+        utils.formatBytes32String("HysiBatchInteraction"),
+        owner.address
+      );
   });
 
   context("setters and getters", () => {
