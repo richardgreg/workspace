@@ -126,20 +126,16 @@ describe("Keeper incentives", function () {
       "Only the contract governance may perform this action"
     );
     await expect(
-      keeperIncentiveHelper.connect(nonOwner).setBurnRate(0)
+      keeperIncentive.connect(nonOwner).setBurnRate(0)
     ).to.be.revertedWith(
       "Only the contract governance may perform this action"
     );
   });
   it("should adjust the burn rate", async function () {
-    expect(
-      await keeperIncentiveHelper.connect(owner).setBurnRate(parseEther("0.1"))
-    )
-      .to.emit(keeperIncentiveHelper, "BurnRateChanged")
+    expect(await keeperIncentive.connect(owner).setBurnRate(parseEther("0.1")))
+      .to.emit(keeperIncentive, "BurnRateChanged")
       .withArgs(parseEther("0.25"), parseEther("0.1"));
-    expect(await keeperIncentiveHelper.burnRate()).to.be.equal(
-      parseEther("0.1")
-    );
+    expect(await keeperIncentive.burnRate()).to.be.equal(parseEther("0.1"));
   });
   it("should create an incentive", async () => {
     const result = await keeperIncentive
