@@ -250,6 +250,22 @@ async function prepareContracts(): Promise<void> {
   );
   await contracts.keeperIncentive
     .connect(owner)
+    .createIncentive(
+      utils.formatBytes32String("RewardsManager"),
+      0,
+      true,
+      false
+    );
+  await contracts.keeperIncentive
+    .connect(owner)
+    .createIncentive(
+      utils.formatBytes32String("RewardsManager"),
+      0,
+      true,
+      false
+    );
+  await contracts.keeperIncentive
+    .connect(owner)
     .addControllerContract(
       utils.formatBytes32String("RewardsManager"),
       contracts.rewardsManager.address

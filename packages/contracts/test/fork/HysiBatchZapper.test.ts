@@ -345,7 +345,14 @@ const deployAndAssignContracts = async () => {
     4,
     depositor.address
   );
-
+  await contracts.keeperIncentive
+    .connect(owner)
+    .createIncentive(
+      utils.formatBytes32String("HysiBatchInteraction"),
+      0,
+      true,
+      false
+    );
   await contracts.keeperIncentive
     .connect(owner)
     .addControllerContract(

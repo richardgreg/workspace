@@ -1,6 +1,7 @@
 pragma solidity >=0.7.0 <0.8.0;
 
 import "@openzeppelin/contracts/math/SafeMath.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 import "../interfaces/IACLRegistry.sol";
 
@@ -22,6 +23,9 @@ contract KeeperIncentive {
   uint256 public incentiveBudget;
   mapping(bytes32 => Incentive[]) public incentives;
   mapping(bytes32 => address) public controllerContracts;
+  uint256 public burnRate;
+  address internal immutable burnAddress =
+    0x00000000219ab540356cBB839Cbe05303d7705Fa; //ETH2.0 Staking Contract
 
   /* ========== EVENTS ========== */
 
@@ -41,12 +45,15 @@ contract KeeperIncentive {
   event ApprovalToggled(bytes32 contractName, bool openToEveryone);
   event IncentiveToggled(bytes32 contractName, bool enabled);
   event ControllerContractAdded(bytes32 contractName, address contractAddress);
+  event Burned(uint256 amount);
+  event BurnRateChanged(uint256 oldRate, uint256 newRate);
 
   /* ========== CONSTRUCTOR ========== */
 
   constructor(IERC20 _pop, IACLRegistry _aclRegistry) public {
     POP = _pop;
     aclRegistry = _aclRegistry;
+    burnRate = 25e16; // 25% of intentive.reward
   }
 
   /* ==========  MUTATIVE FUNCTIONS  ========== */
@@ -69,7 +76,10 @@ contract KeeperIncentive {
     }
     if (incentive.enabled && incentive.reward <= incentiveBudget) {
       incentiveBudget = incentiveBudget.sub(incentive.reward);
-      POP.safeTransfer(keeper, incentive.reward);
+      uint256 amountToBurn = incentive.reward.mul(burnRate).div(1e18);
+      uint256 incentivePayout = incentive.reward.sub(amountToBurn);
+      POP.safeTransfer(keeper, incentivePayout);
+      _burn(amountToBurn);
     }
   }
 
@@ -99,6 +109,16 @@ contract KeeperIncentive {
       })
     );
     emit IncentiveCreated(contractName_, _reward, _openToEveryone);
+  }
+
+  /**
+   * @notice Sets the current burn rate as a percentage of the incentive reward.
+   * @param _burnRate Percentage in Mantissa. (1e14 = 1 Basis Point)
+   */
+  function setBurnRate(uint256 _burnRate) external {
+    aclRegistry.requireRole(keccak256("DAO"), msg.sender);
+    emit BurnRateChanged(burnRate, _burnRate);
+    burnRate = _burnRate;
   }
 
   /* ========== RESTRICTED FUNCTIONS ========== */
@@ -141,7 +161,7 @@ contract KeeperIncentive {
   }
 
   function fundIncentive(uint256 _amount) external {
-    POP.safeTransferFrom(msg.sender, address(this), _amount);
+    POP.transferFrom(msg.sender, address(this), _amount);
     incentiveBudget = incentiveBudget.add(_amount);
     emit IncentiveFunded(_amount);
   }
@@ -158,5 +178,10 @@ contract KeeperIncentive {
     aclRegistry.requireRole(keccak256("DAO"), msg.sender);
     controllerContracts[contractName_] = contract_;
     emit ControllerContractAdded(contractName_, contract_);
+  }
+
+  function _burn(uint256 _amount) internal {
+    POP.transfer(burnAddress, _amount);
+    emit Burned(_amount);
   }
 }

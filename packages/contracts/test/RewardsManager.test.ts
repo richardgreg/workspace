@@ -679,12 +679,12 @@ describe("RewardsManager", function () {
           swapReward
         );
       expect(await contracts.pop.balanceOf(owner.address)).to.equal(
-        parseEther("20")
+        parseEther("17.5")
       );
 
       await contracts.rewardsManager.connect(owner).distributeRewards();
       expect(await contracts.pop.balanceOf(owner.address)).to.equal(
-        parseEther("30")
+        parseEther("25")
       );
     });
   });
