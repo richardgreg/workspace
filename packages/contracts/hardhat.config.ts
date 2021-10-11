@@ -1,4 +1,5 @@
 import "@nomiclabs/hardhat-waffle";
+import "@float-capital/solidity-coverage";
 import "@popcorn/utils/src/envLoader";
 import "@typechain/hardhat";
 import { utils } from "ethers";
