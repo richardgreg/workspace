@@ -11,6 +11,7 @@ import {
   MockERC20,
   MockYearnV2Vault,
   Pool,
+  PoolDefendedHelper,
 } from "../typechain";
 
 const provider = waffle.provider;
