@@ -4,12 +4,11 @@ module.exports = {
     invert: true, // Run the grep's inverse set.
   },
   skipFiles: [
-    "pool/AffiliateToken.sol",
+    "core/defi/pool/AffiliateToken.sol",
     "test_helpers/Faucet.sol",
     "mocks/",
-    "lib/",
-    "interfaces/",
-    "UniswapV2Router02.sol",
-    "RandomNumberConsumer.sol",
+    "externals/",
+    "core/interfaces/",
+    "core/utils/RandomNumberConsumer.sol",
   ],
 };

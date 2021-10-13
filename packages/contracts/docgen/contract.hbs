@@ -11,7 +11,7 @@
 ## Functions:
 {{#ownFunctions}}
 {{#if (or (eq visibility "public") (eq visibility "external"))}}
-- [`{{name}}()`](#{{anchor}})
+- [`{{name}}()`](#{{name}}_)
 {{/if}}
 {{/ownFunctions}}
 {{/if}}
@@ -19,17 +19,19 @@
 {{#if ownEvents}}
 ## Events:
 {{#ownEvents}}
-- [`{{name}}`](#{{anchor}})
+- [`{{name}}`](#{{name}}_)
 {{/ownEvents}}
 {{/if}}
 
 {{#if ownModifiers}}
 ## Modifiers:
 {{#ownModifiers}}
-- [`{{name}}()`](#{{anchor}})
+- [`{{name}}()`](#{{name}}_)
 {{/ownModifiers}}
 {{/if}}
-
+## Graphs:
+- [`Dependency Graph`](#dependencyGraph)
+- [`Inheritance Graph`](#inheritanceGraph)
 ***
 
 ## Function Definitions:
@@ -37,7 +39,7 @@
 
 {{#if (or (eq visibility "public") (eq visibility "external"))}}
 
-### {{name}}()
+### <a name="{{name}}_"></a> {{name}}() {#{{name}}_}
 
 ```
 {{name}}({{args}}) {{visibility}} {{#if outputs}} returns ({{outputs}}){{/if}}
@@ -50,7 +52,7 @@
 | Parameter Name | Type | Description |
 |------------|-----| -------|
 {{#natspec.params}}
-| `{{param}}`| {{#lookup ../args.types @index}}{{/lookup}}| {{strip description}}| 
+| `{{param}}`| {{#lookup ../args.types @index}}{{/lookup}}| {{strip description}}|
 {{/natspec.params}}
 
 
@@ -71,7 +73,7 @@
 
 ## Events
 {{#ownEvents}}
-### {{name}}
+### <a name="{{name}}_"></a> {{name}} {#{{name}}_}
 ```
 {{name}}({{args}})
 ```
@@ -93,7 +95,7 @@
 {{#if ownModifiers}}
 ## Modifiers
 {{#ownModifiers}}
-### `{{name}}()`
+### <a name="{{name}}_"></a> `{{name}}()` {#{{name}}_}
 ```
 {{name}}({{args}})
 ```
@@ -111,3 +113,10 @@
 {{/if}}
 {{/ownModifiers}}
 {{/if}}
+
+## Graphs
+
+### <a name="dependencyGraph"></a> `Dependency Graph` {#dependencyGraph}
+![Dependency Graph](images/{{name}}_dependency_graph.png)
+### <a name="inheritanceGraph"></a> `Inheritance Graph` {#inheritanceGraph}
+![Inheritance Graph](images/{{name}}_inheritance_graph.png)

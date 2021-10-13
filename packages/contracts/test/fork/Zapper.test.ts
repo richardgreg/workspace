@@ -1,8 +1,8 @@
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
-import { MockERC20, Faucet, Zapper, Pool } from "../../typechain";
 import { expect } from "chai";
-import { waffle, ethers, network } from "hardhat";
 import { parseEther, parseUnits } from "ethers/lib/utils";
+import { ethers, network, waffle } from "hardhat";
+import { Faucet, MockERC20, Pool, Zapper } from "../../typechain";
 
 const provider = waffle.provider;
 
@@ -58,25 +58,32 @@ async function deployContracts(): Promise<Contracts> {
     await Zapper.deploy(CURVE_ADDRESS_PROVIDER_ADDRESS)
   ).deployed();
 
-  const Pool = await ethers.getContractFactory("Pool");
+  const aclRegistry = await (
+    await (await ethers.getContractFactory("ACLRegistry")).deploy()
+  ).deployed();
 
+  const contractRegistry = await (
+    await (
+      await ethers.getContractFactory("ContractRegistry")
+    ).deploy(aclRegistry.address)
+  ).deployed();
+
+  const Pool = await ethers.getContractFactory("Pool");
   const fraxPool = await (
     await Pool.deploy(
       FRAX_LP_TOKEN_ADDRESS,
       YEARN_REGISTRY_ADDRESS,
-      rewardsManager.address
+      contractRegistry.address
     )
   ).deployed();
-  fraxPool.approveContractAccess(zapper.address);
 
   const usdnPool = await (
     await Pool.deploy(
       USDN_LP_TOKEN_ADDRESS,
       YEARN_REGISTRY_ADDRESS,
-      rewardsManager.address
+      contractRegistry.address
     )
   ).deployed();
-  usdnPool.approveContractAccess(zapper.address);
 
   const dai = (await ethers.getContractAt(
     "MockERC20",
@@ -103,6 +110,18 @@ async function deployContracts(): Promise<Contracts> {
     USDN_TOKEN_ADDRESS
   )) as MockERC20;
 
+  await aclRegistry.grantRole(ethers.utils.id("DAO"), depositor.address);
+  await aclRegistry.grantRole(
+    ethers.utils.id("ApprovedContract"),
+    zapper.address
+  );
+
+  await contractRegistry.addContract(
+    ethers.utils.id("RewardsManager"),
+    rewardsManager.address,
+    ethers.utils.id("1")
+  );
+
   return {
     dai,
     usdc,
@@ -115,7 +134,6 @@ async function deployContracts(): Promise<Contracts> {
     usdnPool,
   };
 }
-
 
 describe("Zapper [ @skip-on-coverage ]", function () {
   beforeEach(async function () {

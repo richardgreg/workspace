@@ -2,8 +2,14 @@ import { BigNumber } from "@ethersproject/bignumber";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { expect } from "chai";
 import { parseEther } from "ethers/lib/utils";
-import { ethers, waffle } from "hardhat";
-import { StakingDefendedHelper, MockERC20, Staking } from "../typechain";
+import { ethers } from "hardhat";
+import {
+  ACLRegistry,
+  ContractRegistry,
+  MockERC20,
+  Staking,
+  StakingDefendedHelper,
+} from "../typechain";
 import { RewardsEscrow } from "../typechain/RewardsEscrow";
 
 let stakingFund: BigNumber;
@@ -16,6 +22,8 @@ let mockERC20Factory;
 let mockPop: MockERC20;
 let staking: Staking;
 let defendedHelper: StakingDefendedHelper;
+let aclRegistry: ACLRegistry;
+let contractRegistry: ContractRegistry;
 let rewardsEscrow: RewardsEscrow;
 const DAY = 86400;
 
@@ -31,20 +39,64 @@ describe("Staking", function () {
     await mockPop.mint(owner.address, parseEther("1000000"));
     await mockPop.mint(nonOwner.address, parseEther("10"));
 
+    aclRegistry = await (
+      await (await ethers.getContractFactory("ACLRegistry")).deploy()
+    ).deployed();
+
+    contractRegistry = await (
+      await (
+        await ethers.getContractFactory("ContractRegistry")
+      ).deploy(aclRegistry.address)
+    ).deployed();
+
     rewardsEscrow = (await (
-      await (await ethers.getContractFactory("RewardsEscrow")).deploy(
-        mockPop.address
-      )
+      await (
+        await ethers.getContractFactory("RewardsEscrow")
+      ).deploy(contractRegistry.address)
     ).deployed()) as RewardsEscrow;
 
     const stakingFactory = await ethers.getContractFactory("Staking");
     staking = (await stakingFactory.deploy(
-      mockPop.address,
-      rewardsEscrow.address
+      contractRegistry.address
     )) as Staking;
     await staking.deployed();
-    await staking.init(rewarder.address);
-    await rewardsEscrow.setStaking(staking.address);
+
+    await aclRegistry
+      .connect(owner)
+      .grantRole(ethers.utils.id("DAO"), owner.address);
+    await aclRegistry
+      .connect(owner)
+      .grantRole(ethers.utils.id("ApprovedContract"), owner.address);
+
+    await contractRegistry
+      .connect(owner)
+      .addContract(
+        ethers.utils.id("POP"),
+        mockPop.address,
+        ethers.utils.id("1")
+      );
+    await contractRegistry
+      .connect(owner)
+      .addContract(
+        ethers.utils.id("RewardsEscrow"),
+        rewardsEscrow.address,
+        ethers.utils.id("1")
+      );
+    await contractRegistry
+      .connect(owner)
+      .addContract(
+        ethers.utils.id("Staking"),
+        staking.address,
+        ethers.utils.id("1")
+      );
+    await contractRegistry
+      .connect(owner)
+      .addContract(
+        ethers.utils.id("RewardsManager"),
+        rewarder.address,
+        ethers.utils.id("1")
+      );
+
     stakingFund = parseEther("10");
     await mockPop.transfer(staking.address, stakingFund);
     await mockPop.connect(owner).approve(staking.address, parseEther("100000"));
@@ -55,6 +107,7 @@ describe("Staking", function () {
     defendedHelper = await (
       await StakingDefendedHelper.deploy(mockPop.address, staking.address)
     ).deployed();
+
     await mockPop.mint(defendedHelper.address, parseEther("1000"));
   });
 
@@ -90,7 +143,9 @@ describe("Staking", function () {
     });
 
     it("should allow whitelisted contracts to stake", async function () {
-      await staking.approveContractAccess(defendedHelper.address);
+      await aclRegistry
+        .connect(owner)
+        .grantRole(ethers.utils.id("ApprovedContract"), defendedHelper.address);
       await expect(defendedHelper.stake(parseEther("1000")))
         .to.emit(staking, "StakingDeposited")
         .withArgs(defendedHelper.address, parseEther("1000"));
@@ -499,9 +554,8 @@ describe("Staking", function () {
   describe("updatePeriodFinish", function () {
     beforeEach(async function () {
       const Staking = await ethers.getContractFactory("Staking");
-      staking = await Staking.deploy(mockPop.address, rewardsEscrow.address);
+      staking = await Staking.deploy(contractRegistry.address);
       await staking.deployed();
-      staking.init(rewarder.address);
       stakingFund = parseEther("10");
       await mockPop.transfer(staking.address, stakingFund);
       await staking.notifyRewardAmount(stakingFund);

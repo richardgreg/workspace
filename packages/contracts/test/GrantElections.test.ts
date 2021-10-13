@@ -3,7 +3,7 @@ import { parseEther } from "@ethersproject/units";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { GrantElectionAdapter } from "@popcorn/contracts/adapters";
 import { expect } from "chai";
-import { BigNumber } from "ethers";
+import { BigNumber, utils } from "ethers";
 import { ethers, waffle } from "hardhat";
 import {
   ElectionMetadata,
@@ -14,6 +14,7 @@ import {
   BeneficiaryVaults,
   GrantElections,
   MockERC20,
+  ParticipationReward,
   RandomNumberHelper,
 } from "../typechain";
 
@@ -23,6 +24,7 @@ interface Contracts {
   mockBeneficiaryRegistry: MockContract;
   beneficiaryVaults: BeneficiaryVaults;
   randomNumberHelper: RandomNumberHelper;
+  participationReward: ParticipationReward;
   grantElections: GrantElections;
 }
 
@@ -33,19 +35,15 @@ let owner: SignerWithAddress,
   beneficiary3: SignerWithAddress,
   beneficiary4: SignerWithAddress,
   beneficiary5: SignerWithAddress,
-  voter1: SignerWithAddress,
-  voter2: SignerWithAddress,
-  voter3: SignerWithAddress,
-  voter4: SignerWithAddress,
-  voter5: SignerWithAddress,
-  voter6: SignerWithAddress,
+  proposer: SignerWithAddress,
+  approver: SignerWithAddress,
   governance: SignerWithAddress;
 
 let contracts: Contracts;
 
 const GRANT_TERM = { MONTH: 0, QUARTER: 1, YEAR: 2 };
 const ONE_DAY = 86400;
-const DEFAULT_REGION = "0x5757";
+const DEFAULT_REGION = ethers.utils.id("World");
 const ElectionState = { Registration: 0, Voting: 1, Closed: 2 };
 const registrationBondMonth = parseEther("50");
 const registrationBondQuarter = parseEther("100");
@@ -88,44 +86,122 @@ async function deployContracts(): Promise<Contracts> {
     )
   ).deployed();
 
-  await mockPop
-    .connect(owner)
-    .transfer(randomNumberHelper.address, parseEther("500"));
+  const aclRegistry = await (
+    await (await ethers.getContractFactory("ACLRegistry")).deploy()
+  ).deployed();
+
+  const contractRegistry = await (
+    await (
+      await ethers.getContractFactory("ContractRegistry")
+    ).deploy(aclRegistry.address)
+  ).deployed();
 
   const beneficiaryVaults = await (
     await (
       await ethers.getContractFactory("BeneficiaryVaults")
-    ).deploy(mockPop.address)
+    ).deploy(contractRegistry.address)
   ).deployed();
-
-  await beneficiaryVaults
-    .connect(owner)
-    .setBeneficiaryRegistry(mockBeneficiaryRegistry.address);
 
   const region = await (
     await (
       await ethers.getContractFactory("Region")
-    ).deploy(beneficiaryVaults.address)
+    ).deploy(beneficiaryVaults.address, contractRegistry.address)
   ).deployed();
+
+  const participationReward = await (
+    await ethers.getContractFactory("ParticipationReward")
+  ).deploy(contractRegistry.address);
+  await participationReward.deployed();
 
   const grantElections = (await (
     await (
       await ethers.getContractFactory("GrantElections")
-    ).deploy(
-      mockStaking.address,
-      mockBeneficiaryRegistry.address,
-      randomNumberHelper.address,
-      mockPop.address,
-      region.address,
-      governance.address
-    )
+    ).deploy(contractRegistry.address)
   ).deployed()) as GrantElections;
+
+  await aclRegistry
+    .connect(owner)
+    .grantRole(ethers.utils.id("DAO"), owner.address);
+  await aclRegistry
+    .connect(owner)
+    .grantRole(ethers.utils.id("DAO"), governance.address);
+  await aclRegistry
+    .connect(owner)
+    .grantRole(ethers.utils.id("ElectionResultProposer"), proposer.address);
+  await aclRegistry
+    .connect(owner)
+    .grantRole(ethers.utils.id("ElectionResultApprover"), approver.address);
+  await aclRegistry
+    .connect(owner)
+    .grantRole(
+      ethers.utils.id("BeneficiaryGovernance"),
+      grantElections.address
+    );
+
+  await contractRegistry
+    .connect(owner)
+    .addContract(ethers.utils.id("POP"), mockPop.address, ethers.utils.id("1"));
+  await contractRegistry
+    .connect(owner)
+    .addContract(
+      ethers.utils.id("BeneficiaryVaults"),
+      beneficiaryVaults.address,
+      ethers.utils.id("1")
+    );
+  await contractRegistry
+    .connect(owner)
+    .addContract(
+      ethers.utils.id("Staking"),
+      mockStaking.address,
+      ethers.utils.id("1")
+    );
+  await contractRegistry
+    .connect(owner)
+    .addContract(
+      ethers.utils.id("BeneficiaryRegistry"),
+      mockBeneficiaryRegistry.address,
+      ethers.utils.id("1")
+    );
+  await contractRegistry
+    .connect(owner)
+    .addContract(
+      ethers.utils.id("RandomNumberConsumer"),
+      randomNumberHelper.address,
+      ethers.utils.id("1")
+    );
+  await contractRegistry
+    .connect(owner)
+    .addContract(
+      ethers.utils.id("ParticipationReward"),
+      participationReward.address,
+      ethers.utils.id("1")
+    );
+  await contractRegistry
+    .connect(owner)
+    .addContract(
+      ethers.utils.id("Region"),
+      region.address,
+      ethers.utils.id("1")
+    );
 
   await mockPop
     .connect(owner)
+    .transfer(randomNumberHelper.address, parseEther("500"));
+  await mockPop
+    .connect(owner)
+    .approve(participationReward.address, parseEther("100000"));
+  await mockPop
+    .connect(owner)
     .approve(grantElections.address, parseEther("100000"));
-  await grantElections.connect(owner).contributeReward(parseEther("2000"));
-  await beneficiaryVaults.transferOwnership(grantElections.address);
+
+  await participationReward.connect(owner).contributeReward(parseEther("2000"));
+
+  await participationReward
+    .connect(governance)
+    .addControllerContract(
+      utils.formatBytes32String("GrantElections"),
+      grantElections.address
+    );
 
   return {
     mockPop,
@@ -133,6 +209,7 @@ async function deployContracts(): Promise<Contracts> {
     mockBeneficiaryRegistry,
     beneficiaryVaults,
     randomNumberHelper,
+    participationReward,
     grantElections,
   };
 }
@@ -184,12 +261,8 @@ describe("GrantElections", function () {
       beneficiary3,
       beneficiary4,
       beneficiary5,
-      voter1,
-      voter2,
-      voter3,
-      voter4,
-      voter5,
-      voter6,
+      proposer,
+      approver,
       governance,
     ] = await ethers.getSigners();
     contracts = await deployContracts();
@@ -289,26 +362,6 @@ describe("GrantElections", function () {
   });
 
   describe("setters", function () {
-    it("should prevent non-governance address from updating governance address", async function () {
-      await expect(
-        contracts.grantElections
-          .connect(nonOwner)
-          .nominateNewGovernance(nonOwner.address)
-      ).to.be.revertedWith(
-        "Only the contract governance may perform this action"
-      );
-    });
-
-    it("should allow governance to set new governance address", async function () {
-      await expect(
-        contracts.grantElections
-          .connect(governance)
-          .nominateNewGovernance(nonOwner.address)
-      )
-        .to.emit(contracts.grantElections, "GovernanceNominated")
-        .withArgs(nonOwner.address);
-    });
-
     it("should allow to fund incentives", async function () {
       await contracts.grantElections
         .connect(owner)
@@ -317,165 +370,6 @@ describe("GrantElections", function () {
       const balance = await contracts.mockPop.balanceOf(owner.address);
       expect(incentiveBudget).to.equal(parseEther("4000"));
       expect(balance).to.equal(parseEther("0"));
-    });
-  });
-
-  describe("approver and proposer maintance", function () {
-    context("proposer", function () {
-      context("adding", function () {
-        it("must be called by the governance", async function () {
-          await expect(
-            contracts.grantElections
-              .connect(beneficiary)
-              .addProposer(beneficiary.address)
-          ).to.be.revertedWith(
-            "Only the contract governance may perform this action"
-          );
-        });
-        it("requires the account not to be a proposer already", async function () {
-          await contracts.grantElections
-            .connect(governance)
-            .addProposer(beneficiary.address);
-          await expect(
-            contracts.grantElections
-              .connect(governance)
-              .addProposer(beneficiary.address)
-          ).to.be.revertedWith("already registered");
-        });
-        it("requires the account not to be a approver already", async function () {
-          await contracts.grantElections
-            .connect(governance)
-            .addApprover(beneficiary.address);
-          await expect(
-            contracts.grantElections
-              .connect(governance)
-              .addProposer(beneficiary.address)
-          ).to.be.revertedWith("is already an approver");
-        });
-        it("adds the account as a proposer", async function () {
-          await expect(
-            contracts.grantElections
-              .connect(governance)
-              .addProposer(beneficiary.address)
-          )
-            .to.emit(contracts.grantElections, "ProposerAdded")
-            .withArgs(beneficiary.address);
-          expect(
-            await contracts.grantElections.proposer(beneficiary.address)
-          ).to.be.equal(true);
-        });
-      });
-      context("removing", function () {
-        it("must be called by the governance", async function () {
-          await expect(
-            contracts.grantElections
-              .connect(beneficiary)
-              .removeProposer(beneficiary.address)
-          ).to.be.revertedWith(
-            "Only the contract governance may perform this action"
-          );
-        });
-        it("requires the account to be a proposer", async function () {
-          await expect(
-            contracts.grantElections
-              .connect(governance)
-              .removeProposer(beneficiary.address)
-          ).to.be.revertedWith("not registered");
-        });
-        it("removes the proposer", async function () {
-          await contracts.grantElections
-            .connect(governance)
-            .addProposer(beneficiary.address);
-          await expect(
-            contracts.grantElections
-              .connect(governance)
-              .removeProposer(beneficiary.address)
-          )
-            .to.emit(contracts.grantElections, "ProposerRemoved")
-            .withArgs(beneficiary.address);
-          expect(
-            await contracts.grantElections.proposer(beneficiary.address)
-          ).to.be.equal(false);
-        });
-      });
-    });
-    context("approver", function () {
-      context("adding", function () {
-        it("must be called by the governance", async function () {
-          await expect(
-            contracts.grantElections
-              .connect(beneficiary)
-              .addApprover(beneficiary.address)
-          ).to.be.revertedWith(
-            "Only the contract governance may perform this action"
-          );
-        });
-        it("requires the account not to be a approver already", async function () {
-          await contracts.grantElections
-            .connect(governance)
-            .addApprover(beneficiary.address);
-          await expect(
-            contracts.grantElections
-              .connect(governance)
-              .addApprover(beneficiary.address)
-          ).to.be.revertedWith("already registered");
-        });
-        it("requires the account not to be a proposer already", async function () {
-          await contracts.grantElections
-            .connect(governance)
-            .addProposer(beneficiary.address);
-          await expect(
-            contracts.grantElections
-              .connect(governance)
-              .addApprover(beneficiary.address)
-          ).to.be.revertedWith("is already a proposer");
-        });
-        it("adds the account as a approver", async function () {
-          await expect(
-            contracts.grantElections
-              .connect(governance)
-              .addApprover(beneficiary.address)
-          )
-            .to.emit(contracts.grantElections, "ApproverAdded")
-            .withArgs(beneficiary.address);
-          expect(
-            await contracts.grantElections.approver(beneficiary.address)
-          ).to.be.equal(true);
-        });
-      });
-      context("removing", function () {
-        it("must be called by the governance", async function () {
-          await expect(
-            contracts.grantElections
-              .connect(beneficiary)
-              .removeApprover(beneficiary.address)
-          ).to.be.revertedWith(
-            "Only the contract governance may perform this action"
-          );
-        });
-        it("requires the account to be a approver", async function () {
-          await expect(
-            contracts.grantElections
-              .connect(governance)
-              .removeApprover(beneficiary.address)
-          ).to.be.revertedWith("not registered");
-        });
-        it("removes the approver", async function () {
-          await contracts.grantElections
-            .connect(governance)
-            .addApprover(beneficiary.address);
-          await expect(
-            contracts.grantElections
-              .connect(governance)
-              .removeApprover(beneficiary.address)
-          )
-            .to.emit(contracts.grantElections, "ApproverRemoved")
-            .withArgs(beneficiary.address);
-          expect(
-            await contracts.grantElections.approver(beneficiary.address)
-          ).to.be.equal(false);
-        });
-      });
     });
   });
 
@@ -569,7 +463,7 @@ describe("GrantElections", function () {
       const popBalanceForElection = await contracts.mockPop.balanceOf(
         contracts.grantElections.address
       );
-      expect(popBalanceForElection).to.equal(parseEther("3000"));
+      expect(popBalanceForElection).to.equal(parseEther("1000"));
     });
   });
 
@@ -588,7 +482,7 @@ describe("GrantElections", function () {
           currentBlock.timestamp + 1
         );
       expect(result)
-        .to.emit(contracts.grantElections, "VaultInitialized")
+        .to.emit(contracts.participationReward, "VaultInitialized")
         .withArgs(
           ethers.utils.solidityKeccak256(
             ["uint8", "uint256"],
@@ -640,12 +534,6 @@ describe("GrantElections", function () {
       ).to.be.revertedWith("election not yet finalized");
     });
     it("should allow to create a new election for a term when the old one is finalized", async function () {
-      await contracts.grantElections
-        .connect(governance)
-        .addProposer(beneficiary.address);
-      await contracts.grantElections
-        .connect(governance)
-        .addApprover(owner.address);
       const merkleRoot = ethers.utils.formatBytes32String("merkleRoot");
       await contracts.grantElections
         .connect(governance)
@@ -668,10 +556,10 @@ describe("GrantElections", function () {
       ethers.provider.send("evm_mine", []);
       await contracts.grantElections.refreshElectionState(electionId);
       await contracts.grantElections
-        .connect(beneficiary)
+        .connect(proposer)
         .proposeFinalization(electionId, merkleRoot);
       await contracts.grantElections
-        .connect(owner)
+        .connect(approver)
         .approveFinalization(electionId, merkleRoot);
       const currentBlockNumber = await ethers.provider.getBlockNumber();
       const currentBlock = await ethers.provider._getBlock(currentBlockNumber);
@@ -698,9 +586,12 @@ describe("GrantElections", function () {
       expect(activeElectionId).to.equal(electionId + 1);
     });
     it("should not initialize a vault even the needed budget is larger than rewardBudget", async function () {
-      await contracts.grantElections
+      await contracts.participationReward
         .connect(governance)
-        .setRewardsBudget(parseEther("3000"));
+        .setRewardsBudget(
+          utils.formatBytes32String("GrantElections"),
+          parseEther("3000")
+        );
       const currentBlock = await waffle.provider.getBlock("latest");
       const result = await contracts.grantElections.initialize(
         GRANT_TERM.QUARTER,
@@ -713,7 +604,10 @@ describe("GrantElections", function () {
           DEFAULT_REGION,
           currentBlock.timestamp + 1
         );
-      expect(result).to.not.emit(contracts.grantElections, "VaultInitialized");
+      expect(result).to.not.emit(
+        contracts.participationReward,
+        "VaultInitialized"
+      );
       const election = await contracts.grantElections.elections(electionId);
       expect(election.vaultId).to.equal(
         "0x0000000000000000000000000000000000000000000000000000000000000000"
@@ -841,12 +735,6 @@ describe("GrantElections", function () {
             0
           );
         await prepareElection(GRANT_TERM.MONTH, electionId);
-        await contracts.grantElections
-          .connect(governance)
-          .addProposer(beneficiary.address);
-        await contracts.grantElections
-          .connect(governance)
-          .addApprover(owner.address);
       });
       describe("propose finalization", function () {
         it("require to be called by a proposer", async function () {
@@ -854,9 +742,9 @@ describe("GrantElections", function () {
           ethers.provider.send("evm_mine", []);
           await expect(
             contracts.grantElections
-              .connect(beneficiary2)
+              .connect(nonOwner)
               .proposeFinalization(electionId, merkleRoot)
-          ).to.be.revertedWith("not a proposer");
+          ).to.be.revertedWith("you dont have the right role");
         });
 
         it("require election closed", async function () {
@@ -864,7 +752,7 @@ describe("GrantElections", function () {
           ethers.provider.send("evm_mine", []);
           await expect(
             contracts.grantElections
-              .connect(beneficiary)
+              .connect(proposer)
               .proposeFinalization(electionId, merkleRoot)
           ).to.be.revertedWith("wrong election state");
         });
@@ -874,15 +762,14 @@ describe("GrantElections", function () {
           ethers.provider.send("evm_mine", []);
           await contracts.grantElections.refreshElectionState(electionId);
           await contracts.grantElections
-            .connect(beneficiary)
+            .connect(proposer)
             .proposeFinalization(electionId, merkleRoot);
-          await contracts.grantElections.approveFinalization(
-            electionId,
-            merkleRoot
-          );
+          await contracts.grantElections
+            .connect(approver)
+            .approveFinalization(electionId, merkleRoot);
           await expect(
             contracts.grantElections
-              .connect(beneficiary)
+              .connect(proposer)
               .proposeFinalization(electionId, merkleRoot)
           ).to.be.revertedWith("wrong election state");
         });
@@ -894,13 +781,13 @@ describe("GrantElections", function () {
           ethers.provider.send("evm_mine", []);
           await contracts.grantElections.refreshElectionState(electionId);
           await contracts.grantElections
-            .connect(beneficiary)
+            .connect(proposer)
             .proposeFinalization(electionId, merkleRoot);
           expect(
             await contracts.grantElections.getElectionMerkleRoot(electionId)
           ).to.equal(merkleRoot);
           await contracts.grantElections
-            .connect(beneficiary)
+            .connect(proposer)
             .proposeFinalization(electionId, newMerkleRoot);
           expect(
             await contracts.grantElections.getElectionMerkleRoot(electionId)
@@ -912,7 +799,7 @@ describe("GrantElections", function () {
           ethers.provider.send("evm_mine", []);
           await contracts.grantElections.refreshElectionState(electionId);
           const result = await contracts.grantElections
-            .connect(beneficiary)
+            .connect(proposer)
             .proposeFinalization(electionId, merkleRoot);
           expect(result)
             .to.emit(contracts.grantElections, "FinalizationProposed")
@@ -929,12 +816,12 @@ describe("GrantElections", function () {
             ethers.provider.send("evm_mine", []);
             await contracts.grantElections.refreshElectionState(electionId);
             await contracts.grantElections
-              .connect(beneficiary)
+              .connect(proposer)
               .proposeFinalization(electionId, merkleRoot);
             const balance1 = await contracts.mockPop.balanceOf(
-              beneficiary.address
+              proposer.address
             );
-            expect(balance1).to.equal(parseEther("500"));
+            expect(balance1).to.equal(0);
             const incentiveBudget1 =
               await contracts.grantElections.incentiveBudget();
             expect(incentiveBudget1).to.equal(parseEther("1000"));
@@ -948,12 +835,12 @@ describe("GrantElections", function () {
             ethers.provider.send("evm_mine", []);
             await contracts.grantElections.refreshElectionState(electionId);
             await contracts.grantElections
-              .connect(beneficiary)
+              .connect(proposer)
               .proposeFinalization(electionId, merkleRoot);
             const balance1 = await contracts.mockPop.balanceOf(
-              beneficiary.address
+              proposer.address
             );
-            expect(balance1).to.equal(parseEther("2500"));
+            expect(balance1).to.equal(parseEther("2000"));
             const incentiveBudget1 =
               await contracts.grantElections.incentiveBudget();
             expect(incentiveBudget1).to.equal(0);
@@ -968,23 +855,23 @@ describe("GrantElections", function () {
             ethers.provider.send("evm_mine", []);
             await contracts.grantElections.refreshElectionState(electionId);
             await contracts.grantElections
-              .connect(beneficiary)
+              .connect(proposer)
               .proposeFinalization(electionId, merkleRoot);
             const balance1 = await contracts.mockPop.balanceOf(
-              beneficiary.address
+              proposer.address
             );
-            expect(balance1).to.equal(parseEther("2500"));
+            expect(balance1).to.equal(parseEther("2000"));
             const incentiveBudget1 =
               await contracts.grantElections.incentiveBudget();
             expect(incentiveBudget1).to.equal(parseEther("2000"));
 
             await contracts.grantElections
-              .connect(beneficiary)
+              .connect(proposer)
               .proposeFinalization(electionId, merkleRoot);
             const balance2 = await contracts.mockPop.balanceOf(
-              beneficiary.address
+              proposer.address
             );
-            expect(balance2).to.equal(parseEther("2500"));
+            expect(balance2).to.equal(parseEther("2000"));
             const incentiveBudget2 =
               await contracts.grantElections.incentiveBudget();
             expect(incentiveBudget2).to.equal(parseEther("2000"));
@@ -995,21 +882,21 @@ describe("GrantElections", function () {
         it("approveFinalization needs an election in proposedFinalization state", async function () {
           await expect(
             contracts.grantElections
-              .connect(owner)
+              .connect(approver)
               .approveFinalization(electionId, merkleRoot)
           ).to.be.revertedWith("finalization not yet proposed");
           ethers.provider.send("evm_increaseTime", [30 * ONE_DAY]);
           ethers.provider.send("evm_mine", []);
           await contracts.grantElections.refreshElectionState(electionId);
           await contracts.grantElections
-            .connect(beneficiary)
+            .connect(proposer)
             .proposeFinalization(electionId, merkleRoot);
           await contracts.grantElections
-            .connect(owner)
+            .connect(approver)
             .approveFinalization(electionId, merkleRoot);
           await expect(
             contracts.grantElections
-              .connect(owner)
+              .connect(approver)
               .approveFinalization(electionId, merkleRoot)
           ).to.be.revertedWith("election already finalized");
         });
@@ -1017,17 +904,17 @@ describe("GrantElections", function () {
         it("approves finalization successfully", async function () {
           await expect(
             contracts.grantElections
-              .connect(owner)
+              .connect(approver)
               .approveFinalization(electionId, merkleRoot)
           ).to.be.revertedWith("finalization not yet proposed");
           ethers.provider.send("evm_increaseTime", [30 * ONE_DAY]);
           ethers.provider.send("evm_mine", []);
           await contracts.grantElections.refreshElectionState(electionId);
           await contracts.grantElections
-            .connect(beneficiary)
+            .connect(proposer)
             .proposeFinalization(electionId, merkleRoot);
           const result = await contracts.grantElections
-            .connect(owner)
+            .connect(approver)
             .approveFinalization(electionId, merkleRoot);
           expect(result)
             .to.emit(contracts.grantElections, "ElectionFinalized")
@@ -1126,12 +1013,6 @@ describe("GrantElections", function () {
         ethers.provider.send("evm_increaseTime", [30 * ONE_DAY]);
         ethers.provider.send("evm_mine", []);
         await contracts.grantElections.refreshElectionState(electionId);
-        await contracts.grantElections
-          .connect(governance)
-          .addProposer(beneficiary.address);
-        await contracts.grantElections
-          .connect(governance)
-          .addApprover(owner.address);
       });
       it("creates a random number", async function () {
         await contracts.randomNumberHelper.mockFulfillRandomness(7);
@@ -1142,7 +1023,7 @@ describe("GrantElections", function () {
       it("requires a random number to propose finalization", async function () {
         await expect(
           contracts.grantElections
-            .connect(beneficiary)
+            .connect(proposer)
             .proposeFinalization(electionId, merkleRoot)
         ).to.revertedWith("randomNumber required");
       });
