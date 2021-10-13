@@ -1,6 +1,7 @@
 import { InformationCircleIcon } from '@heroicons/react/outline';
 import { ArrowSmDownIcon, ArrowSmUpIcon } from '@heroicons/react/solid';
 import React from 'react';
+import ReactTooltip from 'react-tooltip';
 
 export interface StatCardData {
   change: string;
@@ -29,8 +30,6 @@ export const StatCard: React.FC<StatCardProps> = ({
 }): JSX.Element => {
   return (
     <div
-      data-tip
-      data-for={data.name}
       key={data.name}
       className="relative h-24 bg-white pt-5 px-4 pb-12 sm:pt-6 sm:px-6 shadow rounded-lg overflow-hidden mr-4 mb-4"
       style={{ width: '20rem' }}
@@ -46,7 +45,11 @@ export const StatCard: React.FC<StatCardProps> = ({
           <p className="ml-16 text-sm font-light text-gray-500 truncate">
             {data.name}
           </p>
-          <InformationCircleIcon className="h-6 w-6 text-gray-500" />
+          <InformationCircleIcon
+            data-tip
+            data-for={data.name}
+            className="h-6 w-6 text-gray-500"
+          />
         </div>
       </dt>
       <dd className="ml-16 pb-6 flex items-baseline sm:pb-7">
@@ -80,6 +83,25 @@ export const StatCard: React.FC<StatCardProps> = ({
           </p>
         )}
       </dd>
+
+      <ReactTooltip
+        id={data.name}
+        place="bottom"
+        effect="solid"
+        type="light"
+        className="rounded-lg shadow-lg border border-gray-50 p-1 w-72 "
+      >
+        <p className="text-center text-md justify-self-center font-bold mb-1">
+          {data.name}
+        </p>
+        <p className="text-sm font-light text-gray-500 ">
+          {data.name === 'Total Balance' &&
+            'Total acquisition of deposits, HYSI and pending withdrawls'}
+          {data.name === 'HYSI' && 'HYSI desc'}
+          {data.name === 'Claimable HYSI' && 'Claimable HYSI desc'}
+          {data.name === 'Pending Withdraw' && 'Pending withdrawl desc'}
+        </p>
+      </ReactTooltip>
     </div>
   );
 };
