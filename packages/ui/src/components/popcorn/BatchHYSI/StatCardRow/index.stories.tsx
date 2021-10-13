@@ -39,7 +39,7 @@ Primary.args = {
     icon: CashIcon,
     id: 1,
     name: 'Total Balance',
-    statCur: 78000,
+    statCur: 71897,
     statPrev: 35000,
   },
   HYSI: {
@@ -48,7 +48,7 @@ Primary.args = {
     icon: SparklesIcon,
     id: 2,
     name: 'HYSI',
-    statCur: 78000,
+    statCur: 1897,
     statPrev: 35000,
   },
   ClaimableHYSI: {
@@ -57,7 +57,7 @@ Primary.args = {
     icon: KeyIcon,
     id: 3,
     name: 'Claimable HYSI',
-    statCur: 78000,
+    statCur: 58897,
     statPrev: 35000,
   },
   PendingWithdraw: {
@@ -66,7 +66,7 @@ Primary.args = {
     icon: HandIcon,
     id: 4,
     name: 'Pending Withdraw',
-    statCur: 78000,
+    statCur: 250,
     statPrev: 35000,
   },
 };
