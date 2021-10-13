@@ -679,7 +679,12 @@ contract HysiBatchInteraction {
     internal
     returns (uint256)
   {
-    threeCrv.safeIncreaseAllowance(address(curveMetapool_), amount_);
+    uint256 allowanceAmount = threeCrv.allowance(
+      address(this),
+      address(curveMetapool_)
+    );
+    threeCrv.safeDecreaseAllowance(address(curveMetapool_), allowanceAmount);
+    threeCrv.safeIncreaseAllowance(address(curveMetapool_), uint256(-1));
 
     //Takes 3CRV and sends lpToken to this contract
     //Metapools take an array of amounts with the exoctic stablecoin at the first spot and 3CRV at the second.
@@ -698,7 +703,12 @@ contract HysiBatchInteraction {
     IERC20 lpToken_,
     CurveMetapool curveMetapool_
   ) internal returns (uint256) {
-    lpToken_.safeIncreaseAllowance(address(curveMetapool_), amount_);
+    uint256 allowanceAmount = lpToken_.allowance(
+      address(this),
+      address(curveMetapool_)
+    );
+    lpToken_.safeDecreaseAllowance(address(curveMetapool_), allowanceAmount);
+    lpToken_.safeIncreaseAllowance(address(curveMetapool_), uint256(-1));
 
     //Takes lp Token and sends 3CRV to this contract
     //The second variable is the index for the token we want to receive (0 = exotic stablecoin, 1 = 3CRV)
@@ -717,7 +727,12 @@ contract HysiBatchInteraction {
     IERC20 crvLPToken_,
     YearnVault yearnVault_
   ) internal {
-    crvLPToken_.safeIncreaseAllowance(address(yearnVault_), amount_);
+    uint256 allowanceAmount = crvLPToken_.allowance(
+      address(this),
+      address(yearnVault_)
+    );
+    crvLPToken_.safeDecreaseAllowance(address(yearnVault_), allowanceAmount);
+    crvLPToken_.safeIncreaseAllowance(address(yearnVault_), uint256(-1));
 
     //Mints yToken and sends them to msg.sender (this contract)
     yearnVault_.deposit(amount_);
@@ -731,7 +746,12 @@ contract HysiBatchInteraction {
   function _withdrawFromYearn(uint256 amount_, YearnVault yearnVault_)
     internal
   {
-    yearnVault_.safeIncreaseAllowance(address(yearnVault_), amount_);
+    uint256 allowanceAmount = yearnVault_.allowance(
+      address(this),
+      address(yearnVault_)
+    );
+    yearnVault_.safeDecreaseAllowance(address(yearnVault_), allowanceAmount);
+    yearnVault_.safeIncreaseAllowance(address(yearnVault_), uint256(-1));
 
     //Takes yToken and sends crvLPToken to this contract
     yearnVault_.withdraw(amount_);
