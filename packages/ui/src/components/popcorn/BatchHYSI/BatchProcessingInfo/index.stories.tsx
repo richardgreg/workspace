@@ -1,4 +1,5 @@
 import { Meta, Story } from '@storybook/react/types-6-0';
+import { DateTime } from 'luxon';
 import React from 'react';
 import { BatchProcessingInfo } from './index';
 
@@ -18,16 +19,25 @@ const Template: Story = (args) => (
   <BatchProcessingInfo timeTillBatchProcessing={[]} {...args} />
 );
 
-export const InProgress = Template.bind({});
-InProgress.args = {
+export const LT12Hours = Template.bind({});
+export const GT12Hours = Template.bind({});
+export const Complete = Template.bind({});
+LT12Hours.args = {
   timeTillBatchProcessing: [
     {
-      timeTillProcessing: new Date(),
+      timeTillProcessing: DateTime.now().plus({ hours: 12 }).toJSDate(),
       progressPercentage: 38.42,
     },
   ],
 };
-export const Complete = Template.bind({});
+GT12Hours.args = {
+  timeTillBatchProcessing: [
+    {
+      timeTillProcessing: DateTime.now().plus({ hours: 36 }).toJSDate(),
+      progressPercentage: 38.42,
+    },
+  ],
+};
 Complete.args = {
   timeTillBatchProcessing: [
     {

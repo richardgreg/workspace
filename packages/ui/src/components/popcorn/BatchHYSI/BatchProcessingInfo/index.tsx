@@ -1,6 +1,6 @@
-import React from 'react';
+import { Interval } from 'luxon';
+import React, { useEffect, useState } from 'react';
 import { CircularProgressbar } from 'react-circular-progressbar';
-
 interface TimeTillBatchProcessing {
   timeTillProcessing: Date;
   progressPercentage: number;
@@ -13,6 +13,38 @@ interface BatchProcessingInfoProps {
 export const BatchProcessingInfo: React.FC<BatchProcessingInfoProps> = ({
   timeTillBatchProcessing,
 }) => {
+  const [timeLeft, setTimeLeft] = useState<Interval>();
+  const [hours, setHours] = useState<number>();
+  const [minutes, setMinutes] = useState<number>();
+  const [seconds, setSeconds] = useState<number>();
+  useEffect(() => {
+    setTimeLeft(
+      Interval.fromDateTimes(
+        new Date(),
+        timeTillBatchProcessing[0].timeTillProcessing,
+      ),
+    );
+    setInterval(() => {
+      setTimeLeft(
+        Interval.fromDateTimes(
+          new Date(),
+          timeTillBatchProcessing[0].timeTillProcessing,
+        ),
+      );
+    }, 1000);
+  }, []);
+
+  useEffect(() => {
+    if (timeLeft) {
+      const { hours, minutes, seconds } = timeLeft
+        .toDuration(['hours', 'minutes', 'seconds'])
+        .toObject();
+      setHours(hours);
+      setMinutes(minutes);
+      setSeconds(seconds);
+    }
+  }, [timeLeft]);
+
   return (
     <div className="bg-white rounded-lg shadow px-5 py-6 mt-16 flex flex-row">
       <div className="w-2/3 flex flex-row">
@@ -21,28 +53,36 @@ export const BatchProcessingInfo: React.FC<BatchProcessingInfoProps> = ({
             <CircularProgressbar
               value={timeTillBatchProcessing[0].progressPercentage}
               styles={{
-                // Customize the root svg element
                 root: {},
-                // Customize the path, i.e. the "completed progress"
                 path: {
-                  stroke: `rgba(34, 152, 112, 100)`,
+                  stroke: `${
+                    hours < 12
+                      ? 'rgba(251, 191, 36, 100)'
+                      : 'rgba(34, 152, 112, 100)'
+                  }`,
                   strokeLinecap: 'butt',
-                  // Customize transition animation
                   transition: 'stroke-dashoffset 0.5s ease 0s',
                 },
                 trail: {
-                  stroke: '#a6ebcd',
+                  stroke: `${
+                    hours < 12 ? 'rgba(254, 243, 199, 100)' : '#a6ebcd'
+                  }`,
                 },
               }}
             />
           )}
         </div>
         <div>
-          {timeTillBatchProcessing && (
+          {timeLeft?.isValid && (
             <h2 className="font-semibold text-base text-gray-900 mb-2">
-              {`${timeTillBatchProcessing[0].timeTillProcessing.getUTCHours()} Hours
-          ${timeTillBatchProcessing[0].timeTillProcessing.getUTCMinutes()} Minutes
-          ${timeTillBatchProcessing[0].timeTillProcessing.getUTCSeconds()} Seconds left`}
+              {`${hours} Hours ${minutes} Minutes ${Math.floor(
+                seconds,
+              )} Seconds left`}
+            </h2>
+          )}
+          {!timeLeft?.isValid && (
+            <h2 className="font-semibold text-base text-gray-900 mb-2">
+              {`Time has elapsed`}
             </h2>
           )}
           <p className="text-sm font-light text-gray-400">
