@@ -28,6 +28,10 @@ jobs:
       - name: Remove gitignore
         uses: JesseTG/rm@v1.0.2
         with:
+          path: .gitignore
+      - name: Remove gitignore
+        uses: JesseTG/rm@v1.0.2
+        with:
           path: pacakges/contracts/.gitignore
       - uses: borales/actions-yarn@v2.3.0
         name: "generate documentation"
