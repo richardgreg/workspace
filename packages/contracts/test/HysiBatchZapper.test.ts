@@ -134,6 +134,12 @@ async function deployContracts(): Promise<Contracts> {
   const keeperIncentive = await (
     await (
       await ethers.getContractFactory("KeeperIncentive")
+    ).deploy(contractRegistry.address, 0, 0)
+  ).deployed();
+
+  const staking = await (
+    await (
+      await ethers.getContractFactory("Staking")
     ).deploy(contractRegistry.address)
   ).deployed();
 
@@ -220,6 +226,13 @@ async function deployContracts(): Promise<Contracts> {
     .addContract(
       ethers.utils.id("HysiBatchInteraction"),
       hysiBatchInteraction.address,
+      ethers.utils.id("1")
+    );
+  await contractRegistry
+    .connect(owner)
+    .addContract(
+      ethers.utils.id("Staking"),
+      staking.address,
       ethers.utils.id("1")
     );
 

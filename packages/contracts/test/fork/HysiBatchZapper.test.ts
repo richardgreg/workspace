@@ -23,6 +23,7 @@ import {
   HysiBatchZapper,
   KeeperIncentive,
   MockYearnV2Vault,
+  Staking,
 } from "../../typechain";
 
 const provider = waffle.provider;
@@ -50,6 +51,7 @@ interface Contracts {
   setToken: SetToken; // alias for hysi
   basicIssuanceModule: BasicIssuanceModule;
   hysiBatchInteraction: HysiBatchInteraction;
+  staking: Staking;
   keeperIncentive: KeeperIncentive;
   faucet: Faucet;
   aclRegistry: ACLRegistry;
@@ -251,6 +253,12 @@ async function deployContracts(): Promise<Contracts> {
   const keeperIncentive = await (
     await (
       await ethers.getContractFactory("KeeperIncentive")
+    ).deploy(contractRegistry.address, 0, 0)
+  ).deployed();
+
+  const staking = await (
+    await (
+      await ethers.getContractFactory("Staking")
     ).deploy(contractRegistry.address)
   ).deployed();
 
@@ -323,6 +331,7 @@ async function deployContracts(): Promise<Contracts> {
     setToken: hysi,
     basicIssuanceModule,
     hysiBatchInteraction,
+    staking,
     keeperIncentive,
     faucet,
     aclRegistry,
@@ -369,6 +378,13 @@ const deployAndAssignContracts = async () => {
     .addContract(
       ethers.utils.id("HysiBatchInteraction"),
       contracts.hysiBatchInteraction.address,
+      ethers.utils.id("1")
+    );
+  await contracts.contractRegistry
+    .connect(owner)
+    .addContract(
+      ethers.utils.id("Staking"),
+      contracts.staking.address,
       ethers.utils.id("1")
     );
 
