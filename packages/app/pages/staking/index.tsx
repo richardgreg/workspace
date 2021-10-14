@@ -52,8 +52,8 @@ export default function LockPop() {
 
   const getLockedPop = async () => {
     const lockedBalance = await contracts.staking.lockedBalances(account);
-    const currentTime = parseInt(`${(new Date().getTime() / 1000)}`);
-    setExpired(lockedBalance._end.lt(currentTime));
+    const currentTime = parseInt(`${new Date().getTime() / 1000}`);
+    setExpired(lockedBalance.end.lt(currentTime));
     setLockedPop(
       Number(utils.formatEther(await contracts.staking.balanceOf(account))),
     );
@@ -105,8 +105,7 @@ export default function LockPop() {
     const formattedPop = popToLock.toLocaleString().replace(/,/gi, '');
     const lockedPopInEth = utils.parseEther(formattedPop);
     const connected = await contracts.staking.connect(library.getSigner());
-    toast.promise(connected
-      .increaseStake(lockedPopInEth), {
+    toast.promise(connected.increaseStake(lockedPopInEth), {
       loading: 'Increasing POP for staking...',
       success: 'POP Increased!',
       error: 'Error occurred while increasing POP',
@@ -117,8 +116,7 @@ export default function LockPop() {
   async function increaseLock(): Promise<void> {
     setWait(true);
     const connected = await contracts.staking.connect(library.getSigner());
-    toast.promise(connected
-      .increaseStake(lockDuration), {
+    toast.promise(connected.increaseStake(lockDuration), {
       loading: 'Increasing POP Lock Period',
       success: 'POP Lock Period Increased!',
       error: 'Error occurred while increasing POP Lock Period',
@@ -207,7 +205,9 @@ export default function LockPop() {
                               min={0}
                               max={popBalance}
                               step={1}
-                              disabled={(account && approved >= popToLock && expired)}
+                              disabled={
+                                account && approved >= popToLock && expired
+                              }
                             />
                           </div>
                         </div>
@@ -226,7 +226,12 @@ export default function LockPop() {
                                 Number(period.value) === Number(lockDuration),
                             ).label
                           }
-                          disabled={(account && approved >= popToLock && lockedPop > 0 && !expired)}
+                          disabled={
+                            account &&
+                            approved >= popToLock &&
+                            lockedPop > 0 &&
+                            !expired
+                          }
                           selectOptions={lockPeriods}
                           selectOption={setLockDuration}
                         />
@@ -242,20 +247,23 @@ export default function LockPop() {
                             handleClick={() => activate(connectors.Injected)}
                           />
                         )}
-                        {account && approved >= popToLock && !lockedPop &&(
+                        {account && approved >= popToLock && !lockedPop && (
                           <MainActionButton
                             label={'Stake POP'}
                             handleClick={lockPop}
                             disabled={wait || popToLock === 0}
                           />
                         )}
-                        {account && approved >= popToLock && lockedPop > 0 && !expired && (
-                          <MainActionButton
-                            label={'Increase Stake POP'}
-                            handleClick={increaseStake}
-                            disabled={wait || popToLock === 0}
-                          />
-                        )}
+                        {account &&
+                          approved >= popToLock &&
+                          lockedPop > 0 &&
+                          !expired && (
+                            <MainActionButton
+                              label={'Increase Stake POP'}
+                              handleClick={increaseStake}
+                              disabled={wait || popToLock === 0}
+                            />
+                          )}
                         {account && approved >= popToLock && expired && (
                           <MainActionButton
                             label={'Increase POP Lock Period'}
