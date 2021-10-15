@@ -1,15 +1,15 @@
 import { BigNumber } from '@ethersproject/bignumber';
 import { BatchType } from '@popcorn/contracts/adapters/HYSIBatchInteraction/HYSIBatchInteractionAdapter';
-import { AccountValue } from '../AccountValue';
+// import { ExchangeIcon } from '../../../../images/exchangeIcon.svg';
 import { DepositWithdrawToggle } from '../DepositWithdrawToggle';
 import TokenInput, { TokenInputProps } from '../TokenInput';
 
-interface MintRedeemInterfaceProps extends TokenInputProps {
+interface DespositWithdrawInterfaceProps extends TokenInputProps {
   deposit: (depositAmount: BigNumber, batchType: BatchType) => Promise<void>;
   depositDisabled: boolean;
 }
 
-export const MintRedeemInterface: React.FC<MintRedeemInterfaceProps> = ({
+export const DespositWithdrawInterface: React.FC<DespositWithdrawInterfaceProps> = ({
   threeCrvBalance,
   threeCrvPrice,
   hysiBalance,
@@ -23,25 +23,10 @@ export const MintRedeemInterface: React.FC<MintRedeemInterfaceProps> = ({
   useUnclaimedDeposits,
   setUseUnclaimedDeposits,
 }) => {
-  console.log({
-    threeCrvBalance,
-    threeCrvPrice,
-    hysiBalance,
-    hysiPrice,
-    withdrawal,
-    setwithdrawal,
-    depositAmount,
-    setDepositAmount,
-    deposit,
-    depositDisabled,
-    useUnclaimedDeposits,
-    setUseUnclaimedDeposits,
-  });
   return (
-    <div className="bg-white rounded-lg shadow px-5 py-6 sm:px-6">
+    <div className="relative -mt-12 bg-white rounded-lg shadow px-5 pt-6 sm:px-6">
       <div className="flex flex-row">
-        <AccountValue hysiBalance={hysiBalance} hysiPrice={hysiPrice} />
-        <div className="w-1/2 px-6 py-6">
+        <div className="w-full px-6 py-6">
           <DepositWithdrawToggle
             withdrawal={withdrawal}
             setwithdrawal={setwithdrawal}

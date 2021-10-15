@@ -1,11 +1,11 @@
 import { Meta, Story } from '@storybook/react/types-6-0';
 import { DateTime } from 'luxon';
 import React from 'react';
-import { BatchProcessingInfo } from './index';
+import { BatchProcessingCountdown } from './index';
 
 export default {
-  title: 'App / Batch HYSI / Components / Batch Processing Info',
-  component: BatchProcessingInfo,
+  title: 'App / Batch HYSI / Components / Batch Processing Countdown',
+  component: BatchProcessingCountdown,
   decorators: [
     (Story) => (
       <div className="flex flex-row justify-center">
@@ -16,7 +16,7 @@ export default {
 } as Meta;
 
 const Template: Story = (args) => (
-  <BatchProcessingInfo timeTillBatchProcessing={[]} {...args} />
+  <BatchProcessingCountdown timeTillBatchProcessing={[]} {...args} />
 );
 
 export const LT12Hours = Template.bind({});

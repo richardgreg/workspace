@@ -1,17 +1,28 @@
 import { Interval } from 'luxon';
 import React, { useEffect, useState } from 'react';
 import { CircularProgressbar } from 'react-circular-progressbar';
+
 interface TimeTillBatchProcessing {
   timeTillProcessing: Date;
   progressPercentage: number;
 }
 
-interface BatchProcessingInfoProps {
+interface BatchProcessingCountdownProps {
   timeTillBatchProcessing: TimeTillBatchProcessing[];
+  strokeNormal?: string;
+  trailNormal?: string;
+  strokeWarning?: string;
+  trailWarning?: string;
+  warningCutOffHours?: number;
 }
 
-export const BatchProcessingInfo: React.FC<BatchProcessingInfoProps> = ({
+export const BatchProcessingCountdown: React.FC<BatchProcessingCountdownProps> = ({
   timeTillBatchProcessing,
+  strokeNormal = 'rgba(34, 152, 112, 100)',
+  trailNormal = '#a6ebcd',
+  strokeWarning = 'rgba(251, 191, 36, 100)',
+  trailWarning = 'rgba(254, 243, 199, 100)',
+  warningCutOffHours = 12,
 }) => {
   const [timeLeft, setTimeLeft] = useState<Interval>();
   const [hours, setHours] = useState<number>();
@@ -46,7 +57,7 @@ export const BatchProcessingInfo: React.FC<BatchProcessingInfoProps> = ({
   }, [timeLeft]);
 
   return (
-    <div className="bg-white rounded-lg shadow px-5 py-6 mt-16 flex flex-row">
+    <div className="bg-white rounded-lg shadow px-5 py-6 mt-6 flex flex-row">
       <div className="w-2/3 flex flex-row">
         <div className="w-24 h-24 flex-shrink-0 flex-grow-0 mr-4">
           {timeTillBatchProcessing && (
@@ -56,16 +67,14 @@ export const BatchProcessingInfo: React.FC<BatchProcessingInfoProps> = ({
                 root: {},
                 path: {
                   stroke: `${
-                    hours < 12
-                      ? 'rgba(251, 191, 36, 100)'
-                      : 'rgba(34, 152, 112, 100)'
+                    hours < warningCutOffHours ? strokeWarning : strokeNormal
                   }`,
                   strokeLinecap: 'butt',
                   transition: 'stroke-dashoffset 0.5s ease 0s',
                 },
                 trail: {
                   stroke: `${
-                    hours < 12 ? 'rgba(254, 243, 199, 100)' : '#a6ebcd'
+                    hours < warningCutOffHours ? trailWarning : trailNormal
                   }`,
                 },
               }}
@@ -93,8 +102,8 @@ export const BatchProcessingInfo: React.FC<BatchProcessingInfoProps> = ({
           </p>
         </div>
       </div>
-      <div className="w-1/3 flex justify-end">
-        <button className="px-3 h-9 rounded-lg font-semibold bg-blue-100 text-blue-600 text-sm hover:bg-blue-200 hover:text-blue-700">
+      <div className="w-1/3 flex justify-end ml-2">
+        <button className="px-2 h-9 rounded-lg font-semibold bg-blue-100 text-blue-600 text-sm hover:bg-blue-200 hover:text-blue-700">
           See Detail Process
         </button>
       </div>

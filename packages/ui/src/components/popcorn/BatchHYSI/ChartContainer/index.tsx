@@ -11,7 +11,7 @@ export const ChartContainer: React.FC = ({}): JSX.Element => {
         Find out what you earn by the time goes
       </p>
       <TimeRangeButtonGroup range={range} setRange={setRange} />
-      <HYSIAreaChart range={range} />
+      <HYSIAreaChart data={[]} xAxisDataKey={''} yAxisDataKey={''} />
     </div>
   );
 };
