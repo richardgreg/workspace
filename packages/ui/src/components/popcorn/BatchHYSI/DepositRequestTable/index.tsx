@@ -14,54 +14,57 @@ export const DepositRequestTable: React.FC<DepositRequestTableProps> = ({
   withdraw,
 }) => {
   return (
-    <table className="min-w-full divide-y divide-gray-200">
-      <thead className="bg-gray-50">
-        <tr>
-          <th
-            scope="col"
-            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-          >
-            Batch
-          </th>
-          <th
-            scope="col"
-            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-          >
-            Submitted Request
-          </th>
-          <th
-            scope="col"
-            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-          >
-            Deposit Amount
-          </th>
-          <th
-            scope="col"
-            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-          >
-            HYSI Token To Receive
-          </th>
-          <th
-            scope="col"
-            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-          >
-            Status
-          </th>
-          <th
-            scope="col"
-            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-          ></th>
-        </tr>
-      </thead>
-      <tbody>
-        {depositRequests?.map((depositRequest, i) => (
-          <DepositRequestRow
-            depositRequest={depositRequest}
-            claim={claim}
-            withdraw={withdraw}
-          />
-        ))}
-      </tbody>
-    </table>
+    <div className="my-4">
+      <p className="text-2xl font-bold mb-2">Deposit Request</p>
+      <table className="min-w-full divide-y divide-gray-200">
+        <thead className="bg-gray-50">
+          <tr>
+            <th
+              scope="col"
+              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+            >
+              Batch
+            </th>
+            <th
+              scope="col"
+              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+            >
+              Submitted Request
+            </th>
+            <th
+              scope="col"
+              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+            >
+              Deposit Amount
+            </th>
+            <th
+              scope="col"
+              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+            >
+              HYSI Token To Receive
+            </th>
+            <th
+              scope="col"
+              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+            >
+              Status
+            </th>
+            <th
+              scope="col"
+              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+            ></th>
+          </tr>
+        </thead>
+        <tbody>
+          {depositRequests?.map((depositRequest, i) => (
+            <DepositRequestRow
+              depositRequest={depositRequest}
+              claim={claim}
+              withdraw={withdraw}
+            />
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 };

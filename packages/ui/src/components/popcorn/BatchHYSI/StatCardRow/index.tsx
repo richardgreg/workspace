@@ -14,7 +14,7 @@ export const StatCardRow: React.FC<StatCardRowProps> = ({
   PendingWithdraw,
 }): JSX.Element => {
   return (
-    <div className="flex flex-row flex-wrap grid-rows-1">
+    <div className="relative -mt-12 mb-6 flex flex-row flex-wrap grid-rows-1">
       <StatCardAndTooltip
         data={totalBalance}
         iconCol={'#4185f2'}
