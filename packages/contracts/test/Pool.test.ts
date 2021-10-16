@@ -137,30 +137,77 @@ describe("Pool", function () {
   });
 
   describe("constructor", async function () {
-    it("should be constructed with correct addresses", async function () {
+    it("stores token address", async function () {
       expect(await contracts.pool.token()).to.equal(
         contracts.mockToken.address
       );
+    });
+
+    it("reverts on zero token address", async function () {
+      const Pool = await ethers.getContractFactory("Pool");
+      await expect(
+        Pool.deploy(
+          ethers.constants.AddressZero,
+          contracts.mockYearnRegistry.address,
+          contracts.contractRegistry.address
+        )
+      ).to.be.revertedWith("function call to a non-contract account");
+    });
+
+    it("stores Popcorn contract registry address", async function () {
       expect(await contracts.pool.contractRegistry()).to.equal(
         contracts.contractRegistry.address
       );
+    });
+
+    it("reverts on zero Popcorn registry address", async function () {
+      const Pool = await ethers.getContractFactory("Pool");
+      await expect(
+        Pool.deploy(
+          contracts.mockToken.address,
+          contracts.mockYearnRegistry.address,
+          ethers.constants.AddressZero
+        )
+      ).to.be.revertedWith("Zero address");
+    });
+
+    it("stores Yearn registry address", async function () {
       expect(await contracts.pool.registry()).to.equal(
         contracts.mockYearnRegistry.address
       );
     });
-  });
 
-  describe("pool token", async function () {
-    it("generates token name from underlying", async function () {
-      expect(await contracts.pool.name()).to.equal("Popcorn Token Pool");
+    it("reverts on zero Yearn registry address", async function () {
+      const Pool = await ethers.getContractFactory("Pool");
+      await expect(
+        Pool.deploy(
+          contracts.mockToken.address,
+          ethers.constants.AddressZero,
+          contracts.contractRegistry.address
+        )
+      ).to.be.revertedWith("Zero address");
     });
 
-    it("generates token symbol from underlying", async function () {
-      expect(await contracts.pool.symbol()).to.equal("popToken");
+    it("feesUpdatedAt is contract creation block for new pool", async function () {
+      let deployBlock = await provider.getBlock(
+        contracts.pool.deployTransaction.blockNumber
+      );
+      let deployTimestamp = deployBlock.timestamp;
+      expect(await contracts.pool.feesUpdatedAt()).to.equal(deployTimestamp);
     });
 
-    it("uses 18 decimals", async function () {
-      expect(await contracts.pool.decimals()).to.equal(18);
+    describe("pool token", async function () {
+      it("generates token name from underlying", async function () {
+        expect(await contracts.pool.name()).to.equal("Popcorn Token Pool");
+      });
+
+      it("generates token symbol from underlying", async function () {
+        expect(await contracts.pool.symbol()).to.equal("popToken");
+      });
+
+      it("uses 18 decimals", async function () {
+        expect(await contracts.pool.decimals()).to.equal(18);
+      });
     });
   });
 
@@ -178,11 +225,35 @@ describe("Pool", function () {
       ).to.equal(parseEther("99000"));
     });
 
-    it("reverts unapproved deposits", async function () {
+    it("reverts when ERC20 transfer is unapproved", async function () {
       let amount = parseEther("1000");
       await expect(
         contracts.pool.connect(depositor).deposit(amount)
       ).to.be.revertedWith("transfer amount exceeds allowance");
+    });
+
+    it("reverts if sender is not allowed contract", async function () {
+      let amount = parseEther("1000");
+      const PoolDefendedHelper = await ethers.getContractFactory(
+        "PoolDefendedHelper"
+      );
+      const defendedHelper = await (
+        await PoolDefendedHelper.deploy(
+          contracts.mockToken.address,
+          contracts.pool.address
+        )
+      ).deployed();
+      await expect(defendedHelper.deposit(amount)).to.revertedWith(
+        "Access denied for caller"
+      );
+    });
+
+    it("allows allowed contracts to deposit", async function () {
+      let amount = parseEther("1000");
+      await contracts.defendedHelper.deposit(amount);
+      expect(
+        await contracts.mockYearnVault.balanceOf(contracts.pool.address)
+      ).to.equal(parseEther("1000"));
     });
 
     it("returns pool tokens to depositor", async function () {
@@ -209,30 +280,6 @@ describe("Pool", function () {
       ).to.equal(parseEther("1000"));
     });
 
-    it("should not allow non-whitelisted contracts to deposit", async function () {
-      let amount = parseEther("1000");
-      const PoolDefendedHelper = await ethers.getContractFactory(
-        "PoolDefendedHelper"
-      );
-      const defendedHelper = await (
-        await PoolDefendedHelper.deploy(
-          contracts.mockToken.address,
-          contracts.pool.address
-        )
-      ).deployed();
-      await expect(defendedHelper.deposit(amount)).to.revertedWith(
-        "Access denied for caller"
-      );
-    });
-
-    it("should allow whitelisted contracts to deposit", async function () {
-      let amount = parseEther("1000");
-      await contracts.defendedHelper.deposit(amount);
-      expect(
-        await contracts.mockYearnVault.balanceOf(contracts.pool.address)
-      ).to.equal(parseEther("1000"));
-    });
-
     it("depositFor deposits and sends shares to address", async function () {
       let amount = parseEther("1000");
       await contracts.mockToken
@@ -244,6 +291,16 @@ describe("Pool", function () {
       expect(
         await contracts.pool.connect(depositor2).balanceOf(depositor2.address)
       ).to.equal(amount);
+    });
+
+    it("depositFor reverts on insufficient balance", async function () {
+      let amount = parseEther("100000000");
+      await contracts.mockToken
+        .connect(depositor)
+        .approve(contracts.pool.address, amount);
+      await expect(
+        contracts.pool.connect(depositor).depositFor(amount, depositor2.address)
+      ).to.be.revertedWith("Insufficient balance");
     });
   });
 
@@ -279,6 +336,14 @@ describe("Pool", function () {
       expect(await contracts.pool.balanceOf(depositor1.address)).to.equal(
         balance
       );
+    });
+  });
+
+  describe("withdrawals", async function () {
+    it("reverts on insufficient balance", async function () {
+      await expect(
+        contracts.pool.connect(depositor).withdraw(parseEther("1000"))
+      ).to.be.revertedWith("Insufficient pool token balance");
     });
   });
 
@@ -819,14 +884,6 @@ describe("Pool", function () {
         expect(await contracts.pool.valueFor(managementTokenBalance)).to.equal(
           parseEther("3.835616438356164382")
         );
-      });
-
-      it("feesUpdatedAt is contract creation block for new pool", async function () {
-        let deployBlock = await provider.getBlock(
-          contracts.pool.deployTransaction.blockNumber
-        );
-        let deployTimestamp = deployBlock.timestamp;
-        expect(await contracts.pool.feesUpdatedAt()).to.equal(deployTimestamp);
       });
 
       it("larger management fees dilute token value", async function () {
@@ -1502,9 +1559,15 @@ describe("Pool", function () {
     });
 
     it("non-owner cannot set withdrawalFee", async function () {
-      expect(
+      await expect(
         contracts.pool.connect(depositor).setWithdrawalFee(20)
       ).to.be.revertedWith("you dont have the right role");
+    });
+
+    it("reverts on same withdrawalFee", async function () {
+      await expect(
+        contracts.pool.connect(owner).setWithdrawalFee(50)
+      ).to.be.revertedWith("Same withdrawalFee");
     });
 
     it("owner can set managementFee", async function () {
@@ -1513,9 +1576,15 @@ describe("Pool", function () {
     });
 
     it("non-owner cannot set managementFee", async function () {
-      expect(
+      await expect(
         contracts.pool.connect(depositor).setManagementFee(500)
       ).to.be.revertedWith("you dont have the right role");
+    });
+
+    it("reverts on same managementFee", async function () {
+      await expect(
+        contracts.pool.connect(owner).setManagementFee(200)
+      ).to.be.revertedWith("Same managementFee");
     });
 
     it("owner can set performanceFee", async function () {
@@ -1524,9 +1593,15 @@ describe("Pool", function () {
     });
 
     it("non-owner cannot set performanceFee", async function () {
-      expect(
+      await expect(
         contracts.pool.connect(depositor).setPerformanceFee(500)
       ).to.be.revertedWith("you dont have the right role");
+    });
+
+    it("reverts on same performanceFee", async function () {
+      await expect(
+        contracts.pool.connect(owner).setPerformanceFee(2000)
+      ).to.be.revertedWith("Same performanceFee");
     });
 
     it("owner can pause the contract", async function () {
@@ -1537,7 +1612,7 @@ describe("Pool", function () {
     });
 
     it("non-owner cannot pause the contract", async function () {
-      expect(
+      await expect(
         contracts.pool.connect(depositor).pauseContract()
       ).to.be.revertedWith("you dont have the right role");
     });
@@ -1549,7 +1624,7 @@ describe("Pool", function () {
         .connect(depositor1)
         .approve(contracts.pool.address, deposit1Amount);
 
-      expect(
+      await expect(
         contracts.pool.connect(depositor1).deposit(deposit1Amount)
       ).to.be.revertedWith("Pausable: paused");
     });
