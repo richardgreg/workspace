@@ -12,6 +12,7 @@ const OUTPUT_DIR = path.resolve(__dirname, "../docgen/docs");
 const OUTPUT_IMAGES_DIR = path.resolve(__dirname, "../docgen/docs/images");
 const SUMMARY_FILE = path.resolve(__dirname, "../docgen/SUMMARY.md")
 const EXCLUDE_FILE = path.resolve(__dirname, "../docgen/exclude.txt");
+const GITBOOK_FILE = path.resolve(__dirname, "../docgen/.gitbook.yaml")
 
 const excludeList = lines(EXCLUDE_FILE).map((line) => INPUT_DIR + "/" + line);
 const relativePath = path.relative(path.dirname(SUMMARY_FILE), OUTPUT_DIR);
@@ -77,10 +78,10 @@ function checkDir(pathName){
 checkDir(OUTPUT_IMAGES_DIR);
 
 fs.writeFileSync(SUMMARY_FILE, "# Summary\n");
-fs.writeFileSync(".gitbook.yaml", "root: ./\n");
-fs.appendFileSync(".gitbook.yaml", "structure:\n");
-fs.appendFileSync(".gitbook.yaml", "  readme: docgen/README.md\n");
-fs.appendFileSync(".gitbook.yaml", "  summary: docgen/SUMMARY.md\n");
+fs.writeFileSync(GITBOOK_FILE, "root: ./\n");
+fs.appendFileSync(GITBOOK_FILE, "structure:\n");
+fs.appendFileSync(GITBOOK_FILE, "  readme: README.md\n");
+fs.appendFileSync(GITBOOK_FILE, "  summary: SUMMARY.md\n");
 
 scan(INPUT_DIR, "");
 
