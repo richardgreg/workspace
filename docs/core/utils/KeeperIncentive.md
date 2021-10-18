@@ -10,6 +10,7 @@
 - [`fundIncentive()`](#fundIncentive_)
 - [`addControllerContract()`](#addControllerContract_)
 - [`updateBurnRate()`](#updateBurnRate_)
+- [`updateRequiredKeeperStake()`](#updateRequiredKeeperStake_)
 ## Events:
 - [`IncentiveCreated`](#IncentiveCreated_)
 - [`IncentiveChanged`](#IncentiveChanged_)
@@ -19,6 +20,7 @@
 - [`ControllerContractAdded`](#ControllerContractAdded_)
 - [`Burned`](#Burned_)
 - [`BurnRateChanged`](#BurnRateChanged_)
+- [`RequiredKeeperStakeChanged`](#RequiredKeeperStakeChanged_)
 ## Graphs:
 - [`Dependency Graph`](#dependencyGraph)
 - [`Inheritance Graph`](#inheritanceGraph)
@@ -26,7 +28,7 @@
 ## Function Definitions:
 ### <a name="constructor_"></a> constructor() {#constructor_}
 ```
-constructor(contract IContractRegistry _contractRegistry) public 
+constructor(contract IContractRegistry _contractRegistry, uint256 _burnRate, uint256 _requiredKeeperStake) public 
 ```
 ### <a name="handleKeeperIncentive_"></a> handleKeeperIncentive() {#handleKeeperIncentive_}
 ```
@@ -76,6 +78,13 @@ updateBurnRate(uint256 _burnRate) external
 | Parameter Name | Type | Description |
 |------------|-----| -------|
 | `_burnRate`| uint256| Percentage in Mantissa. (1e14 = 1 Basis Point)|
+### <a name="updateRequiredKeeperStake_"></a> updateRequiredKeeperStake() {#updateRequiredKeeperStake_}
+```
+updateRequiredKeeperStake(uint256 _amount) external 
+```
+| Parameter Name | Type | Description |
+|------------|-----| -------|
+| `_amount`| uint256| Amount of POP a keeper needs to stake|
 ## Events
 ### <a name="IncentiveCreated_"></a> IncentiveCreated {#IncentiveCreated_}
 ```
@@ -108,6 +117,10 @@ Burned(uint256 amount)
 ### <a name="BurnRateChanged_"></a> BurnRateChanged {#BurnRateChanged_}
 ```
 BurnRateChanged(uint256 oldRate, uint256 newRate)
+```
+### <a name="RequiredKeeperStakeChanged_"></a> RequiredKeeperStakeChanged {#RequiredKeeperStakeChanged_}
+```
+RequiredKeeperStakeChanged(uint256 oldRequirement, uint256 newRequirement)
 ```
 ## Graphs
 ### <a name="dependencyGraph"></a> `Dependency Graph` {#dependencyGraph}
