@@ -253,127 +253,38 @@ const TokenInput: React.FC<TokenInputProps> = ({
           </div>
         </>
       )}
+
       {withdrawal && (
         <>
           <div className="mt-6">
-            <p className="font-semibold text-sm text-gray-900 mb-1">
-              Withdraw Amount
-            </p>
-            <div
-              className={`rounded-md border  px-2 py-3 ${
-                validInputAmount ? 'border-gray-200' : 'border-red-600'
-              }`}
-            >
-              <div className="flex flex-row justify-between items-center">
-                <input
-                  className="w-96"
-                  placeholder="-"
-                  value={bigNumberToNumber(depositAmount)}
-                  onChange={(e) =>
-                    updateWithInputAmounts(Number(e.target.value), withdrawal)
-                  }
-                />
-                <div className="flex flex-row items-center">
-                  <Menu as="div" className="relative inline-block text-left">
-                    <div>
-                      <Menu.Button className="">
-                        <span className="sr-only">Open options</span>
-                        <div className="flex flex-row">
-                          <p className="text-gray-700">{despositCcy}</p>
-                          <ChevronDownIcon className="ml-2 mt-1 w-4 h-4" />
-                        </div>
-                      </Menu.Button>
-                    </div>
-
-                    <Transition
-                      as={Fragment}
-                      enter="transition ease-out duration-100"
-                      enterFrom="transform opacity-0 scale-95"
-                      enterTo="transform opacity-100 scale-100"
-                      leave="transition ease-in duration-75"
-                      leaveFrom="transform opacity-100 scale-100"
-                      leaveTo="transform opacity-0 scale-95"
-                    >
-                      <Menu.Items className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-                        <div className="py-1">
-                          <Menu.Item>
-                            {({ active }) => (
-                              <a
-                                href="#"
-                                className={classNames(
-                                  active
-                                    ? 'bg-gray-100 text-gray-900'
-                                    : 'text-gray-700',
-                                  'block px-4 py-2 text-sm',
-                                )}
-                                onClick={() => setDepositCcy('USDC')}
-                              >
-                                USDC
-                              </a>
-                            )}
-                          </Menu.Item>
-                          <Menu.Item>
-                            {({ active }) => (
-                              <a
-                                href="#"
-                                className={classNames(
-                                  active
-                                    ? 'bg-gray-100 text-gray-900'
-                                    : 'text-gray-700',
-                                  'block px-4 py-2 text-sm',
-                                )}
-                                onClick={() => setDepositCcy('FRAX')}
-                              >
-                                FRAX
-                              </a>
-                            )}
-                          </Menu.Item>
-                          <Menu.Item>
-                            {({ active }) => (
-                              <a
-                                href="#"
-                                className={classNames(
-                                  active
-                                    ? 'bg-gray-100 text-gray-900'
-                                    : 'text-gray-700',
-                                  'block px-4 py-2 text-sm',
-                                )}
-                                onClick={() => setDepositCcy('USDN')}
-                              >
-                                USDN
-                              </a>
-                            )}
-                          </Menu.Item>
-                          <Menu.Item>
-                            {({ active }) => (
-                              <a
-                                href="#"
-                                className={classNames(
-                                  active
-                                    ? 'bg-gray-100 text-gray-900'
-                                    : 'text-gray-700',
-                                  'block px-4 py-2 text-sm',
-                                )}
-                                onClick={() => setDepositCcy('UST')}
-                              >
-                                UST
-                              </a>
-                            )}
-                          </Menu.Item>
-                        </div>
-                      </Menu.Items>
-                    </Transition>
-                  </Menu>
+            <div className="">
+              <p className="font-semibold text-sm text-gray-900 mb-1">
+                Withdrawal Amount
+              </p>
+              <div className="rounded-md border border-gray-200 px-2 py-4">
+                <div className="flex flex-row justify-between">
+                  <input
+                    className="w-96"
+                    placeholder="-"
+                    value={estimatedAmount}
+                    onChange={(e) =>
+                      updateWithOuputAmounts(Number(e.target.value), withdrawal)
+                    }
+                  />
+                  <p className="text-gray-700">
+                    {withdrawal ? '3CRV' : 'HYSI'}
+                  </p>
                 </div>
               </div>
             </div>
+
             <label className="flex flex-row items-center mt-2">
               <input
                 type="checkbox"
                 className="mr-2 rounded-sm"
                 onChange={(e) => setUseUnclaimedDeposits(!useUnclaimedDeposits)}
               />
-              <p>{`Deposit entire ${despositCcy} balance`}</p>
+              <p>{`Withdraw entire USD balance`}</p>
             </label>
 
             {!validInputAmount && (
@@ -398,21 +309,115 @@ const TokenInput: React.FC<TokenInputProps> = ({
               </div>
             </div>
           </div>
-          <div className="">
-            <p className="font-semibold text-sm text-gray-900 mb-1">
-              {`Estimated ${withdrawal ? '3CRV' : 'HYSI'} Amount`}
-            </p>
-            <div className="rounded-md border border-gray-200 px-2 py-4">
-              <div className="flex flex-row justify-between">
-                <input
-                  className="w-96"
-                  placeholder="-"
-                  value={estimatedAmount}
-                  onChange={(e) =>
-                    updateWithOuputAmounts(Number(e.target.value), withdrawal)
-                  }
-                />
-                <p className="text-gray-700">{withdrawal ? '3CRV' : 'HYSI'}</p>
+
+          <p className="font-semibold text-sm text-gray-900 mb-1">
+            Estimated Stablecoin withdrawal
+          </p>
+          <div
+            className={`rounded-md border  px-2 py-3 ${
+              validInputAmount ? 'border-gray-200' : 'border-red-600'
+            }`}
+          >
+            <div className="flex flex-row justify-between items-center">
+              <input
+                className="w-96"
+                placeholder="-"
+                value={bigNumberToNumber(depositAmount)}
+                onChange={(e) =>
+                  updateWithInputAmounts(Number(e.target.value), withdrawal)
+                }
+              />
+              <div className="flex flex-row items-center">
+                <Menu as="div" className="relative inline-block text-left">
+                  <div>
+                    <Menu.Button className="">
+                      <span className="sr-only">Open options</span>
+                      <div className="flex flex-row">
+                        <p className="text-gray-700">{despositCcy}</p>
+                        <ChevronDownIcon className="ml-2 mt-1 w-4 h-4" />
+                      </div>
+                    </Menu.Button>
+                  </div>
+
+                  <Transition
+                    as={Fragment}
+                    enter="transition ease-out duration-100"
+                    enterFrom="transform opacity-0 scale-95"
+                    enterTo="transform opacity-100 scale-100"
+                    leave="transition ease-in duration-75"
+                    leaveFrom="transform opacity-100 scale-100"
+                    leaveTo="transform opacity-0 scale-95"
+                  >
+                    <Menu.Items className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                      <div className="py-1">
+                        <Menu.Item>
+                          {({ active }) => (
+                            <a
+                              href="#"
+                              className={classNames(
+                                active
+                                  ? 'bg-gray-100 text-gray-900'
+                                  : 'text-gray-700',
+                                'block px-4 py-2 text-sm',
+                              )}
+                              onClick={() => setDepositCcy('USDC')}
+                            >
+                              USDC
+                            </a>
+                          )}
+                        </Menu.Item>
+                        <Menu.Item>
+                          {({ active }) => (
+                            <a
+                              href="#"
+                              className={classNames(
+                                active
+                                  ? 'bg-gray-100 text-gray-900'
+                                  : 'text-gray-700',
+                                'block px-4 py-2 text-sm',
+                              )}
+                              onClick={() => setDepositCcy('FRAX')}
+                            >
+                              FRAX
+                            </a>
+                          )}
+                        </Menu.Item>
+                        <Menu.Item>
+                          {({ active }) => (
+                            <a
+                              href="#"
+                              className={classNames(
+                                active
+                                  ? 'bg-gray-100 text-gray-900'
+                                  : 'text-gray-700',
+                                'block px-4 py-2 text-sm',
+                              )}
+                              onClick={() => setDepositCcy('USDN')}
+                            >
+                              USDN
+                            </a>
+                          )}
+                        </Menu.Item>
+                        <Menu.Item>
+                          {({ active }) => (
+                            <a
+                              href="#"
+                              className={classNames(
+                                active
+                                  ? 'bg-gray-100 text-gray-900'
+                                  : 'text-gray-700',
+                                'block px-4 py-2 text-sm',
+                              )}
+                              onClick={() => setDepositCcy('UST')}
+                            >
+                              UST
+                            </a>
+                          )}
+                        </Menu.Item>
+                      </div>
+                    </Menu.Items>
+                  </Transition>
+                </Menu>
               </div>
             </div>
           </div>

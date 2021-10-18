@@ -9,7 +9,7 @@ import { DespositWithdrawInterface } from '../DespositWithdrawInterface';
 export const RightColumn = () => {
   const [withdrawal, setwithdrawal] = useState<boolean>(false);
   return (
-    <div className="w-1/3 pl-6 pr-12">
+    <div className="w-full col-span-1 px-6 lg:pr-12">
       <DespositWithdrawInterface
         deposit={function (
           depositAmount: BigNumber,

@@ -47,17 +47,13 @@ const getDateXAxisValues = (range: string): string[] => {
         const date = now.plus({ days: i * 7 });
         return date.day + ' ' + date.monthShort;
       });
-    case '24hr':
-      return new Array(9).fill(undefined).map((x, i) => {
-        const date = now.plus({ hours: i * 3 });
-        return date.hour + ':00 ' + date.day + ' ' + date.monthShort;
-      });
+
     default:
       break;
   }
 };
 
-const getDummyData = (range: string) => {
+export const getDummyData = (range: string) => {
   const xAxis = getDateXAxisValues(range);
   return xAxis.map((date, i) => {
     return {
@@ -72,7 +68,6 @@ export const Week = Template.bind({});
 export const Fortnight = Template.bind({});
 export const Year = Template.bind({});
 export const HalfYear = Template.bind({});
-export const Day = Template.bind({});
 
 Month.args = {
   data: getDummyData('30D'),
@@ -96,11 +91,6 @@ Year.args = {
 };
 HalfYear.args = {
   data: getDummyData('180D'),
-  yAxisDataKey: 'yield',
-  xAxisDataKey: 'date',
-};
-Day.args = {
-  data: getDummyData('24hr'),
   yAxisDataKey: 'yield',
   xAxisDataKey: 'date',
 };

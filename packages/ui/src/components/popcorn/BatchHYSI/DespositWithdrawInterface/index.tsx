@@ -23,7 +23,10 @@ export const DespositWithdrawInterface: React.FC<DespositWithdrawInterfaceProps>
   setUseUnclaimedDeposits,
 }) => {
   return (
-    <div className="relative -mt-12 bg-white rounded-lg shadow px-5 pt-6 sm:px-6">
+    <div
+      className="relative mt-12 lg:-mt-12 bg-white rounded-lg shadow px-5 pt-6 sm:px-6"
+      style={{ minWidth: 300 }}
+    >
       <div className="flex flex-row">
         <div className="w-full px-6 py-6">
           <DepositWithdrawToggle

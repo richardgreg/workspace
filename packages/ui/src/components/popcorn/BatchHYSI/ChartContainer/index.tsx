@@ -1,9 +1,15 @@
 import { useState } from 'react';
-import { HYSIAreaChart } from '../AreaChart';
+import { ChartData, HYSIAreaChart } from '../AreaChart';
 import { TimeRangeButtonGroup } from '../TimeRangeButtonGroup';
 
-export const ChartContainer: React.FC = ({}): JSX.Element => {
-  const [range, setRange] = useState<string>('1YR');
+interface ChartContainerProps {
+  chartData: ChartData[];
+}
+
+export const ChartContainer: React.FC<ChartContainerProps> = ({
+  chartData,
+}): JSX.Element => {
+  const [range, setRange] = useState<string>('30D');
   return (
     <div className="justify-items-center bg-white shadow rounded-lg py-4">
       <p className="text-3xl font-bold text-center">Annual Percentage Yield</p>
@@ -11,7 +17,7 @@ export const ChartContainer: React.FC = ({}): JSX.Element => {
         Find out what you earn by the time goes
       </p>
       <TimeRangeButtonGroup range={range} setRange={setRange} />
-      <HYSIAreaChart data={[]} xAxisDataKey={''} yAxisDataKey={''} />
+      <HYSIAreaChart data={chartData} />
     </div>
   );
 };

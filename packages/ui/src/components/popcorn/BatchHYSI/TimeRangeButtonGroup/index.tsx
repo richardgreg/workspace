@@ -7,9 +7,12 @@ export const TimeRangeButtonGroup: React.FC<TimeRangeButtonGroupProps> = ({
   range,
   setRange,
 }): JSX.Element => {
-  const rangeOptions = ['24hr', '7D', '14D', '30D', '180D', '1YR'];
+  const rangeOptions = ['7D', '30D', '180D', '1YR'];
   return (
-    <div className="flex flex-row w-2/3 mx-auto justify-center py-2 my-2 px-2 rounded-full shadow-sm text-white bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 mb-8">
+    <div
+      className="flex flex-row w-full sm:w-2/3 mx-auto justify-center py-2 my-2 px-2 rounded-full shadow-sm text-white bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 mb-8"
+      style={{ width: 330 }}
+    >
       {rangeOptions.map((option) => {
         return (
           <button

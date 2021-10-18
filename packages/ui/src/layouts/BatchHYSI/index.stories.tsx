@@ -1,6 +1,13 @@
 import { BigNumber } from '@ethersproject/bignumber';
+import {
+  CashIcon,
+  HandIcon,
+  KeyIcon,
+  SparklesIcon,
+} from '@heroicons/react/outline';
 import { Meta, Story } from '@storybook/react/types-6-0';
 import React from 'react';
+import { getDummyData } from '../../components/popcorn/BatchHYSI/AreaChart/index.stories';
 import { DepositRequestTable } from '../../components/popcorn/BatchHYSI/DepositRequestTable';
 import { Header } from '../../components/popcorn/BatchHYSI/Header';
 import { LeftColumn } from '../../components/popcorn/BatchHYSI/LeftColumn';
@@ -27,23 +34,60 @@ const BatchHYSI = () => {
   return (
     <div className="bg-gray-100">
       <Header title={'Popcorn Yield Optimizer'} />
-      <div className="flex flex-row">
-        <LeftColumn />
+      <div className="grid grid-cols-1 lg:grid-cols-3">
+        <LeftColumn
+          totalBalance={{
+            change: '10%',
+            changeType: 'increase',
+            icon: CashIcon,
+            id: 1,
+            name: 'Total Balance',
+            statCur: 71897,
+            statPrev: 35000,
+          }}
+          HYSI={{
+            change: '10%',
+            changeType: 'increase',
+            icon: SparklesIcon,
+            id: 2,
+            name: 'HYSI',
+            statCur: 1897,
+            statPrev: 35000,
+          }}
+          ClaimableHYSI={{
+            change: '10%',
+            changeType: 'increase',
+            icon: KeyIcon,
+            id: 3,
+            name: 'Claimable HYSI',
+            statCur: 58897,
+            statPrev: 35000,
+          }}
+          PendingWithdraw={{
+            change: '10%',
+            changeType: 'increase',
+            icon: HandIcon,
+            id: 4,
+            name: 'Pending Withdraw',
+            statCur: 250,
+            statPrev: 35000,
+          }}
+          chartData={getDummyData('30D')}
+        />
         <RightColumn />
       </div>
-      <div className="w-full px-12">
-        <DepositRequestTable
-          depositRequests={getDespositRequests(10)}
-          claim={async (batchId: string) => {}}
-          withdraw={async (batchId: string, amount: BigNumber) => {}}
-        />
-      </div>
+
+      <DepositRequestTable
+        depositRequests={getDespositRequests(10)}
+        claim={async (batchId: string) => {}}
+        withdraw={async (batchId: string, amount: BigNumber) => {}}
+      />
     </div>
   );
 };
 
 export default {
-  title: 'App / Batch HYSI / Page / HYSI Deposit / Withdraw',
+  title: 'App / Batch HYSI / Page / HYSI Deposit Withdraw',
   component: BatchHYSI,
   decorators: [
     (Story) => (

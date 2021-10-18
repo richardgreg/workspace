@@ -14,7 +14,7 @@ export const DepositRequestTable: React.FC<DepositRequestTableProps> = ({
   withdraw,
 }) => {
   return (
-    <div className="my-4">
+    <div className="w-full px-6 lg:px-12 pb-12 my-8">
       <p className="text-2xl font-bold mb-2">Deposit Request</p>
       <table className="min-w-full divide-y divide-gray-200">
         <thead className="bg-gray-50">
