@@ -35,8 +35,7 @@ export const StatCardAndTooltip: React.FC<StatCardProps> = ({
   return (
     <div
       key={data.name}
-      className=" h-24 bg-white pt-5 px-4 pb-12 sm:pt-6 sm:px-6 shadow rounded-lg overflow-hidden  mb-4 flex-grow"
-      style={{ width: '17rem' }}
+      className=" h-24 bg-white pt-5 px-4 pb-12 sm:pt-6 sm:px-6 shadow rounded-lg overflow-hidden mb-4 flex-grow max-w-sm"
     >
       <dt>
         <div

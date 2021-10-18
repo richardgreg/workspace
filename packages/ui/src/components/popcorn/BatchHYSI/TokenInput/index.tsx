@@ -1,8 +1,8 @@
 import { BigNumber } from '@ethersproject/bignumber';
 import { Menu, Transition } from '@headlessui/react';
-import { ChevronDownIcon } from '@heroicons/react/outline';
+import { ChevronDownIcon, SwitchVerticalIcon } from '@heroicons/react/outline';
 import { bigNumberToNumber, scaleNumberToBigNumber } from '@popcorn/utils';
-import { Dispatch, Fragment, useEffect, useState } from 'react';
+import React, { Dispatch, Fragment, useEffect, useState } from 'react';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
@@ -228,11 +228,7 @@ const TokenInput: React.FC<TokenInputProps> = ({
                   className="flex mx-auto w-10 h-10 rounded-full border border-gray-200 items-center cursor-pointer hover:bg-gray-50 hover:border-gray-400"
                   onClick={(e) => setwithdrawal(!withdrawal)}
                 >
-                  <img
-                    src="/images/exchangeIcon.svg"
-                    alt="exchangeIcon"
-                    className="mx-auto p-3"
-                  ></img>
+                  <SwitchVerticalIcon className="h-7 w-7 text-gray-400 align-middle mx-auto" />
                 </div>
               </div>
             </div>
@@ -397,11 +393,7 @@ const TokenInput: React.FC<TokenInputProps> = ({
                   className="flex mx-auto w-10 h-10 rounded-full border border-gray-200 items-center cursor-pointer hover:bg-gray-50 hover:border-gray-400"
                   onClick={(e) => setwithdrawal(!withdrawal)}
                 >
-                  <img
-                    src="/images/exchangeIcon.svg"
-                    alt="exchangeIcon"
-                    className="mx-auto p-3"
-                  ></img>
+                  <SwitchVerticalIcon className="h-7 w-7 text-gray-400 align-middle mx-auto" />
                 </div>
               </div>
             </div>
