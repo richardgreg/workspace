@@ -161,6 +161,24 @@ async function deployContracts(): Promise<Contracts> {
 
   await keeperIncentive
     .connect(owner)
+    .createIncentive(
+      utils.formatBytes32String("HysiBatchInteraction"),
+      0,
+      true,
+      false
+    );
+
+  await keeperIncentive
+    .connect(owner)
+    .createIncentive(
+      utils.formatBytes32String("HysiBatchInteraction"),
+      0,
+      true,
+      false
+    );
+
+  await keeperIncentive
+    .connect(owner)
     .addControllerContract(
       utils.formatBytes32String("HysiBatchInteraction"),
       hysiBatchInteraction.address

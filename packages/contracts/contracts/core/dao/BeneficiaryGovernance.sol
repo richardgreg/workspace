@@ -48,6 +48,21 @@ contract BeneficiaryGovernance {
     uint256 proposalBond;
   }
 
+  /**
+   * @param status status of proposal
+   * @param beneficiary the proposal is for this beneficiary address
+   * @param voters addresses that have voted for this proposal
+   * @param applicationCid the IPFS content identifier
+   * @param proposer the address that raised the proposal. this may be different than the beneficiary address
+   * @param startTime the time the proposal was submitted
+   * @param region the bytes32 value of the region according to the Region contract. Proposals are submitted within a council-controlled region
+   * @param yesCount how many yes votes
+   * @param noCount how many no votes
+   * @param voterCount how many addresses have voted for this proposal
+   * @param proposalType either a nomination or a takedown proposal
+   * @param configurationOptions configuration for this proposal, e.g. bond required and length of time for each period - challenge, voting
+   * @param vaultId the vault id is used for the participation rewards allocated for the proposal
+   */
   struct Proposal {
     ProposalStatus status;
     address beneficiary;
@@ -66,16 +81,24 @@ contract BeneficiaryGovernance {
 
   /* ========== STATE VARIABLES ========== */
 
-  IContractRegistry public contractRegistry;
+  IContractRegistry public immutable contractRegistry;
 
-  mapping(address => bool) pendingBeneficiaries;
-  mapping(address => uint256) beneficiaryProposals;
+  /**
+   * @dev when a proposal is created, the beneficiary for which the proposal has been created for will be added to this mapping to prevent multiple proposals from being raised for the beneficiary
+   */
+  mapping(address => bool) internal pendingBeneficiaries;
+
+  /**
+   * @dev maps beneficiary addresses to the proposal id/index
+   * todo: update to map beneficiary addresses to an array of proposal ids otherwise there would be an incomplete mapping if values get overwritten
+   */
+  mapping(address => uint256) public beneficiaryProposals;
 
   Proposal[] public proposals;
   uint256[] public nominations;
   uint256[] public takedowns;
   ConfigurationOptions public DefaultConfigurations;
-  bytes32 public immutable contractName = "BeneficiaryGovernance";
+  bytes32 private constant contractName = "BeneficiaryGovernance";
 
   /* ========== EVENTS ========== */
 
@@ -104,9 +127,10 @@ contract BeneficiaryGovernance {
 
   /**
    * @notice returns number of created proposals
+   * @return uint256
    */
   function getNumberOfProposals(ProposalType _type)
-    public
+    external
     view
     returns (uint256)
   {
@@ -176,7 +200,12 @@ contract BeneficiaryGovernance {
     enoughBond(msg.sender)
     returns (uint256)
   {
-    //require(region.regionExists(_region), "region doesnt exist");
+    require(
+      IRegion(contractRegistry.getContract(keccak256("Region"))).regionExists(
+        _region
+      ),
+      "region doesnt exist"
+    );
     _assertProposalPreconditions(_type, _beneficiary);
 
     if (DefaultConfigurations.proposalBond > 0) {

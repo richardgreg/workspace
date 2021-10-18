@@ -1,6 +1,7 @@
 pragma solidity >=0.7.0 <0.8.0;
 
 import "@openzeppelin/contracts/math/SafeMath.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 import "../interfaces/IACLRegistry.sol";
 import "../interfaces/IContractRegistry.sol";
@@ -20,8 +21,11 @@ contract KeeperIncentive {
   IContractRegistry public contractRegistry;
 
   uint256 public incentiveBudget;
-  mapping(bytes32 => Incentive) public incentives;
+  mapping(bytes32 => Incentive[]) public incentives;
   mapping(bytes32 => address) public controllerContracts;
+  uint256 public burnRate;
+  address internal immutable burnAddress =
+    0x00000000219ab540356cBB839Cbe05303d7705Fa; //ETH2.0 Staking Contract
 
   /* ========== EVENTS ========== */
 
@@ -41,24 +45,29 @@ contract KeeperIncentive {
   event ApprovalToggled(bytes32 contractName, bool openToEveryone);
   event IncentiveToggled(bytes32 contractName, bool enabled);
   event ControllerContractAdded(bytes32 contractName, address contractAddress);
+  event Burned(uint256 amount);
+  event BurnRateChanged(uint256 oldRate, uint256 newRate);
 
   /* ========== CONSTRUCTOR ========== */
 
   constructor(IContractRegistry _contractRegistry) public {
     contractRegistry = _contractRegistry;
+    burnRate = 25e16;
   }
 
   /* ==========  MUTATIVE FUNCTIONS  ========== */
 
-  function handleKeeperIncentive(bytes32 contractName_, address keeper)
-    external
-  {
+  function handleKeeperIncentive(
+    bytes32 contractName_,
+    uint8 i,
+    address keeper
+  ) external {
     require(
       msg.sender == controllerContracts[contractName_],
       "Can only be called by the controlling contract"
     );
 
-    Incentive memory incentive = incentives[contractName_];
+    Incentive memory incentive = incentives[contractName_][i];
 
     if (!incentive.openToEveryone) {
       IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
@@ -66,10 +75,13 @@ contract KeeperIncentive {
     }
     if (incentive.enabled && incentive.reward <= incentiveBudget) {
       incentiveBudget = incentiveBudget.sub(incentive.reward);
+      uint256 amountToBurn = incentive.reward.mul(burnRate).div(1e18);
+      uint256 incentivePayout = incentive.reward.sub(amountToBurn);
       IERC20(contractRegistry.getContract(keccak256("POP"))).safeTransfer(
         keeper,
-        incentive.reward
+        incentivePayout
       );
+      _burn(amountToBurn);
     }
   }
 
@@ -92,11 +104,13 @@ contract KeeperIncentive {
   ) public {
     IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
       .requireRole(keccak256("DAO"), msg.sender);
-    incentives[contractName_] = Incentive({
-      reward: _reward,
-      enabled: _enabled,
-      openToEveryone: _openToEveryone
-    });
+    incentives[contractName_].push(
+      Incentive({
+        reward: _reward,
+        enabled: _enabled,
+        openToEveryone: _openToEveryone
+      })
+    );
     emit IncentiveCreated(contractName_, _reward, _openToEveryone);
   }
 
@@ -104,13 +118,14 @@ contract KeeperIncentive {
 
   function updateIncentive(
     bytes32 contractName_,
+    uint8 i,
     uint256 _reward,
     bool _enabled,
     bool _openToEveryone
   ) external {
     IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
       .requireRole(keccak256("DAO"), msg.sender);
-    Incentive storage incentive = incentives[contractName_];
+    Incentive storage incentive = incentives[contractName_][i];
     uint256 oldReward = incentive.reward;
     bool oldOpenToEveryone = incentive.openToEveryone;
     incentive.reward = _reward;
@@ -125,18 +140,18 @@ contract KeeperIncentive {
     );
   }
 
-  function toggleApproval(bytes32 contractName_) external {
+  function toggleApproval(bytes32 contractName_, uint8 i) external {
     IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
       .requireRole(keccak256("DAO"), msg.sender);
-    Incentive storage incentive = incentives[contractName_];
+    Incentive storage incentive = incentives[contractName_][i];
     incentive.openToEveryone = !incentive.openToEveryone;
     emit ApprovalToggled(contractName_, incentive.openToEveryone);
   }
 
-  function toggleIncentive(bytes32 contractName_) external {
+  function toggleIncentive(bytes32 contractName_, uint8 i) external {
     IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
       .requireRole(keccak256("DAO"), msg.sender);
-    Incentive storage incentive = incentives[contractName_];
+    Incentive storage incentive = incentives[contractName_][i];
     incentive.enabled = !incentive.enabled;
     emit IncentiveToggled(contractName_, incentive.enabled);
   }
@@ -164,5 +179,24 @@ contract KeeperIncentive {
       .requireRole(keccak256("DAO"), msg.sender);
     controllerContracts[contractName_] = contract_;
     emit ControllerContractAdded(contractName_, contract_);
+  }
+
+  /**
+   * @notice Sets the current burn rate as a percentage of the incentive reward.
+   * @param _burnRate Percentage in Mantissa. (1e14 = 1 Basis Point)
+   */
+  function updateBurnRate(uint256 _burnRate) external {
+    IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
+      .requireRole(keccak256("DAO"), msg.sender);
+    emit BurnRateChanged(burnRate, _burnRate);
+    burnRate = _burnRate;
+  }
+
+  function _burn(uint256 _amount) internal {
+    IERC20(contractRegistry.getContract(keccak256("POP"))).transfer(
+      burnAddress,
+      _amount
+    );
+    emit Burned(_amount);
   }
 }

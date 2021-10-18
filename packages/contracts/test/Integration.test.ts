@@ -167,6 +167,27 @@ async function deployContracts(): Promise<Contracts> {
   await aclRegistry
     .connect(owner)
     .grantRole(ethers.utils.id("Keeper"), owner.address);
+  await aclRegistry
+    .connect(owner)
+    .grantRole(ethers.utils.id("RewardsManager"), rewardsManager.address);
+
+  await keeperIncentive
+    .connect(owner)
+    .createIncentive(
+      utils.formatBytes32String("RewardsManager"),
+      0,
+      true,
+      false
+    );
+
+  await keeperIncentive
+    .connect(owner)
+    .createIncentive(
+      utils.formatBytes32String("RewardsManager"),
+      0,
+      true,
+      false
+    );
 
   await contractRegistry
     .connect(owner)
@@ -281,6 +302,22 @@ async function prepareContracts(): Promise<void> {
     owner.address,
     currentTimestamp + 60
   );
+  await contracts.keeperIncentive
+    .connect(owner)
+    .createIncentive(
+      utils.formatBytes32String("RewardsManager"),
+      0,
+      true,
+      false
+    );
+  await contracts.keeperIncentive
+    .connect(owner)
+    .createIncentive(
+      utils.formatBytes32String("RewardsManager"),
+      0,
+      true,
+      false
+    );
   await contracts.keeperIncentive
     .connect(owner)
     .addControllerContract(
