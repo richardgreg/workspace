@@ -25,14 +25,6 @@ jobs:
         name: "yarn install"
         with:
           cmd: install # will run `yarn install` command
-      - name: Remove gitignore
-        uses: JesseTG/rm@v1.0.2
-        with:
-          path: .gitignore
-      - name: Remove gitignore
-        uses: JesseTG/rm@v1.0.2
-        with:
-          path: pacakges/contracts/.gitignore
       - uses: borales/actions-yarn@v2.3.0
         name: "generate documentation"
         with:
@@ -42,6 +34,6 @@ jobs:
         env:
           REPO: self
           BRANCH: develop-docgen
-          FOLDER: packages/contracts/
+          FOLDER: packages/contracts/docgen/
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           MESSAGE: "Build: ({sha}) {msg}" # The commit message

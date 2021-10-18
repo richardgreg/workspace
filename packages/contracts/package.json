@@ -10,7 +10,7 @@
     "prettier": "prettier --write 'contracts/**/*.sol'",
     "clean": "rimraf ./cache & rimraf ./artifacts",
     "compile": "yarn clean && hardhat compile ",
-    "docify": "rm -rf ./.gitbook.yaml ./docgen/SUMMARY.md ./docgen/docs/* && node scripts/docify.js",
+    "docify": "rm -rf ./docgen/.gitbook.yaml ./docgen/SUMMARY.md ./docgen/docs/* && node scripts/docify.js",
     "test": "yarn hardhat test test/*.test.ts",
     "test:fork": "yarn hardhat test test/fork/*.test.ts",
     "coverage": "yarn hardhat coverage --testfiles 'test/*.test.ts'",

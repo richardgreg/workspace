@@ -6,4 +6,4 @@ coverage.json
 
 docgen/docs
 docgen/SUMMARY.md
-.gitbook.yaml
+docgen/.gitbook.yaml
