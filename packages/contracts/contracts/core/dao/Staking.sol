@@ -16,12 +16,12 @@ contract Staking is IStaking, ReentrancyGuard {
   using SafeMath for uint256;
   using SafeERC20 for IERC20;
 
-  /* ========== STATE VARIABLES ========== */
-
   struct LockedBalance {
-    uint256 _balance;
-    uint256 _end;
+    uint256 balance;
+    uint256 end;
   }
+
+  /* ========== STATE VARIABLES ========== */
 
   IContractRegistry public contractRegistry;
 
@@ -63,8 +63,8 @@ contract Staking is IStaking, ReentrancyGuard {
     override
     returns (uint256)
   {
-    uint256 lockEndTime = lockedBalances[_address]._end;
-    uint256 balance = lockedBalances[_address]._balance;
+    uint256 lockEndTime = lockedBalances[_address].end;
+    uint256 balance = lockedBalances[_address].balance;
     uint256 currentTime = block.timestamp;
 
     if (lockEndTime == 0 || lockEndTime < currentTime || balance == 0) {
@@ -85,14 +85,19 @@ contract Staking is IStaking, ReentrancyGuard {
   {
     uint256 _withdrawable = 0;
     uint256 _currentTime = block.timestamp;
-    if (lockedBalances[_address]._end <= _currentTime) {
-      _withdrawable = lockedBalances[_address]._balance;
+    if (lockedBalances[_address].end <= _currentTime) {
+      _withdrawable = lockedBalances[_address].balance;
     }
     return _withdrawable;
   }
 
-  function balanceOf(address _address) external view returns (uint256) {
-    return lockedBalances[_address]._balance;
+  function balanceOf(address _address)
+    external
+    view
+    override
+    returns (uint256)
+  {
+    return lockedBalances[_address].balance;
   }
 
   function lastTimeRewardApplicable() public view returns (uint256) {
@@ -116,7 +121,7 @@ contract Staking is IStaking, ReentrancyGuard {
   function earned(address account) public view returns (uint256) {
     return
       lockedBalances[account]
-        ._balance
+        .balance
         .mul(rewardPerToken().sub(userRewardPerTokenPaid[account]))
         .div(1e18)
         .add(rewards[account]);
@@ -145,7 +150,7 @@ contract Staking is IStaking, ReentrancyGuard {
       "must lock tokens for less than/equal to  4 year"
     );
     require(POP.balanceOf(msg.sender) >= amount, "insufficient balance");
-    require(lockedBalances[msg.sender]._balance == 0, "withdraw balance first");
+    require(lockedBalances[msg.sender].balance == 0, "withdraw balance first");
 
     POP.safeTransferFrom(msg.sender, address(this), amount);
 
@@ -162,12 +167,12 @@ contract Staking is IStaking, ReentrancyGuard {
       lengthOfTime <= 365 * 4 days,
       "must lock tokens for less than/equal to  4 year"
     );
-    require(lockedBalances[msg.sender]._balance > 0, "no lockedBalance exists");
+    require(lockedBalances[msg.sender].balance > 0, "no lockedBalance exists");
     require(
-      lockedBalances[msg.sender]._end > _currentTime,
+      lockedBalances[msg.sender].end > _currentTime,
       "withdraw balance first"
     );
-    lockedBalances[msg.sender]._end = lockedBalances[msg.sender]._end.add(
+    lockedBalances[msg.sender].end = lockedBalances[msg.sender].end.add(
       lengthOfTime
     );
     recalculateVoiceCredits(msg.sender);
@@ -178,16 +183,16 @@ contract Staking is IStaking, ReentrancyGuard {
     IERC20 POP = IERC20(contractRegistry.getContract(keccak256("POP")));
     require(amount > 0, "amount must be greater than 0");
     require(POP.balanceOf(msg.sender) >= amount, "insufficient balance");
-    require(lockedBalances[msg.sender]._balance > 0, "no lockedBalance exists");
+    require(lockedBalances[msg.sender].balance > 0, "no lockedBalance exists");
     require(
-      lockedBalances[msg.sender]._end > _currentTime,
+      lockedBalances[msg.sender].end > _currentTime,
       "withdraw balance first"
     );
     POP.safeTransferFrom(msg.sender, address(this), amount);
     totalLocked = totalLocked.add(amount);
-    lockedBalances[msg.sender]._balance = lockedBalances[msg.sender]
-      ._balance
-      .add(amount);
+    lockedBalances[msg.sender].balance = lockedBalances[msg.sender].balance.add(
+      amount
+    );
     recalculateVoiceCredits(msg.sender);
   }
 
@@ -198,7 +203,7 @@ contract Staking is IStaking, ReentrancyGuard {
     updateReward(msg.sender)
   {
     require(amount > 0, "amount must be greater than 0");
-    require(lockedBalances[msg.sender]._balance > 0, "insufficient balance");
+    require(lockedBalances[msg.sender].balance > 0, "insufficient balance");
     require(amount <= getWithdrawableBalance(msg.sender));
 
     IERC20(contractRegistry.getContract(keccak256("POP"))).safeTransfer(
@@ -250,27 +255,27 @@ contract Staking is IStaking, ReentrancyGuard {
 
   function _lockTokens(uint256 amount, uint256 lengthOfTime) internal {
     uint256 _currentTime = block.timestamp;
-    if (_currentTime > lockedBalances[msg.sender]._end) {
+    if (_currentTime > lockedBalances[msg.sender].end) {
       lockedBalances[msg.sender] = LockedBalance({
-        _balance: lockedBalances[msg.sender]._balance.add(amount),
-        _end: _currentTime.add(lengthOfTime)
+        balance: lockedBalances[msg.sender].balance.add(amount),
+        end: _currentTime.add(lengthOfTime)
       });
     } else {
       lockedBalances[msg.sender] = LockedBalance({
-        _balance: lockedBalances[msg.sender]._balance.add(amount),
-        _end: lockedBalances[msg.sender]._end.add(lengthOfTime)
+        balance: lockedBalances[msg.sender].balance.add(amount),
+        end: lockedBalances[msg.sender].end.add(lengthOfTime)
       });
     }
   }
 
   function _clearWithdrawnFromLocked(uint256 _amount) internal {
     uint256 _currentTime = block.timestamp;
-    if (lockedBalances[msg.sender]._end <= _currentTime) {
-      if (_amount == lockedBalances[msg.sender]._balance) {
+    if (lockedBalances[msg.sender].end <= _currentTime) {
+      if (_amount == lockedBalances[msg.sender].balance) {
         delete lockedBalances[msg.sender];
       } else {
-        lockedBalances[msg.sender]._balance = lockedBalances[msg.sender]
-          ._balance
+        lockedBalances[msg.sender].balance = lockedBalances[msg.sender]
+          .balance
           .sub(_amount);
       }
     }

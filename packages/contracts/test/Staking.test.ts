@@ -173,7 +173,7 @@ describe("Staking", function () {
 
       await staking.connect(owner).stake(amount, 7 * DAY);
       const lockedBalance = await staking.lockedBalances(owner.address);
-      expect(lockedBalance._balance).to.equal(parseEther("10"));
+      expect(lockedBalance.balance).to.equal(parseEther("10"));
     });
   });
 
@@ -430,15 +430,15 @@ describe("Staking", function () {
       const timestamp = (
         await ethers.provider.getBlock(ethers.provider.getBlockNumber())
       ).timestamp;
-      const { _end, _balance } = await staking.lockedBalances(address);
-      if (_end.eq(0) || _end.lt(timestamp) || _balance.eq(0)) {
+      const { end, balance } = await staking.lockedBalances(address);
+      if (end.eq(0) || end.lt(timestamp) || balance.eq(0)) {
         return BigNumber.from(0);
       }
-      const timeTillEnd = _end
+      const timeTillEnd = end
         .sub(timestamp)
         .div(60 * 60)
         .mul(60 * 60);
-      return _balance.mul(timeTillEnd).div(4 * 365 * DAY);
+      return balance.mul(timeTillEnd).div(4 * 365 * DAY);
     };
 
     it("should return decayed voice credits", async function () {

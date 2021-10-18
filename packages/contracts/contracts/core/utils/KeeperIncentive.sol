@@ -5,6 +5,7 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 import "../interfaces/IACLRegistry.sol";
 import "../interfaces/IContractRegistry.sol";
+import "../interfaces/IStaking.sol";
 
 contract KeeperIncentive {
   using SafeMath for uint256;
@@ -26,6 +27,7 @@ contract KeeperIncentive {
   uint256 public burnRate;
   address internal immutable burnAddress =
     0x00000000219ab540356cBB839Cbe05303d7705Fa; //ETH2.0 Staking Contract
+  uint256 public requiredKeeperStake;
 
   /* ========== EVENTS ========== */
 
@@ -47,12 +49,21 @@ contract KeeperIncentive {
   event ControllerContractAdded(bytes32 contractName, address contractAddress);
   event Burned(uint256 amount);
   event BurnRateChanged(uint256 oldRate, uint256 newRate);
+  event RequiredKeeperStakeChanged(
+    uint256 oldRequirement,
+    uint256 newRequirement
+  );
 
   /* ========== CONSTRUCTOR ========== */
 
-  constructor(IContractRegistry _contractRegistry) public {
+  constructor(
+    IContractRegistry _contractRegistry,
+    uint256 _burnRate,
+    uint256 _requiredKeeperStake
+  ) public {
     contractRegistry = _contractRegistry;
-    burnRate = 25e16;
+    burnRate = _burnRate; //25e16
+    requiredKeeperStake = _requiredKeeperStake; // 2000 ether
   }
 
   /* ==========  MUTATIVE FUNCTIONS  ========== */
@@ -72,6 +83,12 @@ contract KeeperIncentive {
     if (!incentive.openToEveryone) {
       IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
         .requireRole(keccak256("Keeper"), keeper);
+      require(
+        IStaking(contractRegistry.getContract(keccak256("Staking"))).balanceOf(
+          keeper
+        ) >= requiredKeeperStake,
+        "not enough pop at stake"
+      );
     }
     if (incentive.enabled && incentive.reward <= incentiveBudget) {
       incentiveBudget = incentiveBudget.sub(incentive.reward);
@@ -198,5 +215,16 @@ contract KeeperIncentive {
       _amount
     );
     emit Burned(_amount);
+  }
+
+  /**
+   * @notice Sets the required amount of POP a keeper needs to have staked to handle incentivized functions.
+   * @param _amount Amount of POP a keeper needs to stake
+   */
+  function updateRequiredKeeperStake(uint256 _amount) external {
+    IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
+      .requireRole(keccak256("DAO"), msg.sender);
+    emit RequiredKeeperStakeChanged(requiredKeeperStake, _amount);
+    requiredKeeperStake = _amount;
   }
 }

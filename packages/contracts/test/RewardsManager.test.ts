@@ -116,7 +116,7 @@ async function deployContracts(): Promise<Contracts> {
   const keeperIncentive = await (
     await (
       await ethers.getContractFactory("KeeperIncentive")
-    ).deploy(contractRegistry.address)
+    ).deploy(contractRegistry.address, 0, 0)
   ).deployed();
 
   const mockUniswapV2Factory = await waffle.deployMockContract(
@@ -629,12 +629,12 @@ describe("RewardsManager", function () {
           swapReward
         );
       expect(await contracts.pop.balanceOf(owner.address)).to.equal(
-        parseEther("17.5")
+        parseEther("20")
       );
 
       await contracts.rewardsManager.connect(owner).distributeRewards();
       expect(await contracts.pop.balanceOf(owner.address)).to.equal(
-        parseEther("25")
+        parseEther("30")
       );
     });
   });
