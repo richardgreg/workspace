@@ -1,5 +1,6 @@
 import { Meta, Story } from '@storybook/react/types-6-0';
 import React from 'react';
+import { getDummyData } from '../AreaChart/index.stories';
 import { ChartContainer } from './index';
 
 export default {
@@ -18,4 +19,4 @@ const Template: Story = (args) => <ChartContainer {...args} />;
 
 export const Primary = Template.bind({});
 
-Primary.args = {};
+Primary.args = { chartData: getDummyData('30D') };
