@@ -113,16 +113,25 @@ function generateGraphs(sourcePathNameList) {
     const outputInheritancePathName = OUTPUT_IMAGES_DIR + `/${contractName}_inheritance_graph.png`;
     const suryaPath = GLOBAL_NODE_DIR + "/surya/bin/surya";
 
+    exec(`${suryaPath} graph ${inputContractPathName}`, (err, stdout, stderr) => {
+      if (err) {
+        //some err occurred
+        console.error(`exec error: ${err}`);
+      }
+      console.log(`stdout: ${stdout}`);
+      console.log(`stderr: ${stderr}`);
+    });
+
     exec(`${suryaPath} graph ${inputContractPathName} | dot -Tpng > ${outputGraphPathName}`, (err, stdout, stderr) => {
       if (err) {
         //some err occurred
-        console.error(err)
+        console.error(`exec error: ${err}`);
       }
     });
     exec(`${suryaPath} inheritance ${inputContractPathName} | dot -Tpng > ${outputInheritancePathName}`, (err, stdout, stderr) => {
       if (err) {
         //some err occurred
-        console.error(err)
+        console.error(`exec error: ${err}`);
       }
     });
   }
