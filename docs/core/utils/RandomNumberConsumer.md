@@ -29,6 +29,6 @@ getRandomNumber(uint256 electionId, uint256 seed) public
 ## Events
 ## Graphs
 ### <a name="dependencyGraph"></a> `Dependency Graph` {#dependencyGraph}
-![Dependency Graph](images/RandomNumberConsumer_dependency_graph.png)
+![Dependency Graph](/docs/images/RandomNumberConsumer_dependency_graph.png)
 ### <a name="inheritanceGraph"></a> `Inheritance Graph` {#inheritanceGraph}
-![Inheritance Graph](images/RandomNumberConsumer_inheritance_graph.png)
+![Inheritance Graph](/docs/images/RandomNumberConsumer_inheritance_graph.png)

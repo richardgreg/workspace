@@ -58,6 +58,6 @@ ContractDeleted(bytes32 _name)
 ```
 ## Graphs
 ### <a name="dependencyGraph"></a> `Dependency Graph` {#dependencyGraph}
-![Dependency Graph](images/ContractRegistry_dependency_graph.png)
+![Dependency Graph](/docs/images/ContractRegistry_dependency_graph.png)
 ### <a name="inheritanceGraph"></a> `Inheritance Graph` {#inheritanceGraph}
-![Inheritance Graph](images/ContractRegistry_inheritance_graph.png)
+![Inheritance Graph](/docs/images/ContractRegistry_inheritance_graph.png)

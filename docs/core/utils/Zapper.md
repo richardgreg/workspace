@@ -65,6 +65,6 @@ ZapOut(address account, address withdrawalShares, uint256 shares, uint256 withdr
 ```
 ## Graphs
 ### <a name="dependencyGraph"></a> `Dependency Graph` {#dependencyGraph}
-![Dependency Graph](images/Zapper_dependency_graph.png)
+![Dependency Graph](/docs/images/Zapper_dependency_graph.png)
 ### <a name="inheritanceGraph"></a> `Inheritance Graph` {#inheritanceGraph}
-![Inheritance Graph](images/Zapper_inheritance_graph.png)
+![Inheritance Graph](/docs/images/Zapper_inheritance_graph.png)

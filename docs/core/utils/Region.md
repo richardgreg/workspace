@@ -35,6 +35,6 @@ RegionAdded(bytes32 region)
 ```
 ## Graphs
 ### <a name="dependencyGraph"></a> `Dependency Graph` {#dependencyGraph}
-![Dependency Graph](images/Region_dependency_graph.png)
+![Dependency Graph](/docs/images/Region_dependency_graph.png)
 ### <a name="inheritanceGraph"></a> `Inheritance Graph` {#inheritanceGraph}
-![Inheritance Graph](images/Region_inheritance_graph.png)
+![Inheritance Graph](/docs/images/Region_inheritance_graph.png)

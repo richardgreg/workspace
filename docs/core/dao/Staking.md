@@ -39,9 +39,11 @@ constructor(contract IContractRegistry _contractRegistry) public
 getVoiceCredits(address _address) public  returns (uint256)
 ```
 todo - check if multiplier is needed for calculating square root of smaller balances
+
 | Parameter Name | Type | Description |
 |------------|-----| -------|
 | `_address`| address| address to get voice credits for|
+
 ### <a name="getWithdrawableBalance_"></a> getWithdrawableBalance() {#getWithdrawableBalance_}
 ```
 getWithdrawableBalance(address _address) public  returns (uint256)
@@ -126,6 +128,6 @@ updateReward(address account)
 ```
 ## Graphs
 ### <a name="dependencyGraph"></a> `Dependency Graph` {#dependencyGraph}
-![Dependency Graph](images/Staking_dependency_graph.png)
+![Dependency Graph](/docs/images/Staking_dependency_graph.png)
 ### <a name="inheritanceGraph"></a> `Inheritance Graph` {#inheritanceGraph}
-![Inheritance Graph](images/Staking_inheritance_graph.png)
+![Inheritance Graph](/docs/images/Staking_inheritance_graph.png)

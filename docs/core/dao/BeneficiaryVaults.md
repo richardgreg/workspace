@@ -43,43 +43,53 @@ vaultExists(uint8 vaultId_) public  returns (bool)
 openVault(uint8 vaultId_, bytes32 merkleRoot_) public 
 ```
 Vault cannot be initialized if it is currently in an open state, otherwise existing data is reset*
+
 | Parameter Name | Type | Description |
 |------------|-----| -------|
 | `vaultId_`| uint8| Vault ID in range 0-2|
 | `merkleRoot_`| bytes32| Merkle root to support claims|
+
 ### <a name="closeVault_"></a> closeVault() {#closeVault_}
 ```
 closeVault(uint8 vaultId_) public 
 ```
 Vault must be in an open state
+
 | Parameter Name | Type | Description |
 |------------|-----| -------|
 | `vaultId_`| uint8| Vault ID in range 0-2|
+
 ### <a name="verifyClaim_"></a> verifyClaim() {#verifyClaim_}
 ```
 verifyClaim(uint8 vaultId_, bytes32[] proof_, address beneficiary_, uint256 share_) public  returns (bool)
 ```
+
 | Parameter Name | Type | Description |
 |------------|-----| -------|
 | `vaultId_`| uint8| Vault ID in range 0-2|
 | `proof_`| bytes32[]| Merkle proof of path to leaf element|
 | `beneficiary_`| address| Beneficiary address encoded in leaf element|
 | `share_`| uint256| Beneficiary expected share encoded in leaf element|
+
 #### Return Values:
+
 | Return Name | Type | Description |
 |-------------|-------|------------|
 |Returns| uint8|boolean true or false if claim is valid|
+
 ### <a name="claimReward_"></a> claimReward() {#claimReward_}
 ```
 claimReward(uint8 vaultId_, bytes32[] proof_, address beneficiary_, uint256 share_) public 
 ```
 Applies any outstanding rewards before processing claim
+
 | Parameter Name | Type | Description |
 |------------|-----| -------|
 | `vaultId_`| uint8| Vault ID in range 0-2|
 | `proof_`| bytes32[]| Merkle proof of path to leaf element|
 | `beneficiary_`| address| Beneficiary address encoded in leaf element|
 | `share_`| uint256| Beneficiary expected share encoded in leaf element|
+
 ### <a name="allocateRewards_"></a> allocateRewards() {#allocateRewards_}
 ```
 allocateRewards() public 
@@ -109,6 +119,6 @@ _vaultExists(uint8 vaultId_)
 ```
 ## Graphs
 ### <a name="dependencyGraph"></a> `Dependency Graph` {#dependencyGraph}
-![Dependency Graph](images/BeneficiaryVaults_dependency_graph.png)
+![Dependency Graph](/docs/images/BeneficiaryVaults_dependency_graph.png)
 ### <a name="inheritanceGraph"></a> `Inheritance Graph` {#inheritanceGraph}
-![Inheritance Graph](images/BeneficiaryVaults_inheritance_graph.png)
+![Inheritance Graph](/docs/images/BeneficiaryVaults_inheritance_graph.png)

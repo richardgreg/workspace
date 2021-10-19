@@ -40,12 +40,14 @@ createIncentive(bytes32 contractName_, uint256 _reward, bool _enabled, bool _ope
 ```
 This function is only for creating unique incentives for future contracts
 Multiple functions can use the same incentive which can than be updated with one governance vote
+
 | Parameter Name | Type | Description |
 |------------|-----| -------|
 | `contractName_`| bytes32| Name of contract that uses ParticipationRewards in bytes32|
 | `_reward`| uint256| The amount in POP the Keeper receives for calling the function|
 | `_enabled`| bool| Is this Incentive currently enabled?|
 | `_openToEveryone`| bool| Can anyone call the function for rewards or only keeper?|
+
 ### <a name="updateIncentive_"></a> updateIncentive() {#updateIncentive_}
 ```
 updateIncentive(bytes32 contractName_, uint8 i, uint256 _reward, bool _enabled, bool _openToEveryone) external 
@@ -67,24 +69,30 @@ fundIncentive(uint256 _amount) external
 addControllerContract(bytes32 contractName_, address contract_) external 
 ```
 all critical functions to init/open vaults and add shares to them can only be called by controller contracts
+
 | Parameter Name | Type | Description |
 |------------|-----| -------|
 | `contractName_`| bytes32| the name of the controller contract in bytes32|
 | `contract_`| address| the address of the controller contract|
+
 ### <a name="updateBurnRate_"></a> updateBurnRate() {#updateBurnRate_}
 ```
 updateBurnRate(uint256 _burnRate) external 
 ```
+
 | Parameter Name | Type | Description |
 |------------|-----| -------|
 | `_burnRate`| uint256| Percentage in Mantissa. (1e14 = 1 Basis Point)|
+
 ### <a name="updateRequiredKeeperStake_"></a> updateRequiredKeeperStake() {#updateRequiredKeeperStake_}
 ```
 updateRequiredKeeperStake(uint256 _amount) external 
 ```
+
 | Parameter Name | Type | Description |
 |------------|-----| -------|
 | `_amount`| uint256| Amount of POP a keeper needs to stake|
+
 ## Events
 ### <a name="IncentiveCreated_"></a> IncentiveCreated {#IncentiveCreated_}
 ```
@@ -124,6 +132,6 @@ RequiredKeeperStakeChanged(uint256 oldRequirement, uint256 newRequirement)
 ```
 ## Graphs
 ### <a name="dependencyGraph"></a> `Dependency Graph` {#dependencyGraph}
-![Dependency Graph](images/KeeperIncentive_dependency_graph.png)
+![Dependency Graph](/docs/images/KeeperIncentive_dependency_graph.png)
 ### <a name="inheritanceGraph"></a> `Inheritance Graph` {#inheritanceGraph}
-![Inheritance Graph](images/KeeperIncentive_inheritance_graph.png)
+![Inheritance Graph](/docs/images/KeeperIncentive_inheritance_graph.png)

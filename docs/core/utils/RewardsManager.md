@@ -40,14 +40,18 @@ swapTokenForRewards(address[] path_, uint256 minAmountOut_) public  returns (uin
 ```
 Path specification requires at least source token as first in path and POP address as last
 Token swap internals implemented as described at https://uniswap.org/docs/v2/smart-contracts/router02/#swapexacttokensfortokens
+
 | Parameter Name | Type | Description |
 |------------|-----| -------|
 | `path_`| address[]| Uniswap path specification for source token to POP|
 | `minAmountOut_`| uint256| Minimum desired amount (>0) of POP tokens to be received from swap|
+
 #### Return Values:
+
 | Return Name | Type | Description |
 |-------------|-------|------------|
 |swapped| address[]|in/out amounts uint256 tuple|
+
 ### <a name="distributeRewards_"></a> distributeRewards() {#distributeRewards_}
 ```
 distributeRewards() public 
@@ -58,9 +62,11 @@ Contract must have POP balance in order to distribute according to rewardSplits 
 setRewardSplits(uint256[4] splits_) public 
 ```
 Values must be within rewardsLimit range, specified in percent to 18 decimal place precision
+
 | Parameter Name | Type | Description |
 |------------|-----| -------|
 | `splits_`| uint256[4]| Array of RewardTargets enumerated uint256 values within rewardLimits range|
+
 ## Events
 ### <a name="StakingDeposited_"></a> StakingDeposited {#StakingDeposited_}
 ```
@@ -96,6 +102,6 @@ RegionChanged(contract IRegion from, contract IRegion to)
 ```
 ## Graphs
 ### <a name="dependencyGraph"></a> `Dependency Graph` {#dependencyGraph}
-![Dependency Graph](images/RewardsManager_dependency_graph.png)
+![Dependency Graph](/docs/images/RewardsManager_dependency_graph.png)
 ### <a name="inheritanceGraph"></a> `Inheritance Graph` {#inheritanceGraph}
-![Inheritance Graph](images/RewardsManager_inheritance_graph.png)
+![Inheritance Graph](/docs/images/RewardsManager_inheritance_graph.png)

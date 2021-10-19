@@ -137,6 +137,6 @@ The format of the revert reason is given by the following regular expression:
 _Available since v4.1._
 ## Graphs
 ### <a name="dependencyGraph"></a> `Dependency Graph` {#dependencyGraph}
-![Dependency Graph](images/ACLRegistry_dependency_graph.png)
+![Dependency Graph](/docs/images/ACLRegistry_dependency_graph.png)
 ### <a name="inheritanceGraph"></a> `Inheritance Graph` {#inheritanceGraph}
-![Inheritance Graph](images/ACLRegistry_inheritance_graph.png)
+![Inheritance Graph](/docs/images/ACLRegistry_inheritance_graph.png)

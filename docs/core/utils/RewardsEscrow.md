@@ -27,16 +27,20 @@ constructor(contract IContractRegistry contractRegistry_) public
 ```
 isClaimable(bytes32 escrowId_) external  returns (bool)
 ```
+
 | Parameter Name | Type | Description |
 |------------|-----| -------|
 | `escrowId_`| bytes32| Bytes32|
+
 ### <a name="getEscrowsByUser_"></a> getEscrowsByUser() {#getEscrowsByUser_}
 ```
 getEscrowsByUser(address account) external  returns (bytes32[])
 ```
+
 | Parameter Name | Type | Description |
 |------------|-----| -------|
 | `account`| address| address|
+
 ### <a name="lock_"></a> lock() {#lock_}
 ```
 lock(address account_, uint256 amount_) external 
@@ -84,6 +88,6 @@ VestingCliffChanged(uint256 _vestingCliff)
 ```
 ## Graphs
 ### <a name="dependencyGraph"></a> `Dependency Graph` {#dependencyGraph}
-![Dependency Graph](images/RewardsEscrow_dependency_graph.png)
+![Dependency Graph](/docs/images/RewardsEscrow_dependency_graph.png)
 ### <a name="inheritanceGraph"></a> `Inheritance Graph` {#inheritanceGraph}
-![Inheritance Graph](images/RewardsEscrow_inheritance_graph.png)
+![Inheritance Graph](/docs/images/RewardsEscrow_inheritance_graph.png)
