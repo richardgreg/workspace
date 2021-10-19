@@ -3,11 +3,11 @@ import { BatchType } from '@popcorn/ui/src/interfaces/popcorn/BatchHYSI';
 import { numberToBigNumber } from '@popcorn/utils/dist/formatBigNumber';
 import { Meta, Story } from '@storybook/react/types-6-0';
 import React from 'react';
-import { DespositWithdrawInterface } from './index';
+import { MintRedeemInterface } from './index';
 
 export default {
-  title: 'App / Batch HYSI / Components / Deposit Redeem Interface',
-  component: DespositWithdrawInterface,
+  title: 'App / Batch HYSI / Components / Mint Redeem Interface',
+  component: MintRedeemInterface,
   decorators: [
     (Story) => (
       <div className="flex flex-row justify-center">
@@ -18,7 +18,7 @@ export default {
 } as Meta;
 
 const Template: Story = (args) => (
-  <DespositWithdrawInterface
+  <MintRedeemInterface
     deposit={function (
       depositAmount: BigNumber,
       batchType: BatchType,
