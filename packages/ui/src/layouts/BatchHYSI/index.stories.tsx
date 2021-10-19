@@ -7,11 +7,11 @@ import {
 } from '@heroicons/react/outline';
 import { Meta, Story } from '@storybook/react/types-6-0';
 import React from 'react';
-import { getDummyData } from '../../components/popcorn/BatchHYSI/AreaChart/index.stories';
-import { DepositRequestTable } from '../../components/popcorn/BatchHYSI/DepositRequestTable';
-import { Header } from '../../components/popcorn/BatchHYSI/Header';
-import { LeftColumn } from '../../components/popcorn/BatchHYSI/LeftColumn';
-import { RightColumn } from '../../components/popcorn/BatchHYSI/RightColumn';
+import { getDummyData } from '../../components/popcorn/HYSIDepositWithdrawal/AreaChart/index.stories';
+import { DepositRequestTable } from '../../components/popcorn/HYSIDepositWithdrawal/DepositRequestTable';
+import { Header } from '../../components/popcorn/HYSIDepositWithdrawal/Header';
+import { LeftColumn } from '../../components/popcorn/HYSIDepositWithdrawal/LeftColumn';
+import { RightColumn } from '../../components/popcorn/HYSIDepositWithdrawal/RightColumn';
 import { DepositRequest } from '../../interfaces/popcorn/BatchHYSI';
 
 const getDespositRequests = (numBatches: number): DepositRequest[] => {
@@ -30,7 +30,7 @@ const getDespositRequests = (numBatches: number): DepositRequest[] => {
   });
 };
 
-const BatchHYSI = () => {
+const HYSIDepositWithdrawal = () => {
   return (
     <div className="bg-gray-100">
       <Header title={'Popcorn Yield Optimizer'} />
@@ -88,7 +88,7 @@ const BatchHYSI = () => {
 
 export default {
   title: 'App / Batch HYSI / Page / HYSI Deposit Withdraw',
-  component: BatchHYSI,
+  component: HYSIDepositWithdrawal,
   decorators: [
     (Story) => (
       <div>
@@ -98,7 +98,7 @@ export default {
   ],
 } as Meta;
 
-const Template: Story = (args) => <BatchHYSI {...args} />;
+const Template: Story = (args) => <HYSIDepositWithdrawal {...args} />;
 
 export const Primary = Template.bind({});
 Primary.args = {
