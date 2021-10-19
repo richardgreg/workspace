@@ -1,7 +1,6 @@
 const fs = require("fs");
 const path = require("path");
 const spawnSync = require("child_process").spawnSync;
-const readline = require("readline");
 const { exec } = require('child_process');
 
 const GLOBAL_NODE_DIR = path.resolve(__dirname, "../../../node_modules");
@@ -19,6 +18,7 @@ const relativePath = path.relative(path.dirname(SUMMARY_FILE), OUTPUT_DIR);
 
 let excludeListPathName = [];
 let postCheckPathNameList = [];
+let sourcePathNameList = [];
 
 function lines(pathName) {
   return fs
@@ -47,6 +47,7 @@ function scan(pathName, indentation) {
       postCheckPathNameList.push(
         CONFIG_DIR + "/" + relativePath + link + ".md"
       );
+      sourcePathNameList.push(pathName);
     }
   } else {
     excludeListPathName.push(pathName);
@@ -66,14 +67,13 @@ function fix(pathName) {
     );
   }
 }
-function checkDir(pathName){
 
+function checkDir(pathName){
   if (!fs.existsSync(pathName)) {
 	fs.mkdirSync(pathName, {
 		recursive: true
 	});
   }
-
 }
 checkDir(OUTPUT_IMAGES_DIR);
 
@@ -105,59 +105,39 @@ if (result.stderr.length > 0) throw new Error(result.stderr);
 
 fix(OUTPUT_DIR);
 
+function generateGraphs(sourcePathNameList) {
+  for (const sourcePathName of sourcePathNameList) {
+    const contractName = path.basename(sourcePathName).slice(0, -3);
+    const inputContractPathName = sourcePathName;
+    const outputGraphPathName = OUTPUT_IMAGES_DIR + `/${contractName}_dependency_graph.png`;
+    const outputInheritancePathName = OUTPUT_IMAGES_DIR + `/${contractName}_inheritance_graph.png`;
+    const suryaPath = GLOBAL_NODE_DIR + "/surya/bin/surya";
 
-console.log("\n\nDocify Report:");
-
-async function generateGraphs(docPathNameList) {
-  let count = 0;
-  const re = new RegExp("Missing `(.*?)` for (.*?) `(.*?)`");
-  for (const docPathName of docPathNameList) {
-    const contractName = path.basename(docPathName).slice(0, -3);
-    const inputContractPathName = INPUT_DIR + "/" + contractName + ".sol"
-    const outputGraphPathName = OUTPUT_IMAGES_DIR + "/" + contractName + "_dependency_graph.png"
-    const outputInheritancePathName = OUTPUT_IMAGES_DIR + "/" + contractName + "_inheritance_graph.png"
-
-    exec('surya graph ' + inputContractPathName + ' | dot -Tpng > ' + outputGraphPathName, (err, stdout, stderr) => {
+    exec(`${suryaPath} graph ${inputContractPathName} | dot -Tpng > ${outputGraphPathName}`, (err, stdout, stderr) => {
       if (err) {
         //some err occurred
         console.error(err)
       }
     });
-    exec('surya inheritance ' + inputContractPathName + ' | dot -Tpng > ' + outputInheritancePathName, (err, stdout, stderr) => {
+    exec(`${suryaPath} inheritance ${inputContractPathName} | dot -Tpng > ${outputInheritancePathName}`, (err, stdout, stderr) => {
       if (err) {
         //some err occurred
         console.error(err)
       }
     });
   }
-  console.log(`Total of ${count} missing documentations for contracts.`);
 }
 
-generateGraphs(postCheckPathNameList).then((_) => { });
+generateGraphs(sourcePathNameList);
 
-async function generateDocReport(docPathNameList) {
-  let count = 0;
-  const re = new RegExp("Missing `(.*?)` for (.*?) `(.*?)`");
+function insertLinebreak(docPathNameList) {
+  const re = /^\[\[linebreak\]\]/gm;
   for (const docPathName of docPathNameList) {
-    const originalName = path.basename(docPathName).slice(0, -3) + ".sol";
-    const fileStream = fs.createReadStream(docPathName);
-    const rl = readline.createInterface({
-      input: fileStream,
-      crlfDelay: Infinity,
-    });
-
-    for await (const line of rl) {
-      const reMatch = line.match(re);
-      if (reMatch) {
-        count += 1;
-        console.log(
-          `${count}\tWarning: ${reMatch[2]} ${reMatch[3]} in ${originalName} is missing ${reMatch[1]}`
-        );
-      }
-    }
+    let fileContent = fs.readFileSync(docPathName, "utf8");
+    let insertedFileContent = fileContent.replace(re, "");
+    fs.writeFileSync(docPathName, insertedFileContent, "utf8");
   }
-  console.log(`Total of ${count} missing documentations for contracts.`);
 }
 
-generateDocReport(postCheckPathNameList).then((_) => { });
+insertLinebreak(postCheckPathNameList);
 

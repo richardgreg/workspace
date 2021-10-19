@@ -1,12 +1,8 @@
 # {{name}}
-
-
 {{{natspec.userdoc}}}
-
 ***
 
 {{{natspec.devdoc}}}
-
 {{#if ownFunctions}}
 ## Functions:
 {{#ownFunctions}}
@@ -48,25 +44,25 @@
 {{#if natspec.devdoc}}{{natspec.devdoc}}{{/if}}
 
 {{#if natspec.params}}
-
+[[linebreak]]
 | Parameter Name | Type | Description |
 |------------|-----| -------|
 {{#natspec.params}}
 | `{{param}}`| {{#lookup ../args.types @index}}{{/lookup}}| {{strip description}}|
 {{/natspec.params}}
-
-
+[[linebreak]]
 {{/if}}
 
 
 {{#if natspec.returns}}
 #### Return Values:
+[[linebreak]]
 | Return Name | Type | Description |
 |-------------|-------|------------|
 {{#natspec.returns}}
 |{{param}}| {{#lookup ../args.types @index}}{{/lookup}}|{{description}}|
 {{/natspec.returns}}
-
+[[linebreak]]
 {{/if}}
 {{/if}}
 {{/ownFunctions}}
@@ -87,7 +83,6 @@
 {{#natspec.params}}
 - `{{param}}`: {{description}}
 {{/natspec.params}}
-
 {{/if}}
 {{/ownEvents}}
 
@@ -109,7 +104,6 @@
 {{#natspec.params}}
 - `{{param}}`: {{description}}
 {{/natspec.params}}
-
 {{/if}}
 {{/ownModifiers}}
 {{/if}}
