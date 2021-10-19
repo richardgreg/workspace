@@ -112,23 +112,15 @@ function generateGraphs(sourcePathNameList) {
     const outputGraphPathName = OUTPUT_IMAGES_DIR + `/${contractName}_dependency_graph.png`;
     const outputInheritancePathName = OUTPUT_IMAGES_DIR + `/${contractName}_inheritance_graph.png`;
     const suryaPath = GLOBAL_NODE_DIR + "/surya/bin/surya";
+    const dotPath = "/usr/bin/dot"
 
-    exec(`dot -V`, (err, stdout, stderr) => {
-      if (err) {
-        //some err occurred
-        console.error(`exec error: ${err}`);
-      }
-      console.log(`stdout: ${stdout}`);
-      console.log(`stderr: ${stderr}`);
-    });
-
-    exec(`${suryaPath} graph ${inputContractPathName} | dot -Tpng > ${outputGraphPathName}`, (err, stdout, stderr) => {
+    exec(`${suryaPath} graph ${inputContractPathName} | ${dotPath} -Tpng > ${outputGraphPathName}`, (err, stdout, stderr) => {
       if (err) {
         //some err occurred
         console.error(`exec error: ${err}`);
       }
     });
-    exec(`${suryaPath} inheritance ${inputContractPathName} | dot -Tpng > ${outputInheritancePathName}`, (err, stdout, stderr) => {
+    exec(`${suryaPath} inheritance ${inputContractPathName} | ${dotPath} -Tpng > ${outputInheritancePathName}`, (err, stdout, stderr) => {
       if (err) {
         //some err occurred
         console.error(`exec error: ${err}`);
