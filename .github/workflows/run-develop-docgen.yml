@@ -16,7 +16,7 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
     steps:
       - name: install dependency
-        run: sudo apt-get install graphviz
+        run: sudo apt-get install graphviz && whereis dot
       - uses: actions/checkout@v2
       - uses: canastro/copy-file-action@master
         name: "copy env file"

@@ -114,6 +114,15 @@ function generateGraphs(sourcePathNameList) {
     const suryaPath = GLOBAL_NODE_DIR + "/surya/bin/surya";
     const dotPath = "/usr/bin/dot"
 
+    exec(`${dotPath} -V`, (err, stdout, stderr) => {
+      if (err) {
+        //some err occurred
+        console.error(`exec error: ${err}`);
+      }
+      console.log(`stdout: ${stdout}`);
+      console.log(`stderr: ${stderr}`);
+    });
+
     exec(`${suryaPath} graph ${inputContractPathName} | ${dotPath} -Tpng > ${outputGraphPathName}`, (err, stdout, stderr) => {
       if (err) {
         //some err occurred
