@@ -113,7 +113,7 @@ function generateGraphs(sourcePathNameList) {
     const outputInheritancePathName = OUTPUT_IMAGES_DIR + `/${contractName}_inheritance_graph.png`;
     const suryaPath = GLOBAL_NODE_DIR + "/surya/bin/surya";
 
-    exec(`${suryaPath} graph ${inputContractPathName}`, (err, stdout, stderr) => {
+    exec(`dot -V`, (err, stdout, stderr) => {
       if (err) {
         //some err occurred
         console.error(`exec error: ${err}`);
