@@ -75,6 +75,7 @@ function checkDir(pathName){
 	});
   }
 }
+
 checkDir(OUTPUT_IMAGES_DIR);
 
 fs.writeFileSync(SUMMARY_FILE, "# Summary\n");
@@ -107,7 +108,7 @@ fix(OUTPUT_DIR);
 
 function generateGraphs(sourcePathNameList) {
   for (const sourcePathName of sourcePathNameList) {
-    const contractName = path.basename(sourcePathName).slice(0, -3);
+    const contractName = path.basename(sourcePathName).slice(0, -4);
     const inputContractPathName = sourcePathName;
     const outputGraphPathName = OUTPUT_IMAGES_DIR + `/${contractName}_dependency_graph.png`;
     const outputInheritancePathName = OUTPUT_IMAGES_DIR + `/${contractName}_inheritance_graph.png`;
