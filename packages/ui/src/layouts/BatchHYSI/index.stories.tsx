@@ -40,8 +40,8 @@ const BatchHYSI: React.FC<BatchHYSIProps> = ({
 }): JSX.Element => {
   return (
     <div className="bg-gray-100">
-      <div className=" bg-gray-900">
-        <div className="mx-4 sm:mx-6 lg:mx-8 pt-10">
+      <div className="bg-gray-900">
+        <div className="absolute pl-6 pr-16 py-2 lg:pl-12 lg:pr-20 w-full ">
           {componentState === 'error' && <ErrorBadge />}
           {componentState === 'success' && <SuccessBadge />}
         </div>
