@@ -26,7 +26,7 @@ LT12Hours.args = {
   timeTillBatchProcessing: [
     {
       timeTillProcessing: DateTime.now().plus({ hours: 12 }).toJSDate(),
-      progressPercentage: 38.42,
+      progressPercentage: 60,
     },
   ],
 };

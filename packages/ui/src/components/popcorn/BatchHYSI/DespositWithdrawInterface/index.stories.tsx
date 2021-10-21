@@ -10,7 +10,7 @@ export default {
   component: DespositWithdrawInterface,
   decorators: [
     (Story) => (
-      <div className="flex flex-row justify-center">
+      <div className="w-1/2">
         <Story></Story>
       </div>
     ),
@@ -46,9 +46,36 @@ const Template: Story = (args) => (
   />
 );
 
-export const Primary = Template.bind({});
+export const Withdrawal = Template.bind({});
+export const Deposit = Template.bind({});
 
-Primary.args = {
+Withdrawal.args = {
+  deposit: function (
+    depositAmount: BigNumber,
+    batchType: BatchType,
+  ): Promise<void> {
+    throw new Error('Function not implemented.');
+  },
+  depositDisabled: false,
+  threeCrvBalance: numberToBigNumber(Math.pow(10, 18)),
+  threeCrvPrice: numberToBigNumber(Math.pow(10, 18)),
+  hysiBalance: numberToBigNumber(Math.pow(10, 18)),
+  hysiPrice: numberToBigNumber(Math.pow(10, 18)),
+  withdrawal: true,
+  setwithdrawal: function (value: Boolean): void {
+    throw new Error('Function not implemented.');
+  },
+  depositAmount: numberToBigNumber(Math.pow(10, 18)),
+  setDepositAmount: function (value: BigNumber): void {
+    throw new Error('Function not implemented.');
+  },
+  useUnclaimedDeposits: false,
+  setUseUnclaimedDeposits: function (value: Boolean): void {
+    throw new Error('Function not implemented.');
+  },
+};
+
+Deposit.args = {
   deposit: function (
     depositAmount: BigNumber,
     batchType: BatchType,

@@ -7,12 +7,14 @@ import {
 } from '@heroicons/react/outline';
 import { Meta, Story } from '@storybook/react/types-6-0';
 import React from 'react';
-import { getDummyData } from '../../components/popcorn/BatchHYSI/AreaChart/index.stories';
 import { DepositRequestTable } from '../../components/popcorn/BatchHYSI/DepositRequestTable';
+import { ErrorBadge } from '../../components/popcorn/BatchHYSI/ErrorBadge';
 import { Header } from '../../components/popcorn/BatchHYSI/Header';
 import { LeftColumn } from '../../components/popcorn/BatchHYSI/LeftColumn';
 import { RightColumn } from '../../components/popcorn/BatchHYSI/RightColumn';
+import { SuccessBadge } from '../../components/popcorn/BatchHYSI/SuccessBadge';
 import { DepositRequest } from '../../interfaces/popcorn/BatchHYSI';
+import { getDummyData } from '../../utils/batchHYSI';
 
 const getDespositRequests = (numBatches: number): DepositRequest[] => {
   return new Array(numBatches).fill(undefined).map((x, i) => {
@@ -30,9 +32,20 @@ const getDespositRequests = (numBatches: number): DepositRequest[] => {
   });
 };
 
-const BatchHYSI = () => {
+interface BatchHYSIProps {
+  componentState: string;
+}
+const BatchHYSI: React.FC<BatchHYSIProps> = ({
+  componentState,
+}): JSX.Element => {
   return (
     <div className="bg-gray-100">
+      <div className=" bg-gray-900">
+        <div className="mx-4 sm:mx-6 lg:mx-8 pt-10">
+          {componentState === 'error' && <ErrorBadge />}
+          {componentState === 'success' && <SuccessBadge />}
+        </div>
+      </div>
       <Header title={'Popcorn Yield Optimizer'} />
       <div className="grid grid-cols-1 lg:grid-cols-3">
         <LeftColumn
@@ -98,18 +111,20 @@ export default {
   ],
 } as Meta;
 
-const Template: Story = (args) => <BatchHYSI {...args} />;
+const Template: Story = (args) => <BatchHYSI componentState={''} {...args} />;
 
+export const Error = Template.bind({});
 export const Primary = Template.bind({});
+export const Success = Template.bind({});
+
+Error.args = {
+  componentState: 'error',
+};
+
 Primary.args = {
-  contractProps: {
-    open: false,
-    setOpen: () => {},
-    addContract: () => {},
-  },
-  contractErrorProps: {
-    errorMessage: 'Fatal error, run your life',
-    setErrorMessage: () => {},
-    openAddContractModal: () => {},
-  },
+  componentState: '',
+};
+
+Success.args = {
+  componentState: 'success',
 };

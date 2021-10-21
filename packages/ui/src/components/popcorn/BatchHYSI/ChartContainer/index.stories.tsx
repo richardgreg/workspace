@@ -1,6 +1,6 @@
 import { Meta, Story } from '@storybook/react/types-6-0';
 import React from 'react';
-import { getDummyData } from '../AreaChart/index.stories';
+import { getDummyData } from '../../../../utils/batchHYSI';
 import { ChartContainer } from './index';
 
 export default {
@@ -8,7 +8,7 @@ export default {
   component: ChartContainer,
   decorators: [
     (Story) => (
-      <div className="flex flex-row justify-center">
+      <div>
         <Story></Story>
       </div>
     ),
