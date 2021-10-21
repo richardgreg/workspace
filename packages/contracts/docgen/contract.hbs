@@ -7,7 +7,7 @@
 ## Functions:
 {{#ownFunctions}}
 {{#if (or (eq visibility "public") (eq visibility "external"))}}
-- [`{{name}}()`](#{{name}}_)
+- [`{{name}}()`](#{{toc_format name}})
 {{/if}}
 {{/ownFunctions}}
 {{/if}}
@@ -15,19 +15,19 @@
 {{#if ownEvents}}
 ## Events:
 {{#ownEvents}}
-- [`{{name}}`](#{{name}}_)
+- [`{{name}}`](#{{toc_format name}})
 {{/ownEvents}}
 {{/if}}
 
 {{#if ownModifiers}}
 ## Modifiers:
 {{#ownModifiers}}
-- [`{{name}}()`](#{{name}}_)
+- [`{{name}}()`](#{{toc_format name}})
 {{/ownModifiers}}
 {{/if}}
 ## Graphs:
-- [`Dependency Graph`](#dependencyGraph)
-- [`Inheritance Graph`](#inheritanceGraph)
+- [`Dependency Graph`](#dependency-graph)
+- [`Inheritance Graph`](#inheritance-graph)
 ***
 
 ## Function Definitions:
@@ -35,7 +35,7 @@
 
 {{#if (or (eq visibility "public") (eq visibility "external"))}}
 
-### <a name="{{name}}_"></a> {{name}}() {#{{name}}_}
+###  {{name}}()
 
 ```
 {{name}}({{args}}) {{visibility}} {{#if outputs}} returns ({{outputs}}){{/if}}
@@ -69,7 +69,7 @@
 
 ## Events
 {{#ownEvents}}
-### <a name="{{name}}_"></a> {{name}} {#{{name}}_}
+### {{name}}
 ```
 {{name}}({{args}})
 ```
@@ -90,7 +90,7 @@
 {{#if ownModifiers}}
 ## Modifiers
 {{#ownModifiers}}
-### <a name="{{name}}_"></a> `{{name}}()` {#{{name}}_}
+### `{{name}}()`
 ```
 {{name}}({{args}})
 ```
@@ -110,7 +110,7 @@
 
 ## Graphs
 
-### <a name="dependencyGraph"></a> `Dependency Graph` {#dependencyGraph}
+### Dependency Graph
 ![Dependency Graph](/docs/images/{{name}}_dependency_graph.png)
-### <a name="inheritanceGraph"></a> `Inheritance Graph` {#inheritanceGraph}
+### Inheritance Graph
 ![Inheritance Graph](/docs/images/{{name}}_inheritance_graph.png)

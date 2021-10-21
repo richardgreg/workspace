@@ -2,4 +2,3 @@ mocks
 externals
 test_helpers
 core/interfaces
-core/defi/pool
