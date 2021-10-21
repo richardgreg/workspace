@@ -6,6 +6,7 @@ import {
 } from '@heroicons/react/outline';
 import { Meta, Story } from '@storybook/react/types-6-0';
 import React from 'react';
+import { StatCardAndTooltip } from '../StatCardAndTooltip';
 import { StatCardRow } from './index';
 
 export default {
@@ -21,52 +22,72 @@ export default {
 } as Meta;
 
 const Template: Story = (args) => (
-  <StatCardRow
-    totalBalance={undefined}
-    HYSI={undefined}
-    ClaimableHYSI={undefined}
-    PendingWithdraw={undefined}
-    {...args}
-  />
+  <StatCardRow {...args}>
+    <StatCardAndTooltip
+      data={{
+        change: '10%',
+        changeType: 'increase',
+        icon: CashIcon,
+        id: 1,
+        name: 'Total Balance',
+        statCur: 71897,
+        statPrev: 35000,
+      }}
+      iconCol={'#4185f2'}
+      showChange={false}
+      tooltipTitle={'Total Balance'}
+      tooltipContent={
+        'Total acquisition of deposits, HYSI and pending withdrawls'
+      }
+    />
+    <StatCardAndTooltip
+      data={{
+        change: '10%',
+        changeType: 'increase',
+        icon: SparklesIcon,
+        id: 2,
+        name: 'HYSI',
+        statCur: 1897,
+        statPrev: 35000,
+      }}
+      iconCol={'#646aec'}
+      showChange={true}
+      tooltipTitle={'HYSI'}
+      tooltipContent={'HYSI desc'}
+    />
+    <StatCardAndTooltip
+      data={{
+        change: '10%',
+        changeType: 'increase',
+        icon: KeyIcon,
+        id: 3,
+        name: 'Claimable HYSI',
+        statCur: 58897,
+        statPrev: 35000,
+      }}
+      iconCol={'#f6732b'}
+      showChange={false}
+      tooltipTitle={'Claimable HYSI'}
+      tooltipContent={'Claimable HYSI desc'}
+    />
+    <StatCardAndTooltip
+      data={{
+        change: '10%',
+        changeType: 'increase',
+        icon: HandIcon,
+        id: 4,
+        name: 'Pending Withdraw',
+        statCur: 250,
+        statPrev: 35000,
+      }}
+      iconCol={'#f39c2b'}
+      showChange={false}
+      tooltipTitle={'Pending Withdrawls'}
+      tooltipContent={'Pending withdrawl desc'}
+    />
+  </StatCardRow>
 );
 
 export const Primary = Template.bind({});
 
-Primary.args = {
-  totalBalance: {
-    change: '10%',
-    changeType: 'increase',
-    icon: CashIcon,
-    id: 1,
-    name: 'Total Balance',
-    statCur: 71897,
-    statPrev: 35000,
-  },
-  HYSI: {
-    change: '10%',
-    changeType: 'increase',
-    icon: SparklesIcon,
-    id: 2,
-    name: 'HYSI',
-    statCur: 1897,
-    statPrev: 35000,
-  },
-  ClaimableHYSI: {
-    change: '10%',
-    changeType: 'increase',
-    icon: KeyIcon,
-    id: 3,
-    name: 'Claimable HYSI',
-    statCur: 58897,
-    statPrev: 35000,
-  },
-  PendingWithdraw: {
-    change: '10%',
-    changeType: 'increase',
-    icon: HandIcon,
-    id: 4,
-    name: 'Pending Withdraw',
-    statCur: 250,
-    statPrev: 35000,
-  },
-};
+Primary.args = {};

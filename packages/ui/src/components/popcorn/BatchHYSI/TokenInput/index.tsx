@@ -34,7 +34,7 @@ const TokenInput: React.FC<TokenInputProps> = ({
   setUseUnclaimedDeposits,
 }) => {
   const [estimatedAmount, setEstimatedAmount] = useState<number>(0);
-  const [validInputAmount, setValidInputAmount] = useState<Boolean>(true);
+  const [validInputAmount, setValidInputAmount] = useState<Boolean>(false);
   const [ccy, setCcy] = useState<AvailableCcys>('USDC');
 
   useEffect(() => {
@@ -97,7 +97,12 @@ const TokenInput: React.FC<TokenInputProps> = ({
               >
                 Deposit Amount
               </label>
-              <div className="mt-1 relative rounded-md shadow-sm border">
+              <div
+                className={classNames(
+                  'mt-1 relative rounded-md shadow-sm border',
+                  validInputAmount ? 'border-gray-200' : 'border-red-600',
+                )}
+              >
                 <input
                   type="text"
                   name="deposit"
@@ -106,10 +111,9 @@ const TokenInput: React.FC<TokenInputProps> = ({
                   onChange={(e) =>
                     updateWithInputAmounts(Number(e.target.value), withdrawal)
                   }
-                  className={classNames(
-                    'focus:ring-indigo-500 focus:border-indigo-500 block w-full text-gray-500 sm:text-sm border-gray-300 rounded-md pl-4 py-3',
-                    validInputAmount ? 'border-gray-200' : 'border-red-600',
-                  )}
+                  className={
+                    'focus:ring-indigo-500 focus:border-indigo-500 block w-full text-gray-500 sm:text-sm rounded-md pl-4 py-3'
+                  }
                   placeholder="0.00"
                 />
                 <div className="absolute inset-y-0 right-0 flex items-center">
@@ -130,7 +134,12 @@ const TokenInput: React.FC<TokenInputProps> = ({
                 </div>
               </div>
             </div>
-            <label className="flex flex-row items-center mt-2">
+            {!validInputAmount && (
+              <p className="mt-2 text-sm font-medium text-red-600">
+                Insufficient Balance
+              </p>
+            )}
+            <label className="flex flex-row items-center mt-1">
               <input
                 type="checkbox"
                 className="mr-2 rounded-sm"
@@ -138,10 +147,6 @@ const TokenInput: React.FC<TokenInputProps> = ({
               />
               <p className="text-sm font-medium text-gray-700">{`Deposit entire ${ccy} balance`}</p>
             </label>
-
-            {!validInputAmount && (
-              <p className="text-red-600">Insufficient Balance</p>
-            )}
           </div>
           <div className="relative">
             <div
