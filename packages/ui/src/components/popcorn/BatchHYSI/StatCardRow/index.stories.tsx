@@ -21,7 +21,7 @@ export default {
   ],
 } as Meta;
 
-const Template: Story = (args) => (
+const TemplateFourCards: Story = (args) => (
   <StatCardRow {...args}>
     <StatCardAndTooltip
       data={{
@@ -88,6 +88,60 @@ const Template: Story = (args) => (
   </StatCardRow>
 );
 
-export const Primary = Template.bind({});
+const TemplateThreeCards: Story = (args) => (
+  <StatCardRow {...args}>
+    <StatCardAndTooltip
+      data={{
+        change: '10%',
+        changeType: 'increase',
+        icon: CashIcon,
+        id: 1,
+        name: 'Total Balance',
+        statCur: 71897,
+        statPrev: 35000,
+      }}
+      iconCol={'#4185f2'}
+      showChange={false}
+      tooltipTitle={'Total Balance'}
+      tooltipContent={
+        'Total acquisition of deposits, HYSI and pending withdrawls'
+      }
+    />
+    <StatCardAndTooltip
+      data={{
+        change: '10%',
+        changeType: 'increase',
+        icon: SparklesIcon,
+        id: 2,
+        name: 'HYSI',
+        statCur: 1897,
+        statPrev: 35000,
+      }}
+      iconCol={'#646aec'}
+      showChange={true}
+      tooltipTitle={'HYSI'}
+      tooltipContent={'HYSI desc'}
+    />
+    <StatCardAndTooltip
+      data={{
+        change: '10%',
+        changeType: 'increase',
+        icon: KeyIcon,
+        id: 3,
+        name: 'Claimable HYSI',
+        statCur: 58897,
+        statPrev: 35000,
+      }}
+      iconCol={'#f6732b'}
+      showChange={false}
+      tooltipTitle={'Claimable HYSI'}
+      tooltipContent={'Claimable HYSI desc'}
+    />
+  </StatCardRow>
+);
 
-Primary.args = {};
+export const FourCards = TemplateFourCards.bind({});
+export const ThreeCards = TemplateThreeCards.bind({});
+
+FourCards.args = {};
+ThreeCards.args = {};
