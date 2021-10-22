@@ -30,39 +30,39 @@ contract RewardsEscrow is IRewardsEscrow, ReentrancyGuard {
 
   /* ========== EVENTS ========== */
   event Locked(address account, uint256 amount);
-  event RewardsClaimed(address account_, uint256 amount);
+  event RewardsClaimed(address _account, uint256 amount);
   event EscrowDurationChanged(uint256 _escrowDuration);
   event VestingCliffChanged(uint256 _vestingCliff);
 
   /* ========== CONSTRUCTOR ========== */
 
-  constructor(IContractRegistry contractRegistry_) {
-    contractRegistry = contractRegistry_;
+  constructor(IContractRegistry _contractRegistry) {
+    contractRegistry = _contractRegistry;
   }
 
   /* ========== VIEWS ========== */
 
   /**
    * @notice Returns the escrow status
-   * @param escrowId_ Bytes32
+   * @param _escrowId Bytes32
    */
-  function isClaimable(bytes32 escrowId_) external view returns (bool) {
+  function isClaimable(bytes32 _escrowId) external view returns (bool) {
     return
-      escrows[escrowId_].start <= block.timestamp &&
-      escrows[escrowId_].start != 0 &&
-      escrows[escrowId_].claimed == false;
+      escrows[_escrowId].start <= block.timestamp &&
+      escrows[_escrowId].start != 0 &&
+      escrows[_escrowId].claimed == false;
   }
 
   /**
    * @notice Returns all escrowIds which an account has/had claims in
-   * @param account address
+   * @param _account address
    */
-  function getEscrowsByUser(address account)
+  function getEscrowsByUser(address _account)
     external
     view
     returns (bytes32[] memory)
   {
-    return escrowIds[account];
+    return escrowIds[_account];
   }
 
   /* ========== MUTATIVE FUNCTIONS ========== */
@@ -71,7 +71,7 @@ contract RewardsEscrow is IRewardsEscrow, ReentrancyGuard {
    * @notice Locks funds for escrow
    * @dev This creates a seperate escrow structure which can later be iterated upon to unlock the escrowed funds
    */
-  function lock(address account_, uint256 amount_)
+  function lock(address _account, uint256 _amount)
     external
     override
     nonReentrant
@@ -81,25 +81,25 @@ contract RewardsEscrow is IRewardsEscrow, ReentrancyGuard {
       msg.sender == contractRegistry.getContract(keccak256("Staking")),
       "you cant call this function"
     );
-    require(amount_ > 0, "amount must be greater than 0");
-    require(POP.balanceOf(msg.sender) >= amount_, "insufficient balance");
+    require(_amount > 0, "amount must be greater than 0");
+    require(POP.balanceOf(msg.sender) >= _amount, "insufficient balance");
 
-    uint256 _now = block.timestamp;
-    uint256 _start = _now.add(vestingCliff);
-    uint256 _end = _start.add(escrowDuration);
-    bytes32 id = keccak256(abi.encodePacked(account_, amount_, _now));
+    uint256 currentTime = block.timestamp;
+    uint256 start = currentTime.add(vestingCliff);
+    uint256 end = start.add(escrowDuration);
+    bytes32 id = keccak256(abi.encodePacked(_account, _amount, currentTime));
 
     escrows[id] = Escrow({
-      start: _start,
-      end: _end,
-      balance: amount_,
+      start: start,
+      end: end,
+      balance: _amount,
       claimed: false
     });
-    escrowIds[account_].push(id);
+    escrowIds[_account].push(id);
 
-    POP.safeTransferFrom(msg.sender, address(this), amount_);
+    POP.safeTransferFrom(msg.sender, address(this), _amount);
 
-    emit Locked(account_, amount_);
+    emit Locked(_account, _amount);
   }
 
   /**
@@ -108,8 +108,8 @@ contract RewardsEscrow is IRewardsEscrow, ReentrancyGuard {
    * @dev This function is used when a user only wants to claim a specific escrowVault or if they decide the gas cost of claimRewards are to high for now.
    * @dev (lower cost but also lower reward)
    */
-  function claimReward(bytes32 escrowId_) external nonReentrant {
-    uint256 reward = _claimReward(msg.sender, escrowId_);
+  function claimReward(bytes32 _escrowId) external nonReentrant {
+    uint256 reward = _claimReward(msg.sender, _escrowId);
     require(reward > 0, "no rewards");
 
     IERC20(contractRegistry.getContract(keccak256("POP"))).safeTransfer(
@@ -127,12 +127,12 @@ contract RewardsEscrow is IRewardsEscrow, ReentrancyGuard {
    * @dev The array of indices is limited to 20 as we want to prevent gas overflow of looping through too many vaults
    * TODO the upper bound of indices that can be used should be calculated with a simulation
    */
-  function claimRewards(bytes32[] calldata escrowIds_) external nonReentrant {
-    require(escrowIds_.length <= 20, "claiming too many escrows");
+  function claimRewards(bytes32[] calldata _escrowIds) external nonReentrant {
+    require(_escrowIds.length <= 20, "claiming too many escrows");
     uint256 total;
 
-    for (uint256 i = 0; i < escrowIds_.length; i++) {
-      total = total.add(_claimReward(msg.sender, escrowIds_[i]));
+    for (uint256 i = 0; i < _escrowIds.length; i++) {
+      total = total.add(_claimReward(msg.sender, _escrowIds[i]));
     }
     require(total > 0, "no rewards");
 
@@ -165,11 +165,11 @@ contract RewardsEscrow is IRewardsEscrow, ReentrancyGuard {
    * @dev We dont want it to error when a vault is empty for the user as this would terminate the entire loop when used in claimRewards()
    * @dev It marks the escrow as claimed when the whole balance was claimed
    */
-  function _claimReward(address account_, bytes32 escrowId_)
+  function _claimReward(address _account, bytes32 _escrowId)
     internal
     returns (uint256)
   {
-    Escrow storage escrow = escrows[escrowId_];
+    Escrow storage escrow = escrows[_escrowId];
     if (escrow.start <= block.timestamp) {
       uint256 claimable = _getClaimableAmount(escrow);
       if (claimable == escrow.balance) {
@@ -180,19 +180,19 @@ contract RewardsEscrow is IRewardsEscrow, ReentrancyGuard {
     return 0;
   }
 
-  function _getClaimableAmount(Escrow memory escrow)
+  function _getClaimableAmount(Escrow memory _escrow)
     internal
     returns (uint256)
   {
-    if (escrow.start == 0 || escrow.end == 0) {
+    if (_escrow.start == 0 || _escrow.end == 0) {
       return 0;
     }
     return
       Math.min(
-        (escrow.balance.mul(block.timestamp.sub(escrow.start))).div(
-          escrow.end.sub(escrow.start)
+        (_escrow.balance.mul(block.timestamp.sub(_escrow.start))).div(
+          _escrow.end.sub(_escrow.start)
         ),
-        escrow.balance
+        _escrow.balance
       );
   }
 }

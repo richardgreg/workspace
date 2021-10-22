@@ -15,14 +15,14 @@ contract Region is IRegion {
 
   event RegionAdded(bytes32 region);
 
-  constructor(address beneficiaryVault_, IContractRegistry contractRegistry_)
+  constructor(address _beneficiaryVault, IContractRegistry _contractRegistry)
     public
   {
     regions.push(keccak256("World"));
     regionExists[keccak256("World")] = true;
-    beneficiaryVaults.push(beneficiaryVault_);
-    regionVaults[keccak256("World")] = beneficiaryVault_;
-    contractRegistry = contractRegistry_;
+    beneficiaryVaults.push(_beneficiaryVault);
+    regionVaults[keccak256("World")] = _beneficiaryVault;
+    contractRegistry = _contractRegistry;
   }
 
   function getAllRegions() public view override returns (bytes32[] memory) {
@@ -33,7 +33,7 @@ contract Region is IRegion {
     return beneficiaryVaults;
   }
 
-  function addRegion(bytes32 region_, address beneficiaryVault_)
+  function addRegion(bytes32 region_, address _beneficiaryVault)
     external
     override
   {
@@ -42,8 +42,8 @@ contract Region is IRegion {
     require(regionExists[region_] == false, "region already exists");
     regions.push(region_);
     regionExists[region_] = true;
-    beneficiaryVaults.push(beneficiaryVault_);
-    regionVaults[region_] = beneficiaryVault_;
+    beneficiaryVaults.push(_beneficiaryVault);
+    regionVaults[region_] = _beneficiaryVault;
     emit RegionAdded(region_);
   }
 }

@@ -55,9 +55,9 @@ contract RandomNumberConsumer is VRFConsumerBase {
   /**
    * Requests randomness from a user-provided seed
    */
-  function getRandomNumber(uint256 electionId, uint256 seed) public {
+  function getRandomNumber(uint256 _electionId, uint256 _seed) public {
     require(LINK.balanceOf(address(this)) >= fee, "Not enough LINK");
-    requestToElection[requestRandomness(keyHash, fee)] = electionId;
+    requestToElection[requestRandomness(keyHash, fee)] = _electionId;
   }
 
   /* ========== RESTRICTED FUNCTIONS ========== */
@@ -65,12 +65,12 @@ contract RandomNumberConsumer is VRFConsumerBase {
   /**
    * Callback function used by VRF Coordinator
    */
-  function fulfillRandomness(bytes32 requestId, uint256 randomness)
+  function fulfillRandomness(bytes32 _requestId, uint256 _randomness)
     internal
     override
   {
     //randomResult should not be 0
-    randomness = randomness.add(1);
-    randomResult[requestToElection[requestId]] = randomness;
+    _randomness = _randomness.add(1);
+    randomResult[requestToElection[_requestId]] = _randomness;
   }
 }
