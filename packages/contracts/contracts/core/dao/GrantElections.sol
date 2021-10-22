@@ -409,7 +409,7 @@ contract GrantElections {
     if (_election.electionState != ElectionState.FinalizationProposed) {
       KeeperIncentive(
         contractRegistry.getContract(keccak256("KeeperIncentive"))
-      ).handleKeeperIncentive(contractName, msg.sender);
+      ).handleKeeperIncentive(contractName, 0, msg.sender);
     }
 
     uint256 finalizationIncentive = electionDefaults[
@@ -440,7 +440,7 @@ contract GrantElections {
     require(election.merkleRoot == _merkleRoot, "Incorrect root");
 
     KeeperIncentive(contractRegistry.getContract(keccak256("KeeperIncentive")))
-      .handleKeeperIncentive(contractName, msg.sender);
+      .handleKeeperIncentive(contractName, 1, msg.sender);
 
     address beneficiaryVault = IRegion(
       contractRegistry.getContract(keccak256("Region"))

@@ -286,13 +286,13 @@ contract HysiBatchInteraction {
 
   /**
    * @notice Moves unclaimed token (3crv or Hysi) from their respective Batches into a new redeemBatch / mintBatch without needing to claim them first. This will typically be used when hysi has already been minted and a user has never claimed / transfered the token to their address and they would like to convert it to stablecoin.
-   * @param batchIds the ids of each batch where hysi should be moved from
+   * @param _batchIds the ids of each batch where hysi should be moved from
    * @param shares how many shares should redeemed in each of the batches
    * @param batchType the batchType where funds should be taken from (Mint -> Take Hysi and redeem then, Redeem -> Take 3Crv and Mint HYSI)
    * @dev the indices of batchIds must match the amountsInHysi to work properly (This will be done by the frontend)
    */
   function moveUnclaimedDepositsIntoCurrentBatch(
-    bytes32[] calldata batchIds,
+    bytes32[] calldata _batchIds,
     uint256[] calldata shares,
     BatchType batchType
   ) external {
@@ -300,8 +300,8 @@ contract HysiBatchInteraction {
 
     uint256 totalAmount;
 
-    for (uint256 i; i < batchIds.length; i++) {
-      Batch storage batch = batches[batchIds[i]];
+    for (uint256 i; i < _batchIds.length; i++) {
+      Batch storage batch = batches[_batchIds[i]];
       uint256 accountBalance = accountBalances[batch.batchId][msg.sender];
       //Check that the user has enough funds and that the batch was already minted
       //Only the current redeemBatch is claimable == false so this check allows us to not adjust batch.suppliedTokenBalance
