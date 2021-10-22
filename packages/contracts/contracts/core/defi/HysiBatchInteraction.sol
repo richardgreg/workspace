@@ -296,7 +296,7 @@ contract HysiBatchInteraction {
     uint256[] calldata shares,
     BatchType batchType
   ) external {
-    require(batchIds.length == shares.length, "array lengths must match");
+    require(_batchIds.length == shares.length, "array lengths must match");
 
     uint256 totalAmount;
 
