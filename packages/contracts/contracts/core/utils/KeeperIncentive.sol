@@ -22,8 +22,12 @@ contract KeeperIncentive {
   IContractRegistry public contractRegistry;
 
   uint256 public incentiveBudget;
+
   mapping(bytes32 => Incentive[]) public incentives;
   mapping(bytes32 => address) public controllerContracts;
+
+  mapping(address => uint256) public claimablePayouts;
+
   uint256 public burnRate;
   address internal immutable burnAddress =
     0x00000000219ab540356cBB839Cbe05303d7705Fa; //ETH2.0 Staking Contract
@@ -94,12 +98,20 @@ contract KeeperIncentive {
       incentiveBudget = incentiveBudget.sub(incentive.reward);
       uint256 amountToBurn = incentive.reward.mul(burnRate).div(1e18);
       uint256 incentivePayout = incentive.reward.sub(amountToBurn);
-      IERC20(contractRegistry.getContract(keccak256("POP"))).safeTransfer(
-        _keeper,
+      claimablePayouts[_keeper] = claimablePayouts[_keeper].add(
         incentivePayout
       );
       _burn(amountToBurn);
     }
+  }
+
+  function claimPayout() external {
+    require(claimablePayouts[msg.sender] > 0, "no claimable payout");
+    IERC20(contractRegistry.getContract(keccak256("POP"))).safeTransfer(
+      msg.sender,
+      claimablePayouts[msg.sender]
+    );
+    claimablePayouts[msg.sender] = 0;
   }
 
   /* ========== SETTER ========== */

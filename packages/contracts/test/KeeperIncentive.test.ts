@@ -303,8 +303,7 @@ describe("Keeper incentives", function () {
     });
   });
   describe("call incentivized functions", function () {
-    it("should pay out keeper incentive rewards", async function () {
-      const oldBalance = await mockPop.balanceOf(owner.address);
+    it("should add the incentive rewards to claimable payouts", async function () {
       await mockPop
         .connect(nonOwner)
         .approve(keeperIncentive.address, incentive);
@@ -313,16 +312,17 @@ describe("Keeper incentives", function () {
       expect(await keeperIncentiveHelper.connect(owner).incentivisedFunction())
         .to.emit(keeperIncentiveHelper, "FunctionCalled")
         .withArgs(owner.address);
-      const newBalance = await mockPop.balanceOf(owner.address);
-      expect(newBalance).to.deep.equal(oldBalance.add(incentive.mul(3).div(4)));
+      const claimablePayout = await keeperIncentive.claimablePayouts(
+        owner.address
+      );
+      expect(claimablePayout).to.deep.equal(incentive.mul(3).div(4));
     });
     it("should not pay out rewards if the incentive budget is not high enough", async function () {
-      const oldBalance = await mockPop.balanceOf(owner.address);
-      const result = await keeperIncentiveHelper
-        .connect(owner)
-        .incentivisedFunction();
-      const newBalance = await mockPop.balanceOf(owner.address);
-      expect(newBalance).to.equal(oldBalance);
+      await keeperIncentiveHelper.connect(owner).incentivisedFunction();
+      const claimablePayout = await keeperIncentive.claimablePayouts(
+        owner.address
+      );
+      expect(claimablePayout).to.equal(0);
     });
     it("should revert if the keeper didnt stake enough pop", async function () {
       await keeperIncentive
@@ -350,7 +350,6 @@ describe("Keeper incentives", function () {
           .approve(keeperIncentiveHelper.address, parseEther("11"));
         await keeperIncentive.connect(owner).fundIncentive(parseEther("11"));
 
-        const oldBalance = await mockPop.balanceOf(nonOwner.address);
         const result = await keeperIncentiveHelper
           .connect(nonOwner)
           .incentivisedFunction();
@@ -358,8 +357,10 @@ describe("Keeper incentives", function () {
         expect(result)
           .to.emit(keeperIncentiveHelper, "FunctionCalled")
           .withArgs(nonOwner.address);
-        const newbalance = await mockPop.balanceOf(nonOwner.address);
-        expect(newbalance).to.equal(oldBalance.add(incentive.mul(3).div(4)));
+        const claimablePayout = await keeperIncentive.claimablePayouts(
+          nonOwner.address
+        );
+        expect(claimablePayout).to.equal(incentive.mul(3).div(4));
       });
     });
     context("should not do anything ", function () {
@@ -384,15 +385,50 @@ describe("Keeper incentives", function () {
           .approve(keeperIncentive.address, incentive);
         await keeperIncentive.connect(nonOwner).fundIncentive(incentive);
 
-        const oldBalance = await mockPop.balanceOf(owner.address);
+        const oldClaimablePayout = await keeperIncentive.claimablePayouts(
+          owner.address
+        );
         expect(
           await keeperIncentiveHelper.connect(owner).incentivisedFunction()
         )
           .to.emit(keeperIncentiveHelper, "FunctionCalled")
           .withArgs(owner.address);
 
-        const newBalance = await mockPop.balanceOf(owner.address);
-        expect(newBalance).to.equal(oldBalance);
+        const newClaimablePayout = await keeperIncentive.claimablePayouts(
+          owner.address
+        );
+        expect(newClaimablePayout).to.equal(oldClaimablePayout);
+      });
+    });
+  });
+  describe("claim payouts", function () {
+    context("happy case", function () {
+      beforeEach(async () => {
+        await mockPop
+          .connect(nonOwner)
+          .approve(keeperIncentive.address, incentive);
+        await keeperIncentive.connect(nonOwner).fundIncentive(incentive);
+        await keeperIncentiveHelper.connect(owner).incentivisedFunction();
+      });
+      it("claims the payout", async () => {
+        const oldBalance = await mockPop.balanceOf(owner.address);
+        const claimablePayout = await keeperIncentive.claimablePayouts(
+          owner.address
+        );
+        await keeperIncentive.connect(owner).claimPayout();
+        expect(await keeperIncentive.claimablePayouts(owner.address)).to.equal(
+          0
+        );
+        expect(await mockPop.balanceOf(owner.address)).to.equal(
+          oldBalance.add(claimablePayout)
+        );
+      });
+    });
+    context("error case", function () {
+      it("reverts when there is no claimable payout", async () => {
+        await expect(
+          keeperIncentive.connect(nonOwner).claimPayout()
+        ).to.be.revertedWith("no claimable payout");
       });
     });
   });

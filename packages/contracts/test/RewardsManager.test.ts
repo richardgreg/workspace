@@ -628,14 +628,14 @@ describe("RewardsManager", function () {
           [contracts.mockAlt.address, contracts.pop.address],
           swapReward
         );
-      expect(await contracts.pop.balanceOf(owner.address)).to.equal(
-        parseEther("20")
-      );
+      expect(
+        await contracts.keeperIncentive.claimablePayouts(owner.address)
+      ).to.equal(parseEther("10"));
 
       await contracts.rewardsManager.connect(owner).distributeRewards();
-      expect(await contracts.pop.balanceOf(owner.address)).to.equal(
-        parseEther("30")
-      );
+      expect(
+        await contracts.keeperIncentive.claimablePayouts(owner.address)
+      ).to.equal(parseEther("20"));
     });
   });
 });
