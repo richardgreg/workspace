@@ -1,44 +1,44 @@
 # BeneficiaryVaults
 ***
 ## Functions:
-- [`constructor()`](#constructor_)
-- [`getVault()`](#getVault_)
-- [`hasClaimed()`](#hasClaimed_)
-- [`vaultExists()`](#vaultExists_)
-- [`openVault()`](#openVault_)
-- [`closeVault()`](#closeVault_)
-- [`verifyClaim()`](#verifyClaim_)
-- [`claimReward()`](#claimReward_)
-- [`allocateRewards()`](#allocateRewards_)
+- [`constructor()`](#constructor)
+- [`getVault()`](#getvault)
+- [`hasClaimed()`](#hasclaimed)
+- [`vaultExists()`](#vaultexists)
+- [`openVault()`](#openvault)
+- [`closeVault()`](#closevault)
+- [`verifyClaim()`](#verifyclaim)
+- [`claimReward()`](#claimreward)
+- [`allocateRewards()`](#allocaterewards)
 ## Events:
-- [`VaultOpened`](#VaultOpened_)
-- [`VaultClosed`](#VaultClosed_)
-- [`RewardsAllocated`](#RewardsAllocated_)
-- [`RewardClaimed`](#RewardClaimed_)
+- [`VaultOpened`](#vaultopened)
+- [`VaultClosed`](#vaultclosed)
+- [`RewardsAllocated`](#rewardsallocated)
+- [`RewardClaimed`](#rewardclaimed)
 ## Modifiers:
-- [`_vaultExists()`](#_vaultExists_)
+- [`_vaultExists()`](#_vaultexists)
 ## Graphs:
-- [`Dependency Graph`](#dependencyGraph)
-- [`Inheritance Graph`](#inheritanceGraph)
+- [Dependency Graph](#dependency-graph)
+- [Inheritance Graph](#inheritance-graph)
 ***
 ## Function Definitions:
-### <a name="constructor_"></a> constructor() {#constructor_}
+###  constructor()
 ```
 constructor(contract IContractRegistry contractRegistry_) public 
 ```
-### <a name="getVault_"></a> getVault() {#getVault_}
+###  getVault()
 ```
 getVault(uint8 vaultId_) public  returns (uint256 totalAllocated, uint256 currentBalance, uint256 unclaimedShare, bytes32 merkleRoot, enum BeneficiaryVaults.VaultStatus status)
 ```
-### <a name="hasClaimed_"></a> hasClaimed() {#hasClaimed_}
+###  hasClaimed()
 ```
 hasClaimed(uint8 vaultId_, address beneficiary_) public  returns (bool)
 ```
-### <a name="vaultExists_"></a> vaultExists() {#vaultExists_}
+###  vaultExists()
 ```
 vaultExists(uint8 vaultId_) public  returns (bool)
 ```
-### <a name="openVault_"></a> openVault() {#openVault_}
+###  openVault()
 ```
 openVault(uint8 vaultId_, bytes32 merkleRoot_) public 
 ```
@@ -49,7 +49,7 @@ Vault cannot be initialized if it is currently in an open state, otherwise exist
 | `vaultId_`| uint8| Vault ID in range 0-2|
 | `merkleRoot_`| bytes32| Merkle root to support claims|
 
-### <a name="closeVault_"></a> closeVault() {#closeVault_}
+###  closeVault()
 ```
 closeVault(uint8 vaultId_) public 
 ```
@@ -59,7 +59,7 @@ Vault must be in an open state
 |------------|-----| -------|
 | `vaultId_`| uint8| Vault ID in range 0-2|
 
-### <a name="verifyClaim_"></a> verifyClaim() {#verifyClaim_}
+###  verifyClaim()
 ```
 verifyClaim(uint8 vaultId_, bytes32[] proof_, address beneficiary_, uint256 share_) public  returns (bool)
 ```
@@ -77,7 +77,7 @@ verifyClaim(uint8 vaultId_, bytes32[] proof_, address beneficiary_, uint256 shar
 |-------------|-------|------------|
 |Returns| uint8|boolean true or false if claim is valid|
 
-### <a name="claimReward_"></a> claimReward() {#claimReward_}
+###  claimReward()
 ```
 claimReward(uint8 vaultId_, bytes32[] proof_, address beneficiary_, uint256 share_) public 
 ```
@@ -90,35 +90,35 @@ Applies any outstanding rewards before processing claim
 | `beneficiary_`| address| Beneficiary address encoded in leaf element|
 | `share_`| uint256| Beneficiary expected share encoded in leaf element|
 
-### <a name="allocateRewards_"></a> allocateRewards() {#allocateRewards_}
+###  allocateRewards()
 ```
 allocateRewards() public 
 ```
 Requires at least one open vault
 ## Events
-### <a name="VaultOpened_"></a> VaultOpened {#VaultOpened_}
+### VaultOpened
 ```
 VaultOpened(uint8 vaultId, bytes32 merkleRoot)
 ```
-### <a name="VaultClosed_"></a> VaultClosed {#VaultClosed_}
+### VaultClosed
 ```
 VaultClosed(uint8 vaultId)
 ```
-### <a name="RewardsAllocated_"></a> RewardsAllocated {#RewardsAllocated_}
+### RewardsAllocated
 ```
 RewardsAllocated(uint256 amount)
 ```
-### <a name="RewardClaimed_"></a> RewardClaimed {#RewardClaimed_}
+### RewardClaimed
 ```
 RewardClaimed(uint8 vaultId, address beneficiary, uint256 amount)
 ```
 ## Modifiers
-### <a name="_vaultExists_"></a> `_vaultExists()` {#_vaultExists_}
+### `_vaultExists()`
 ```
 _vaultExists(uint8 vaultId_)
 ```
 ## Graphs
-### <a name="dependencyGraph"></a> `Dependency Graph` {#dependencyGraph}
+### Dependency Graph
 ![Dependency Graph](/docs/images/BeneficiaryVaults_dependency_graph.png)
-### <a name="inheritanceGraph"></a> `Inheritance Graph` {#inheritanceGraph}
+### Inheritance Graph
 ![Inheritance Graph](/docs/images/BeneficiaryVaults_inheritance_graph.png)

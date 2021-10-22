@@ -2,39 +2,39 @@
 Manages distribution of POP rewards to Popcorn Treasury, DAO Staking, and Beneficiaries
 ***
 ## Functions:
-- [`constructor()`](#constructor_)
-- [`getRewardSplits()`](#getRewardSplits_)
-- [`receive()`](#receive_)
-- [`swapTokenForRewards()`](#swapTokenForRewards_)
-- [`distributeRewards()`](#distributeRewards_)
-- [`setRewardSplits()`](#setRewardSplits_)
+- [`constructor()`](#constructor)
+- [`getRewardSplits()`](#getrewardsplits)
+- [`receive()`](#receive)
+- [`swapTokenForRewards()`](#swaptokenforrewards)
+- [`distributeRewards()`](#distributerewards)
+- [`setRewardSplits()`](#setrewardsplits)
 ## Events:
-- [`StakingDeposited`](#StakingDeposited_)
-- [`TreasuryDeposited`](#TreasuryDeposited_)
-- [`InsuranceDeposited`](#InsuranceDeposited_)
-- [`BeneficiaryVaultsDeposited`](#BeneficiaryVaultsDeposited_)
-- [`RewardsDistributed`](#RewardsDistributed_)
-- [`RewardSplitsUpdated`](#RewardSplitsUpdated_)
-- [`TokenSwapped`](#TokenSwapped_)
-- [`RegionChanged`](#RegionChanged_)
+- [`StakingDeposited`](#stakingdeposited)
+- [`TreasuryDeposited`](#treasurydeposited)
+- [`InsuranceDeposited`](#insurancedeposited)
+- [`BeneficiaryVaultsDeposited`](#beneficiaryvaultsdeposited)
+- [`RewardsDistributed`](#rewardsdistributed)
+- [`RewardSplitsUpdated`](#rewardsplitsupdated)
+- [`TokenSwapped`](#tokenswapped)
+- [`RegionChanged`](#regionchanged)
 ## Graphs:
-- [`Dependency Graph`](#dependencyGraph)
-- [`Inheritance Graph`](#inheritanceGraph)
+- [Dependency Graph](#dependency-graph)
+- [Inheritance Graph](#inheritance-graph)
 ***
 ## Function Definitions:
-### <a name="constructor_"></a> constructor() {#constructor_}
+###  constructor()
 ```
 constructor(contract IContractRegistry contractRegistry_, contract IUniswapV2Router02 uniswapV2Router_) public 
 ```
-### <a name="getRewardSplits_"></a> getRewardSplits() {#getRewardSplits_}
+###  getRewardSplits()
 ```
 getRewardSplits() external  returns (uint256[4])
 ```
-### <a name="receive_"></a> receive() {#receive_}
+###  receive()
 ```
 receive() external 
 ```
-### <a name="swapTokenForRewards_"></a> swapTokenForRewards() {#swapTokenForRewards_}
+###  swapTokenForRewards()
 ```
 swapTokenForRewards(address[] path_, uint256 minAmountOut_) public  returns (uint256[])
 ```
@@ -52,12 +52,12 @@ Token swap internals implemented as described at https://uniswap.org/docs/v2/sma
 |-------------|-------|------------|
 |swapped| address[]|in/out amounts uint256 tuple|
 
-### <a name="distributeRewards_"></a> distributeRewards() {#distributeRewards_}
+###  distributeRewards()
 ```
 distributeRewards() public 
 ```
 Contract must have POP balance in order to distribute according to rewardSplits ratio
-### <a name="setRewardSplits_"></a> setRewardSplits() {#setRewardSplits_}
+###  setRewardSplits()
 ```
 setRewardSplits(uint256[4] splits_) public 
 ```
@@ -68,40 +68,40 @@ Values must be within rewardsLimit range, specified in percent to 18 decimal pla
 | `splits_`| uint256[4]| Array of RewardTargets enumerated uint256 values within rewardLimits range|
 
 ## Events
-### <a name="StakingDeposited_"></a> StakingDeposited {#StakingDeposited_}
+### StakingDeposited
 ```
 StakingDeposited(address to, uint256 amount)
 ```
-### <a name="TreasuryDeposited_"></a> TreasuryDeposited {#TreasuryDeposited_}
+### TreasuryDeposited
 ```
 TreasuryDeposited(address to, uint256 amount)
 ```
-### <a name="InsuranceDeposited_"></a> InsuranceDeposited {#InsuranceDeposited_}
+### InsuranceDeposited
 ```
 InsuranceDeposited(address to, uint256 amount)
 ```
-### <a name="BeneficiaryVaultsDeposited_"></a> BeneficiaryVaultsDeposited {#BeneficiaryVaultsDeposited_}
+### BeneficiaryVaultsDeposited
 ```
 BeneficiaryVaultsDeposited(uint256 amount)
 ```
-### <a name="RewardsDistributed_"></a> RewardsDistributed {#RewardsDistributed_}
+### RewardsDistributed
 ```
 RewardsDistributed(uint256 amount)
 ```
-### <a name="RewardSplitsUpdated_"></a> RewardSplitsUpdated {#RewardSplitsUpdated_}
+### RewardSplitsUpdated
 ```
 RewardSplitsUpdated(uint256[4] splits)
 ```
-### <a name="TokenSwapped_"></a> TokenSwapped {#TokenSwapped_}
+### TokenSwapped
 ```
 TokenSwapped(address token, uint256 amountIn, uint256 amountOut)
 ```
-### <a name="RegionChanged_"></a> RegionChanged {#RegionChanged_}
+### RegionChanged
 ```
 RegionChanged(contract IRegion from, contract IRegion to)
 ```
 ## Graphs
-### <a name="dependencyGraph"></a> `Dependency Graph` {#dependencyGraph}
+### Dependency Graph
 ![Dependency Graph](/docs/images/RewardsManager_dependency_graph.png)
-### <a name="inheritanceGraph"></a> `Inheritance Graph` {#inheritanceGraph}
+### Inheritance Graph
 ![Inheritance Graph](/docs/images/RewardsManager_inheritance_graph.png)

@@ -1,62 +1,62 @@
 # BeneficiaryRegistry
 ***
 ## Functions:
-- [`constructor()`](#constructor_)
-- [`beneficiaryExists()`](#beneficiaryExists_)
-- [`getBeneficiary()`](#getBeneficiary_)
-- [`getBeneficiaryList()`](#getBeneficiaryList_)
-- [`addBeneficiary()`](#addBeneficiary_)
-- [`revokeBeneficiary()`](#revokeBeneficiary_)
+- [`constructor()`](#constructor)
+- [`beneficiaryExists()`](#beneficiaryexists)
+- [`getBeneficiary()`](#getbeneficiary)
+- [`getBeneficiaryList()`](#getbeneficiarylist)
+- [`addBeneficiary()`](#addbeneficiary)
+- [`revokeBeneficiary()`](#revokebeneficiary)
 ## Events:
-- [`BeneficiaryAdded`](#BeneficiaryAdded_)
-- [`BeneficiaryRevoked`](#BeneficiaryRevoked_)
+- [`BeneficiaryAdded`](#beneficiaryadded)
+- [`BeneficiaryRevoked`](#beneficiaryrevoked)
 ## Modifiers:
-- [`validAddress()`](#validAddress_)
+- [`validAddress()`](#validaddress)
 ## Graphs:
-- [`Dependency Graph`](#dependencyGraph)
-- [`Inheritance Graph`](#inheritanceGraph)
+- [Dependency Graph](#dependency-graph)
+- [Inheritance Graph](#inheritance-graph)
 ***
 ## Function Definitions:
-### <a name="constructor_"></a> constructor() {#constructor_}
+###  constructor()
 ```
 constructor(contract IContractRegistry _contractRegistry) public 
 ```
-### <a name="beneficiaryExists_"></a> beneficiaryExists() {#beneficiaryExists_}
+###  beneficiaryExists()
 ```
 beneficiaryExists(address _address) public  returns (bool)
 ```
-### <a name="getBeneficiary_"></a> getBeneficiary() {#getBeneficiary_}
+###  getBeneficiary()
 ```
 getBeneficiary(address _address) public  returns (bytes)
 ```
-### <a name="getBeneficiaryList_"></a> getBeneficiaryList() {#getBeneficiaryList_}
+###  getBeneficiaryList()
 ```
 getBeneficiaryList() public  returns (address[])
 ```
-### <a name="addBeneficiary_"></a> addBeneficiary() {#addBeneficiary_}
+###  addBeneficiary()
 ```
 addBeneficiary(address account, bytes32 region, bytes applicationCid) external 
 ```
-### <a name="revokeBeneficiary_"></a> revokeBeneficiary() {#revokeBeneficiary_}
+###  revokeBeneficiary()
 ```
 revokeBeneficiary(address _address) external 
 ```
 ## Events
-### <a name="BeneficiaryAdded_"></a> BeneficiaryAdded {#BeneficiaryAdded_}
+### BeneficiaryAdded
 ```
 BeneficiaryAdded(address _address, bytes _applicationCid)
 ```
-### <a name="BeneficiaryRevoked_"></a> BeneficiaryRevoked {#BeneficiaryRevoked_}
+### BeneficiaryRevoked
 ```
 BeneficiaryRevoked(address _address)
 ```
 ## Modifiers
-### <a name="validAddress_"></a> `validAddress()` {#validAddress_}
+### `validAddress()`
 ```
 validAddress(address _address)
 ```
 ## Graphs
-### <a name="dependencyGraph"></a> `Dependency Graph` {#dependencyGraph}
+### Dependency Graph
 ![Dependency Graph](/docs/images/BeneficiaryRegistry_dependency_graph.png)
-### <a name="inheritanceGraph"></a> `Inheritance Graph` {#inheritanceGraph}
+### Inheritance Graph
 ![Inheritance Graph](/docs/images/BeneficiaryRegistry_inheritance_graph.png)

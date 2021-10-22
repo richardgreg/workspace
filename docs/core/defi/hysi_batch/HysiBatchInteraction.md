@@ -1,38 +1,38 @@
 # HysiBatchInteraction
 ***
 ## Functions:
-- [`constructor()`](#constructor_)
-- [`getAccountBatches()`](#getAccountBatches_)
-- [`depositForMint()`](#depositForMint_)
-- [`depositForRedeem()`](#depositForRedeem_)
-- [`withdrawFromBatch()`](#withdrawFromBatch_)
-- [`claim()`](#claim_)
-- [`moveUnclaimedDepositsIntoCurrentBatch()`](#moveUnclaimedDepositsIntoCurrentBatch_)
-- [`batchMint()`](#batchMint_)
-- [`batchRedeem()`](#batchRedeem_)
-- [`setCurvePoolTokenPairs()`](#setCurvePoolTokenPairs_)
-- [`setBatchCooldown()`](#setBatchCooldown_)
-- [`setMintThreshold()`](#setMintThreshold_)
-- [`setRedeemThreshold()`](#setRedeemThreshold_)
+- [`constructor()`](#constructor)
+- [`getAccountBatches()`](#getaccountbatches)
+- [`depositForMint()`](#depositformint)
+- [`depositForRedeem()`](#depositforredeem)
+- [`withdrawFromBatch()`](#withdrawfrombatch)
+- [`claim()`](#claim)
+- [`moveUnclaimedDepositsIntoCurrentBatch()`](#moveunclaimeddepositsintocurrentbatch)
+- [`batchMint()`](#batchmint)
+- [`batchRedeem()`](#batchredeem)
+- [`setCurvePoolTokenPairs()`](#setcurvepooltokenpairs)
+- [`setBatchCooldown()`](#setbatchcooldown)
+- [`setMintThreshold()`](#setmintthreshold)
+- [`setRedeemThreshold()`](#setredeemthreshold)
 ## Events:
-- [`Deposit`](#Deposit_)
-- [`Withdrawal`](#Withdrawal_)
-- [`BatchMinted`](#BatchMinted_)
-- [`BatchRedeemed`](#BatchRedeemed_)
-- [`Claimed`](#Claimed_)
-- [`TokenSetAdded`](#TokenSetAdded_)
-- [`WithdrawnFromBatch`](#WithdrawnFromBatch_)
-- [`MovedUnclaimedDepositsIntoCurrentBatch`](#MovedUnclaimedDepositsIntoCurrentBatch_)
+- [`Deposit`](#deposit)
+- [`Withdrawal`](#withdrawal)
+- [`BatchMinted`](#batchminted)
+- [`BatchRedeemed`](#batchredeemed)
+- [`Claimed`](#claimed)
+- [`TokenSetAdded`](#tokensetadded)
+- [`WithdrawnFromBatch`](#withdrawnfrombatch)
+- [`MovedUnclaimedDepositsIntoCurrentBatch`](#movedunclaimeddepositsintocurrentbatch)
 ## Graphs:
-- [`Dependency Graph`](#dependencyGraph)
-- [`Inheritance Graph`](#inheritanceGraph)
+- [Dependency Graph](#dependency-graph)
+- [Inheritance Graph](#inheritance-graph)
 ***
 ## Function Definitions:
-### <a name="constructor_"></a> constructor() {#constructor_}
+###  constructor()
 ```
 constructor(contract IContractRegistry contractRegistry_, contract ISetToken setToken_, contract IERC20 threeCrv_, contract BasicIssuanceModule basicIssuanceModule_, address[] yTokenAddresses_, struct HysiBatchInteraction.CurvePoolTokenPair[] curvePoolTokenPairs_, uint256 batchCooldown_, uint256 mintThreshold_, uint256 redeemThreshold_) public 
 ```
-### <a name="getAccountBatches_"></a> getAccountBatches() {#getAccountBatches_}
+###  getAccountBatches()
 ```
 getAccountBatches(address account) external  returns (bytes32[])
 ```
@@ -41,7 +41,7 @@ getAccountBatches(address account) external  returns (bytes32[])
 |------------|-----| -------|
 | `account`| address| The address for whom we want to retrieve batches|
 
-### <a name="depositForMint_"></a> depositForMint() {#depositForMint_}
+###  depositForMint()
 ```
 depositForMint(uint256 amount_, address depositFor_) external 
 ```
@@ -52,7 +52,7 @@ Should this be secured we nonReentrant?
 | `amount_`| uint256| Amount of 3cr3CRV to use for minting|
 | `depositFor_`| address| User that gets the shares attributed to (for use in zapper contract)|
 
-### <a name="depositForRedeem_"></a> depositForRedeem() {#depositForRedeem_}
+###  depositForRedeem()
 ```
 depositForRedeem(uint256 amount_) external 
 ```
@@ -62,7 +62,7 @@ Should this be secured we nonReentrant?
 |------------|-----| -------|
 | `amount_`| uint256| amount of HYSI to be redeemed|
 
-### <a name="withdrawFromBatch_"></a> withdrawFromBatch() {#withdrawFromBatch_}
+###  withdrawFromBatch()
 ```
 withdrawFromBatch(bytes32 batchId_, uint256 amountToWithdraw_, address withdrawFor_) external 
 ```
@@ -73,7 +73,7 @@ withdrawFromBatch(bytes32 batchId_, uint256 amountToWithdraw_, address withdrawF
 | `amountToWithdraw_`| uint256| Amount of HYSI or 3CRV to be withdrawn from the queue (depending on mintBatch / redeemBatch)|
 | `withdrawFor_`| address| User that gets the shares attributed to (for use in zapper contract)|
 
-### <a name="claim_"></a> claim() {#claim_}
+###  claim()
 ```
 claim(bytes32 batchId_, address claimFor_) external  returns (uint256)
 ```
@@ -83,7 +83,7 @@ claim(bytes32 batchId_, address claimFor_) external  returns (uint256)
 | `batchId_`| bytes32| Id of batch to claim from|
 | `claimFor_`| address| User that gets the shares attributed to (for use in zapper contract)|
 
-### <a name="moveUnclaimedDepositsIntoCurrentBatch_"></a> moveUnclaimedDepositsIntoCurrentBatch() {#moveUnclaimedDepositsIntoCurrentBatch_}
+###  moveUnclaimedDepositsIntoCurrentBatch()
 ```
 moveUnclaimedDepositsIntoCurrentBatch(bytes32[] batchIds, uint256[] shares, enum HysiBatchInteraction.BatchType batchType) external 
 ```
@@ -95,7 +95,7 @@ the indices of batchIds must match the amountsInHysi to work properly (This will
 | `shares`| uint256[]| how many shares should redeemed in each of the batches|
 | `batchType`| enum HysiBatchInteraction.BatchType| the batchType where funds should be taken from (Mint -> Take Hysi and redeem then, Redeem -> Take 3Crv and Mint HYSI)|
 
-### <a name="batchMint_"></a> batchMint() {#batchMint_}
+###  batchMint()
 ```
 batchMint(uint256 minAmountToMint_) external 
 ```
@@ -108,7 +108,7 @@ handleKeeperIncentive checks if the msg.sender is a permissioned keeper and pays
 |------------|-----| -------|
 | `minAmountToMint_`| uint256| The expected min amount of hysi to mint. If hysiAmount is lower than minAmountToMint_ the transaction will revert.|
 
-### <a name="batchRedeem_"></a> batchRedeem() {#batchRedeem_}
+###  batchRedeem()
 ```
 batchRedeem(uint256 min3crvToReceive_) external 
 ```
@@ -120,7 +120,7 @@ handleKeeperIncentive checks if the msg.sender is a permissioned keeper and pays
 |------------|-----| -------|
 | `min3crvToReceive_`| uint256| sets minimum amount of 3crv to redeem HYSI for, otherwise the transaction will revert|
 
-### <a name="setCurvePoolTokenPairs_"></a> setCurvePoolTokenPairs() {#setCurvePoolTokenPairs_}
+###  setCurvePoolTokenPairs()
 ```
 setCurvePoolTokenPairs(address[] yTokenAddresses_, struct HysiBatchInteraction.CurvePoolTokenPair[] curvePoolTokenPairs_) public 
 ```
@@ -130,7 +130,7 @@ setCurvePoolTokenPairs(address[] yTokenAddresses_, struct HysiBatchInteraction.C
 | `yTokenAddresses_`| address[]| An array of addresses for the yToken needed to mint HYSI|
 | `curvePoolTokenPairs_`| struct HysiBatchInteraction.CurvePoolTokenPair[]| An array structs describing underlying yToken, crvToken and curve metapool|
 
-### <a name="setBatchCooldown_"></a> setBatchCooldown() {#setBatchCooldown_}
+###  setBatchCooldown()
 ```
 setBatchCooldown(uint256 cooldown_) external 
 ```
@@ -140,7 +140,7 @@ The cooldown is the same for redeem and mint batches
 |------------|-----| -------|
 | `cooldown_`| uint256| Cooldown in seconds|
 
-### <a name="setMintThreshold_"></a> setMintThreshold() {#setMintThreshold_}
+###  setMintThreshold()
 ```
 setMintThreshold(uint256 threshold_) external 
 ```
@@ -149,7 +149,7 @@ setMintThreshold(uint256 threshold_) external
 |------------|-----| -------|
 | `threshold_`| uint256| Amount of 3CRV necessary to mint immediately|
 
-### <a name="setRedeemThreshold_"></a> setRedeemThreshold() {#setRedeemThreshold_}
+###  setRedeemThreshold()
 ```
 setRedeemThreshold(uint256 threshold_) external 
 ```
@@ -159,40 +159,40 @@ setRedeemThreshold(uint256 threshold_) external
 | `threshold_`| uint256| Amount of HYSI necessary to mint immediately|
 
 ## Events
-### <a name="Deposit_"></a> Deposit {#Deposit_}
+### Deposit
 ```
 Deposit(address from, uint256 deposit)
 ```
-### <a name="Withdrawal_"></a> Withdrawal {#Withdrawal_}
+### Withdrawal
 ```
 Withdrawal(address to, uint256 amount)
 ```
-### <a name="BatchMinted_"></a> BatchMinted {#BatchMinted_}
+### BatchMinted
 ```
 BatchMinted(bytes32 batchId, uint256 suppliedTokenAmount, uint256 hysiAmount)
 ```
-### <a name="BatchRedeemed_"></a> BatchRedeemed {#BatchRedeemed_}
+### BatchRedeemed
 ```
 BatchRedeemed(bytes32 batchId, uint256 suppliedTokenAmount, uint256 threeCrvAmount)
 ```
-### <a name="Claimed_"></a> Claimed {#Claimed_}
+### Claimed
 ```
 Claimed(address account, enum HysiBatchInteraction.BatchType batchType, uint256 shares, uint256 claimedToken)
 ```
-### <a name="TokenSetAdded_"></a> TokenSetAdded {#TokenSetAdded_}
+### TokenSetAdded
 ```
 TokenSetAdded(contract ISetToken setToken)
 ```
-### <a name="WithdrawnFromBatch_"></a> WithdrawnFromBatch {#WithdrawnFromBatch_}
+### WithdrawnFromBatch
 ```
 WithdrawnFromBatch(bytes32 batchId, uint256 amount, address to)
 ```
-### <a name="MovedUnclaimedDepositsIntoCurrentBatch_"></a> MovedUnclaimedDepositsIntoCurrentBatch {#MovedUnclaimedDepositsIntoCurrentBatch_}
+### MovedUnclaimedDepositsIntoCurrentBatch
 ```
 MovedUnclaimedDepositsIntoCurrentBatch(uint256 amount, enum HysiBatchInteraction.BatchType batchType, address account)
 ```
 ## Graphs
-### <a name="dependencyGraph"></a> `Dependency Graph` {#dependencyGraph}
+### Dependency Graph
 ![Dependency Graph](/docs/images/HysiBatchInteraction_dependency_graph.png)
-### <a name="inheritanceGraph"></a> `Inheritance Graph` {#inheritanceGraph}
+### Inheritance Graph
 ![Inheritance Graph](/docs/images/HysiBatchInteraction_inheritance_graph.png)

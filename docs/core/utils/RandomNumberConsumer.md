@@ -1,34 +1,34 @@
 # RandomNumberConsumer
 ***
 ## Functions:
-- [`constructor()`](#constructor_)
-- [`getRandomResult()`](#getRandomResult_)
-- [`deposit()`](#deposit_)
-- [`getRandomNumber()`](#getRandomNumber_)
+- [`constructor()`](#constructor)
+- [`getRandomResult()`](#getrandomresult)
+- [`deposit()`](#deposit)
+- [`getRandomNumber()`](#getrandomnumber)
 ## Graphs:
-- [`Dependency Graph`](#dependencyGraph)
-- [`Inheritance Graph`](#inheritanceGraph)
+- [Dependency Graph](#dependency-graph)
+- [Inheritance Graph](#inheritance-graph)
 ***
 ## Function Definitions:
-### <a name="constructor_"></a> constructor() {#constructor_}
+###  constructor()
 ```
 constructor(address _VRFCoordinator, address _LinkToken, bytes32 _keyHash) public 
 ```
-### <a name="getRandomResult_"></a> getRandomResult() {#getRandomResult_}
+###  getRandomResult()
 ```
 getRandomResult(uint256 electionId) public  returns (uint256)
 ```
-### <a name="deposit_"></a> deposit() {#deposit_}
+###  deposit()
 ```
 deposit() public 
 ```
-### <a name="getRandomNumber_"></a> getRandomNumber() {#getRandomNumber_}
+###  getRandomNumber()
 ```
 getRandomNumber(uint256 electionId, uint256 seed) public 
 ```
 ## Events
 ## Graphs
-### <a name="dependencyGraph"></a> `Dependency Graph` {#dependencyGraph}
+### Dependency Graph
 ![Dependency Graph](/docs/images/RandomNumberConsumer_dependency_graph.png)
-### <a name="inheritanceGraph"></a> `Inheritance Graph` {#inheritanceGraph}
+### Inheritance Graph
 ![Inheritance Graph](/docs/images/RandomNumberConsumer_inheritance_graph.png)

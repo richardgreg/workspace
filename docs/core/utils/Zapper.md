@@ -1,70 +1,70 @@
 # Zapper
 ***
 ## Functions:
-- [`constructor()`](#constructor_)
-- [`token()`](#token_)
-- [`curveMetapoolAddress()`](#curveMetapoolAddress_)
-- [`curveBasepoolAddress()`](#curveBasepoolAddress_)
-- [`supportedTokens()`](#supportedTokens_)
-- [`canZap()`](#canZap_)
-- [`tokenIndex()`](#tokenIndex_)
-- [`zapIn()`](#zapIn_)
-- [`zapOut()`](#zapOut_)
+- [`constructor()`](#constructor)
+- [`token()`](#token)
+- [`curveMetapoolAddress()`](#curvemetapooladdress)
+- [`curveBasepoolAddress()`](#curvebasepooladdress)
+- [`supportedTokens()`](#supportedtokens)
+- [`canZap()`](#canzap)
+- [`tokenIndex()`](#tokenindex)
+- [`zapIn()`](#zapin)
+- [`zapOut()`](#zapout)
 ## Events:
-- [`ZapIn`](#ZapIn_)
-- [`ZapOut`](#ZapOut_)
+- [`ZapIn`](#zapin)
+- [`ZapOut`](#zapout)
 ## Graphs:
-- [`Dependency Graph`](#dependencyGraph)
-- [`Inheritance Graph`](#inheritanceGraph)
+- [Dependency Graph](#dependency-graph)
+- [Inheritance Graph](#inheritance-graph)
 ***
 ## Function Definitions:
-### <a name="constructor_"></a> constructor() {#constructor_}
+###  constructor()
 ```
 constructor(address curveAddressProvider_) public 
 ```
-### <a name="token_"></a> token() {#token_}
+###  token()
 ```
 token(address popcornPool) public  returns (address)
 ```
-### <a name="curveMetapoolAddress_"></a> curveMetapoolAddress() {#curveMetapoolAddress_}
+###  curveMetapoolAddress()
 ```
 curveMetapoolAddress(address popcornPool) public  returns (address)
 ```
-### <a name="curveBasepoolAddress_"></a> curveBasepoolAddress() {#curveBasepoolAddress_}
+###  curveBasepoolAddress()
 ```
 curveBasepoolAddress(address popcornPool) public  returns (address)
 ```
-### <a name="supportedTokens_"></a> supportedTokens() {#supportedTokens_}
+###  supportedTokens()
 ```
 supportedTokens(address popcornPool) public  returns (address[8])
 ```
-### <a name="canZap_"></a> canZap() {#canZap_}
+###  canZap()
 ```
 canZap(address popcornPool, address tokenAddress) public  returns (bool)
 ```
-### <a name="tokenIndex_"></a> tokenIndex() {#tokenIndex_}
+###  tokenIndex()
 ```
 tokenIndex(address popcornPool, address tokenAddress) public  returns (uint8)
 ```
-### <a name="zapIn_"></a> zapIn() {#zapIn_}
+###  zapIn()
 ```
 zapIn(address popcornPool, address depositToken, uint256 amount) public  returns (uint256)
 ```
-### <a name="zapOut_"></a> zapOut() {#zapOut_}
+###  zapOut()
 ```
 zapOut(address popcornPool, address withdrawalToken, uint256 amount) public  returns (uint256)
 ```
 ## Events
-### <a name="ZapIn_"></a> ZapIn {#ZapIn_}
+### ZapIn
 ```
 ZapIn(address account, address depositToken, uint256 depositAmount, uint256 shares)
 ```
-### <a name="ZapOut_"></a> ZapOut {#ZapOut_}
+### ZapOut
 ```
 ZapOut(address account, address withdrawalShares, uint256 shares, uint256 withdrawalAmount)
 ```
 ## Graphs
-### <a name="dependencyGraph"></a> `Dependency Graph` {#dependencyGraph}
+### Dependency Graph
 ![Dependency Graph](/docs/images/Zapper_dependency_graph.png)
-### <a name="inheritanceGraph"></a> `Inheritance Graph` {#inheritanceGraph}
+### Inheritance Graph
 ![Inheritance Graph](/docs/images/Zapper_inheritance_graph.png)

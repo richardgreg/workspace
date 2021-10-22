@@ -1,29 +1,29 @@
 # RewardsEscrow
 ***
 ## Functions:
-- [`constructor()`](#constructor_)
-- [`isClaimable()`](#isClaimable_)
-- [`getEscrowsByUser()`](#getEscrowsByUser_)
-- [`lock()`](#lock_)
-- [`claimReward()`](#claimReward_)
-- [`claimRewards()`](#claimRewards_)
-- [`updateEscrowDuration()`](#updateEscrowDuration_)
-- [`updateCliff()`](#updateCliff_)
+- [`constructor()`](#constructor)
+- [`isClaimable()`](#isclaimable)
+- [`getEscrowsByUser()`](#getescrowsbyuser)
+- [`lock()`](#lock)
+- [`claimReward()`](#claimreward)
+- [`claimRewards()`](#claimrewards)
+- [`updateEscrowDuration()`](#updateescrowduration)
+- [`updateCliff()`](#updatecliff)
 ## Events:
-- [`Locked`](#Locked_)
-- [`RewardsClaimed`](#RewardsClaimed_)
-- [`EscrowDurationChanged`](#EscrowDurationChanged_)
-- [`VestingCliffChanged`](#VestingCliffChanged_)
+- [`Locked`](#locked)
+- [`RewardsClaimed`](#rewardsclaimed)
+- [`EscrowDurationChanged`](#escrowdurationchanged)
+- [`VestingCliffChanged`](#vestingcliffchanged)
 ## Graphs:
-- [`Dependency Graph`](#dependencyGraph)
-- [`Inheritance Graph`](#inheritanceGraph)
+- [Dependency Graph](#dependency-graph)
+- [Inheritance Graph](#inheritance-graph)
 ***
 ## Function Definitions:
-### <a name="constructor_"></a> constructor() {#constructor_}
+###  constructor()
 ```
 constructor(contract IContractRegistry contractRegistry_) public 
 ```
-### <a name="isClaimable_"></a> isClaimable() {#isClaimable_}
+###  isClaimable()
 ```
 isClaimable(bytes32 escrowId_) external  returns (bool)
 ```
@@ -32,7 +32,7 @@ isClaimable(bytes32 escrowId_) external  returns (bool)
 |------------|-----| -------|
 | `escrowId_`| bytes32| Bytes32|
 
-### <a name="getEscrowsByUser_"></a> getEscrowsByUser() {#getEscrowsByUser_}
+###  getEscrowsByUser()
 ```
 getEscrowsByUser(address account) external  returns (bytes32[])
 ```
@@ -41,19 +41,19 @@ getEscrowsByUser(address account) external  returns (bytes32[])
 |------------|-----| -------|
 | `account`| address| address|
 
-### <a name="lock_"></a> lock() {#lock_}
+###  lock()
 ```
 lock(address account_, uint256 amount_) external 
 ```
 This creates a seperate escrow structure which can later be iterated upon to unlock the escrowed funds
-### <a name="claimReward_"></a> claimReward() {#claimReward_}
+###  claimReward()
 ```
 claimReward(bytes32 escrowId_) external 
 ```
 Uses the escrowId at the specified index of escrowIds.
 This function is used when a user only wants to claim a specific escrowVault or if they decide the gas cost of claimRewards are to high for now.
 (lower cost but also lower reward)
-### <a name="claimRewards_"></a> claimRewards() {#claimRewards_}
+###  claimRewards()
 ```
 claimRewards(bytes32[] escrowIds_) external 
 ```
@@ -61,33 +61,33 @@ Uses the vaultIds at the specified indices of escrowIds.
 This function is used when a user only wants to claim multiple escrowVaults at once (probably most of the time)
 The array of indices is limited to 20 as we want to prevent gas overflow of looping through too many vaults
 TODO the upper bound of indices that can be used should be calculated with a simulation
-### <a name="updateEscrowDuration_"></a> updateEscrowDuration() {#updateEscrowDuration_}
+###  updateEscrowDuration()
 ```
 updateEscrowDuration(uint256 _escrowDuration) external 
 ```
-### <a name="updateCliff_"></a> updateCliff() {#updateCliff_}
+###  updateCliff()
 ```
 updateCliff(uint256 _vestingCliff) external 
 ```
 ## Events
-### <a name="Locked_"></a> Locked {#Locked_}
+### Locked
 ```
 Locked(address account, uint256 amount)
 ```
-### <a name="RewardsClaimed_"></a> RewardsClaimed {#RewardsClaimed_}
+### RewardsClaimed
 ```
 RewardsClaimed(address account_, uint256 amount)
 ```
-### <a name="EscrowDurationChanged_"></a> EscrowDurationChanged {#EscrowDurationChanged_}
+### EscrowDurationChanged
 ```
 EscrowDurationChanged(uint256 _escrowDuration)
 ```
-### <a name="VestingCliffChanged_"></a> VestingCliffChanged {#VestingCliffChanged_}
+### VestingCliffChanged
 ```
 VestingCliffChanged(uint256 _vestingCliff)
 ```
 ## Graphs
-### <a name="dependencyGraph"></a> `Dependency Graph` {#dependencyGraph}
+### Dependency Graph
 ![Dependency Graph](/docs/images/RewardsEscrow_dependency_graph.png)
-### <a name="inheritanceGraph"></a> `Inheritance Graph` {#inheritanceGraph}
+### Inheritance Graph
 ![Inheritance Graph](/docs/images/RewardsEscrow_inheritance_graph.png)

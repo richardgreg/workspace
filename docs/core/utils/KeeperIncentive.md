@@ -1,40 +1,40 @@
 # KeeperIncentive
 ***
 ## Functions:
-- [`constructor()`](#constructor_)
-- [`handleKeeperIncentive()`](#handleKeeperIncentive_)
-- [`createIncentive()`](#createIncentive_)
-- [`updateIncentive()`](#updateIncentive_)
-- [`toggleApproval()`](#toggleApproval_)
-- [`toggleIncentive()`](#toggleIncentive_)
-- [`fundIncentive()`](#fundIncentive_)
-- [`addControllerContract()`](#addControllerContract_)
-- [`updateBurnRate()`](#updateBurnRate_)
-- [`updateRequiredKeeperStake()`](#updateRequiredKeeperStake_)
+- [`constructor()`](#constructor)
+- [`handleKeeperIncentive()`](#handlekeeperincentive)
+- [`createIncentive()`](#createincentive)
+- [`updateIncentive()`](#updateincentive)
+- [`toggleApproval()`](#toggleapproval)
+- [`toggleIncentive()`](#toggleincentive)
+- [`fundIncentive()`](#fundincentive)
+- [`addControllerContract()`](#addcontrollercontract)
+- [`updateBurnRate()`](#updateburnrate)
+- [`updateRequiredKeeperStake()`](#updaterequiredkeeperstake)
 ## Events:
-- [`IncentiveCreated`](#IncentiveCreated_)
-- [`IncentiveChanged`](#IncentiveChanged_)
-- [`IncentiveFunded`](#IncentiveFunded_)
-- [`ApprovalToggled`](#ApprovalToggled_)
-- [`IncentiveToggled`](#IncentiveToggled_)
-- [`ControllerContractAdded`](#ControllerContractAdded_)
-- [`Burned`](#Burned_)
-- [`BurnRateChanged`](#BurnRateChanged_)
-- [`RequiredKeeperStakeChanged`](#RequiredKeeperStakeChanged_)
+- [`IncentiveCreated`](#incentivecreated)
+- [`IncentiveChanged`](#incentivechanged)
+- [`IncentiveFunded`](#incentivefunded)
+- [`ApprovalToggled`](#approvaltoggled)
+- [`IncentiveToggled`](#incentivetoggled)
+- [`ControllerContractAdded`](#controllercontractadded)
+- [`Burned`](#burned)
+- [`BurnRateChanged`](#burnratechanged)
+- [`RequiredKeeperStakeChanged`](#requiredkeeperstakechanged)
 ## Graphs:
-- [`Dependency Graph`](#dependencyGraph)
-- [`Inheritance Graph`](#inheritanceGraph)
+- [Dependency Graph](#dependency-graph)
+- [Inheritance Graph](#inheritance-graph)
 ***
 ## Function Definitions:
-### <a name="constructor_"></a> constructor() {#constructor_}
+###  constructor()
 ```
 constructor(contract IContractRegistry _contractRegistry, uint256 _burnRate, uint256 _requiredKeeperStake) public 
 ```
-### <a name="handleKeeperIncentive_"></a> handleKeeperIncentive() {#handleKeeperIncentive_}
+###  handleKeeperIncentive()
 ```
 handleKeeperIncentive(bytes32 contractName_, uint8 i, address keeper) external 
 ```
-### <a name="createIncentive_"></a> createIncentive() {#createIncentive_}
+###  createIncentive()
 ```
 createIncentive(bytes32 contractName_, uint256 _reward, bool _enabled, bool _openToEveryone) public 
 ```
@@ -48,23 +48,23 @@ Multiple functions can use the same incentive which can than be updated with one
 | `_enabled`| bool| Is this Incentive currently enabled?|
 | `_openToEveryone`| bool| Can anyone call the function for rewards or only keeper?|
 
-### <a name="updateIncentive_"></a> updateIncentive() {#updateIncentive_}
+###  updateIncentive()
 ```
 updateIncentive(bytes32 contractName_, uint8 i, uint256 _reward, bool _enabled, bool _openToEveryone) external 
 ```
-### <a name="toggleApproval_"></a> toggleApproval() {#toggleApproval_}
+###  toggleApproval()
 ```
 toggleApproval(bytes32 contractName_, uint8 i) external 
 ```
-### <a name="toggleIncentive_"></a> toggleIncentive() {#toggleIncentive_}
+###  toggleIncentive()
 ```
 toggleIncentive(bytes32 contractName_, uint8 i) external 
 ```
-### <a name="fundIncentive_"></a> fundIncentive() {#fundIncentive_}
+###  fundIncentive()
 ```
 fundIncentive(uint256 _amount) external 
 ```
-### <a name="addControllerContract_"></a> addControllerContract() {#addControllerContract_}
+###  addControllerContract()
 ```
 addControllerContract(bytes32 contractName_, address contract_) external 
 ```
@@ -75,7 +75,7 @@ all critical functions to init/open vaults and add shares to them can only be ca
 | `contractName_`| bytes32| the name of the controller contract in bytes32|
 | `contract_`| address| the address of the controller contract|
 
-### <a name="updateBurnRate_"></a> updateBurnRate() {#updateBurnRate_}
+###  updateBurnRate()
 ```
 updateBurnRate(uint256 _burnRate) external 
 ```
@@ -84,7 +84,7 @@ updateBurnRate(uint256 _burnRate) external
 |------------|-----| -------|
 | `_burnRate`| uint256| Percentage in Mantissa. (1e14 = 1 Basis Point)|
 
-### <a name="updateRequiredKeeperStake_"></a> updateRequiredKeeperStake() {#updateRequiredKeeperStake_}
+###  updateRequiredKeeperStake()
 ```
 updateRequiredKeeperStake(uint256 _amount) external 
 ```
@@ -94,44 +94,44 @@ updateRequiredKeeperStake(uint256 _amount) external
 | `_amount`| uint256| Amount of POP a keeper needs to stake|
 
 ## Events
-### <a name="IncentiveCreated_"></a> IncentiveCreated {#IncentiveCreated_}
+### IncentiveCreated
 ```
 IncentiveCreated(bytes32 contractName, uint256 reward, bool openToEveryone)
 ```
-### <a name="IncentiveChanged_"></a> IncentiveChanged {#IncentiveChanged_}
+### IncentiveChanged
 ```
 IncentiveChanged(bytes32 contractName, uint256 oldReward, uint256 newReward, bool oldOpenToEveryone, bool newOpenToEveryone)
 ```
-### <a name="IncentiveFunded_"></a> IncentiveFunded {#IncentiveFunded_}
+### IncentiveFunded
 ```
 IncentiveFunded(uint256 amount)
 ```
-### <a name="ApprovalToggled_"></a> ApprovalToggled {#ApprovalToggled_}
+### ApprovalToggled
 ```
 ApprovalToggled(bytes32 contractName, bool openToEveryone)
 ```
-### <a name="IncentiveToggled_"></a> IncentiveToggled {#IncentiveToggled_}
+### IncentiveToggled
 ```
 IncentiveToggled(bytes32 contractName, bool enabled)
 ```
-### <a name="ControllerContractAdded_"></a> ControllerContractAdded {#ControllerContractAdded_}
+### ControllerContractAdded
 ```
 ControllerContractAdded(bytes32 contractName, address contractAddress)
 ```
-### <a name="Burned_"></a> Burned {#Burned_}
+### Burned
 ```
 Burned(uint256 amount)
 ```
-### <a name="BurnRateChanged_"></a> BurnRateChanged {#BurnRateChanged_}
+### BurnRateChanged
 ```
 BurnRateChanged(uint256 oldRate, uint256 newRate)
 ```
-### <a name="RequiredKeeperStakeChanged_"></a> RequiredKeeperStakeChanged {#RequiredKeeperStakeChanged_}
+### RequiredKeeperStakeChanged
 ```
 RequiredKeeperStakeChanged(uint256 oldRequirement, uint256 newRequirement)
 ```
 ## Graphs
-### <a name="dependencyGraph"></a> `Dependency Graph` {#dependencyGraph}
+### Dependency Graph
 ![Dependency Graph](/docs/images/KeeperIncentive_dependency_graph.png)
-### <a name="inheritanceGraph"></a> `Inheritance Graph` {#inheritanceGraph}
+### Inheritance Graph
 ![Inheritance Graph](/docs/images/KeeperIncentive_inheritance_graph.png)

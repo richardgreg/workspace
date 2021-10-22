@@ -1,24 +1,24 @@
 # HysiBatchZapper
 ***
 ## Functions:
-- [`constructor()`](#constructor_)
-- [`zapIntoBatch()`](#zapIntoBatch_)
-- [`zapOutOfBatch()`](#zapOutOfBatch_)
-- [`claimAndSwapToStable()`](#claimAndSwapToStable_)
+- [`constructor()`](#constructor)
+- [`zapIntoBatch()`](#zapintobatch)
+- [`zapOutOfBatch()`](#zapoutofbatch)
+- [`claimAndSwapToStable()`](#claimandswaptostable)
 ## Events:
-- [`ZappedIntoBatch`](#ZappedIntoBatch_)
-- [`ZappedOutOfBatch`](#ZappedOutOfBatch_)
-- [`ClaimedIntoStable`](#ClaimedIntoStable_)
+- [`ZappedIntoBatch`](#zappedintobatch)
+- [`ZappedOutOfBatch`](#zappedoutofbatch)
+- [`ClaimedIntoStable`](#claimedintostable)
 ## Graphs:
-- [`Dependency Graph`](#dependencyGraph)
-- [`Inheritance Graph`](#inheritanceGraph)
+- [Dependency Graph](#dependency-graph)
+- [Inheritance Graph](#inheritance-graph)
 ***
 ## Function Definitions:
-### <a name="constructor_"></a> constructor() {#constructor_}
+###  constructor()
 ```
 constructor(contract IContractRegistry contractRegistry_, contract Curve3Pool curve3Pool_, contract IERC20 threeCrv_) public 
 ```
-### <a name="zapIntoBatch_"></a> zapIntoBatch() {#zapIntoBatch_}
+###  zapIntoBatch()
 ```
 zapIntoBatch(uint256[3] amounts_, uint256 min_mint_amounts_) external 
 ```
@@ -29,7 +29,7 @@ The amounts in amounts_ must align with their index in the curve three-pool
 | `amounts_`| uint256[3]| An array of amounts in stablecoins the user wants to deposit|
 | `min_mint_amounts_`| uint256| The min amount of 3CRV which should be minted by the curve three-pool (slippage control)|
 
-### <a name="zapOutOfBatch_"></a> zapOutOfBatch() {#zapOutOfBatch_}
+###  zapOutOfBatch()
 ```
 zapOutOfBatch(bytes32 batchId_, uint256 amountToWithdraw_, uint8 stableCoinIndex_, uint256 min_amount_) external 
 ```
@@ -42,7 +42,7 @@ The stableCoinIndex_ must align with the index in the curve three-pool
 | `stableCoinIndex_`| uint8| Defines which stablecoin the user wants to receive|
 | `min_amount_`| uint256| The min amount of stables which should be returned by the curve three-pool (slippage control)|
 
-### <a name="claimAndSwapToStable_"></a> claimAndSwapToStable() {#claimAndSwapToStable_}
+###  claimAndSwapToStable()
 ```
 claimAndSwapToStable(bytes32 batchId_, uint8 stableCoinIndex_, uint256 min_amount_) external 
 ```
@@ -55,20 +55,20 @@ The stableCoinIndex_ must align with the index in the curve three-pool
 | `min_amount_`| uint256| The min amount of stables which should be returned by the curve three-pool (slippage control)|
 
 ## Events
-### <a name="ZappedIntoBatch_"></a> ZappedIntoBatch {#ZappedIntoBatch_}
+### ZappedIntoBatch
 ```
 ZappedIntoBatch(uint256 threeCurveAmount, address account)
 ```
-### <a name="ZappedOutOfBatch_"></a> ZappedOutOfBatch {#ZappedOutOfBatch_}
+### ZappedOutOfBatch
 ```
 ZappedOutOfBatch(bytes32 batchId, uint8 stableCoinIndex, uint256 threeCurveAmount, uint256 stableCoinAmount, address account)
 ```
-### <a name="ClaimedIntoStable_"></a> ClaimedIntoStable {#ClaimedIntoStable_}
+### ClaimedIntoStable
 ```
 ClaimedIntoStable(bytes32 batchId, uint8 stableCoinIndex, uint256 threeCurveAmount, uint256 stableCoinAmount, address account)
 ```
 ## Graphs
-### <a name="dependencyGraph"></a> `Dependency Graph` {#dependencyGraph}
+### Dependency Graph
 ![Dependency Graph](/docs/images/HysiBatchZapper_dependency_graph.png)
-### <a name="inheritanceGraph"></a> `Inheritance Graph` {#inheritanceGraph}
+### Inheritance Graph
 ![Inheritance Graph](/docs/images/HysiBatchZapper_inheritance_graph.png)

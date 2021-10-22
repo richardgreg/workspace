@@ -1,48 +1,48 @@
 # ParticipationReward
 ***
 ## Functions:
-- [`constructor()`](#constructor_)
-- [`isClaimable()`](#isClaimable_)
-- [`hasClaim()`](#hasClaim_)
-- [`getVaultStatus()`](#getVaultStatus_)
-- [`getUserVaults()`](#getUserVaults_)
-- [`initializeVault()`](#initializeVault_)
-- [`openVault()`](#openVault_)
-- [`addShares()`](#addShares_)
-- [`claimReward()`](#claimReward_)
-- [`claimRewards()`](#claimRewards_)
-- [`setRewardsBudget()`](#setRewardsBudget_)
-- [`addControllerContract()`](#addControllerContract_)
-- [`toggleRewards()`](#toggleRewards_)
-- [`contributeReward()`](#contributeReward_)
+- [`constructor()`](#constructor)
+- [`isClaimable()`](#isclaimable)
+- [`hasClaim()`](#hasclaim)
+- [`getVaultStatus()`](#getvaultstatus)
+- [`getUserVaults()`](#getuservaults)
+- [`initializeVault()`](#initializevault)
+- [`openVault()`](#openvault)
+- [`addShares()`](#addshares)
+- [`claimReward()`](#claimreward)
+- [`claimRewards()`](#claimrewards)
+- [`setRewardsBudget()`](#setrewardsbudget)
+- [`addControllerContract()`](#addcontrollercontract)
+- [`toggleRewards()`](#togglerewards)
+- [`contributeReward()`](#contributereward)
 ## Events:
-- [`RewardBudgetChanged`](#RewardBudgetChanged_)
-- [`VaultInitialized`](#VaultInitialized_)
-- [`VaultOpened`](#VaultOpened_)
-- [`VaultClosed`](#VaultClosed_)
-- [`RewardClaimed`](#RewardClaimed_)
-- [`RewardsClaimed`](#RewardsClaimed_)
-- [`SharesAdded`](#SharesAdded_)
-- [`RewardBalanceIncreased`](#RewardBalanceIncreased_)
-- [`ControllerContractAdded`](#ControllerContractAdded_)
-- [`RewardsToggled`](#RewardsToggled_)
+- [`RewardBudgetChanged`](#rewardbudgetchanged)
+- [`VaultInitialized`](#vaultinitialized)
+- [`VaultOpened`](#vaultopened)
+- [`VaultClosed`](#vaultclosed)
+- [`RewardClaimed`](#rewardclaimed)
+- [`RewardsClaimed`](#rewardsclaimed)
+- [`SharesAdded`](#sharesadded)
+- [`RewardBalanceIncreased`](#rewardbalanceincreased)
+- [`ControllerContractAdded`](#controllercontractadded)
+- [`RewardsToggled`](#rewardstoggled)
 ## Modifiers:
-- [`vaultExists()`](#vaultExists_)
-- [`onlyControllerContract()`](#onlyControllerContract_)
+- [`vaultExists()`](#vaultexists)
+- [`onlyControllerContract()`](#onlycontrollercontract)
 ## Graphs:
-- [`Dependency Graph`](#dependencyGraph)
-- [`Inheritance Graph`](#inheritanceGraph)
+- [Dependency Graph](#dependency-graph)
+- [Inheritance Graph](#inheritance-graph)
 ***
 ## Function Definitions:
-### <a name="constructor_"></a> constructor() {#constructor_}
+###  constructor()
 ```
 constructor(contract IContractRegistry _contractRegistry) public 
 ```
-### <a name="isClaimable_"></a> isClaimable() {#isClaimable_}
+###  isClaimable()
 ```
 isClaimable(bytes32 vaultId_, address beneficiary_) public  returns (bool)
 ```
-### <a name="hasClaim_"></a> hasClaim() {#hasClaim_}
+###  hasClaim()
 ```
 hasClaim(bytes32 vaultId_, address beneficiary_) public  returns (bool)
 ```
@@ -52,7 +52,7 @@ hasClaim(bytes32 vaultId_, address beneficiary_) public  returns (bool)
 | `vaultId_`| bytes32| Bytes32|
 | `beneficiary_`| address| address of the beneficiary|
 
-### <a name="getVaultStatus_"></a> getVaultStatus() {#getVaultStatus_}
+###  getVaultStatus()
 ```
 getVaultStatus(bytes32 vaultId_) external  returns (enum ParticipationReward.VaultStatus)
 ```
@@ -61,7 +61,7 @@ getVaultStatus(bytes32 vaultId_) external  returns (enum ParticipationReward.Vau
 |------------|-----| -------|
 | `vaultId_`| bytes32| Bytes32|
 
-### <a name="getUserVaults_"></a> getUserVaults() {#getUserVaults_}
+###  getUserVaults()
 ```
 getUserVaults(address account) external  returns (bytes32[])
 ```
@@ -70,7 +70,7 @@ getUserVaults(address account) external  returns (bytes32[])
 |------------|-----| -------|
 | `account`| address| address|
 
-### <a name="initializeVault_"></a> initializeVault() {#initializeVault_}
+###  initializeVault()
 ```
 initializeVault(bytes32 contractName_, bytes32 vaultId_, uint256 endTime_) external  returns (bool, bytes32)
 ```
@@ -82,7 +82,7 @@ There must be enough funds in this contract to support opening another vault
 | `vaultId_`| bytes32| Bytes32|
 | `endTime_`| uint256| Unix timestamp in seconds after which a vault can be closed|
 
-### <a name="openVault_"></a> openVault() {#openVault_}
+###  openVault()
 ```
 openVault(bytes32 contractName_, bytes32 vaultId_) external 
 ```
@@ -93,7 +93,7 @@ Vault must be in an initialized state
 | `contractName_`| bytes32| the controller contract|
 | `vaultId_`| bytes32| Vault ID in bytes32|
 
-### <a name="addShares_"></a> addShares() {#addShares_}
+###  addShares()
 ```
 addShares(bytes32 contractName_, bytes32 vaultId_, address account_, uint256 shares_) external 
 ```
@@ -106,7 +106,7 @@ This will be called by contracts after an account has voted in order to add them
 | `account_`| address| address|
 | `shares_`| uint256| uint256|
 
-### <a name="claimReward_"></a> claimReward() {#claimReward_}
+###  claimReward()
 ```
 claimReward(uint256 index_) external 
 ```
@@ -118,7 +118,7 @@ This function is used when a user only wants to claim a specific vault or if the
 |------------|-----| -------|
 | `index_`| uint256| uint256|
 
-### <a name="claimRewards_"></a> claimRewards() {#claimRewards_}
+###  claimRewards()
 ```
 claimRewards(uint256[] indices_) external 
 ```
@@ -130,7 +130,7 @@ The array of indices is limited to 19 as we want to prevent gas overflow of loop
 |------------|-----| -------|
 | `indices_`| uint256[]| uint256[]|
 
-### <a name="setRewardsBudget_"></a> setRewardsBudget() {#setRewardsBudget_}
+###  setRewardsBudget()
 ```
 setRewardsBudget(bytes32 contractName_, uint256 amount) external 
 ```
@@ -142,7 +142,7 @@ Every controller contract has their own rewardsBudget to set indivual rewards pe
 | `contractName_`| bytes32| the name of the controller contract in bytes32|
 | `amount`| uint256| uint256 reward amount in POP per vault|
 
-### <a name="addControllerContract_"></a> addControllerContract() {#addControllerContract_}
+###  addControllerContract()
 ```
 addControllerContract(bytes32 contractName_, address contract_) external 
 ```
@@ -153,7 +153,7 @@ all critical functions to init/open vaults and add shares to them can only be ca
 | `contractName_`| bytes32| the name of the controller contract in bytes32|
 | `contract_`| address| the address of the controller contract|
 
-### <a name="toggleRewards_"></a> toggleRewards() {#toggleRewards_}
+###  toggleRewards()
 ```
 toggleRewards(bytes32 contractName_) external 
 ```
@@ -163,7 +163,7 @@ all critical functions to init/open vaults and add shares to them can only be ca
 |------------|-----| -------|
 | `contractName_`| bytes32| the address of the controller contract|
 
-### <a name="contributeReward_"></a> contributeReward() {#contributeReward_}
+###  contributeReward()
 ```
 contributeReward(uint256 amount) external 
 ```
@@ -174,61 +174,61 @@ Sufficient RewardsBalance will be checked when opening a new vault to see if eno
 | `amount`| uint256| uint256 amount in POP to be used for vault rewards|
 
 ## Events
-### <a name="RewardBudgetChanged_"></a> RewardBudgetChanged {#RewardBudgetChanged_}
+### RewardBudgetChanged
 ```
 RewardBudgetChanged(bytes32 contractName_, uint256 amount)
 ```
-### <a name="VaultInitialized_"></a> VaultInitialized {#VaultInitialized_}
+### VaultInitialized
 ```
 VaultInitialized(bytes32 vaultId)
 ```
-### <a name="VaultOpened_"></a> VaultOpened {#VaultOpened_}
+### VaultOpened
 ```
 VaultOpened(bytes32 vaultId)
 ```
-### <a name="VaultClosed_"></a> VaultClosed {#VaultClosed_}
+### VaultClosed
 ```
 VaultClosed(bytes32 vaultId)
 ```
-### <a name="RewardClaimed_"></a> RewardClaimed {#RewardClaimed_}
+### RewardClaimed
 ```
 RewardClaimed(bytes32 vaultId, address account_, uint256 amount)
 ```
-### <a name="RewardsClaimed_"></a> RewardsClaimed {#RewardsClaimed_}
+### RewardsClaimed
 ```
 RewardsClaimed(address account_, uint256 amount)
 ```
-### <a name="SharesAdded_"></a> SharesAdded {#SharesAdded_}
+### SharesAdded
 ```
 SharesAdded(bytes32 vaultId_, address account_, uint256 shares_)
 ```
-### <a name="RewardBalanceIncreased_"></a> RewardBalanceIncreased {#RewardBalanceIncreased_}
+### RewardBalanceIncreased
 ```
 RewardBalanceIncreased(address account, uint256 amount)
 ```
-### <a name="ControllerContractAdded_"></a> ControllerContractAdded {#ControllerContractAdded_}
+### ControllerContractAdded
 ```
 ControllerContractAdded(bytes32 contractName_, address contract_)
 ```
-### <a name="RewardsToggled_"></a> RewardsToggled {#RewardsToggled_}
+### RewardsToggled
 ```
 RewardsToggled(bytes32 contractName_, bool prevState, bool newState)
 ```
 ## Modifiers
-### <a name="vaultExists_"></a> `vaultExists()` {#vaultExists_}
+### `vaultExists()`
 ```
 vaultExists(bytes32 vaultId_)
 ```
 ## Parameters:
 - `vaultId_`: Bytes32
-### <a name="onlyControllerContract_"></a> `onlyControllerContract()` {#onlyControllerContract_}
+### `onlyControllerContract()`
 ```
 onlyControllerContract(bytes32 contractName_)
 ```
 ## Parameters:
 - `contractName_`: Bytes32
 ## Graphs
-### <a name="dependencyGraph"></a> `Dependency Graph` {#dependencyGraph}
+### Dependency Graph
 ![Dependency Graph](/docs/images/ParticipationReward_dependency_graph.png)
-### <a name="inheritanceGraph"></a> `Inheritance Graph` {#inheritanceGraph}
+### Inheritance Graph
 ![Inheritance Graph](/docs/images/ParticipationReward_inheritance_graph.png)

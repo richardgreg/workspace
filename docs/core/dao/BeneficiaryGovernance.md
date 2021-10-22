@@ -2,39 +2,39 @@
 This contract is for submitting beneficiary nomination proposals and beneficiary takedown proposals
 ***
 ## Functions:
-- [`constructor()`](#constructor_)
-- [`getNumberOfProposals()`](#getNumberOfProposals_)
-- [`getNumberOfVoters()`](#getNumberOfVoters_)
-- [`getStatus()`](#getStatus_)
-- [`hasVoted()`](#hasVoted_)
-- [`createProposal()`](#createProposal_)
-- [`refreshState()`](#refreshState_)
-- [`vote()`](#vote_)
-- [`finalize()`](#finalize_)
-- [`claimBond()`](#claimBond_)
-- [`setConfiguration()`](#setConfiguration_)
+- [`constructor()`](#constructor)
+- [`getNumberOfProposals()`](#getnumberofproposals)
+- [`getNumberOfVoters()`](#getnumberofvoters)
+- [`getStatus()`](#getstatus)
+- [`hasVoted()`](#hasvoted)
+- [`createProposal()`](#createproposal)
+- [`refreshState()`](#refreshstate)
+- [`vote()`](#vote)
+- [`finalize()`](#finalize)
+- [`claimBond()`](#claimbond)
+- [`setConfiguration()`](#setconfiguration)
 ## Events:
-- [`ProposalCreated`](#ProposalCreated_)
-- [`Vote`](#Vote_)
-- [`Finalize`](#Finalize_)
-- [`BondWithdrawn`](#BondWithdrawn_)
+- [`ProposalCreated`](#proposalcreated)
+- [`Vote`](#vote)
+- [`Finalize`](#finalize)
+- [`BondWithdrawn`](#bondwithdrawn)
 ## Modifiers:
-- [`validAddress()`](#validAddress_)
-- [`enoughBond()`](#enoughBond_)
+- [`validAddress()`](#validaddress)
+- [`enoughBond()`](#enoughbond)
 ## Graphs:
-- [`Dependency Graph`](#dependencyGraph)
-- [`Inheritance Graph`](#inheritanceGraph)
+- [Dependency Graph](#dependency-graph)
+- [Inheritance Graph](#inheritance-graph)
 ***
 ## Function Definitions:
-### <a name="constructor_"></a> constructor() {#constructor_}
+###  constructor()
 ```
 constructor(contract IContractRegistry _contractRegistry) public 
 ```
-### <a name="getNumberOfProposals_"></a> getNumberOfProposals() {#getNumberOfProposals_}
+###  getNumberOfProposals()
 ```
 getNumberOfProposals(enum BeneficiaryGovernance.ProposalType _type) external  returns (uint256)
 ```
-### <a name="getNumberOfVoters_"></a> getNumberOfVoters() {#getNumberOfVoters_}
+###  getNumberOfVoters()
 ```
 getNumberOfVoters(uint256 proposalId) external  returns (uint256)
 ```
@@ -49,7 +49,7 @@ getNumberOfVoters(uint256 proposalId) external  returns (uint256)
 |-------------|-------|------------|
 |number| uint256|of votes to a proposal|
 
-### <a name="getStatus_"></a> getStatus() {#getStatus_}
+###  getStatus()
 ```
 getStatus(uint256 proposalId) external  returns (enum BeneficiaryGovernance.ProposalStatus)
 ```
@@ -64,7 +64,7 @@ getStatus(uint256 proposalId) external  returns (enum BeneficiaryGovernance.Prop
 |-------------|-------|------------|
 |status| uint256|of proposal|
 
-### <a name="hasVoted_"></a> hasVoted() {#hasVoted_}
+###  hasVoted()
 ```
 hasVoted(uint256 proposalId, address voter) external  returns (bool)
 ```
@@ -74,7 +74,7 @@ hasVoted(uint256 proposalId, address voter) external  returns (bool)
 | `proposalId`| uint256| id of the proposal|
 | `voter`| address| address opf voter|
 
-### <a name="createProposal_"></a> createProposal() {#createProposal_}
+###  createProposal()
 ```
 createProposal(address _beneficiary, bytes32 _region, bytes _applicationCid, enum BeneficiaryGovernance.ProposalType _type) external  returns (uint256)
 ```
@@ -85,7 +85,7 @@ createProposal(address _beneficiary, bytes32 _region, bytes _applicationCid, enu
 | `_applicationCid`| bytes32| IPFS content hash|
 | `_type`| bytes| the proposal type (nomination / takedown)|
 
-### <a name="refreshState_"></a> refreshState() {#refreshState_}
+###  refreshState()
 ```
 refreshState(uint256 proposalId) external 
 ```
@@ -94,7 +94,7 @@ refreshState(uint256 proposalId) external
 |------------|-----| -------|
 | `proposalId`| uint256| id of the proposal|
 
-### <a name="vote_"></a> vote() {#vote_}
+###  vote()
 ```
 vote(uint256 proposalId, enum BeneficiaryGovernance.VoteOption _vote) external 
 ```
@@ -103,7 +103,7 @@ vote(uint256 proposalId, enum BeneficiaryGovernance.VoteOption _vote) external
 |------------|-----| -------|
 | `proposalId`| uint256| id of the proposal which you are going to vote|
 
-### <a name="finalize_"></a> finalize() {#finalize_}
+###  finalize()
 ```
 finalize(uint256 proposalId) public 
 ```
@@ -112,7 +112,7 @@ finalize(uint256 proposalId) public
 |------------|-----| -------|
 | `proposalId`| uint256| id of the proposal|
 
-### <a name="claimBond_"></a> claimBond() {#claimBond_}
+###  claimBond()
 ```
 claimBond(uint256 proposalId) public 
 ```
@@ -121,38 +121,38 @@ claimBond(uint256 proposalId) public
 |------------|-----| -------|
 | `proposalId`| uint256| id of the proposal|
 
-### <a name="setConfiguration_"></a> setConfiguration() {#setConfiguration_}
+###  setConfiguration()
 ```
 setConfiguration(uint256 _votingPeriod, uint256 _vetoPeriod, uint256 _proposalBond) public 
 ```
 ## Events
-### <a name="ProposalCreated_"></a> ProposalCreated {#ProposalCreated_}
+### ProposalCreated
 ```
 ProposalCreated(uint256 proposalId, address proposer, address beneficiary, bytes applicationCid)
 ```
-### <a name="Vote_"></a> Vote {#Vote_}
+### Vote
 ```
 Vote(uint256 proposalId, address voter, uint256 weight)
 ```
-### <a name="Finalize_"></a> Finalize {#Finalize_}
+### Finalize
 ```
 Finalize(uint256 proposalId)
 ```
-### <a name="BondWithdrawn_"></a> BondWithdrawn {#BondWithdrawn_}
+### BondWithdrawn
 ```
 BondWithdrawn(address _address, uint256 amount)
 ```
 ## Modifiers
-### <a name="validAddress_"></a> `validAddress()` {#validAddress_}
+### `validAddress()`
 ```
 validAddress(address _address)
 ```
-### <a name="enoughBond_"></a> `enoughBond()` {#enoughBond_}
+### `enoughBond()`
 ```
 enoughBond(address _address)
 ```
 ## Graphs
-### <a name="dependencyGraph"></a> `Dependency Graph` {#dependencyGraph}
+### Dependency Graph
 ![Dependency Graph](/docs/images/BeneficiaryGovernance_dependency_graph.png)
-### <a name="inheritanceGraph"></a> `Inheritance Graph` {#inheritanceGraph}
+### Inheritance Graph
 ![Inheritance Graph](/docs/images/BeneficiaryGovernance_inheritance_graph.png)

@@ -30,60 +30,60 @@ WARNING: The `DEFAULT_ADMIN_ROLE` is also its own admin: it has permission to
 grant and revoke this role. Extra precautions should be taken to secure
 accounts that have been granted it.
 ## Functions:
-- [`hasRole()`](#hasRole_)
-- [`hasPermission()`](#hasPermission_)
-- [`getRoleAdmin()`](#getRoleAdmin_)
-- [`requireRole()`](#requireRole_)
-- [`requirePermission()`](#requirePermission_)
-- [`isRoleAdmin()`](#isRoleAdmin_)
-- [`requireApprovedContractOrEOA()`](#requireApprovedContractOrEOA_)
-- [`grantRole()`](#grantRole_)
-- [`revokeRole()`](#revokeRole_)
-- [`renounceRole()`](#renounceRole_)
-- [`setRoleAdmin()`](#setRoleAdmin_)
-- [`grantPermission()`](#grantPermission_)
-- [`revokePermission()`](#revokePermission_)
+- [`hasRole()`](#hasrole)
+- [`hasPermission()`](#haspermission)
+- [`getRoleAdmin()`](#getroleadmin)
+- [`requireRole()`](#requirerole)
+- [`requirePermission()`](#requirepermission)
+- [`isRoleAdmin()`](#isroleadmin)
+- [`requireApprovedContractOrEOA()`](#requireapprovedcontractoreoa)
+- [`grantRole()`](#grantrole)
+- [`revokeRole()`](#revokerole)
+- [`renounceRole()`](#renouncerole)
+- [`setRoleAdmin()`](#setroleadmin)
+- [`grantPermission()`](#grantpermission)
+- [`revokePermission()`](#revokepermission)
 ## Modifiers:
-- [`onlyRole()`](#onlyRole_)
+- [`onlyRole()`](#onlyrole)
 ## Graphs:
-- [`Dependency Graph`](#dependencyGraph)
-- [`Inheritance Graph`](#inheritanceGraph)
+- [Dependency Graph](#dependency-graph)
+- [Inheritance Graph](#inheritance-graph)
 ***
 ## Function Definitions:
-### <a name="hasRole_"></a> hasRole() {#hasRole_}
+###  hasRole()
 ```
 hasRole(bytes32 role, address account) public  returns (bool)
 ```
 Returns `true` if `account` has been granted `role`.
-### <a name="hasPermission_"></a> hasPermission() {#hasPermission_}
+###  hasPermission()
 ```
 hasPermission(bytes32 permission, address account) public  returns (bool)
 ```
 Returns `true` if `account` has been granted `permission`.
-### <a name="getRoleAdmin_"></a> getRoleAdmin() {#getRoleAdmin_}
+###  getRoleAdmin()
 ```
 getRoleAdmin(bytes32 role) public  returns (bytes32)
 ```
 Returns the admin role that controls `role`. See {grantRole} and
 {revokeRole}.
 To change a role's admin, use {_setRoleAdmin}.
-### <a name="requireRole_"></a> requireRole() {#requireRole_}
+###  requireRole()
 ```
 requireRole(bytes32 role, address account) public 
 ```
-### <a name="requirePermission_"></a> requirePermission() {#requirePermission_}
+###  requirePermission()
 ```
 requirePermission(bytes32 permission, address account) public 
 ```
-### <a name="isRoleAdmin_"></a> isRoleAdmin() {#isRoleAdmin_}
+###  isRoleAdmin()
 ```
 isRoleAdmin(bytes32 role, address account) public 
 ```
-### <a name="requireApprovedContractOrEOA_"></a> requireApprovedContractOrEOA() {#requireApprovedContractOrEOA_}
+###  requireApprovedContractOrEOA()
 ```
 requireApprovedContractOrEOA(address account) public 
 ```
-### <a name="grantRole_"></a> grantRole() {#grantRole_}
+###  grantRole()
 ```
 grantRole(bytes32 role, address account) public 
 ```
@@ -92,7 +92,7 @@ If `account` had not been already granted `role`, emits a {RoleGranted}
 event.
 Requirements:
 - the caller must have ``role``'s admin role.
-### <a name="revokeRole_"></a> revokeRole() {#revokeRole_}
+###  revokeRole()
 ```
 revokeRole(bytes32 role, address account) public 
 ```
@@ -100,7 +100,7 @@ Revokes `role` from `account`.
 If `account` had been granted `role`, emits a {RoleRevoked} event.
 Requirements:
 - the caller must have ``role``'s admin role.
-### <a name="renounceRole_"></a> renounceRole() {#renounceRole_}
+###  renounceRole()
 ```
 renounceRole(bytes32 role, address account) public 
 ```
@@ -112,21 +112,21 @@ If the calling account had been granted `role`, emits a {RoleRevoked}
 event.
 Requirements:
 - the caller must be `account`.
-### <a name="setRoleAdmin_"></a> setRoleAdmin() {#setRoleAdmin_}
+###  setRoleAdmin()
 ```
 setRoleAdmin(bytes32 role, bytes32 adminRole) public 
 ```
-### <a name="grantPermission_"></a> grantPermission() {#grantPermission_}
+###  grantPermission()
 ```
 grantPermission(bytes32 permission, address account) public 
 ```
-### <a name="revokePermission_"></a> revokePermission() {#revokePermission_}
+###  revokePermission()
 ```
 revokePermission(bytes32 permission) public 
 ```
 ## Events
 ## Modifiers
-### <a name="onlyRole_"></a> `onlyRole()` {#onlyRole_}
+### `onlyRole()`
 ```
 onlyRole(bytes32 role)
 ```
@@ -136,7 +136,7 @@ The format of the revert reason is given by the following regular expression:
  /^AccessControl: account (0x[0-9a-f]{40}) is missing role (0x[0-9a-f]{64})$/
 _Available since v4.1._
 ## Graphs
-### <a name="dependencyGraph"></a> `Dependency Graph` {#dependencyGraph}
+### Dependency Graph
 ![Dependency Graph](/docs/images/ACLRegistry_dependency_graph.png)
-### <a name="inheritanceGraph"></a> `Inheritance Graph` {#inheritanceGraph}
+### Inheritance Graph
 ![Inheritance Graph](/docs/images/ACLRegistry_inheritance_graph.png)
