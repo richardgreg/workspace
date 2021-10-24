@@ -70,27 +70,50 @@ export default function Register(): JSX.Element {
 
   async function swapToken(): Promise<void> {
     setWait(true);
-    toast.promise(
-      handleSwapTokenForRewards(
-        [contracts.threeCrv.address, contracts.pop.address],
-        swapOutput,
-      ),
-      {
-        loading: 'Swap in Progress...',
-        success: 'Funds swapped!',
-        error: (error) => error.data.message.split("'")[1],
-      },
-    );
+    toast.loading('Swap in Progress...');
+    handleSwapTokenForRewards(
+      [contracts.threeCrv.address, contracts.pop.address],
+      swapOutput,
+    )
+      .then((res) => {
+        toast.remove();
+        if (res !== undefined) {
+          toast.success('Funds swapped!');
+        } else {
+          toast.error('An error occurred');
+        }
+      })
+      .catch((error) => {
+        toast.remove();
+        if (error?.data === undefined) {
+          toast.error('An error occurred');
+        } else {
+          toast.error(error.data.message.split("'")[1]);
+        }
+      });
     setWait(false);
   }
 
   async function distributeRewards(): Promise<void> {
     setWait(true);
-    toast.promise(handleDistributeRewards(), {
-      loading: 'Distributing funds...',
-      success: 'Funds distributed!',
-      error: (error) => error.data.message.split("'")[1],
-    });
+    toast.loading('Distributing funds...');
+    handleDistributeRewards()
+      .then((res) => {
+        toast.remove();
+        if (res !== undefined) {
+          toast.success('Funds distributed!');
+        } else {
+          toast.error('An error occurred');
+        }
+      })
+      .catch((error) => {
+        toast.remove();
+        if (error?.data === undefined) {
+          toast.error('An error occurred');
+        } else {
+          toast.error(error.data.message.split("'")[1]);
+        }
+      });
     setWait(false);
   }
 

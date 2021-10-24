@@ -253,6 +253,7 @@ export default function AllGrants() {
   }
 
   const submitVotes = async (grantTerm: ElectionTerm) => {
+    toast.loading('Submitting Votes...');
     const txArgs = Object.keys(pendingVotes[grantTerm].votes).reduce<
       [string[], BigNumber[], number]
     >(
@@ -266,14 +267,23 @@ export default function AllGrants() {
       [[], [], grantTerm],
     );
 
-    toast.promise(handleVote(txArgs[0], txArgs[1], txArgs[2]), {
-      loading: 'Submitting Votes...',
-      success: 'Votes submitted!',
-      error: (error) =>
-        error?.data === undefined
-          ? 'An error occurred'
-          : error.data.message.split("'")[1],
-    });
+    handleVote(txArgs[0], txArgs[1], txArgs[2])
+      .then((res) => {
+        toast.remove();
+        if (res !== undefined) {
+          toast.success('Votes submitted!');
+        } else {
+          toast.error('An error occurred');
+        }
+      })
+      .catch((error) => {
+        toast.remove();
+        if (error?.data === undefined) {
+          toast.error('An error occurred');
+        } else {
+          toast.error(error.data.message.split("'")[1]);
+        }
+      });
     dispatch(setDualActionModal(false));
   };
 
