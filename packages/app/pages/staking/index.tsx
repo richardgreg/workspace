@@ -86,13 +86,24 @@ export default function LockPop() {
 
   async function lockPop() {
     setWait(true);
+    toast.loading('Staking POP...');
     const formattedPop = popToLock.toLocaleString().replace(/,/gi, '');
     const lockedPopInEth = utils.parseEther(formattedPop);
-    toast.promise(handleStake(lockedPopInEth, lockDuration), {
-      loading: 'Staking POP...',
-      success: 'POP staked!',
-      error: (error) => error.data.message.split("'")[1],
-    });
+    handleStake(lockedPopInEth, lockDuration)
+      .then((data) => {
+        toast.remove();
+        if (data !== undefined) {
+          toast.success('POP staked!');
+        } else {
+          toast.error('Error occurred while staking POP');
+        }
+      })
+      .catch((error) => {
+        toast.remove();
+        if (error.data) {
+          toast.error(error.data.message.split("'")[1]);
+        }
+      });
     setWait(false);
   }
 
@@ -102,14 +113,22 @@ export default function LockPop() {
     // because parseEther breaks with exponential String
     const formattedPop = popToLock.toLocaleString().replace(/,/gi, '');
     const lockedPopInEth = utils.parseEther(formattedPop);
-    toast.promise(
-      handleApproveStake(process.env.ADDR_STAKING, lockedPopInEth),
-      {
-        loading: 'Approving POP for staking...',
-        success: 'POP approved!',
-        error: (error) => error.data.message.split("'")[1],
-      },
-    );
+    toast.loading('Approving POP for staking...');
+    handleApproveStake(process.env.ADDR_STAKING, lockedPopInEth)
+      .then((data) => {
+        toast.remove();
+        if (data !== undefined) {
+          toast.success('POP approved!');
+        } else {
+          toast.error('Error occurred while approving POP');
+        }
+      })
+      .catch((error) => {
+        toast.remove();
+        if (error.data) {
+          toast.error(error.data.message.split("'")[1]);
+        }
+      });
     setWait(false);
   }
 
@@ -119,21 +138,43 @@ export default function LockPop() {
     // because parseEther breaks with exponential String
     const formattedPop = popToLock.toLocaleString().replace(/,/gi, '');
     const lockedPopInEth = utils.parseEther(formattedPop);
-    toast.promise(handleIncreaseStake(lockedPopInEth), {
-      loading: 'Increasing POP for staking...',
-      success: 'POP Increased!',
-      error: 'Error occurred while increasing POP',
-    });
+    toast.loading('Increasing POP for staking...');
+    handleIncreaseStake(lockedPopInEth)
+      .then((data) => {
+        toast.remove();
+        if (data !== undefined) {
+          toast.success('POP Increased!');
+        } else {
+          toast.error('Error occurred while increasing POP');
+        }
+      })
+      .catch((error) => {
+        toast.remove();
+        if (error.data) {
+          toast.error(error.data.message.split("'")[1]);
+        }
+      });
     setWait(false);
   }
 
   async function increaseLock(): Promise<void> {
     setWait(true);
-    toast.promise(handleIncreaseLockPeriod(lockDuration), {
-      loading: 'Increasing POP Lock Period',
-      success: 'POP Lock Period Increased!',
-      error: 'Error occurred while increasing POP Lock Period',
-    });
+    toast.loading('Increasing POP Lock Period...');
+    handleIncreaseLockPeriod(lockDuration)
+      .then((data) => {
+        toast.remove();
+        if (data !== undefined) {
+          toast.success('POP Lock Period Increased!');
+        } else {
+          toast.error('Error occurred while increasing POP Lock Period');
+        }
+      })
+      .catch((error) => {
+        toast.remove();
+        if (error.data) {
+          toast.error(error.data.message.split("'")[1]);
+        }
+      });
     setWait(false);
   }
 
@@ -219,7 +260,7 @@ export default function LockPop() {
                               max={popBalance}
                               step={1}
                               disabled={
-                                account && approved >= popToLock && expired
+                                !account && approved >= popToLock && expired
                               }
                             />
                           </div>
