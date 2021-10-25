@@ -14,7 +14,7 @@
 ## Function Definitions:
 ###  constructor()
 ```
-constructor(address beneficiaryVault_, contract IContractRegistry contractRegistry_) public 
+constructor(address _beneficiaryVault, contract IContractRegistry _contractRegistry) public 
 ```
 ###  getAllRegions()
 ```
@@ -26,7 +26,7 @@ getAllVaults() public  returns (address[])
 ```
 ###  addRegion()
 ```
-addRegion(bytes32 region_, address beneficiaryVault_) external 
+addRegion(bytes32 region_, address _beneficiaryVault) external 
 ```
 ## Events
 ### RegionAdded

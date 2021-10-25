@@ -62,7 +62,7 @@ rewardPerToken() public  returns (uint256)
 ```
 ###  earned()
 ```
-earned(address account) public  returns (uint256)
+earned(address _account) public  returns (uint256)
 ```
 ###  getRewardForDuration()
 ```
@@ -70,19 +70,19 @@ getRewardForDuration() external  returns (uint256)
 ```
 ###  stake()
 ```
-stake(uint256 amount, uint256 lengthOfTime) external 
+stake(uint256 _amount, uint256 _lengthOfTime) external 
 ```
 ###  increaseLock()
 ```
-increaseLock(uint256 lengthOfTime) external 
+increaseLock(uint256 _lengthOfTime) external 
 ```
 ###  increaseStake()
 ```
-increaseStake(uint256 amount) external 
+increaseStake(uint256 _amount) external 
 ```
 ###  withdraw()
 ```
-withdraw(uint256 amount) public 
+withdraw(uint256 _amount) public 
 ```
 ###  getReward()
 ```
@@ -98,11 +98,11 @@ recalculateVoiceCredits(address _address) public
 ```
 ###  notifyRewardAmount()
 ```
-notifyRewardAmount(uint256 reward) external 
+notifyRewardAmount(uint256 _reward) external 
 ```
 ###  updatePeriodFinish()
 ```
-updatePeriodFinish(uint256 timestamp) external 
+updatePeriodFinish(uint256 _timestamp) external 
 ```
 ## Events
 ### StakingDeposited
@@ -124,7 +124,7 @@ RewardAdded(uint256 reward)
 ## Modifiers
 ### `updateReward()`
 ```
-updateReward(address account)
+updateReward(address _account)
 ```
 ## Graphs
 ### Dependency Graph

@@ -21,41 +21,41 @@
 ## Function Definitions:
 ###  constructor()
 ```
-constructor(contract IContractRegistry contractRegistry_) public 
+constructor(contract IContractRegistry _contractRegistry) public 
 ```
 ###  isClaimable()
 ```
-isClaimable(bytes32 escrowId_) external  returns (bool)
+isClaimable(bytes32 _escrowId) external  returns (bool)
 ```
 
 | Parameter Name | Type | Description |
 |------------|-----| -------|
-| `escrowId_`| bytes32| Bytes32|
+| `_escrowId`| bytes32| Bytes32|
 
 ###  getEscrowsByUser()
 ```
-getEscrowsByUser(address account) external  returns (bytes32[])
+getEscrowsByUser(address _account) external  returns (bytes32[])
 ```
 
 | Parameter Name | Type | Description |
 |------------|-----| -------|
-| `account`| address| address|
+| `_account`| address| address|
 
 ###  lock()
 ```
-lock(address account_, uint256 amount_) external 
+lock(address _account, uint256 _amount) external 
 ```
 This creates a seperate escrow structure which can later be iterated upon to unlock the escrowed funds
 ###  claimReward()
 ```
-claimReward(bytes32 escrowId_) external 
+claimReward(bytes32 _escrowId) external 
 ```
 Uses the escrowId at the specified index of escrowIds.
 This function is used when a user only wants to claim a specific escrowVault or if they decide the gas cost of claimRewards are to high for now.
 (lower cost but also lower reward)
 ###  claimRewards()
 ```
-claimRewards(bytes32[] escrowIds_) external 
+claimRewards(bytes32[] _escrowIds) external 
 ```
 Uses the vaultIds at the specified indices of escrowIds.
 This function is used when a user only wants to claim multiple escrowVaults at once (probably most of the time)
@@ -76,7 +76,7 @@ Locked(address account, uint256 amount)
 ```
 ### RewardsClaimed
 ```
-RewardsClaimed(address account_, uint256 amount)
+RewardsClaimed(address _account, uint256 amount)
 ```
 ### EscrowDurationChanged
 ```

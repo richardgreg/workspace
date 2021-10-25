@@ -24,7 +24,7 @@ Manages distribution of POP rewards to Popcorn Treasury, DAO Staking, and Benefi
 ## Function Definitions:
 ###  constructor()
 ```
-constructor(contract IContractRegistry contractRegistry_, contract IUniswapV2Router02 uniswapV2Router_) public 
+constructor(contract IContractRegistry _contractRegistry, contract IUniswapV2Router02 _uniswapV2Router) public 
 ```
 ###  getRewardSplits()
 ```
@@ -36,15 +36,15 @@ receive() external
 ```
 ###  swapTokenForRewards()
 ```
-swapTokenForRewards(address[] path_, uint256 minAmountOut_) public  returns (uint256[])
+swapTokenForRewards(address[] _path, uint256 _minAmountOut) public  returns (uint256[])
 ```
 Path specification requires at least source token as first in path and POP address as last
 Token swap internals implemented as described at https://uniswap.org/docs/v2/smart-contracts/router02/#swapexacttokensfortokens
 
 | Parameter Name | Type | Description |
 |------------|-----| -------|
-| `path_`| address[]| Uniswap path specification for source token to POP|
-| `minAmountOut_`| uint256| Minimum desired amount (>0) of POP tokens to be received from swap|
+| `_path`| address[]| Uniswap path specification for source token to POP|
+| `_minAmountOut`| uint256| Minimum desired amount (>0) of POP tokens to be received from swap|
 
 #### Return Values:
 
@@ -59,13 +59,13 @@ distributeRewards() public
 Contract must have POP balance in order to distribute according to rewardSplits ratio
 ###  setRewardSplits()
 ```
-setRewardSplits(uint256[4] splits_) public 
+setRewardSplits(uint256[4] _splits) public 
 ```
 Values must be within rewardsLimit range, specified in percent to 18 decimal place precision
 
 | Parameter Name | Type | Description |
 |------------|-----| -------|
-| `splits_`| uint256[4]| Array of RewardTargets enumerated uint256 values within rewardLimits range|
+| `_splits`| uint256[4]| Array of RewardTargets enumerated uint256 values within rewardLimits range|
 
 ## Events
 ### StakingDeposited

@@ -35,7 +35,7 @@ getBeneficiaryList() public  returns (address[])
 ```
 ###  addBeneficiary()
 ```
-addBeneficiary(address account, bytes32 region, bytes applicationCid) external 
+addBeneficiary(address _account, bytes32 _region, bytes _applicationCid) external 
 ```
 ###  revokeBeneficiary()
 ```

@@ -16,43 +16,43 @@
 ## Function Definitions:
 ###  constructor()
 ```
-constructor(contract IContractRegistry contractRegistry_, contract Curve3Pool curve3Pool_, contract IERC20 threeCrv_) public 
+constructor(contract IContractRegistry _contractRegistry, contract Curve3Pool _curve3Pool, contract IERC20 _threeCrv) public 
 ```
 ###  zapIntoBatch()
 ```
-zapIntoBatch(uint256[3] amounts_, uint256 min_mint_amounts_) external 
+zapIntoBatch(uint256[3] _amounts, uint256 _min_mint_amounts) external 
 ```
-The amounts in amounts_ must align with their index in the curve three-pool
+The amounts in _amounts must align with their index in the curve three-pool
 
 | Parameter Name | Type | Description |
 |------------|-----| -------|
-| `amounts_`| uint256[3]| An array of amounts in stablecoins the user wants to deposit|
-| `min_mint_amounts_`| uint256| The min amount of 3CRV which should be minted by the curve three-pool (slippage control)|
+| `_amounts`| uint256[3]| An array of amounts in stablecoins the user wants to deposit|
+| `_min_mint_amounts`| uint256| The min amount of 3CRV which should be minted by the curve three-pool (slippage control)|
 
 ###  zapOutOfBatch()
 ```
-zapOutOfBatch(bytes32 batchId_, uint256 amountToWithdraw_, uint8 stableCoinIndex_, uint256 min_amount_) external 
+zapOutOfBatch(bytes32 _batchId, uint256 _amountToWithdraw, uint8 _stableCoinIndex, uint256 _min_amount) external 
 ```
-The stableCoinIndex_ must align with the index in the curve three-pool
+The _stableCoinIndex must align with the index in the curve three-pool
 
 | Parameter Name | Type | Description |
 |------------|-----| -------|
-| `batchId_`| bytes32| Defines which batch gets withdrawn from|
-| `amountToWithdraw_`| uint256| 3CRV amount that shall be withdrawn|
-| `stableCoinIndex_`| uint8| Defines which stablecoin the user wants to receive|
-| `min_amount_`| uint256| The min amount of stables which should be returned by the curve three-pool (slippage control)|
+| `_batchId`| bytes32| Defines which batch gets withdrawn from|
+| `_amountToWithdraw`| uint256| 3CRV amount that shall be withdrawn|
+| `_stableCoinIndex`| uint8| Defines which stablecoin the user wants to receive|
+| `_min_amount`| uint256| The min amount of stables which should be returned by the curve three-pool (slippage control)|
 
 ###  claimAndSwapToStable()
 ```
-claimAndSwapToStable(bytes32 batchId_, uint8 stableCoinIndex_, uint256 min_amount_) external 
+claimAndSwapToStable(bytes32 _batchId, uint8 _stableCoinIndex, uint256 _min_amount) external 
 ```
-The stableCoinIndex_ must align with the index in the curve three-pool
+The _stableCoinIndex must align with the index in the curve three-pool
 
 | Parameter Name | Type | Description |
 |------------|-----| -------|
-| `batchId_`| bytes32| Defines which batch gets withdrawn from|
-| `stableCoinIndex_`| uint8| Defines which stablecoin the user wants to receive|
-| `min_amount_`| uint256| The min amount of stables which should be returned by the curve three-pool (slippage control)|
+| `_batchId`| bytes32| Defines which batch gets withdrawn from|
+| `_stableCoinIndex`| uint8| Defines which stablecoin the user wants to receive|
+| `_min_amount`| uint256| The min amount of stables which should be returned by the curve three-pool (slippage control)|
 
 ## Events
 ### ZappedIntoBatch

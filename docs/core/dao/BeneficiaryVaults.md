@@ -24,52 +24,52 @@
 ## Function Definitions:
 ###  constructor()
 ```
-constructor(contract IContractRegistry contractRegistry_) public 
+constructor(contract IContractRegistry _contractRegistry) public 
 ```
 ###  getVault()
 ```
-getVault(uint8 vaultId_) public  returns (uint256 totalAllocated, uint256 currentBalance, uint256 unclaimedShare, bytes32 merkleRoot, enum BeneficiaryVaults.VaultStatus status)
+getVault(uint8 _vaultId) public  returns (uint256 totalAllocated, uint256 currentBalance, uint256 unclaimedShare, bytes32 merkleRoot, enum BeneficiaryVaults.VaultStatus status)
 ```
 ###  hasClaimed()
 ```
-hasClaimed(uint8 vaultId_, address beneficiary_) public  returns (bool)
+hasClaimed(uint8 _vaultId, address _beneficiary) public  returns (bool)
 ```
 ###  vaultExists()
 ```
-vaultExists(uint8 vaultId_) public  returns (bool)
+vaultExists(uint8 _vaultId) public  returns (bool)
 ```
 ###  openVault()
 ```
-openVault(uint8 vaultId_, bytes32 merkleRoot_) public 
+openVault(uint8 _vaultId, bytes32 _merkleRoot) public 
 ```
 Vault cannot be initialized if it is currently in an open state, otherwise existing data is reset*
 
 | Parameter Name | Type | Description |
 |------------|-----| -------|
-| `vaultId_`| uint8| Vault ID in range 0-2|
-| `merkleRoot_`| bytes32| Merkle root to support claims|
+| `_vaultId`| uint8| Vault ID in range 0-2|
+| `_merkleRoot`| bytes32| Merkle root to support claims|
 
 ###  closeVault()
 ```
-closeVault(uint8 vaultId_) public 
+closeVault(uint8 _vaultId) public 
 ```
 Vault must be in an open state
 
 | Parameter Name | Type | Description |
 |------------|-----| -------|
-| `vaultId_`| uint8| Vault ID in range 0-2|
+| `_vaultId`| uint8| Vault ID in range 0-2|
 
 ###  verifyClaim()
 ```
-verifyClaim(uint8 vaultId_, bytes32[] proof_, address beneficiary_, uint256 share_) public  returns (bool)
+verifyClaim(uint8 _vaultId, bytes32[] _proof, address _beneficiary, uint256 _share) public  returns (bool)
 ```
 
 | Parameter Name | Type | Description |
 |------------|-----| -------|
-| `vaultId_`| uint8| Vault ID in range 0-2|
-| `proof_`| bytes32[]| Merkle proof of path to leaf element|
-| `beneficiary_`| address| Beneficiary address encoded in leaf element|
-| `share_`| uint256| Beneficiary expected share encoded in leaf element|
+| `_vaultId`| uint8| Vault ID in range 0-2|
+| `_proof`| bytes32[]| Merkle proof of path to leaf element|
+| `_beneficiary`| address| Beneficiary address encoded in leaf element|
+| `_share`| uint256| Beneficiary expected share encoded in leaf element|
 
 #### Return Values:
 
@@ -79,16 +79,16 @@ verifyClaim(uint8 vaultId_, bytes32[] proof_, address beneficiary_, uint256 shar
 
 ###  claimReward()
 ```
-claimReward(uint8 vaultId_, bytes32[] proof_, address beneficiary_, uint256 share_) public 
+claimReward(uint8 _vaultId, bytes32[] _proof, address _beneficiary, uint256 _share) public 
 ```
 Applies any outstanding rewards before processing claim
 
 | Parameter Name | Type | Description |
 |------------|-----| -------|
-| `vaultId_`| uint8| Vault ID in range 0-2|
-| `proof_`| bytes32[]| Merkle proof of path to leaf element|
-| `beneficiary_`| address| Beneficiary address encoded in leaf element|
-| `share_`| uint256| Beneficiary expected share encoded in leaf element|
+| `_vaultId`| uint8| Vault ID in range 0-2|
+| `_proof`| bytes32[]| Merkle proof of path to leaf element|
+| `_beneficiary`| address| Beneficiary address encoded in leaf element|
+| `_share`| uint256| Beneficiary expected share encoded in leaf element|
 
 ###  allocateRewards()
 ```
@@ -115,7 +115,7 @@ RewardClaimed(uint8 vaultId, address beneficiary, uint256 amount)
 ## Modifiers
 ### `_vaultExists()`
 ```
-_vaultExists(uint8 vaultId_)
+_vaultExists(uint8 _vaultId)
 ```
 ## Graphs
 ### Dependency Graph

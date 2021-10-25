@@ -32,33 +32,33 @@ constructor(contract IContractRegistry _contractRegistry, uint256 _burnRate, uin
 ```
 ###  handleKeeperIncentive()
 ```
-handleKeeperIncentive(bytes32 contractName_, uint8 i, address keeper) external 
+handleKeeperIncentive(bytes32 _contractName, uint8 _i, address _keeper) external 
 ```
 ###  createIncentive()
 ```
-createIncentive(bytes32 contractName_, uint256 _reward, bool _enabled, bool _openToEveryone) public 
+createIncentive(bytes32 _contractName, uint256 _reward, bool _enabled, bool _openToEveryone) public 
 ```
 This function is only for creating unique incentives for future contracts
 Multiple functions can use the same incentive which can than be updated with one governance vote
 
 | Parameter Name | Type | Description |
 |------------|-----| -------|
-| `contractName_`| bytes32| Name of contract that uses ParticipationRewards in bytes32|
+| `_contractName`| bytes32| Name of contract that uses ParticipationRewards in bytes32|
 | `_reward`| uint256| The amount in POP the Keeper receives for calling the function|
 | `_enabled`| bool| Is this Incentive currently enabled?|
 | `_openToEveryone`| bool| Can anyone call the function for rewards or only keeper?|
 
 ###  updateIncentive()
 ```
-updateIncentive(bytes32 contractName_, uint8 i, uint256 _reward, bool _enabled, bool _openToEveryone) external 
+updateIncentive(bytes32 _contractName, uint8 _i, uint256 _reward, bool _enabled, bool _openToEveryone) external 
 ```
 ###  toggleApproval()
 ```
-toggleApproval(bytes32 contractName_, uint8 i) external 
+toggleApproval(bytes32 _contractName, uint8 _i) external 
 ```
 ###  toggleIncentive()
 ```
-toggleIncentive(bytes32 contractName_, uint8 i) external 
+toggleIncentive(bytes32 _contractName, uint8 _i) external 
 ```
 ###  fundIncentive()
 ```
@@ -66,13 +66,13 @@ fundIncentive(uint256 _amount) external
 ```
 ###  addControllerContract()
 ```
-addControllerContract(bytes32 contractName_, address contract_) external 
+addControllerContract(bytes32 _contractName, address contract_) external 
 ```
 all critical functions to init/open vaults and add shares to them can only be called by controller contracts
 
 | Parameter Name | Type | Description |
 |------------|-----| -------|
-| `contractName_`| bytes32| the name of the controller contract in bytes32|
+| `_contractName`| bytes32| the name of the controller contract in bytes32|
 | `contract_`| address| the address of the controller contract|
 
 ###  updateBurnRate()

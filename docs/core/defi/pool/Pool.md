@@ -35,16 +35,16 @@
 ## Function Definitions:
 ###  constructor()
 ```
-constructor(address token_, address yearnRegistry_, contract IContractRegistry contractRegistry_) public 
+constructor(address _token, address _yearnRegistry, contract IContractRegistry _contractRegistry) public 
 ```
 ###  deposit()
 ```
-deposit(uint256 amount) public  returns (uint256)
+deposit(uint256 _amount) public  returns (uint256)
 ```
 
 | Parameter Name | Type | Description |
 |------------|-----| -------|
-| `amount`| uint256| Quantity of tokens to deposit.|
+| `_amount`| uint256| Quantity of tokens to deposit.|
 
 #### Return Values:
 
@@ -54,13 +54,13 @@ deposit(uint256 amount) public  returns (uint256)
 
 ###  depositFor()
 ```
-depositFor(uint256 amount, address recipient) public  returns (uint256)
+depositFor(uint256 _amount, address _recipient) public  returns (uint256)
 ```
 
 | Parameter Name | Type | Description |
 |------------|-----| -------|
-| `amount`| uint256| Quantity of tokens to deposit.|
-| `recipient`| address| Recipient of issued pool tokens.|
+| `_amount`| uint256| Quantity of tokens to deposit.|
+| `_recipient`| address| Recipient of issued pool tokens.|
 
 #### Return Values:
 
@@ -70,12 +70,12 @@ depositFor(uint256 amount, address recipient) public  returns (uint256)
 
 ###  withdraw()
 ```
-withdraw(uint256 amount) public  returns (uint256)
+withdraw(uint256 _amount) public  returns (uint256)
 ```
 
 | Parameter Name | Type | Description |
 |------------|-----| -------|
-| `amount`| uint256| Quantity of pool tokens to exchange for underlying tokens.|
+| `_amount`| uint256| Quantity of pool tokens to exchange for underlying tokens.|
 
 #### Return Values:
 
@@ -85,13 +85,13 @@ withdraw(uint256 amount) public  returns (uint256)
 
 ###  transfer()
 ```
-transfer(address recipient, uint256 amount) public  returns (bool)
+transfer(address _recipient, uint256 _amount) public  returns (bool)
 ```
 
 | Parameter Name | Type | Description |
 |------------|-----| -------|
-| `recipient`| address| Address pool tokens are being transferred to. Must not be this contract's address or 0x0.|
-| `amount`| uint256| Quantity of pool tokens to transfer to `recipient`.|
+| `_recipient`| address| Address pool tokens are being transferred to. Must not be this contract's address or 0x0.|
+| `_amount`| uint256| Quantity of pool tokens to transfer to `_recipient`.|
 
 #### Return Values:
 
@@ -101,14 +101,14 @@ transfer(address recipient, uint256 amount) public  returns (bool)
 
 ###  transferFrom()
 ```
-transferFrom(address sender, address recipient, uint256 amount) public  returns (bool)
+transferFrom(address _sender, address _recipient, uint256 _amount) public  returns (bool)
 ```
 
 | Parameter Name | Type | Description |
 |------------|-----| -------|
-| `sender`| address| Address pool tokens are being transferred from.|
-| `recipient`| address| Address pool tokens are being transferred to. Must not be this contract's address or 0x0.|
-| `amount`| uint256| Quantity of pool tokens to transfer.|
+| `_sender`| address| Address pool tokens are being transferred from.|
+| `_recipient`| address| Address pool tokens are being transferred to. Must not be this contract's address or 0x0.|
+| `_amount`| uint256| Quantity of pool tokens to transfer.|
 
 #### Return Values:
 
@@ -122,33 +122,33 @@ takeFees() external
 ```
 ###  setWithdrawalFee()
 ```
-setWithdrawalFee(uint256 withdrawalFee_) external 
+setWithdrawalFee(uint256 _withdrawalFee) external 
 ```
 Value is in basis points, i.e. 100 BPS = 1%
 
 | Parameter Name | Type | Description |
 |------------|-----| -------|
-| `withdrawalFee_`| uint256| New `withdrawalFee` in BPS.|
+| `_withdrawalFee`| uint256| New `withdrawalFee` in BPS.|
 
 ###  setManagementFee()
 ```
-setManagementFee(uint256 managementFee_) external 
+setManagementFee(uint256 _managementFee) external 
 ```
 Value is in basis points, i.e. 100 BPS = 1%
 
 | Parameter Name | Type | Description |
 |------------|-----| -------|
-| `managementFee_`| uint256| New `managementFee` in BPS.|
+| `_managementFee`| uint256| New `managementFee` in BPS.|
 
 ###  setPerformanceFee()
 ```
-setPerformanceFee(uint256 performanceFee_) external 
+setPerformanceFee(uint256 _performanceFee) external 
 ```
 Value is in basis points, i.e. 100 BPS = 1%
 
 | Parameter Name | Type | Description |
 |------------|-----| -------|
-| `performanceFee_`| uint256| New `performanceFee` in BPS.|
+| `_performanceFee`| uint256| New `performanceFee` in BPS.|
 
 ###  withdrawAccruedFees()
 ```
@@ -188,14 +188,14 @@ Return value is denominated in underlying token.
 
 ###  valueFor()
 ```
-valueFor(uint256 amount) public  returns (uint256)
+valueFor(uint256 _amount) public  returns (uint256)
 ```
 Return value is denominated in underlying token.
 #### Return Values:
 
 | Return Name | Type | Description |
 |-------------|-------|------------|
-|Value| uint256|of `amount` of pool tokens in underlying token.
+|Value| uint256|of `_amount` of pool tokens in underlying token.
 |
 
 ## Events

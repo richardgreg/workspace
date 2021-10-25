@@ -24,7 +24,7 @@ deposit() public
 ```
 ###  getRandomNumber()
 ```
-getRandomNumber(uint256 electionId, uint256 seed) public 
+getRandomNumber(uint256 _electionId, uint256 _seed) public 
 ```
 ## Events
 ## Graphs

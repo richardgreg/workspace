@@ -36,12 +36,12 @@ getNumberOfProposals(enum BeneficiaryGovernance.ProposalType _type) external  re
 ```
 ###  getNumberOfVoters()
 ```
-getNumberOfVoters(uint256 proposalId) external  returns (uint256)
+getNumberOfVoters(uint256 _proposalId) external  returns (uint256)
 ```
 
 | Parameter Name | Type | Description |
 |------------|-----| -------|
-| `proposalId`| uint256| id of the proposal|
+| `_proposalId`| uint256| id of the proposal|
 
 #### Return Values:
 
@@ -51,12 +51,12 @@ getNumberOfVoters(uint256 proposalId) external  returns (uint256)
 
 ###  getStatus()
 ```
-getStatus(uint256 proposalId) external  returns (enum BeneficiaryGovernance.ProposalStatus)
+getStatus(uint256 _proposalId) external  returns (enum BeneficiaryGovernance.ProposalStatus)
 ```
 
 | Parameter Name | Type | Description |
 |------------|-----| -------|
-| `proposalId`| uint256| id of the proposal|
+| `_proposalId`| uint256| id of the proposal|
 
 #### Return Values:
 
@@ -66,13 +66,13 @@ getStatus(uint256 proposalId) external  returns (enum BeneficiaryGovernance.Prop
 
 ###  hasVoted()
 ```
-hasVoted(uint256 proposalId, address voter) external  returns (bool)
+hasVoted(uint256 _proposalId, address _voter) external  returns (bool)
 ```
 
 | Parameter Name | Type | Description |
 |------------|-----| -------|
-| `proposalId`| uint256| id of the proposal|
-| `voter`| address| address opf voter|
+| `_proposalId`| uint256| id of the proposal|
+| `_voter`| address| address opf voter|
 
 ###  createProposal()
 ```
@@ -82,44 +82,46 @@ createProposal(address _beneficiary, bytes32 _region, bytes _applicationCid, enu
 | Parameter Name | Type | Description |
 |------------|-----| -------|
 | `_beneficiary`| address| address of the beneficiary|
-| `_applicationCid`| bytes32| IPFS content hash|
-| `_type`| bytes| the proposal type (nomination / takedown)|
+| `_region`| bytes32| id of region|
+| `_applicationCid`| bytes| IPFS content hash|
+| `_type`| enum BeneficiaryGovernance.ProposalType| the proposal type (nomination / takedown)|
 
 ###  refreshState()
 ```
-refreshState(uint256 proposalId) external 
+refreshState(uint256 _proposalId) external 
 ```
 
 | Parameter Name | Type | Description |
 |------------|-----| -------|
-| `proposalId`| uint256| id of the proposal|
+| `_proposalId`| uint256| id of the proposal|
 
 ###  vote()
 ```
-vote(uint256 proposalId, enum BeneficiaryGovernance.VoteOption _vote) external 
+vote(uint256 _proposalId, enum BeneficiaryGovernance.VoteOption _vote) external 
 ```
 
 | Parameter Name | Type | Description |
 |------------|-----| -------|
-| `proposalId`| uint256| id of the proposal which you are going to vote|
+| `_proposalId`| uint256| id of the proposal which you are going to vote|
+| `_vote`| enum BeneficiaryGovernance.VoteOption| a yes or no vote|
 
 ###  finalize()
 ```
-finalize(uint256 proposalId) public 
+finalize(uint256 _proposalId) public 
 ```
 
 | Parameter Name | Type | Description |
 |------------|-----| -------|
-| `proposalId`| uint256| id of the proposal|
+| `_proposalId`| uint256| id of the proposal|
 
 ###  claimBond()
 ```
-claimBond(uint256 proposalId) public 
+claimBond(uint256 _proposalId) public 
 ```
 
 | Parameter Name | Type | Description |
 |------------|-----| -------|
-| `proposalId`| uint256| id of the proposal|
+| `_proposalId`| uint256| id of the proposal|
 
 ###  setConfiguration()
 ```

@@ -20,39 +20,39 @@
 ## Function Definitions:
 ###  constructor()
 ```
-constructor(address curveAddressProvider_) public 
+constructor(address _curveAddressProvider) public 
 ```
 ###  token()
 ```
-token(address popcornPool) public  returns (address)
+token(address _popcornPool) public  returns (address)
 ```
 ###  curveMetapoolAddress()
 ```
-curveMetapoolAddress(address popcornPool) public  returns (address)
+curveMetapoolAddress(address _popcornPool) public  returns (address)
 ```
 ###  curveBasepoolAddress()
 ```
-curveBasepoolAddress(address popcornPool) public  returns (address)
+curveBasepoolAddress(address _popcornPool) public  returns (address)
 ```
 ###  supportedTokens()
 ```
-supportedTokens(address popcornPool) public  returns (address[8])
+supportedTokens(address _popcornPool) public  returns (address[8])
 ```
 ###  canZap()
 ```
-canZap(address popcornPool, address tokenAddress) public  returns (bool)
+canZap(address _popcornPool, address tokenAddress) public  returns (bool)
 ```
 ###  tokenIndex()
 ```
-tokenIndex(address popcornPool, address tokenAddress) public  returns (uint8)
+tokenIndex(address _popcornPool, address tokenAddress) public  returns (uint8)
 ```
 ###  zapIn()
 ```
-zapIn(address popcornPool, address depositToken, uint256 amount) public  returns (uint256)
+zapIn(address _popcornPool, address depositToken, uint256 amount) public  returns (uint256)
 ```
 ###  zapOut()
 ```
-zapOut(address popcornPool, address withdrawalToken, uint256 amount) public  returns (uint256)
+zapOut(address _popcornPool, address withdrawalToken, uint256 amount) public  returns (uint256)
 ```
 ## Events
 ### ZapIn
