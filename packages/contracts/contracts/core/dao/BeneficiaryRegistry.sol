@@ -69,24 +69,24 @@ contract BeneficiaryRegistry is IBeneficiaryRegistry {
    * TODO: allow only election contract to modify beneficiary
    */
   function addBeneficiary(
-    address account,
-    bytes32 region,
-    bytes calldata applicationCid
+    address _account,
+    bytes32 _region,
+    bytes calldata _applicationCid
   ) external override {
     IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
       .requireRole(keccak256("BeneficiaryGovernance"), msg.sender);
-    require(account == address(account), "invalid address");
-    require(applicationCid.length > 0, "!application");
-    require(!beneficiaryExists(account), "exists");
+    require(_account == address(_account), "invalid address");
+    require(_applicationCid.length > 0, "!application");
+    require(!beneficiaryExists(_account), "exists");
 
-    beneficiariesList.push(account);
-    beneficiariesMap[account] = Beneficiary({
-      applicationCid: applicationCid,
-      region: region,
+    beneficiariesList.push(_account);
+    beneficiariesMap[_account] = Beneficiary({
+      applicationCid: _applicationCid,
+      region: _region,
       listPointer: beneficiariesList.length - 1
     });
 
-    emit BeneficiaryAdded(account, applicationCid);
+    emit BeneficiaryAdded(_account, _applicationCid);
   }
 
   /**

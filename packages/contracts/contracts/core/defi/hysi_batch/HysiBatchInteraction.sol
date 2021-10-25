@@ -126,26 +126,26 @@ contract HysiBatchInteraction {
   /* ========== CONSTRUCTOR ========== */
 
   constructor(
-    IContractRegistry contractRegistry_,
-    ISetToken setToken_,
-    IERC20 threeCrv_,
-    BasicIssuanceModule basicIssuanceModule_,
-    address[] memory yTokenAddresses_,
-    CurvePoolTokenPair[] memory curvePoolTokenPairs_,
-    uint256 batchCooldown_,
-    uint256 mintThreshold_,
-    uint256 redeemThreshold_
+    IContractRegistry _contractRegistry,
+    ISetToken _setToken,
+    IERC20 _threeCrv,
+    BasicIssuanceModule _basicIssuanceModule,
+    address[] memory _yTokenAddresses,
+    CurvePoolTokenPair[] memory _curvePoolTokenPairs,
+    uint256 _batchCooldown,
+    uint256 _mintThreshold,
+    uint256 _redeemThreshold
   ) {
-    contractRegistry = contractRegistry_;
-    setToken = setToken_;
-    threeCrv = threeCrv_;
-    setBasicIssuanceModule = basicIssuanceModule_;
+    contractRegistry = _contractRegistry;
+    setToken = _setToken;
+    threeCrv = _threeCrv;
+    setBasicIssuanceModule = _basicIssuanceModule;
 
-    _setCurvePoolTokenPairs(yTokenAddresses_, curvePoolTokenPairs_);
+    _setCurvePoolTokenPairs(_yTokenAddresses, _curvePoolTokenPairs);
 
-    batchCooldown = batchCooldown_;
-    mintThreshold = mintThreshold_;
-    redeemThreshold = redeemThreshold_;
+    batchCooldown = _batchCooldown;
+    mintThreshold = _mintThreshold;
+    redeemThreshold = _redeemThreshold;
     lastMintedAt = block.timestamp;
     lastRedeemedAt = block.timestamp;
 
@@ -156,99 +156,99 @@ contract HysiBatchInteraction {
   /* ========== VIEWS ========== */
   /**
    * @notice Get ids for all batches that a user has interacted with
-   * @param account The address for whom we want to retrieve batches
+   * @param _account The address for whom we want to retrieve batches
    */
-  function getAccountBatches(address account)
+  function getAccountBatches(address _account)
     external
     view
     returns (bytes32[] memory)
   {
-    return accountBatches[account];
+    return accountBatches[_account];
   }
 
   /* ========== MUTATIVE FUNCTIONS ========== */
 
   /**
    * @notice Deposits funds in the current mint batch
-   * @param amount_ Amount of 3cr3CRV to use for minting
-   * @param depositFor_ User that gets the shares attributed to (for use in zapper contract)
+   * @param _amount Amount of 3cr3CRV to use for minting
+   * @param _depositFor User that gets the shares attributed to (for use in zapper contract)
    * @dev Should this be secured we nonReentrant?
    */
-  function depositForMint(uint256 amount_, address depositFor_) external {
+  function depositForMint(uint256 _amount, address _depositFor) external {
     require(
       IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
         .hasRole(keccak256("HysiZapper"), msg.sender) ||
-        msg.sender == depositFor_,
+        msg.sender == _depositFor,
       "you cant transfer other funds"
     );
-    require(threeCrv.balanceOf(msg.sender) >= amount_, "insufficent balance");
-    threeCrv.transferFrom(msg.sender, address(this), amount_);
-    _deposit(amount_, currentMintBatchId, depositFor_);
+    require(threeCrv.balanceOf(msg.sender) >= _amount, "insufficent balance");
+    threeCrv.transferFrom(msg.sender, address(this), _amount);
+    _deposit(_amount, currentMintBatchId, _depositFor);
   }
 
   /**
    * @notice deposits funds in the current redeem batch
-   * @param amount_ amount of HYSI to be redeemed
+   * @param _amount amount of HYSI to be redeemed
    * @dev Should this be secured we nonReentrant?
    */
-  function depositForRedeem(uint256 amount_) external {
-    require(setToken.balanceOf(msg.sender) >= amount_, "insufficient balance");
-    setToken.transferFrom(msg.sender, address(this), amount_);
-    _deposit(amount_, currentRedeemBatchId, msg.sender);
+  function depositForRedeem(uint256 _amount) external {
+    require(setToken.balanceOf(msg.sender) >= _amount, "insufficient balance");
+    setToken.transferFrom(msg.sender, address(this), _amount);
+    _deposit(_amount, currentRedeemBatchId, msg.sender);
   }
 
   /**
    * @notice This function allows a user to withdraw their funds from a batch before that batch has been processed
-   * @param batchId_ From which batch should funds be withdrawn from
-   * @param amountToWithdraw_ Amount of HYSI or 3CRV to be withdrawn from the queue (depending on mintBatch / redeemBatch)
-   * @param withdrawFor_ User that gets the shares attributed to (for use in zapper contract)
+   * @param _batchId From which batch should funds be withdrawn from
+   * @param _amountToWithdraw Amount of HYSI or 3CRV to be withdrawn from the queue (depending on mintBatch / redeemBatch)
+   * @param _withdrawFor User that gets the shares attributed to (for use in zapper contract)
    */
   function withdrawFromBatch(
-    bytes32 batchId_,
-    uint256 amountToWithdraw_,
-    address withdrawFor_
+    bytes32 _batchId,
+    uint256 _amountToWithdraw,
+    address _withdrawFor
   ) external {
-    address recipient = _getRecipient(withdrawFor_);
+    address recipient = _getRecipient(_withdrawFor);
 
-    Batch storage batch = batches[batchId_];
-    uint256 accountBalance = accountBalances[batchId_][withdrawFor_];
+    Batch storage batch = batches[_batchId];
+    uint256 accountBalance = accountBalances[_batchId][_withdrawFor];
     require(batch.claimable == false, "already processed");
     require(
-      accountBalance >= amountToWithdraw_,
+      accountBalance >= _amountToWithdraw,
       "account has insufficient funds"
     );
 
     //At this point the share balance is equal to the supplied token and can be used interchangeably
-    accountBalances[batchId_][withdrawFor_] = accountBalance.sub(
-      amountToWithdraw_
+    accountBalances[_batchId][_withdrawFor] = accountBalance.sub(
+      _amountToWithdraw
     );
     batch.suppliedTokenBalance = batch.suppliedTokenBalance.sub(
-      amountToWithdraw_
+      _amountToWithdraw
     );
-    batch.unclaimedShares = batch.unclaimedShares.sub(amountToWithdraw_);
+    batch.unclaimedShares = batch.unclaimedShares.sub(_amountToWithdraw);
 
     if (batch.batchType == BatchType.Mint) {
-      threeCrv.safeTransfer(recipient, amountToWithdraw_);
+      threeCrv.safeTransfer(recipient, _amountToWithdraw);
     } else {
-      setToken.safeTransfer(recipient, amountToWithdraw_);
+      setToken.safeTransfer(recipient, _amountToWithdraw);
     }
-    emit WithdrawnFromBatch(batchId_, amountToWithdraw_, withdrawFor_);
+    emit WithdrawnFromBatch(_batchId, _amountToWithdraw, _withdrawFor);
   }
 
   /**
    * @notice Claims funds after the batch has been processed (get HYSI from a mint batch and 3CRV from a redeem batch)
-   * @param batchId_ Id of batch to claim from
-   * @param claimFor_ User that gets the shares attributed to (for use in zapper contract)
+   * @param _batchId Id of batch to claim from
+   * @param _claimFor User that gets the shares attributed to (for use in zapper contract)
    */
-  function claim(bytes32 batchId_, address claimFor_)
+  function claim(bytes32 _batchId, address _claimFor)
     external
     returns (uint256)
   {
-    Batch storage batch = batches[batchId_];
+    Batch storage batch = batches[_batchId];
     require(batch.claimable, "not yet claimable");
 
-    address recipient = _getRecipient(claimFor_);
-    uint256 accountBalance = accountBalances[batchId_][claimFor_];
+    address recipient = _getRecipient(_claimFor);
+    uint256 accountBalance = accountBalances[_batchId][_claimFor];
     require(
       accountBalance <= batch.unclaimedShares,
       "claiming too many shares"
@@ -265,7 +265,7 @@ contract HysiBatchInteraction {
       tokenAmountToClaim
     );
     batch.unclaimedShares = batch.unclaimedShares.sub(accountBalance);
-    accountBalances[batchId_][claimFor_] = 0;
+    accountBalances[_batchId][_claimFor] = 0;
 
     //Transfer token
     if (batch.batchType == BatchType.Mint) {
@@ -275,7 +275,7 @@ contract HysiBatchInteraction {
     }
 
     emit Claimed(
-      claimFor_,
+      _claimFor,
       batch.batchType,
       accountBalance,
       tokenAmountToClaim
@@ -286,70 +286,70 @@ contract HysiBatchInteraction {
 
   /**
    * @notice Moves unclaimed token (3crv or Hysi) from their respective Batches into a new redeemBatch / mintBatch without needing to claim them first. This will typically be used when hysi has already been minted and a user has never claimed / transfered the token to their address and they would like to convert it to stablecoin.
-   * @param batchIds the ids of each batch where hysi should be moved from
-   * @param shares how many shares should redeemed in each of the batches
-   * @param batchType the batchType where funds should be taken from (Mint -> Take Hysi and redeem then, Redeem -> Take 3Crv and Mint HYSI)
+   * @param _batchIds the ids of each batch where hysi should be moved from
+   * @param _shares how many shares should redeemed in each of the batches
+   * @param _batchType the batchType where funds should be taken from (Mint -> Take Hysi and redeem then, Redeem -> Take 3Crv and Mint HYSI)
    * @dev the indices of batchIds must match the amountsInHysi to work properly (This will be done by the frontend)
    */
   function moveUnclaimedDepositsIntoCurrentBatch(
-    bytes32[] calldata batchIds,
-    uint256[] calldata shares,
-    BatchType batchType
+    bytes32[] calldata _batchIds,
+    uint256[] calldata _shares,
+    BatchType _batchType
   ) external {
-    require(batchIds.length == shares.length, "array lengths must match");
+    require(_batchIds.length == _shares.length, "array lengths must match");
 
     uint256 totalAmount;
 
-    for (uint256 i; i < batchIds.length; i++) {
-      Batch storage batch = batches[batchIds[i]];
+    for (uint256 i; i < _batchIds.length; i++) {
+      Batch storage batch = batches[_batchIds[i]];
       uint256 accountBalance = accountBalances[batch.batchId][msg.sender];
       //Check that the user has enough funds and that the batch was already minted
       //Only the current redeemBatch is claimable == false so this check allows us to not adjust batch.suppliedTokenBalance
       //Additionally it makes no sense to move funds from the current redeemBatch to the current redeemBatch
       require(batch.claimable == true, "has not yet been processed");
-      require(batch.batchType == batchType, "incorrect batchType");
-      require(accountBalance >= shares[i], "account has insufficient funds");
+      require(batch.batchType == _batchType, "incorrect batchType");
+      require(accountBalance >= _shares[i], "account has insufficient funds");
 
       uint256 tokenAmountToClaim = batch
         .claimableTokenBalance
-        .mul(shares[i])
+        .mul(_shares[i])
         .div(batch.unclaimedShares);
       batch.claimableTokenBalance = batch.claimableTokenBalance.sub(
         tokenAmountToClaim
       );
-      batch.unclaimedShares = batch.unclaimedShares.sub(shares[i]);
+      batch.unclaimedShares = batch.unclaimedShares.sub(_shares[i]);
       accountBalances[batch.batchId][msg.sender] = accountBalance.sub(
-        shares[i]
+        _shares[i]
       );
 
       totalAmount = totalAmount.add(tokenAmountToClaim);
     }
     require(totalAmount > 0, "totalAmount must be larger 0");
 
-    if (BatchType.Mint == batchType) {
+    if (BatchType.Mint == _batchType) {
       _deposit(totalAmount, currentRedeemBatchId, msg.sender);
     }
 
-    if (BatchType.Redeem == batchType) {
+    if (BatchType.Redeem == _batchType) {
       _deposit(totalAmount, currentMintBatchId, msg.sender);
     }
 
     emit MovedUnclaimedDepositsIntoCurrentBatch(
       totalAmount,
-      batchType,
+      _batchType,
       msg.sender
     );
   }
 
   /**
    * @notice Mint HYSI token with deposited 3CRV. This function goes through all the steps necessary to mint an optimal amount of HYSI
-   * @param minAmountToMint_ The expected min amount of hysi to mint. If hysiAmount is lower than minAmountToMint_ the transaction will revert.
+   * @param _minAmountToMint The expected min amount of hysi to mint. If hysiAmount is lower than minAmountToMint_ the transaction will revert.
    * @dev This function deposits 3CRV in the underlying Metapool and deposits these LP token to get yToken which in turn are used to mint HYSI
    * @dev This process leaves some leftovers which are partially used in the next mint batches.
    * @dev In order to get 3CRV we can implement a zap to move stables into the curve tri-pool
    * @dev handleKeeperIncentive checks if the msg.sender is a permissioned keeper and pays them a reward for calling this function (see KeeperIncentive.sol)
    */
-  function batchMint(uint256 minAmountToMint_) external {
+  function batchMint(uint256 _minAmountToMint) external {
     KeeperIncentive(contractRegistry.getContract(keccak256("KeeperIncentive")))
       .handleKeeperIncentive(contractName, 0, msg.sender);
     Batch storage batch = batches[currentMintBatchId];
@@ -462,7 +462,7 @@ contract HysiBatchInteraction {
       );
     }
 
-    require(hysiAmount >= minAmountToMint_, "slippage too high");
+    require(hysiAmount >= _minAmountToMint, "slippage too high");
 
     //Mint HYSI
     setBasicIssuanceModule.issue(setToken, hysiAmount, address(this));
@@ -488,12 +488,12 @@ contract HysiBatchInteraction {
 
   /**
    * @notice Redeems HYSI for 3CRV. This function goes through all the steps necessary to get 3CRV
-   * @param min3crvToReceive_ sets minimum amount of 3crv to redeem HYSI for, otherwise the transaction will revert
+   * @param _min3crvToReceive sets minimum amount of 3crv to redeem HYSI for, otherwise the transaction will revert
    * @dev This function reedeems HYSI for the underlying yToken and deposits these yToken in curve Metapools for 3CRV
    * @dev In order to get stablecoins from 3CRV we can use a zap to redeem 3CRV for stables in the curve tri-pool
    * @dev handleKeeperIncentive checks if the msg.sender is a permissioned keeper and pays them a reward for calling this function (see KeeperIncentive.sol)
    */
-  function batchRedeem(uint256 min3crvToReceive_) external {
+  function batchRedeem(uint256 _min3crvToReceive) external {
     KeeperIncentive(contractRegistry.getContract(keccak256("KeeperIncentive")))
       .handleKeeperIncentive(contractName, 1, msg.sender);
     Batch storage batch = batches[currentRedeemBatchId];
@@ -565,7 +565,7 @@ contract HysiBatchInteraction {
     );
 
     require(
-      batch.claimableTokenBalance >= min3crvToReceive_,
+      batch.claimableTokenBalance >= _min3crvToReceive,
       "slippage too high"
     );
 
@@ -589,21 +589,21 @@ contract HysiBatchInteraction {
 
   /**
    * @notice makes sure only zapper or user can withdraw from accout_ and returns the recipient of the withdrawn token
-   * @param account_ is the address which gets withdrawn from
+   * @param _account is the address which gets withdrawn from
    * @dev returns recipient of the withdrawn funds
-   * @dev By default a user should set account_ to their address
-   * @dev If zapper is used to withdraw and swap for a user the msg.sender will be zapper and account_ is the user which we withdraw from. The zapper than sends the swapped funds afterwards to the user
+   * @dev By default a user should set _account to their address
+   * @dev If zapper is used to withdraw and swap for a user the msg.sender will be zapper and _account is the user which we withdraw from. The zapper than sends the swapped funds afterwards to the user
    */
-  function _getRecipient(address account_) internal returns (address) {
+  function _getRecipient(address _account) internal returns (address) {
     //Make sure that only zapper can withdraw from someone else
     require(
       IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
-        .hasRole(keccak256("HysiZapper"), msg.sender) || msg.sender == account_,
+        .hasRole(keccak256("HysiZapper"), msg.sender) || msg.sender == _account,
       "you cant transfer other funds"
     );
 
-    //Set recipient per default to account_
-    address recipient = account_;
+    //Set recipient per default to _account
+    address recipient = _account;
 
     //set the recipient to zapper if its called by the zapper
     if (
@@ -645,189 +645,189 @@ contract HysiBatchInteraction {
 
   /**
    * @notice Deposit either HYSI or 3CRV in their respective batches
-   * @param amount_ The amount of 3CRV or HYSI a user is depositing
-   * @param currentBatchId_ The current reedem or mint batch id to place the funds in the next batch to be processed
-   * @param depositFor_ User that gets the shares attributed to (for use in zapper contract)
+   * @param _amount The amount of 3CRV or HYSI a user is depositing
+   * @param _currentBatchId The current reedem or mint batch id to place the funds in the next batch to be processed
+   * @param _depositFor User that gets the shares attributed to (for use in zapper contract)
    * @dev This function will be called by depositForMint or depositForRedeem and simply reduces code duplication
    */
   function _deposit(
-    uint256 amount_,
-    bytes32 currentBatchId_,
-    address depositFor_
+    uint256 _amount,
+    bytes32 _currentBatchId,
+    address _depositFor
   ) internal {
-    Batch storage batch = batches[currentBatchId_];
+    Batch storage batch = batches[_currentBatchId];
 
     //Add the new funds to the batch
-    batch.suppliedTokenBalance = batch.suppliedTokenBalance.add(amount_);
-    batch.unclaimedShares = batch.unclaimedShares.add(amount_);
-    accountBalances[currentBatchId_][depositFor_] = accountBalances[
-      currentBatchId_
-    ][depositFor_].add(amount_);
+    batch.suppliedTokenBalance = batch.suppliedTokenBalance.add(_amount);
+    batch.unclaimedShares = batch.unclaimedShares.add(_amount);
+    accountBalances[_currentBatchId][_depositFor] = accountBalances[
+      _currentBatchId
+    ][_depositFor].add(_amount);
 
     //Save the batchId for the user so they can be retrieved to claim the batch
-    accountBatches[depositFor_].push(currentBatchId_);
+    accountBatches[_depositFor].push(_currentBatchId);
 
-    emit Deposit(depositFor_, amount_);
+    emit Deposit(_depositFor, _amount);
   }
 
   /**
    * @notice Deposit 3CRV in a curve metapool for its LP-Token
-   * @param amount_ The amount of 3CRV that gets deposited
-   * @param curveMetapool_ The metapool where we want to provide liquidity
+   * @param _amount The amount of 3CRV that gets deposited
+   * @param _curveMetapool The metapool where we want to provide liquidity
    */
-  function _sendToCurve(uint256 amount_, CurveMetapool curveMetapool_)
+  function _sendToCurve(uint256 _amount, CurveMetapool _curveMetapool)
     internal
     returns (uint256)
   {
     uint256 allowanceAmount = threeCrv.allowance(
       address(this),
-      address(curveMetapool_)
+      address(_curveMetapool)
     );
-    threeCrv.safeDecreaseAllowance(address(curveMetapool_), allowanceAmount);
-    threeCrv.safeIncreaseAllowance(address(curveMetapool_), uint256(-1));
+    threeCrv.safeDecreaseAllowance(address(_curveMetapool), allowanceAmount);
+    threeCrv.safeIncreaseAllowance(address(_curveMetapool), uint256(-1));
 
     //Takes 3CRV and sends lpToken to this contract
     //Metapools take an array of amounts with the exoctic stablecoin at the first spot and 3CRV at the second.
     //The second variable determines the min amount of LP-Token we want to receive (slippage control)
-    curveMetapool_.add_liquidity([0, amount_], 0);
+    _curveMetapool.add_liquidity([0, _amount], 0);
   }
 
   /**
    * @notice Withdraws 3CRV for deposited crvLPToken
-   * @param amount_ The amount of crvLPToken that get deposited
-   * @param lpToken_ Which crvLPToken we deposit
-   * @param curveMetapool_ The metapool where we want to provide liquidity
+   * @param _amount The amount of crvLPToken that get deposited
+   * @param _lpToken Which crvLPToken we deposit
+   * @param _curveMetapool The metapool where we want to provide liquidity
    */
   function _withdrawFromCurve(
-    uint256 amount_,
-    IERC20 lpToken_,
-    CurveMetapool curveMetapool_
+    uint256 _amount,
+    IERC20 _lpToken,
+    CurveMetapool _curveMetapool
   ) internal returns (uint256) {
-    uint256 allowanceAmount = lpToken_.allowance(
+    uint256 allowanceAmount = _lpToken.allowance(
       address(this),
-      address(curveMetapool_)
+      address(_curveMetapool)
     );
-    lpToken_.safeDecreaseAllowance(address(curveMetapool_), allowanceAmount);
-    lpToken_.safeIncreaseAllowance(address(curveMetapool_), uint256(-1));
+    _lpToken.safeDecreaseAllowance(address(_curveMetapool), allowanceAmount);
+    _lpToken.safeIncreaseAllowance(address(_curveMetapool), uint256(-1));
 
     //Takes lp Token and sends 3CRV to this contract
     //The second variable is the index for the token we want to receive (0 = exotic stablecoin, 1 = 3CRV)
     //The third variable determines min amount of token we want to receive (slippage control)
-    curveMetapool_.remove_liquidity_one_coin(amount_, 1, 0);
+    _curveMetapool.remove_liquidity_one_coin(_amount, 1, 0);
   }
 
   /**
    * @notice Deposits crvLPToken for yToken
-   * @param amount_ The amount of crvLPToken that get deposited
-   * @param crvLPToken_ The crvLPToken which we deposit
-   * @param yearnVault_ The yearn Vault in which we deposit
+   * @param _amount The amount of crvLPToken that get deposited
+   * @param _crvLPToken The crvLPToken which we deposit
+   * @param _yearnVault The yearn Vault in which we deposit
    */
   function _sendToYearn(
-    uint256 amount_,
-    IERC20 crvLPToken_,
-    YearnVault yearnVault_
+    uint256 _amount,
+    IERC20 _crvLPToken,
+    YearnVault _yearnVault
   ) internal {
-    uint256 allowanceAmount = crvLPToken_.allowance(
+    uint256 allowanceAmount = _crvLPToken.allowance(
       address(this),
-      address(yearnVault_)
+      address(_yearnVault)
     );
-    crvLPToken_.safeDecreaseAllowance(address(yearnVault_), allowanceAmount);
-    crvLPToken_.safeIncreaseAllowance(address(yearnVault_), uint256(-1));
+    _crvLPToken.safeDecreaseAllowance(address(_yearnVault), allowanceAmount);
+    _crvLPToken.safeIncreaseAllowance(address(_yearnVault), uint256(-1));
 
     //Mints yToken and sends them to msg.sender (this contract)
-    yearnVault_.deposit(amount_);
+    _yearnVault.deposit(_amount);
   }
 
   /**
    * @notice Withdraw crvLPToken from yearn
-   * @param amount_ The amount of crvLPToken which we deposit
-   * @param yearnVault_ The yearn Vault in which we deposit
+   * @param _amount The amount of crvLPToken which we deposit
+   * @param _yearnVault The yearn Vault in which we deposit
    */
-  function _withdrawFromYearn(uint256 amount_, YearnVault yearnVault_)
+  function _withdrawFromYearn(uint256 _amount, YearnVault _yearnVault)
     internal
   {
-    uint256 allowanceAmount = yearnVault_.allowance(
+    uint256 allowanceAmount = _yearnVault.allowance(
       address(this),
-      address(yearnVault_)
+      address(_yearnVault)
     );
-    yearnVault_.safeDecreaseAllowance(address(yearnVault_), allowanceAmount);
-    yearnVault_.safeIncreaseAllowance(address(yearnVault_), uint256(-1));
+    _yearnVault.safeDecreaseAllowance(address(_yearnVault), allowanceAmount);
+    _yearnVault.safeIncreaseAllowance(address(_yearnVault), uint256(-1));
 
     //Takes yToken and sends crvLPToken to this contract
-    yearnVault_.withdraw(amount_);
+    _yearnVault.withdraw(_amount);
   }
 
   /**
    * @notice Generates the next batch id for new deposits
-   * @param currentBatchId_ takes the current mint or redeem batch id
+   * @param _currentBatchId takes the current mint or redeem batch id
    */
-  function _generateNextBatchId(bytes32 currentBatchId_)
+  function _generateNextBatchId(bytes32 _currentBatchId)
     internal
     returns (bytes32)
   {
-    return keccak256(abi.encodePacked(block.timestamp, currentBatchId_));
+    return keccak256(abi.encodePacked(block.timestamp, _currentBatchId));
   }
 
   /* ========== SETTER ========== */
 
   /**
    * @notice This function allows the owner to change the composition of underlying token of the HYSI
-   * @param yTokenAddresses_ An array of addresses for the yToken needed to mint HYSI
-   * @param curvePoolTokenPairs_ An array structs describing underlying yToken, crvToken and curve metapool
+   * @param _yTokenAddresses An array of addresses for the yToken needed to mint HYSI
+   * @param _curvePoolTokenPairs An array structs describing underlying yToken, crvToken and curve metapool
    */
   function setCurvePoolTokenPairs(
-    address[] memory yTokenAddresses_,
-    CurvePoolTokenPair[] calldata curvePoolTokenPairs_
+    address[] memory _yTokenAddresses,
+    CurvePoolTokenPair[] calldata _curvePoolTokenPairs
   ) public {
     IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
       .requireRole(keccak256("DAO"), msg.sender);
-    _setCurvePoolTokenPairs(yTokenAddresses_, curvePoolTokenPairs_);
+    _setCurvePoolTokenPairs(_yTokenAddresses, _curvePoolTokenPairs);
   }
 
   /**
    * @notice This function defines which underlying token and pools are needed to mint a hysi token
-   * @param yTokenAddresses_ An array of addresses for the yToken needed to mint HYSI
-   * @param curvePoolTokenPairs_ An array structs describing underlying yToken, crvToken and curve metapool
+   * @param _yTokenAddresses An array of addresses for the yToken needed to mint HYSI
+   * @param _curvePoolTokenPairs An array structs describing underlying yToken, crvToken and curve metapool
    * @dev since our calculations for minting just iterate through the index and match it with the quantities given by Set
    * @dev we must make sure to align them correctly by index, otherwise our whole calculation breaks down
    */
   function _setCurvePoolTokenPairs(
-    address[] memory yTokenAddresses_,
-    CurvePoolTokenPair[] memory curvePoolTokenPairs_
+    address[] memory _yTokenAddresses,
+    CurvePoolTokenPair[] memory _curvePoolTokenPairs
   ) internal {
-    for (uint256 i; i < yTokenAddresses_.length; i++) {
-      curvePoolTokenPairs[yTokenAddresses_[i]] = curvePoolTokenPairs_[i];
+    for (uint256 i; i < _yTokenAddresses.length; i++) {
+      curvePoolTokenPairs[_yTokenAddresses[i]] = _curvePoolTokenPairs[i];
     }
   }
 
   /**
    * @notice Changes the current batch cooldown
-   * @param cooldown_ Cooldown in seconds
+   * @param _cooldown Cooldown in seconds
    * @dev The cooldown is the same for redeem and mint batches
    */
-  function setBatchCooldown(uint256 cooldown_) external {
+  function setBatchCooldown(uint256 _cooldown) external {
     IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
       .requireRole(keccak256("DAO"), msg.sender);
-    batchCooldown = cooldown_;
+    batchCooldown = _cooldown;
   }
 
   /**
    * @notice Changes the Threshold of 3CRV which need to be deposited to be able to mint immediately
-   * @param threshold_ Amount of 3CRV necessary to mint immediately
+   * @param _threshold Amount of 3CRV necessary to mint immediately
    */
-  function setMintThreshold(uint256 threshold_) external {
+  function setMintThreshold(uint256 _threshold) external {
     IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
       .requireRole(keccak256("DAO"), msg.sender);
-    mintThreshold = threshold_;
+    mintThreshold = _threshold;
   }
 
   /**
    * @notice Changes the Threshold of HYSI which need to be deposited to be able to redeem immediately
-   * @param threshold_ Amount of HYSI necessary to mint immediately
+   * @param _threshold Amount of HYSI necessary to mint immediately
    */
-  function setRedeemThreshold(uint256 threshold_) external {
+  function setRedeemThreshold(uint256 _threshold) external {
     IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
       .requireRole(keccak256("DAO"), msg.sender);
-    redeemThreshold = threshold_;
+    redeemThreshold = _threshold;
   }
 }
