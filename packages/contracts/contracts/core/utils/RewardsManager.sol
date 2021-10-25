@@ -1,12 +1,11 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity >=0.7.0 <0.8.0;
+pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
-import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
-import "@openzeppelin/contracts/cryptography/MerkleProof.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
 import "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol";
 import "./KeeperIncentive.sol";
 import "../interfaces/IRegion.sol";
@@ -23,7 +22,6 @@ import "../interfaces/IContractRegistry.sol";
  * @notice Manages distribution of POP rewards to Popcorn Treasury, DAO Staking, and Beneficiaries
  */
 contract RewardsManager is IRewardsManager, ReentrancyGuard {
-  using SafeMath for uint256;
   using SafeERC20 for IERC20;
 
   enum RewardTargets {

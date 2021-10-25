@@ -1,14 +1,12 @@
-pragma solidity >=0.7.0 <0.8.0;
+pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "../interfaces/IACLRegistry.sol";
 import "../interfaces/IContractRegistry.sol";
 import "../interfaces/IStaking.sol";
 
 contract KeeperIncentive {
-  using SafeMath for uint256;
   using SafeERC20 for IERC20;
 
   struct Incentive {

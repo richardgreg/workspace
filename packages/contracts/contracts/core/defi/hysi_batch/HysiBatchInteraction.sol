@@ -1,13 +1,12 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity >=0.7.0 <0.8.0;
+pragma solidity ^0.8.0;
 pragma experimental ABIEncoderV2;
 
-import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "@openzeppelin/contracts/math/SafeMath.sol";
-import "@openzeppelin/contracts/math/Math.sol";
+import "@openzeppelin/contracts/utils/math/Math.sol";
 import "../../interfaces/IACLRegistry.sol";
 import "../../../externals/interfaces/YearnVault.sol";
 import "../../../externals/interfaces/BasicIssuanceModule.sol";
@@ -24,7 +23,6 @@ This means 12 approvals and 9 deposits are necessary to mint one HYSI.
 We Batch this process and allow users to pool their funds. Than we pay keeper to Mint or Redeem HYSI regularly.
 */
 contract HysiBatchInteraction {
-  using SafeMath for uint256;
   using SafeERC20 for YearnVault;
   using SafeERC20 for ISetToken;
   using SafeERC20 for IERC20;

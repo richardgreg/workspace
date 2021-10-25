@@ -1,10 +1,9 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity >=0.7.0 <0.8.0;
+pragma solidity ^0.8.0;
 pragma experimental ABIEncoderV2;
 
-import "@openzeppelin/contracts/math/SafeMath.sol";
-import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "../interfaces/IRegion.sol";
 import "../interfaces/IStaking.sol";
 import "../interfaces/IBeneficiaryRegistry.sol";
@@ -17,7 +16,6 @@ import "../utils/ParticipationReward.sol";
  * @notice This contract is for submitting beneficiary nomination proposals and beneficiary takedown proposals
  */
 contract BeneficiaryGovernance {
-  using SafeMath for uint256;
   using SafeERC20 for IERC20;
 
   /**
