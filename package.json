@@ -15,7 +15,8 @@
     "test:fork": "yarn lerna run test:fork",
     "coverage": "yarn lerna run coverage",
     "netlify-build": "lerna run --scope @popcorn/contracts compile; cd packages/app; yarn next build",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "emissions-db:start": "yarn lerna run --scope @popcorn/emissions-dashboard netlify:dev"
   },
   "dependencies": {
     "@netlify/plugin-nextjs": "^3.3.1",
