@@ -1,5 +1,5 @@
 /**
- * By default this script will compile all contracts using solc 0.7.6
+ * By default this script will compile all contracts using solc 0.8.0
  * If you want to specify a solc version for a path, please do the followings:
  * 1. add the specified version of solc to package.json. For example: "solc-0.7.6": "npm:solc@0.7.6",
  * 2. add a file named `solc-SOLC_VERSION-version` to the desired path. See contracts/core/defi/pool for a example
@@ -8,7 +8,7 @@
 const fs = require("fs");
 const path = require("path");
 const spawnSync = require("child_process").spawnSync;
-const { exec } = require('child_process');
+const { exec } = require("child_process");
 
 const GLOBAL_NODE_DIR = path.resolve(__dirname, "../../../node_modules");
 const NODE_DIR = path.resolve(__dirname, "../node_modules");
@@ -16,7 +16,7 @@ const INPUT_DIR = path.resolve(__dirname, "../contracts");
 const CONFIG_DIR = path.resolve(__dirname, "../docgen");
 const OUTPUT_DIR = path.resolve(__dirname, "../docgen/docs");
 const OUTPUT_IMAGES_DIR = path.resolve(__dirname, "../docgen/docs/images");
-const SUMMARY_FILE = path.resolve(__dirname, "../docgen/SUMMARY.md")
+const SUMMARY_FILE = path.resolve(__dirname, "../docgen/SUMMARY.md");
 const EXCLUDE_FILE = path.resolve(__dirname, "../docgen/exclude.txt");
 const GITBOOK_FILE = path.resolve(__dirname, "../docgen/.gitbook.yaml");
 const TOC_HELPER_FILE = path.resolve(__dirname, "./toc_format.js");
@@ -42,10 +42,12 @@ function scan(pathName, indentation, defaultSolcVersion) {
       let nextSolcVersion = defaultSolcVersion;
       // Scan if there is a specified solc version
       for (const fileName of fs.readdirSync(pathName)) {
-        if (fs.lstatSync(pathName + "/" + fileName).isFile()
-            && !excludeList.includes(pathName + "/" + fileName)
-            && fileName.endsWith("-version")) {
-          nextSolcVersion = fileName.split("-")[1]
+        if (
+          fs.lstatSync(pathName + "/" + fileName).isFile() &&
+          !excludeList.includes(pathName + "/" + fileName) &&
+          fileName.endsWith("-version")
+        ) {
+          nextSolcVersion = fileName.split("-")[1];
         }
       }
 
@@ -58,10 +60,10 @@ function scan(pathName, indentation, defaultSolcVersion) {
         solcVersionDict[nextSolcVersion] = {
           "included-path": [],
           "excluded-path": excludeList,
-        }
+        };
       }
 
-      solcVersionDict[nextSolcVersion]["included-path"].push(pathName)
+      solcVersionDict[nextSolcVersion]["included-path"].push(pathName);
 
       for (const fileName of fs.readdirSync(pathName))
         scan(pathName + "/" + fileName, indentation + "  ", nextSolcVersion);
@@ -94,11 +96,11 @@ function fix(pathName) {
   }
 }
 
-function checkDir(pathName){
+function checkDir(pathName) {
   if (!fs.existsSync(pathName)) {
-	fs.mkdirSync(pathName, {
-		recursive: true
-	});
+    fs.mkdirSync(pathName, {
+      recursive: true,
+    });
   }
 }
 
@@ -110,26 +112,22 @@ fs.appendFileSync(GITBOOK_FILE, "structure:\n");
 fs.appendFileSync(GITBOOK_FILE, "  readme: README.md\n");
 fs.appendFileSync(GITBOOK_FILE, "  summary: SUMMARY.md\n");
 
-scan(INPUT_DIR, "", "0.7.6");
+scan(INPUT_DIR, "", "0.8.0");
 
 for (const [thisSolcVersion, thisObj] of Object.entries(solcVersionDict)) {
   let preExcludeListPathName = [...thisObj["excluded-path"]];
   let excludeListPathName = [];
   for (const [thatSolcVersion, thatObj] of Object.entries(solcVersionDict)) {
-    if (thisSolcVersion === thatSolcVersion)
-      continue;
+    if (thisSolcVersion === thatSolcVersion) continue;
     preExcludeListPathName.push(...thatObj["included-path"]);
   }
   for (const thisExcludedPath of preExcludeListPathName) {
     let isEglible = true;
     for (const thatExcludedPath of preExcludeListPathName) {
-      if (thisExcludedPath === thatExcludedPath)
-        continue;
-      if (thatExcludedPath.includes(thisExcludedPath))
-        isEglible = false;
+      if (thisExcludedPath === thatExcludedPath) continue;
+      if (thatExcludedPath.includes(thisExcludedPath)) isEglible = false;
     }
-    if (isEglible)
-      excludeListPathName.push(thisExcludedPath);
+    if (isEglible) excludeListPathName.push(thisExcludedPath);
   }
 
   const args = [
@@ -140,7 +138,7 @@ for (const [thisSolcVersion, thisObj] of Object.entries(solcVersionDict)) {
     "--exclude=" + excludeListPathName.toString(),
     "--solc-module=" + GLOBAL_NODE_DIR + "/solc-" + thisSolcVersion,
     "--solc-settings=" +
-    JSON.stringify({ optimizer: { enabled: true, runs: 200 } }),
+      JSON.stringify({ optimizer: { enabled: true, runs: 200 } }),
     "--output-structure=" + "contracts",
     "--helpers=" + TOC_HELPER_FILE,
   ];
@@ -148,11 +146,9 @@ for (const [thisSolcVersion, thisObj] of Object.entries(solcVersionDict)) {
   const result = spawnSync("node", args, {
     stdio: ["inherit", "inherit", "pipe"],
   });
-  
-  if (result.stderr.length > 0)
-    throw new Error(result.stderr);
-}
 
+  if (result.stderr.length > 0) throw new Error(result.stderr);
+}
 
 fix(OUTPUT_DIR);
 
@@ -160,23 +156,31 @@ function generateGraphs(sourcePathNameList) {
   for (const sourcePathName of sourcePathNameList) {
     const contractName = path.basename(sourcePathName).slice(0, -4);
     const inputContractPathName = sourcePathName;
-    const outputGraphPathName = OUTPUT_IMAGES_DIR + `/${contractName}_dependency_graph.png`;
-    const outputInheritancePathName = OUTPUT_IMAGES_DIR + `/${contractName}_inheritance_graph.png`;
+    const outputGraphPathName =
+      OUTPUT_IMAGES_DIR + `/${contractName}_dependency_graph.png`;
+    const outputInheritancePathName =
+      OUTPUT_IMAGES_DIR + `/${contractName}_inheritance_graph.png`;
     const suryaPath = GLOBAL_NODE_DIR + "/surya/bin/surya";
-    const dotPath = "/usr/bin/dot"
+    const dotPath = "/usr/bin/dot";
 
-    exec(`${suryaPath} graph ${inputContractPathName} | ${dotPath} -Tpng > ${outputGraphPathName}`, (err, stdout, stderr) => {
-      if (err) {
-        //some err occurred
-        console.error(`exec error: ${err}`);
+    exec(
+      `${suryaPath} graph ${inputContractPathName} | ${dotPath} -Tpng > ${outputGraphPathName}`,
+      (err, stdout, stderr) => {
+        if (err) {
+          //some err occurred
+          console.error(`exec error: ${err}`);
+        }
       }
-    });
-    exec(`${suryaPath} inheritance ${inputContractPathName} | ${dotPath} -Tpng > ${outputInheritancePathName}`, (err, stdout, stderr) => {
-      if (err) {
-        //some err occurred
-        console.error(`exec error: ${err}`);
+    );
+    exec(
+      `${suryaPath} inheritance ${inputContractPathName} | ${dotPath} -Tpng > ${outputInheritancePathName}`,
+      (err, stdout, stderr) => {
+        if (err) {
+          //some err occurred
+          console.error(`exec error: ${err}`);
+        }
       }
-    });
+    );
   }
 }
 

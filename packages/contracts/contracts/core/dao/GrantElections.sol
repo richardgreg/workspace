@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "../interfaces/IStaking.sol";
 import "../interfaces/IBeneficiaryRegistry.sol";
 import "../interfaces/IBeneficiaryVaults.sol";
-import "../interfaces/IRandomNumberConsumer.sol";
+import "../interfaces/random_number_consumer/IRandomNumberConsumer.sol";
 import "../interfaces/IRegion.sol";
 import "../interfaces/IACLRegistry.sol";
 import "../utils/ParticipationReward.sol";
