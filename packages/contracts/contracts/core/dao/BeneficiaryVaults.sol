@@ -126,7 +126,7 @@ contract BeneficiaryVaults is IBeneficiaryVaults, ReentrancyGuard {
     vault.status = VaultStatus.Closed;
 
     if (remainingBalance > 0) {
-      totalDistributedBalance = totalDistributedBalance.sub(remainingBalance);
+      totalDistributedBalance = totalDistributedBalance - remainingBalance;
       if (_getOpenVaultCount() > 0) {
         allocateRewards();
       }
@@ -187,15 +187,13 @@ contract BeneficiaryVaults is IBeneficiaryVaults, ReentrancyGuard {
 
     Vault storage vault = vaults[_vaultId];
 
-    uint256 reward = (vault.currentBalance.mul(_share)).div(
-      vault.unclaimedShare
-    );
+    uint256 reward = (vault.currentBalance * _share) / vault.unclaimedShare;
 
     require(reward > 0, "No reward");
 
-    totalDistributedBalance = totalDistributedBalance.sub(reward);
-    vault.currentBalance = vault.currentBalance.sub(reward);
-    vault.unclaimedShare = vault.unclaimedShare.sub(_share);
+    totalDistributedBalance = totalDistributedBalance - reward;
+    vault.currentBalance = vault.currentBalance - reward;
+    vault.unclaimedShare = vault.unclaimedShare - _share;
 
     vault.claimed[_beneficiary] = true;
 
@@ -214,28 +212,28 @@ contract BeneficiaryVaults is IBeneficiaryVaults, ReentrancyGuard {
   function allocateRewards() public override nonReentrant {
     uint256 availableReward = IERC20(
       contractRegistry.getContract(keccak256("POP"))
-    ).balanceOf(address(this)).sub(totalDistributedBalance);
+    ).balanceOf(address(this)) - totalDistributedBalance;
     require(availableReward > 0, "no rewards available");
 
     uint8 openVaultCount = _getOpenVaultCount();
     require(openVaultCount > 0, "no open vaults");
 
     //@todo handle dust after div
-    uint256 allocation = availableReward.div(openVaultCount);
+    uint256 allocation = availableReward / openVaultCount;
     for (uint8 vaultId = 0; vaultId < vaults.length; vaultId++) {
       if (
         vaults[vaultId].status == VaultStatus.Open &&
         vaults[vaultId].merkleRoot != ""
       ) {
-        vaults[vaultId].totalAllocated = vaults[vaultId].totalAllocated.add(
-          allocation
-        );
-        vaults[vaultId].currentBalance = vaults[vaultId].currentBalance.add(
-          allocation
-        );
+        vaults[vaultId].totalAllocated =
+          vaults[vaultId].totalAllocated +
+          allocation;
+        vaults[vaultId].currentBalance =
+          vaults[vaultId].currentBalance +
+          allocation;
       }
     }
-    totalDistributedBalance = totalDistributedBalance.add(availableReward);
+    totalDistributedBalance = totalDistributedBalance + availableReward;
     emit RewardsAllocated(availableReward);
   }
 

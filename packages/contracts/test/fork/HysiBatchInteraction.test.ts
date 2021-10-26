@@ -143,27 +143,27 @@ async function deployContracts(): Promise<Contracts> {
 
   //Deploy Curve Token
   const threeCrv = (await ethers.getContractAt(
-    "ERC20",
+    "@openzeppelin/contracts/token/ERC20/ERC20.sol:ERC20",
     THREE_CRV_TOKEN_ADDRESS
   )) as ERC20;
 
   const crvDUSD = (await ethers.getContractAt(
-    "ERC20",
+    "@openzeppelin/contracts/token/ERC20/ERC20.sol:ERC20",
     CRV_DUSD_TOKEN_ADDRESS
   )) as ERC20;
 
   const crvFRAX = (await ethers.getContractAt(
-    "ERC20",
+    "@openzeppelin/contracts/token/ERC20/ERC20.sol:ERC20",
     CRV_FRAX_TOKEN_ADDRESS
   )) as ERC20;
 
   const crvUSDN = (await ethers.getContractAt(
-    "ERC20",
+    "@openzeppelin/contracts/token/ERC20/ERC20.sol:ERC20",
     CRV_USDN_TOKEN_ADDRESS
   )) as ERC20;
 
   const crvUST = (await ethers.getContractAt(
-    "ERC20",
+    "@openzeppelin/contracts/token/ERC20/ERC20.sol:ERC20",
     CRV_UST_TOKEN_ADDRESS
   )) as ERC20;
 

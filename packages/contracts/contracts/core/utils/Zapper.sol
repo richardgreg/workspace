@@ -123,7 +123,7 @@ contract Zapper {
       uint256 balanceBefore = IERC20(threeCrv).balanceOf(address(this));
       Curve3Pool(curveBasepoolAddress(_popcornPool)).add_liquidity(amounts, 0);
       uint256 balanceAfter = IERC20(threeCrv).balanceOf(address(this));
-      uint256 threeCrvLPTokens = balanceAfter.sub(balanceBefore);
+      uint256 threeCrvLPTokens = balanceAfter - balanceBefore;
       IERC20(threeCrv).safeIncreaseAllowance(
         curveMetapoolAddress(_popcornPool),
         threeCrvLPTokens
@@ -174,7 +174,7 @@ contract Zapper {
         0
       );
       uint256 balanceAfter = IERC20(withdrawalToken).balanceOf(address(this));
-      withdrawal = balanceAfter.sub(balanceBefore);
+      withdrawal = balanceAfter - balanceBefore;
     }
     IERC20(withdrawalToken).safeTransfer(msg.sender, withdrawal);
     emit ZapOut(msg.sender, withdrawalToken, amount, withdrawal);
