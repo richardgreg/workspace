@@ -3,7 +3,7 @@
 pragma solidity ^0.7.0;
 
 import "@chainlink/contracts/src/v0.7/dev/VRFConsumerBase.sol";
-import "../interfaces/random_number_consumer/IRandomNumberConsumer.sol";
+import "../../interfaces/random_number_consumer/IRandomNumberConsumer.sol";
 
 contract RandomNumberConsumer is VRFConsumerBase {
   /* ========== STATE VARIABLES ========== */
