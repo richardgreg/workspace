@@ -2,7 +2,7 @@
 
 pragma solidity ^0.8.0;
 
-import "../interfaces/IACLRegistry.sol";
+import "../../interfaces/interfaces/IACLRegistry.sol";
 
 /**
  * @dev Contract module that allows children to implement role-based access

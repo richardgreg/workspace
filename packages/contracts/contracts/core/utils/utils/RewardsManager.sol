@@ -8,14 +8,14 @@ import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
 import "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol";
 import "./KeeperIncentive.sol";
-import "../interfaces/IRegion.sol";
-import "../interfaces/IStaking.sol";
-import "../interfaces/ITreasury.sol";
-import "../interfaces/IInsurance.sol";
-import "../interfaces/IBeneficiaryVaults.sol";
-import "../interfaces/IRewardsManager.sol";
-import "../interfaces/IACLRegistry.sol";
-import "../interfaces/IContractRegistry.sol";
+import "../../interfaces/interfaces/IRegion.sol";
+import "../../interfaces/interfaces/IStaking.sol";
+import "../../interfaces/interfaces/ITreasury.sol";
+import "../../interfaces/interfaces/IInsurance.sol";
+import "../../interfaces/interfaces/IBeneficiaryVaults.sol";
+import "../../interfaces/interfaces/IRewardsManager.sol";
+import "../../interfaces/interfaces/IACLRegistry.sol";
+import "../../interfaces/interfaces/IContractRegistry.sol";
 
 /**
  * @title Popcorn Rewards Manager

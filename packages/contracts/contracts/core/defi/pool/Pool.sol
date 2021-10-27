@@ -8,8 +8,8 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
 import "./AffiliateToken.sol";
 import "../../interfaces/erc20_metadata/IERC20Metadata.sol";
-import "../../interfaces/IACLRegistry.sol";
-import "../../interfaces/IContractRegistry.sol";
+import "../../interfaces/interfaces/IACLRegistry.sol";
+import "../../interfaces/interfaces/IContractRegistry.sol";
 
 contract Pool is AffiliateToken, ReentrancyGuard, Pausable {
   using SafeMath for uint256;

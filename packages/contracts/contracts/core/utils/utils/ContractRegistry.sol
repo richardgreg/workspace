@@ -2,8 +2,8 @@
 
 pragma solidity ^0.8.0;
 
-import "../interfaces/IACLRegistry.sol";
-import "../interfaces/IContractRegistry.sol";
+import "../../interfaces/interfaces/IACLRegistry.sol";
+import "../../interfaces/interfaces/IContractRegistry.sol";
 
 /**
  * @dev This Contract holds reference to all our contracts. Every contract A that needs to interact with another contract B calls this contract

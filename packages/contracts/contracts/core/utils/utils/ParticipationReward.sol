@@ -2,8 +2,8 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
-import "../interfaces/IACLRegistry.sol";
-import "../interfaces/IContractRegistry.sol";
+import "../../interfaces/interfaces/IACLRegistry.sol";
+import "../../interfaces/interfaces/IContractRegistry.sol";
 
 contract ParticipationReward is ReentrancyGuard {
   using SafeERC20 for IERC20;

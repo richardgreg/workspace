@@ -2,14 +2,14 @@ pragma solidity ^0.8.0;
 pragma experimental ABIEncoderV2;
 
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
-import "../interfaces/IStaking.sol";
-import "../interfaces/IBeneficiaryRegistry.sol";
-import "../interfaces/IBeneficiaryVaults.sol";
+import "../interfaces/interfaces/IStaking.sol";
+import "../interfaces/interfaces/IBeneficiaryRegistry.sol";
+import "../interfaces/interfaces/IBeneficiaryVaults.sol";
 import "../interfaces/random_number_consumer/IRandomNumberConsumer.sol";
-import "../interfaces/IRegion.sol";
-import "../interfaces/IACLRegistry.sol";
-import "../utils/ParticipationReward.sol";
-import "../interfaces/IContractRegistry.sol";
+import "../interfaces/interfaces/IRegion.sol";
+import "../interfaces/interfaces/IACLRegistry.sol";
+import "../utils/utils/ParticipationReward.sol";
+import "../interfaces/interfaces/IContractRegistry.sol";
 
 contract GrantElections {
   using SafeERC20 for IERC20;

@@ -5,11 +5,11 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/utils/math/Math.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
-import "../interfaces/IStaking.sol";
-import "../interfaces/IRewardsManager.sol";
-import "../interfaces/IRewardsEscrow.sol";
-import "../interfaces/IACLRegistry.sol";
-import "../interfaces/IContractRegistry.sol";
+import "../interfaces/interfaces/IStaking.sol";
+import "../interfaces/interfaces/IRewardsManager.sol";
+import "../interfaces/interfaces/IRewardsEscrow.sol";
+import "../interfaces/interfaces/IACLRegistry.sol";
+import "../interfaces/interfaces/IContractRegistry.sol";
 
 contract Staking is IStaking, ReentrancyGuard {
   using SafeERC20 for IERC20;

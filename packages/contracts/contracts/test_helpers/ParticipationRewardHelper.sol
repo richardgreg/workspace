@@ -2,7 +2,7 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
-import "../core/utils/ParticipationReward.sol";
+import "../core/utils/utils/ParticipationReward.sol";
 
 contract ParticipationRewardHelper {
   using SafeERC20 for IERC20;
