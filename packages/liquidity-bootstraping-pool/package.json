@@ -1,0 +1,41 @@
+{
+  "name": "@popcorn/liquidity-bootstraping-pool",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "next",
+    "build": "yarn next build",
+    "export": "yarn next export",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@headlessui/react": "^1.0.0",
+    "@material-ui/core": "^4.11.2",
+    "@popcorn/ui": "^1.0.0",
+    "autoprefixer": "^10.2.5",
+    "cross-env": "7.0.2",
+    "dotenv": "^8.2.0",
+    "ethers": "^5.0.24",
+    "next": "latest",
+    "postcss": "^8.2.8",
+    "rc-slider": "^9.7.1",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-feather": "^2.0.9",
+    "react-gtm-module": "^2.0.11",
+    "styled-components": "^5.2.1",
+    "tailwindcss": "^2.0.4"
+  },
+  "devDependencies": {
+    "@svgr/webpack": "^5.5.0",
+    "@testing-library/jest-dom": "^5.11.0",
+    "@testing-library/react": "^10.4.3",
+    "@types/howler": "^2.2.1",
+    "@types/node": "^14.0.14",
+    "@types/react": "^16.9.41",
+    "@types/react-dom": "16.9.8",
+    "nodemon": "^1.19.0",
+    "path": "0.12.7",
+    "ts-node": "8.10.2"
+  },
+  "license": "MIT"
+}
