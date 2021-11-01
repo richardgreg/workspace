@@ -19236,6 +19236,11 @@ rc@^1.0.1, rc@^1.1.6, rc@^1.2.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
+react-circular-progressbar@1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/react-circular-progressbar/-/react-circular-progressbar-1.2.1.tgz#76843292e310683c5981480069ed6b4bbf1d96f9"
+  integrity sha512-vfxCdyveCMbpKrfs+vdLqS2a4hv/h5DL1katSVVip9LVDRNtQtrNvxiMVZDPrkZPDQREBubyFZZ7basNhXWK+A==
+
 react-colorful@^5.1.2:
   version "5.4.0"
   resolved "https://registry.yarnpkg.com/react-colorful/-/react-colorful-5.4.0.tgz#e05e602469f9768234f29c1bad9ec1f4e86145a2"

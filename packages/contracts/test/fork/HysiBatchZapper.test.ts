@@ -104,22 +104,18 @@ const CURVE_FACTORY_METAPOOL_DEPOSIT_ZAP_ADDRESS =
 
 const componentMap: ComponentMap = {
   [YDUSD_TOKEN_ADDRESS]: {
-    name: "yDUSD",
     metaPool: undefined,
     yPool: undefined,
   },
   [YFRAX_TOKEN_ADDRESS]: {
-    name: "yFRAX",
     metaPool: undefined,
     yPool: undefined,
   },
   [YUSDN_TOKEN_ADDRESS]: {
-    name: "yUSDN",
     metaPool: undefined,
     yPool: undefined,
   },
   [YUST_TOKEN_ADDRESS]: {
-    name: "yUST",
     metaPool: undefined,
     yPool: undefined,
   },

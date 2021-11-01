@@ -39,5 +39,4 @@ interface CurveMetapool {
 }
 
 interface ThreeCrv is IERC20 {}
-
 interface CrvLPToken is IERC20 {}

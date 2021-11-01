@@ -6,20 +6,32 @@ import {
 } from '@web3-react/injected-connector';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import {
+  BasicIssuanceModule,
+  BasicIssuanceModule__factory,
   BeneficiaryGovernance,
   BeneficiaryGovernance__factory,
   BeneficiaryRegistry,
   BeneficiaryRegistry__factory,
+  Curve3Pool,
+  Curve3Pool__factory,
+  CurveMetapool,
+  CurveMetapool__factory,
   ERC20,
   ERC20__factory,
   GrantElections,
   GrantElections__factory,
+  HysiBatchInteraction,
+  HysiBatchInteraction__factory,
+  ISetToken,
+  ISetToken__factory,
   RewardsManager,
   RewardsManager__factory,
   Staking,
   Staking__factory,
   UniswapV2Router02,
   UniswapV2Router02__factory,
+  YearnVault,
+  YearnVault__factory,
 } from '../../../contracts/typechain';
 import { setSingleActionModal } from '../actions';
 import { store } from '../store';
@@ -34,11 +46,28 @@ export interface Contracts {
   uniswap: UniswapV2Router02;
   threeCrv: ERC20;
   beneficiaryGovernance: BeneficiaryGovernance;
+  hysi: ISetToken;
+  batchHysi: HysiBatchInteraction;
+}
+
+export interface hysiDependencyContracts {
+  basicIssuanceModule: BasicIssuanceModule;
+  yDUSD: YearnVault;
+  yFRAX: YearnVault;
+  yUSDN: YearnVault;
+  yUST: YearnVault;
+  dusdMetapool: CurveMetapool;
+  fraxMetapool: CurveMetapool;
+  usdnMetapool: CurveMetapool;
+  ustMetapool: CurveMetapool;
+  triPool: Curve3Pool;
 }
 
 interface ContractsContext {
   contracts: Contracts;
+  hysiDependencyContracts: hysiDependencyContracts;
   setContracts: React.Dispatch<Contracts>;
+  setHysiDependencyContracts: React.Dispatch<hysiDependencyContracts>;
 }
 
 export const ContractsContext = createContext<ContractsContext>(null);
@@ -77,6 +106,9 @@ export default function ContractsWrapper({
     error,
   } = context;
   const [contracts, setContracts] = useState<Contracts>();
+  const [hysiDependencyContracts, setHysiDependencyContracts] =
+    useState<hysiDependencyContracts>();
+
   const { dispatch } = useContext(store);
 
   useEffect(() => {
@@ -130,6 +162,38 @@ export default function ContractsWrapper({
         process.env.ADDR_BENEFICIARY_GOVERNANCE,
         library,
       ),
+      hysi: ISetToken__factory.connect(process.env.ADDR_HYSI, library),
+      batchHysi: HysiBatchInteraction__factory.connect(
+        process.env.ADDR_BATCH_HYSI,
+        library,
+      ),
+    });
+    setHysiDependencyContracts({
+      basicIssuanceModule: BasicIssuanceModule__factory.connect(
+        process.env.ADDR_BASIC_ISSUANCE_MODULE,
+        library,
+      ),
+      yDUSD: YearnVault__factory.connect(process.env.ADDR_YDUSD, library),
+      yFRAX: YearnVault__factory.connect(process.env.ADDR_YFRAX, library),
+      yUSDN: YearnVault__factory.connect(process.env.ADDR_YUSDN, library),
+      yUST: YearnVault__factory.connect(process.env.ADDR_YUST, library),
+      dusdMetapool: CurveMetapool__factory.connect(
+        process.env.ADDR_DUSD_METAPOOL,
+        library,
+      ),
+      fraxMetapool: CurveMetapool__factory.connect(
+        process.env.ADDR_FRAX_METAPOOL,
+        library,
+      ),
+      usdnMetapool: CurveMetapool__factory.connect(
+        process.env.ADDR_USDN_METAPOOL,
+        library,
+      ),
+      ustMetapool: CurveMetapool__factory.connect(
+        process.env.ADDR_UST_METAPOOL,
+        library,
+      ),
+      triPool: Curve3Pool__factory.connect(process.env.ADDR_TRI_POOL, library),
     });
   }, [library, active]);
 
@@ -137,7 +201,9 @@ export default function ContractsWrapper({
     <ContractsContext.Provider
       value={{
         contracts,
+        hysiDependencyContracts,
         setContracts,
+        setHysiDependencyContracts,
       }}
     >
       {children}
