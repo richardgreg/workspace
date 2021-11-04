@@ -49,7 +49,7 @@ const IndexPage = () => {
         </header>
         <section className="">
           <div
-            className="bg-upper-pattern flex-shrink-0 flex-grow-0 w-screen h-auto"
+            className="bg-upper-pattern flex-shrink-1 flex-grow-1 w-screen h-auto"
             style={{
               backgroundRepeat: 'no-repeat',
               backgroundSize: 'cover',
@@ -59,7 +59,7 @@ const IndexPage = () => {
             <div className="w-10/12 mx-auto flex flex-col lg:flex-row justify-between pb-10 items-center">
               <div className="w-full pt-100">
                 <div>
-                  <h1 className="text-center font-normal text-6xl leading-snug mb-2 font-landing">
+                  <h1 className="text-center font-normal text-6xl leading-snug mb-2 font-landing -mx-8">
                     POPCORN
                   </h1>
                   <h1 className="text-center font-normal text-6xl leading-snug mb-2 font-landing">
@@ -134,9 +134,9 @@ const IndexPage = () => {
             }}
           >
             <div className="w-9/12 mx-auto flex flex-col lg:flex-row justify-between  items-center">
-              <div className="w-full pt-24 grid grid-cols-2 ">
+              <div className="w-full pt-12 grid grid-cols-2 ">
                 <div className="mr-8">
-                  <p className="font-bold text-2xl mb-3">About Popcorn</p>
+                  <p className="font-bold text-4xl mb-3">About Popcorn</p>
                   <p className="text-md">
                     Radicle is the first open-source, community-led, and
                     self-sustaining network for software collaboration. With
@@ -149,7 +149,7 @@ const IndexPage = () => {
                   </p>
                 </div>
                 <div className="ml-8">
-                  <p className="font-bold text-2xl mb-3">The POP Token</p>
+                  <p className="font-bold text-4xl mb-3">The POP Token</p>
                   <p className="text-md">
                     The POP token (POP) is designed as a governance token that
                     enables a number of Ethereum-based features as well as the
@@ -165,7 +165,7 @@ const IndexPage = () => {
               </div>
             </div>
             <div className="w-6/12 mx-auto mt-24">
-              <p className="font-bold text-2xl mb-3 mx-auto text-center">
+              <p className="font-bold text-4xl mb-3 mx-auto text-center">
                 How to participate?
               </p>
               <p className="text-md mx-auto text-center">
@@ -180,17 +180,17 @@ const IndexPage = () => {
 
             <div
               className="w-8/12 mx-auto mt-12 bg-gray-200 grid grid-cols-5 rounded-2xl"
-              style={{ height: 290 }}
+              style={{ height: 280 }}
             >
-              <div className="col-span-1">
-                <img
-                  className="px-8"
-                  style={{ paddingTop: 104 }}
-                  src="images/blueCat.png"
-                ></img>
+              <div className="col-span-1 flex items-stretch">
+                <img className="self-end px-8" src="images/blueCat.png"></img>
               </div>
               <div className="col-span-3  my-auto">
-                <img src="/images/quotationMark.png" className="mb-4"></img>
+                <img
+                  src="/images/quotationMark.png"
+                  className="mb-4"
+                  style={{ width: '71.85', height: '48' }}
+                ></img>
                 <p className="text-md mx-auto font-bold">
                   The Balancer LBP is not like a regular Balancer pool. The
                   price will start high to disincentivize bots, front-running
@@ -199,12 +199,9 @@ const IndexPage = () => {
                   assets. Only participate if you know what you are doing.
                 </p>
               </div>
-              <div className="col-span-1">
-                <img
-                  className="px-8"
-                  style={{ paddingTop: 153 }}
-                  src="images/orangeCat.png"
-                ></img>
+
+              <div className="col-span-1 flex items-stretch">
+                <img className="self-end px-8" src="images/orangeCat.png"></img>
               </div>
             </div>
           </div>

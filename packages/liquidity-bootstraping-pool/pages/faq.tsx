@@ -104,8 +104,8 @@ const IndexPage = () => {
               <img src="images/faqpopcorn.svg"></img>
             </div>
             <div className="col-span-2">
-              <div className="w-full mx-auto my-10">
-                <p className="font-bold text-2xl mb-3 mx-auto ">
+              <div className="w-full mx-auto my-14">
+                <p className="font-bold text-3xl mb-5 mx-auto ">
                   What is the purpose of this event?
                 </p>
                 <p className="text-md mx-auto ">
@@ -127,8 +127,8 @@ const IndexPage = () => {
                 </ul>
               </div>
 
-              <div className="w-full mx-auto my-10">
-                <p className="font-bold text-2xl mb-3 mx-auto ">
+              <div className="w-full mx-auto my-14">
+                <p className="font-bold text-3xl mb-5 mx-auto ">
                   What is a Liquidity Bootstrapping Pool?
                 </p>
                 <p className="text-md mx-auto ">
@@ -140,8 +140,8 @@ const IndexPage = () => {
                 </p>
               </div>
 
-              <div className="w-full mx-auto my-10">
-                <p className="font-bold text-2xl mb-3 mx-auto ">
+              <div className="w-full mx-auto my-14">
+                <p className="font-bold text-3xl mb-5 mx-auto ">
                   What is Balancer and How Does It Work?
                 </p>
                 <p className="text-md mx-auto ">
@@ -176,8 +176,8 @@ const IndexPage = () => {
                 </p>
               </div>
 
-              <div className="w-full mx-auto my-10">
-                <p className="font-bold text-2xl mb-3 mx-auto ">
+              <div className="w-full mx-auto my-14">
+                <p className="font-bold text-3xl mb-5 mx-auto ">
                   Why are we using an LBP?
                 </p>
                 <p className="text-md mx-auto ">
@@ -197,8 +197,8 @@ const IndexPage = () => {
                 </ul>
               </div>
 
-              <div className="w-full mx-auto my-10">
-                <p className="font-bold text-2xl mb-3 mx-auto ">
+              <div className="w-full mx-auto my-14">
+                <p className="font-bold text-3xl mb-5 mx-auto ">
                   Where will the proceeds go?
                 </p>
                 <p className="text-md mx-auto ">
@@ -214,8 +214,8 @@ const IndexPage = () => {
                 </p>
               </div>
 
-              <div className="w-full mx-auto my-10">
-                <p className="font-bold text-2xl mb-3 mx-auto ">
+              <div className="w-full mx-auto my-14">
+                <p className="font-bold text-3xl mb-5 mx-auto ">
                   What if you want to be part of the community but do not have
                   the capital or technical expertise to participate in the LBP?
                 </p>
@@ -226,8 +226,8 @@ const IndexPage = () => {
                 </p>
               </div>
 
-              <div className="w-full mx-auto my-10">
-                <p className="font-bold text-2xl mb-3 mx-auto ">
+              <div className="w-full mx-auto my-14">
+                <p className="font-bold text-3xl mb-5 mx-auto ">
                   If you are going to offer liquidity mining in the future, then
                   why should I buy a token now?
                 </p>
@@ -240,8 +240,8 @@ const IndexPage = () => {
                 </p>
               </div>
 
-              <div className="w-full mx-auto my-10">
-                <p className="font-bold text-2xl mb-3 mx-auto ">
+              <div className="w-full mx-auto my-14">
+                <p className="font-bold text-3xl mb-5 mx-auto ">
                   What is the total supply of $POP?
                 </p>
                 <p className="text-md mx-auto ">
@@ -249,8 +249,8 @@ const IndexPage = () => {
                 </p>
               </div>
 
-              <div className="w-full mx-auto my-10">
-                <p className="font-bold text-2xl mb-3 mx-auto ">
+              <div className="w-full mx-auto my-14">
+                <p className="font-bold text-3xl mb-5 mx-auto ">
                   How many tokens are in circulation?
                 </p>
                 <p className="text-md mx-auto ">
@@ -259,8 +259,8 @@ const IndexPage = () => {
                 </p>
               </div>
 
-              <div className="w-full mx-auto my-10">
-                <p className="font-bold text-2xl mb-3 mx-auto ">
+              <div className="w-full mx-auto my-14">
+                <p className="font-bold text-3xl mb-5 mx-auto ">
                   What are the specifications for the LBP?
                 </p>
                 <ul className="list-inside list-disc">
@@ -278,8 +278,8 @@ const IndexPage = () => {
                 </ul>
               </div>
 
-              <div className="w-full mx-auto my-10">
-                <p className="font-bold text-2xl mb-3 mx-auto ">
+              <div className="w-full mx-auto my-14">
+                <p className="font-bold text-3xl mb-5 mx-auto ">
                   What tokens does the pool accept?
                 </p>
                 <p className="text-md mx-auto ">
@@ -288,8 +288,8 @@ const IndexPage = () => {
                 </p>
               </div>
 
-              <div className="w-full mx-auto my-10">
-                <p className="font-bold text-2xl mb-3 mx-auto ">
+              <div className="w-full mx-auto my-14">
+                <p className="font-bold text-3xl mb-5 mx-auto ">
                   How was the initial price calculated?
                 </p>
                 <p className="text-md mx-auto ">
@@ -302,8 +302,8 @@ const IndexPage = () => {
                 </p>
               </div>
 
-              <div className="w-full mx-auto my-10">
-                <p className="font-bold text-2xl mb-3 mx-auto ">
+              <div className="w-full mx-auto my-14">
+                <p className="font-bold text-3xl mb-5 mx-auto ">
                   How is the last price calculated?
                 </p>
                 <p className="text-md mx-auto ">
@@ -323,8 +323,8 @@ const IndexPage = () => {
                 </p>
               </div>
 
-              <div className="w-full mx-auto my-10">
-                <p className="font-bold text-2xl mb-3 mx-auto ">
+              <div className="w-full mx-auto my-14">
+                <p className="font-bold text-3xl mb-5 mx-auto ">
                   Will the price weights change over time?
                 </p>
                 <p className="text-md mx-auto ">
@@ -335,8 +335,8 @@ const IndexPage = () => {
                 <img src="images/lbpweights.png" />
               </div>
 
-              <div className="w-full mx-auto my-10">
-                <p className="font-bold text-2xl mb-3 mx-auto ">
+              <div className="w-full mx-auto my-14">
+                <p className="font-bold text-3xl mb-5 mx-auto ">
                   Is there a minimum or maximum to how much I can contribute?
                 </p>
                 <p className="text-md mx-auto ">
@@ -346,8 +346,8 @@ const IndexPage = () => {
                 </p>
               </div>
 
-              <div className="w-full mx-auto my-10">
-                <p className="font-bold text-2xl mb-3 mx-auto ">
+              <div className="w-full mx-auto my-14">
+                <p className="font-bold text-3xl mb-5 mx-auto ">
                   If there is no maximum, can someone buy all the tokens?
                 </p>
                 <p className="text-md mx-auto ">
@@ -363,8 +363,8 @@ const IndexPage = () => {
                 </p>
               </div>
 
-              <div className="w-full mx-auto my-10">
-                <p className="font-bold text-2xl mb-3 mx-auto ">
+              <div className="w-full mx-auto my-14">
+                <p className="font-bold text-3xl mb-5 mx-auto ">
                   Who founded Popcorn?
                 </p>
                 <p className="text-md mx-auto ">
@@ -382,8 +382,8 @@ const IndexPage = () => {
                 </p>
               </div>
 
-              <div className="w-full mx-auto my-10">
-                <p className="font-bold text-2xl mb-3 mx-auto ">
+              <div className="w-full mx-auto my-14">
+                <p className="font-bold text-3xl mb-5 mx-auto ">
                   Who are the early contributors to Popcorn?
                 </p>
                 <p className="text-md mx-auto ">
@@ -392,15 +392,15 @@ const IndexPage = () => {
                 </p>
               </div>
 
-              <div className="w-full mx-auto my-10">
-                <p className="font-bold text-2xl mb-3 mx-auto ">
+              <div className="w-full mx-auto my-14">
+                <p className="font-bold text-3xl mb-5 mx-auto ">
                   How is $POP allocated?
                 </p>
                 <img src="images/popallocation.png" />
               </div>
 
-              <div className="w-full mx-auto my-10">
-                <p className="font-bold text-2xl mb-3 mx-auto ">
+              <div className="w-full mx-auto my-14">
+                <p className="font-bold text-3xl mb-5 mx-auto ">
                   How much did Popcorn raise in previous rounds?
                 </p>
                 <p className="text-md mx-auto ">
@@ -414,8 +414,8 @@ const IndexPage = () => {
                 </ul>
               </div>
 
-              <div className="w-full mx-auto my-10">
-                <p className="font-bold text-2xl mb-3 mx-auto ">
+              <div className="w-full mx-auto my-14">
+                <p className="font-bold text-3xl mb-5 mx-auto ">
                   What is the token allocation and release schedule for
                   supporters and team?
                 </p>
@@ -445,8 +445,8 @@ const IndexPage = () => {
                 </ul>
               </div>
 
-              <div className="w-full mx-auto my-10">
-                <p className="font-bold text-2xl mb-3 mx-auto ">
+              <div className="w-full mx-auto my-14">
+                <p className="font-bold text-3xl mb-5 mx-auto ">
                   Where can I read more about other Liquidity Bootstrapping
                   pools?
                 </p>
@@ -493,7 +493,7 @@ const IndexPage = () => {
         <section className="grid">
           <div className="flex flex-row mb-10 justify-self-center">
             <p className="mx-4">
-              <a href="popcorn.network">popcorn.network</a>
+              <a href="https://popcorn.network">popcorn.network</a>
             </p>
             <p className="mx-4">•</p>
             <p className="mx-4">
