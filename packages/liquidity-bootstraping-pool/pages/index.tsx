@@ -1,8 +1,6 @@
-import { Rocket } from '@popcorn/ui/components/Rocket';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
-import { Facebook, GitHub, Menu, Twitter, X } from 'react-feather';
 
 const IndexPage = () => {
   const router = useRouter();

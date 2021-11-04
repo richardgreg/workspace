@@ -1,4 +1,3 @@
-import { GlobalLinearProgress } from 'containers/GlobalLinearProgress';
 import Head from 'next/head';
 import Router from 'next/router';
 import React, { useEffect, useState } from 'react';
@@ -89,7 +88,6 @@ export default function MyApp(props) {
       </Head>
 
       <ThemeProvider theme={theme}>
-        <GlobalLinearProgress visible={loading} />
         <Component {...pageProps} />
       </ThemeProvider>
     </React.Fragment>
