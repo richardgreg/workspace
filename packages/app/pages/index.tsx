@@ -9,7 +9,7 @@ import { Facebook, GitHub, Menu, Twitter, X } from 'react-feather';
 
 const IndexPage = () => {
   const router = useRouter();
-  const endDate = 1637931600000; //Nov 26, 14.00.00 CET
+  const endDate = 1638176340000; //Nov 29, 08.00.00 UTC
   const [countdown, setCountdown] = useState<number[]>([]);
   const [countdownActive, disableCountdown] = useState<boolean>(true);
   const [menuVisible, toggleMenu] = useState<boolean>(false);
