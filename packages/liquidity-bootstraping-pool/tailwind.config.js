@@ -40,12 +40,9 @@ module.exports = {
         ctaYellowLight: '#FFD324',
       },
       backgroundImage: (theme) => ({
-        'hero-pattern': "url('/images/bgHero.svg')",
-        'impact-pattern': "url('/images/bgImpact.svg')",
-        'countdown-pattern': "url('/images/bgCountdown.svg')",
-        'popcorn1-pattern': "url('/images/bgPopcorn1.svg')",
-        'popcorn2-pattern': "url('/images/bgPopcorn2.svg')",
-        'popcorn3-pattern': "url('/images/bgPopcorn3.svg')",
+        'upper-pattern': "url('/images/upper.svg')",
+        'lower-pattern': "url('/images/lower.svg')",
+        'upper-faq-pattern': "url('/images/bgUpperFaq.svg')",
       }),
       fontFamily: {
         landing: ['Avenir Next LT Pro', 'sans-serif'],
