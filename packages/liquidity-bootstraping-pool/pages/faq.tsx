@@ -13,7 +13,7 @@ const IndexPage = () => {
 
   return (
     <div className="font-landing">
-      <div className="hidden lg:flex flex-col w-full h-full">
+      <div className="flex flex-col w-full h-full">
         <header className="w-full bg-primary">
           <nav className="w-10/12 mx-auto pt-12 pb-4 border-b border-primaryLight flex flex-row items-center justify-between">
             <div>
@@ -47,51 +47,58 @@ const IndexPage = () => {
             </div>
           </nav>
         </header>
-        <section className="">
-          <div
-            className="bg-upper-faq-pattern flex-shrink-0 flex-grow-0 w-screen h-auto"
-            style={{
-              backgroundRepeat: 'no-repeat',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-            }}
-          >
-            <div className="w-10/12 mx-auto flex flex-col lg:flex-row justify-between pb-20 items-center">
-              <div className="w-full pt-32">
-                <div>
-                  <h1 className="text-center font-normal text-6xl leading-snug mb-2 font-landing">
-                    Liquidity Bootstrapping FAQ
-                  </h1>
-                  <p className="w-3/5 mx-auto text-center text-lg font-landing mb-10">
-                    Popcorn Liquidity Bootstrapping Event Details:
-                  </p>
 
-                  <p className="w-3/5 mx-auto text-center text-lg font-landing font-semibold">
-                    $POP Tokens Offered: 5,000,000
-                  </p>
-                  <p className="w-3/5 mx-auto text-center text-lg font-landing font-semibold mb-10">
-                    When? November 26, 2021 16:30 UTC till November 28, 2021
-                    ~16:30pm UTC.
-                  </p>
-                  <p className="w-3/5 mx-auto text-center text-lg font-landing mb-10">
-                    The liquidity bootstrapping event will take place on
-                    Balancer, a decentralized exchange where the $POP token will
-                    be offered in a Liquidity Bootstrapping Pool. All proceeds
-                    will go to the Popcorn Treasury, a smart contract entirely
-                    controlled by Popcorn token holders. The intention is to
-                    bootstrap liquidity on decentralized exchanges through a
-                    fair launch mechanism.
-                  </p>
+        <section>
+          <div className="relative">
+            <div className="absolute inset-x-0 bottom-0 h-1/2" />
+            <div className="w-full h-auto">
+              <div className="relative">
+                <div className="absolute inset-0">
+                  <img
+                    className="h-full w-full object-cover"
+                    src="images/bgUpperFaq.svg"
+                    alt="Cats playing with popcorn"
+                  />
+                </div>
+                <div className="relative w-10/12 mx-auto flex flex-col lg:flex-row justify-between pb-20 items-center">
+                  <div className="w-full pt-32">
+                    <div>
+                      <h1 className="text-center font-normal text-6xl leading-snug mb-2 font-landing">
+                        Liquidity Bootstrapping FAQ
+                      </h1>
+                      <p className="w-3/5 mx-auto text-center text-lg font-landing mb-10">
+                        Popcorn Liquidity Bootstrapping Event Details:
+                      </p>
 
-                  <p className="w-3/5 mx-auto text-center text-lg font-landing mb-10">
-                    The Popcorn Team will tweet out the contract address on the
-                    official Popcorn Twitter account and the Popcorn blog, and
-                    you will be able to track the status of the LBP event on
-                    lbp.popcorn.network. Before proceeding, verify that the
-                    contract address comes from an official source and that the
-                    Balancer address is the same as the contract address —
-                    everything else should be considered a scam.
-                  </p>
+                      <p className="w-3/5 mx-auto text-center text-lg font-landing font-semibold">
+                        $POP Tokens Offered: 5,000,000
+                      </p>
+                      <p className="w-3/5 mx-auto text-center text-lg font-landing font-semibold mb-10">
+                        When? November 26, 2021 16:30 UTC till November 28, 2021
+                        ~16:30pm UTC.
+                      </p>
+                      <p className="w-3/5 mx-auto text-center text-lg font-landing mb-10">
+                        The liquidity bootstrapping event will take place on
+                        Balancer, a decentralized exchange where the $POP token
+                        will be offered in a Liquidity Bootstrapping Pool. All
+                        proceeds will go to the Popcorn Treasury, a smart
+                        contract entirely controlled by Popcorn token holders.
+                        The intention is to bootstrap liquidity on decentralized
+                        exchanges through a fair launch mechanism.
+                      </p>
+
+                      <p className="w-3/5 mx-auto text-center text-lg font-landing mb-10">
+                        The Popcorn Team will tweet out the contract address on
+                        the official Popcorn Twitter account and the Popcorn
+                        blog, and you will be able to track the status of the
+                        LBP event on lbp.popcorn.network. Before proceeding,
+                        verify that the contract address comes from an official
+                        source and that the Balancer address is the same as the
+                        contract address — everything else should be considered
+                        a scam.
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -490,6 +497,7 @@ const IndexPage = () => {
             </div>
           </div>
         </section>
+
         <section className="grid">
           <div className="flex flex-row mb-10 justify-self-center">
             <p className="mx-4">

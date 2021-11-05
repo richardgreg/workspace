@@ -40,6 +40,7 @@ module.exports = {
         ctaYellowLight: '#FFD324',
       },
       backgroundImage: (theme) => ({
+        'index-upper-pattern': "url('/images/bgLbpIndexUpper.svg')",
         'upper-pattern': "url('/images/upper.svg')",
         'lower-pattern': "url('/images/lower.svg')",
         'upper-faq-pattern': "url('/images/bgUpperFaq.svg')",
