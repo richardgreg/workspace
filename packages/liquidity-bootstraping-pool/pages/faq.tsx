@@ -56,48 +56,57 @@ const IndexPage = () => {
                 <div className="absolute inset-0">
                   <img
                     className="h-full w-full object-cover"
-                    src="images/bgUpperFaq.svg"
+                    src="images/bgFaqUpper.svg"
                     alt="Cats playing with popcorn"
                   />
                 </div>
-                <div className="relative w-10/12 mx-auto flex flex-col lg:flex-row justify-between pb-20 items-center">
-                  <div className="w-full pt-32">
-                    <div>
-                      <h1 className="text-center font-normal text-6xl leading-snug mb-2 font-landing">
-                        Liquidity Bootstrapping FAQ
-                      </h1>
-                      <p className="w-3/5 mx-auto text-center text-lg font-landing mb-10">
-                        Popcorn Liquidity Bootstrapping Event Details:
-                      </p>
+                <div className="flex flex-row">
+                  <div className="relative w-2/12  flex items-stretch">
+                    <img className="self-end" src="images/leftcatfaq.svg"></img>
+                  </div>
+                  <div className="relative w-8/12 mx-auto flex flex-col lg:flex-row justify-between pb-20 items-center">
+                    <div className="w-full pt-32">
+                      <div>
+                        <h1 className="text-center font-normal text-6xl leading-snug mb-2 font-landing">
+                          Liquidity Bootstrapping FAQ
+                        </h1>
+                        <p className="w-3/5 mx-auto text-center text-lg font-landing mb-10">
+                          Popcorn Liquidity Bootstrapping Event Details:
+                        </p>
 
-                      <p className="w-3/5 mx-auto text-center text-lg font-landing font-semibold">
-                        $POP Tokens Offered: 5,000,000
-                      </p>
-                      <p className="w-3/5 mx-auto text-center text-lg font-landing font-semibold mb-10">
-                        When? November 26, 2021 16:30 UTC till November 28, 2021
-                        ~16:30pm UTC.
-                      </p>
-                      <p className="w-3/5 mx-auto text-center text-lg font-landing mb-10">
-                        The liquidity bootstrapping event will take place on
-                        Balancer, a decentralized exchange where the $POP token
-                        will be offered in a Liquidity Bootstrapping Pool. All
-                        proceeds will go to the Popcorn Treasury, a smart
-                        contract entirely controlled by Popcorn token holders.
-                        The intention is to bootstrap liquidity on decentralized
-                        exchanges through a fair launch mechanism.
-                      </p>
+                        <p className="w-3/5 mx-auto text-center text-lg font-landing font-semibold">
+                          $POP Tokens Offered: 5,000,000
+                        </p>
+                        <p className="w-3/5 mx-auto text-center text-lg font-landing font-semibold mb-10">
+                          When? November 26, 2021 16:30 UTC till November 28,
+                          2021 ~16:30pm UTC.
+                        </p>
+                        <p className="w-3/5 mx-auto text-center text-lg font-landing mb-10">
+                          The liquidity bootstrapping event will take place on
+                          Balancer, a decentralized exchange where the $POP
+                          token will be offered in a Liquidity Bootstrapping
+                          Pool. All proceeds will go to the Popcorn Treasury, a
+                          smart contract entirely controlled by Popcorn token
+                          holders. The intention is to bootstrap liquidity on
+                          decentralized exchanges through a fair launch
+                          mechanism.
+                        </p>
 
-                      <p className="w-3/5 mx-auto text-center text-lg font-landing mb-10">
-                        The Popcorn Team will tweet out the contract address on
-                        the official Popcorn Twitter account and the Popcorn
-                        blog, and you will be able to track the status of the
-                        LBP event on lbp.popcorn.network. Before proceeding,
-                        verify that the contract address comes from an official
-                        source and that the Balancer address is the same as the
-                        contract address — everything else should be considered
-                        a scam.
-                      </p>
+                        <p className="w-3/5 mx-auto text-center text-lg font-landing mb-10">
+                          The Popcorn Team will tweet out the contract address
+                          on the official Popcorn Twitter account and the
+                          Popcorn blog, and you will be able to track the status
+                          of the LBP event on lbp.popcorn.network. Before
+                          proceeding, verify that the contract address comes
+                          from an official source and that the Balancer address
+                          is the same as the contract address — everything else
+                          should be considered a scam.
+                        </p>
+                      </div>
                     </div>
+                  </div>
+                  <div className="relative w-2/12  flex items-stretch">
+                    <img className="self-end" src="images/rightcatfaq.svg"></img>
                   </div>
                 </div>
               </div>
