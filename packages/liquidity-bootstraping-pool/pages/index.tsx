@@ -639,24 +639,22 @@ const IndexPage = () => {
           </section>
 
           <section className="grid">
-            <div className="flex flex-row mb-10 justify-self-center">
-              <p className="mx-4">
-                <a href="https://popcorn.network">popcorn.network</a>
-              </p>
-              <p className="mx-4">•</p>
-              <p className="mx-4">
-                <a href="https://discord.gg/w9zeRTSZsq">popcorn.discord</a>
-              </p>
-              <p className="mx-4">•</p>
-              <p className="mx-4">popcorn.community</p>
-              <p className="mx-4">•</p>
-              <p className="mx-4">
-                <a href="https://twitter.com/Popcorn_DAO">
-                  @popcorn on twitter
-                </a>
-              </p>
-            </div>
-          </section>
+          <div className="flex flex-row mb-10 justify-self-center">
+            <p className="mx-4">
+              <a href="https://popcorn.network">popcorn.network</a>
+            </p>
+            <p className="mx-4">•</p>
+            <p className="mx-4">
+              <a href="https://discord.gg/w9zeRTSZsq">discord</a>
+            </p>
+            <p className="mx-4">•</p>
+            <p className="mx-4"><a href="https://forum.popcorn.network/">popcorn.community</a></p>
+            <p className="mx-4">•</p>
+            <p className="mx-4">
+              <a href="https://twitter.com/Popcorn_DAO">@popcorn on twitter</a>
+            </p>
+          </div>
+        </section>
         </div>
       </div>
     </div>

@@ -106,7 +106,10 @@ const IndexPage = () => {
                     </div>
                   </div>
                   <div className="relative w-2/12  flex items-stretch">
-                    <img className="self-end" src="images/rightcatfaq.svg"></img>
+                    <img
+                      className="self-end"
+                      src="images/rightcatfaq.svg"
+                    ></img>
                   </div>
                 </div>
               </div>
@@ -514,10 +517,12 @@ const IndexPage = () => {
             </p>
             <p className="mx-4">•</p>
             <p className="mx-4">
-              <a href="https://discord.gg/w9zeRTSZsq">popcorn.discord</a>
+              <a href="https://discord.gg/w9zeRTSZsq">discord</a>
             </p>
             <p className="mx-4">•</p>
-            <p className="mx-4">popcorn.community</p>
+            <p className="mx-4">
+              <a href="https://forum.popcorn.network/">popcorn.community</a>
+            </p>
             <p className="mx-4">•</p>
             <p className="mx-4">
               <a href="https://twitter.com/Popcorn_DAO">@popcorn on twitter</a>
