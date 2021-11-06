@@ -2,5 +2,5 @@
   package = "@netlify/plugin-nextjs"
 
 [build]
-  command = "next"
+  command = "yarn next"
   publish = "out"
