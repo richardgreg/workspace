@@ -21,7 +21,7 @@ export default function Tablet(): JSX.Element {
                         </a>
                       </Link>
                     </div>
-                    <div className="space-x-8">
+                    <div className="space-x-8 relative z-20">
                       <Link href="/guide" passHref>
                         <a
                           className="font-light text-xl hover:text-blue-600"

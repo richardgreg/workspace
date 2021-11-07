@@ -21,10 +21,10 @@ export default function Desktop(): JSX.Element {
                         </a>
                       </Link>
                     </div>
-                    <div className="space-x-8">
+                    <div className="space-x-8 relative z-20">
                       <Link href="/guide" passHref>
                         <a
-                          className="font-light text-2xl hover:text-blue-600"
+                          className="font-light text-2xl cursor-pointer hover:text-blue-600"
                           target="_window"
                         >
                           Step-by-Step Guide
@@ -32,7 +32,7 @@ export default function Desktop(): JSX.Element {
                       </Link>
                       <Link href="/faq" passHref>
                         <a
-                          className="font-light text-2xl hover:text-blue-600"
+                          className="font-light text-2xl cursor-pointer hover:text-blue-600"
                           target="_window"
                         >
                           Liquidity Bootstrapping FAQ

@@ -4,8 +4,8 @@ export default function LargeDesktop(): JSX.Element {
   return (
     <div className="hidden 2xl:flex flex-col w-full h-full font-landing">
       <div className="flex flex-col w-full h-full">
-      <header className="absolute w-full bg-primary top-20 z-10">
-      <nav className="w-1/2 mx-auto pb-4 flex flex-row items-center justify-between">
+        <header className="absolute w-full bg-primary top-20 z-20">
+          <nav className="w-1/2 mx-auto pb-4 flex flex-row items-center justify-between">
             <div>
               <Link href="/" passHref>
                 <a>
@@ -20,7 +20,7 @@ export default function LargeDesktop(): JSX.Element {
             <div className="space-x-8">
               <Link href="/guide" passHref>
                 <a
-                  className="font-light text-2xl hover:text-blue-600"
+                  className="font-light text-2xl cursor-pointer hover:text-blue-600"
                   target="_window"
                 >
                   Step-by-Step Guide
@@ -28,7 +28,7 @@ export default function LargeDesktop(): JSX.Element {
               </Link>
               <Link href="/faq" passHref>
                 <a
-                  className="font-light text-2xl hover:text-blue-600"
+                  className="font-light text-2xl cursor-pointer hover:text-blue-600"
                   target="_window"
                 >
                   Liquidity Bootstrapping FAQ
