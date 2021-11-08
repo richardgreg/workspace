@@ -21,7 +21,7 @@ export default function LargeDesktop(): JSX.Element {
               <div className="space-x-8">
                 <Link href="/guide" passHref>
                   <a
-                    className="font-light text-2xl hover:text-blue-600"
+                    className="font-light text-xl hover:text-blue-600"
                     target="_window"
                   >
                     Step-by-Step Guide
@@ -29,7 +29,7 @@ export default function LargeDesktop(): JSX.Element {
                 </Link>
                 <Link href="/faq" passHref>
                   <a
-                    className="font-medium text-2xl cursor-default"
+                    className="font-medium text-xl cursor-default"
                     target="_window"
                   >
                     Liquidity Bootstrapping FAQ
@@ -39,7 +39,7 @@ export default function LargeDesktop(): JSX.Element {
             </nav>
           </header>
           <img
-            className="w-full object-cover z-0 absolute -top-128"
+            className="w-full object-cover z-0 absolute -top-0"
             src="images/bgUpperFaq.svg"
             alt="Upper background"
           />
@@ -87,7 +87,7 @@ export default function LargeDesktop(): JSX.Element {
         </div>
       </section>
 
-      <section className="pt-128 mt-80">
+      <section className="pt-112 mt-80">
         <div className="grid grid-cols-4 relative">
           <div className="flex flex-row justify-start">
             <div className="flex flex-col justify-between w-2/3">

@@ -11,7 +11,7 @@ export default function Mobile({
   setMenu,
 }: MobileProps): JSX.Element {
   return (
-    <div className="w-full h-full lg:hidden xl:hidden 2xl:hidden">
+    <div className="w-full h-full md:hidden lg:hidden xl:hidden 2xl:hidden">
       {showMenu && (
         <div className="fixed bg-primaryLight border-b border-gray-500 z-10 mx-auto w-full flex flex-row justify-between px-8 py-8">
           <div className="flex flex-col space-y-4">

@@ -24,7 +24,7 @@ export default function Tablet(): JSX.Element {
                     <div className="space-x-8 relative z-20">
                       <Link href="/guide" passHref>
                         <a
-                          className="font-light text-xl hover:text-blue-600"
+                          className="font-light text-normal hover:text-blue-600"
                           target="_window"
                         >
                           Step-by-Step Guide
@@ -32,7 +32,7 @@ export default function Tablet(): JSX.Element {
                       </Link>
                       <Link href="/faq" passHref>
                         <a
-                          className="font-light text-xl hover:text-blue-600"
+                          className="font-light text-normal hover:text-blue-600"
                           target="_window"
                         >
                           Liquidity Bootstrapping FAQ
@@ -41,9 +41,10 @@ export default function Tablet(): JSX.Element {
                     </div>
                   </nav>
                 </header>
+                <div className="h-60" style={{backgroundColor: '#FDEAA7'}}></div>
                 <img
                   className="w-full object-cover z-0"
-                  src="images/bgFaqUpper.svg"
+                  src="images/bgLandingPageUpper.svg"
                   alt="Upper background"
                 />
                 <img
@@ -125,7 +126,7 @@ export default function Tablet(): JSX.Element {
         </section>
 
         <section>
-          <div className="w-9/12 mx-auto flex flex-row justify-between items-center mt-12">
+          <div className="w-9/12 mx-auto flex flex-row justify-between items-center mt-44">
             <div className="w-full pt-12 grid grid-cols-2 ">
               <div className="mr-8">
                 <p className="font-medium text-2xl mb-1">What is Popcorn?</p>
@@ -160,7 +161,7 @@ export default function Tablet(): JSX.Element {
           <div className="relative">
             <img
               src="images/bgLBPIndexLower.svg"
-              className="absolute w-full -top-52 z-0"
+              className="absolute w-full -top-28 z-0"
             ></img>
             <div className="absolute w-full mt-24">
               <div className="mx-auto w-full">
@@ -176,7 +177,7 @@ export default function Tablet(): JSX.Element {
                   token holders
                 </p>
               </div>
-              <div className="bg-gray-100 rounded-2xl flex flex-row w-8/12 mx-auto pt-8 mt-28 px-4">
+              <div className="bg-gray-100 rounded-2xl flex flex-row w-8/12 mx-auto pt-8 mt-28 px-4 mb-20">
                 <div className="w-2/12 relative">
                   <img
                     src="/images/blueCat.png"
@@ -211,7 +212,7 @@ export default function Tablet(): JSX.Element {
         </section>
 
         <section className="grid z-10 mt-128">
-          <div className="flex flex-row mb-10 justify-self-center pt-40 mt-114">
+          <div className="flex flex-row mb-10 justify-self-center pt-40 mt-10">
             <p className="mx-4">
               <a href="https://popcorn.network" target="_blank">
                 popcorn.network

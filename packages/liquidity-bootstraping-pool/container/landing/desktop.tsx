@@ -24,7 +24,7 @@ export default function Desktop(): JSX.Element {
                     <div className="space-x-8 relative z-20">
                       <Link href="/guide" passHref>
                         <a
-                          className="font-light text-2xl cursor-pointer hover:text-blue-600"
+                          className="font-light text-xl cursor-pointer hover:text-blue-600"
                           target="_window"
                         >
                           Step-by-Step Guide
@@ -32,7 +32,7 @@ export default function Desktop(): JSX.Element {
                       </Link>
                       <Link href="/faq" passHref>
                         <a
-                          className="font-light text-2xl cursor-pointer hover:text-blue-600"
+                          className="font-light text-xl cursor-pointer hover:text-blue-600"
                           target="_window"
                         >
                           Liquidity Bootstrapping FAQ
@@ -41,9 +41,10 @@ export default function Desktop(): JSX.Element {
                     </div>
                   </nav>
                 </header>
+                <div className="h-60" style={{backgroundColor: '#FDEAA7'}}></div>
                 <img
-                  className="w-full object-cover z-0"
-                  src="images/bgFaqUpper.svg"
+                  className="w-full object-cover z-0 "
+                  src="images/bgLandingPageUpper.svg"
                   alt="Upper background"
                 />
                 <img
@@ -51,7 +52,7 @@ export default function Desktop(): JSX.Element {
                   src="images/rocket.svg"
                   alt="Cat riding a rocket with orange shooting stars"
                 />
-                <div className="absolute mx-auto flex flex-col justify-between -bottom-8 items-center z-20">
+                <div className="absolute mx-auto flex flex-col justify-between -bottom-0 items-center z-20">
                   <div>
                     <h1 className="text-center text-7xl font-light leading-snug font-landing">
                       POPCORN
@@ -74,7 +75,7 @@ export default function Desktop(): JSX.Element {
                       method="post"
                       id="mc-embedded-subscribe-form"
                       name="mc-embedded-subscribe-form"
-                      className="validate "
+                      className="validate"
                       target="_blank"
                       noValidate
                     >
@@ -125,7 +126,7 @@ export default function Desktop(): JSX.Element {
         </section>
 
         <section>
-          <div className="w-9/12 mx-auto flex flex-row justify-between items-center mt-24">
+          <div className="w-9/12 mx-auto flex flex-row justify-between items-center mt-48">
             <div className="w-full pt-12 grid grid-cols-2 ">
               <div className="mr-8">
                 <p className="font-medium text-4xl mb-6">What is Popcorn?</p>
@@ -160,7 +161,7 @@ export default function Desktop(): JSX.Element {
           <div className="relative">
             <img
               src="images/bgLBPIndexLower.svg"
-              className="absolute w-full -top-104 pt-18 z-0"
+              className="absolute w-full -top-72 pt-18 z-0"
             ></img>
             <div className="absolute w-full mt-52">
               <div className="mx-auto w-full">
@@ -176,12 +177,12 @@ export default function Desktop(): JSX.Element {
                   token holders
                 </p>
               </div>
-              <div className="bg-gray-100 rounded-2xl flex flex-row w-8/12 mx-auto pt-14 mt-24 px-4">
+              <div className="bg-gray-100 rounded-2xl flex flex-row w-10/12 mx-auto pt-14 mt-24 px-4">
                 <div className="w-2/12 relative">
                   <img
                     src="/images/blueCat.png"
                     alt="blueCat"
-                    className="absolute bottom-0 left-4"
+                    className="absolute bottom-0 left-2"
                   />
                 </div>
                 <div className="flex flex-col w-8/12">
@@ -202,7 +203,7 @@ export default function Desktop(): JSX.Element {
                   <img
                     src="/images/orangeCat.png"
                     alt="orangeCat"
-                    className="absolute bottom-0 right-4"
+                    className="absolute bottom-0 right-2"
                   />
                 </div>
               </div>

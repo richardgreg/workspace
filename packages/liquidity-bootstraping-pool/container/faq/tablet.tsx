@@ -19,7 +19,7 @@ export default function Tablet(): JSX.Element {
           <div className="space-x-8">
             <Link href="/guide" passHref>
               <a
-                className="font-light text-xl hover:text-blue-600"
+                className="font-light text-normal hover:text-blue-600"
                 target="_window"
               >
                 Step-by-Step Guide
@@ -27,7 +27,7 @@ export default function Tablet(): JSX.Element {
             </Link>
             <Link href="/faq" passHref>
               <a
-                className="font-medium text-xl cursor-default"
+                className="font-medium text-normal cursor-default"
                 target="_window"
               >
                 Liquidity Bootstrapping FAQ
@@ -43,6 +43,7 @@ export default function Tablet(): JSX.Element {
           <div className="w-full h-auto">
             <div className="relative">
               <div className="absolute">
+                <div className="h-60" style={{backgroundColor: '#FDEAA7'}}></div>
                 <img
                   className="h-full w-full object-cover"
                   src="images/bgUpperFaq.svg"

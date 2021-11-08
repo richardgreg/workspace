@@ -20,7 +20,7 @@ export default function LargeDesktop(): JSX.Element {
             <div className="space-x-8">
               <Link href="/guide" passHref>
                 <a
-                  className="font-light text-2xl cursor-pointer hover:text-blue-600"
+                  className="font-light text-xl cursor-pointer hover:text-blue-600"
                   target="_window"
                 >
                   Step-by-Step Guide
@@ -28,7 +28,7 @@ export default function LargeDesktop(): JSX.Element {
               </Link>
               <Link href="/faq" passHref>
                 <a
-                  className="font-light text-2xl cursor-pointer hover:text-blue-600"
+                  className="font-light text-xl cursor-pointer hover:text-blue-600"
                   target="_window"
                 >
                   Liquidity Bootstrapping FAQ
@@ -44,7 +44,7 @@ export default function LargeDesktop(): JSX.Element {
               <div className="relative">
                 <img
                   className="w-full object-cover z-0"
-                  src="images/bgFaqUpper.svg"
+                  src="images/bgLandingPageUpper.svg"
                   alt="Upper background"
                 />
                 <img
@@ -52,7 +52,7 @@ export default function LargeDesktop(): JSX.Element {
                   src="images/rocket.svg"
                   alt="Cat riding a rocket with orange shooting stars"
                 />
-                <div className="absolute mx-auto flex flex-col justify-between bottom-112 items-center z-20">
+                <div className="absolute mx-auto flex flex-col justify-between bottom-18 items-center z-20">
                   <div>
                     <h1 className="text-center font-normal text-8xl leading-snug mb-2 font-landing">
                       POPCORN
@@ -75,13 +75,13 @@ export default function LargeDesktop(): JSX.Element {
                       method="post"
                       id="mc-embedded-subscribe-form"
                       name="mc-embedded-subscribe-form"
-                      className="validate "
+                      className="validate"
                       target="_blank"
                       noValidate
                     >
                       <div
                         id="mc_embed_signup_scroll"
-                        className=" mx-auto shadow-xl bg-white rounded-xl py-4 px-4 mt-20 w-2/12 flex flex-row items-center justify-between"
+                        className=" mx-auto shadow-xl bg-white rounded-xl py-4 px-4 mt-20 w-3/12 flex flex-row items-center justify-between"
                       >
                         <input
                           type="email"
@@ -161,9 +161,9 @@ export default function LargeDesktop(): JSX.Element {
           <div className="relative">
             <img
               src="images/bgLBPIndexLower.svg"
-              className="absolute w-full -top-129 pt-12 z-0"
+              className="absolute w-full -top-128 pt-12 z-0"
             ></img>
-            <div className="absolute w-full" style={{ top: 400 }}>
+            <div className="absolute w-full" style={{ top: 250 }}>
               <div className="mx-auto w-full">
                 <p className="font-bold text-4xl mb-6 text-center ">
                   How to participate?
@@ -177,12 +177,12 @@ export default function LargeDesktop(): JSX.Element {
                   token holders
                 </p>
               </div>
-              <div className="bg-gray-100 rounded-2xl flex flex-row w-5/12 mx-auto pt-14 mt-24">
+              <div className="bg-gray-100 rounded-2xl flex flex-row w-6/12 mx-auto pt-14 mt-24">
                 <div className="w-2/12 relative">
                   <img
                     src="/images/blueCat.png"
                     alt="blueCat"
-                    className="absolute bottom-0 left-14"
+                    className="absolute bottom-0 left-10"
                   />
                 </div>
                 <div className="flex flex-col w-8/12">
@@ -203,7 +203,7 @@ export default function LargeDesktop(): JSX.Element {
                   <img
                     src="/images/orangeCat.png"
                     alt="orangeCat"
-                    className="absolute bottom-0 right-14"
+                    className="absolute bottom-0 right-11"
                   />
                 </div>
               </div>
@@ -211,7 +211,7 @@ export default function LargeDesktop(): JSX.Element {
           </div>
         </section>
 
-        <section className="grid z-10 mt-129">
+        <section className="grid z-10 mt-128">
           <div className="flex flex-row mb-10 justify-self-center mt-128">
             <p className="mx-4">
               <a href="https://popcorn.network" target="_blank">
