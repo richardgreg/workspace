@@ -21,6 +21,9 @@ module.exports = {
       lineHeight: {
         button: '32px',
       },
+      width: {
+        'fit-content': 'fit-content'
+      },
       scale: {
         101: '1.01',
         102: '1.02',
