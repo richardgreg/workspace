@@ -40,87 +40,85 @@ export default function LargeDesktop(): JSX.Element {
 
         <section className="-mt-1">
           <div className="w-full">
-            <div className="">
-              <div className="relative">
-                <img
-                  className="w-full object-cover z-0"
-                  src="images/bgLandingPageUpper.svg"
-                  alt="Upper background"
-                />
-                <img
-                  className="absolute -top-24 left-42 w-3/4 z-10"
-                  src="images/rocket.svg"
-                  alt="Cat riding a rocket with orange shooting stars"
-                />
-                <div className="absolute mx-auto flex flex-col justify-between bottom-18 items-center z-20">
-                  <div>
-                    <h1 className="text-center font-normal text-8xl leading-snug mb-2 font-landing">
-                      POPCORN
-                    </h1>
-                    <h1 className="text-center font-normal text-7xl leading-snug mb-2 font-landing">
-                      Liquidity Bootstrapping Event
-                    </h1>
-                    <p className="w-4/12 mx-auto text-center text-3xl leading-10 font-landing mt-6">
-                      The Popcorn LBP Event is a two-day liquidity bootstrapping
-                      event for the Popcorn community. This is the first
-                      opportunity for the general public to buy POP to
-                      participate in the governance of the network. All proceeds
-                      will go to the Popcorn Treasury, a smart contract entirely
-                      controlled by Popcorn token holders. Please refer to this
-                      Step-by-Step Guide on how to safely participate in the LBP
-                      and check out the FAQ for more on how LBPs work.
-                    </p>
-                    <form
-                      action="https://network.us1.list-manage.com/subscribe/post?u=5ce5e82d673fd2cfaf12849a5&amp;id=e85a091ed3"
-                      method="post"
-                      id="mc-embedded-subscribe-form"
-                      name="mc-embedded-subscribe-form"
-                      className="validate"
-                      target="_blank"
-                      noValidate
+            <div className="relative">
+              <img
+                className="w-full object-cover z-0"
+                src="images/bgLandingPageUpper.svg"
+                alt="Upper background"
+              />
+              <img
+                className="absolute -top-24 left-42 w-3/4 z-10"
+                src="images/rocket.svg"
+                alt="Cat riding a rocket with orange shooting stars"
+              />
+              <div className="absolute mx-auto flex flex-col justify-between bottom-18 items-center z-20">
+                <div>
+                  <h1 className="text-center font-normal text-8xl leading-snug mb-2 font-landing">
+                    POPCORN
+                  </h1>
+                  <h1 className="text-center font-normal text-7xl leading-snug mb-2 font-landing">
+                    Liquidity Bootstrapping Event
+                  </h1>
+                  <p className="w-4/12 mx-auto text-center text-3xl leading-10 font-landing mt-6">
+                    The Popcorn LBP Event is a two-day liquidity bootstrapping
+                    event for the Popcorn community. This is the first
+                    opportunity for the general public to buy POP to participate
+                    in the governance of the network. All proceeds will go to
+                    the Popcorn Treasury, a smart contract entirely controlled
+                    by Popcorn token holders. Please refer to this Step-by-Step
+                    Guide on how to safely participate in the LBP and check out
+                    the FAQ for more on how LBPs work.
+                  </p>
+                  <form
+                    action="https://network.us1.list-manage.com/subscribe/post?u=5ce5e82d673fd2cfaf12849a5&amp;id=e85a091ed3"
+                    method="post"
+                    id="mc-embedded-subscribe-form"
+                    name="mc-embedded-subscribe-form"
+                    className="validate"
+                    target="_blank"
+                    noValidate
+                  >
+                    <div
+                      id="mc_embed_signup_scroll"
+                      className=" mx-auto shadow-xl bg-white rounded-xl py-4 px-4 mt-20 w-3/12 flex flex-row items-center justify-between"
                     >
+                      <input
+                        type="email"
+                        name="EMAIL"
+                        className="w-10/12 p-2 text-base mx-4 text-gray-900"
+                        id="mce-EMAIL"
+                        placeholder="Email Address"
+                        required
+                      />
                       <div
-                        id="mc_embed_signup_scroll"
-                        className=" mx-auto shadow-xl bg-white rounded-xl py-4 px-4 mt-20 w-3/12 flex flex-row items-center justify-between"
+                        style={{ position: 'absolute', left: '-5000px' }}
+                        aria-hidden="true"
                       >
                         <input
-                          type="email"
-                          name="EMAIL"
-                          className="w-10/12 p-2 text-base mx-4 text-gray-900"
-                          id="mce-EMAIL"
-                          placeholder="Email Address"
-                          required
+                          type="text"
+                          name="b_5ce5e82d673fd2cfaf12849a5_e85a091ed3"
+                          tabIndex={-1}
                         />
-                        <div
-                          style={{ position: 'absolute', left: '-5000px' }}
-                          aria-hidden="true"
-                        >
-                          <input
-                            type="text"
-                            name="b_5ce5e82d673fd2cfaf12849a5_e85a091ed3"
-                            tabIndex={-1}
-                          />
-                        </div>
-                        <div className="clear">
-                          <input
-                            type="submit"
-                            value="Early Access"
-                            name="subscribe"
-                            id="mc-embedded-subscribe"
-                            className="font-medium text-base bg-blue-600 hover:bg-blue-500 text-white rounded-xl px-4 py-2 cursor-pointer"
-                            readOnly
-                          />
-                        </div>
                       </div>
-                    </form>
-                  </div>
+                      <div className="clear">
+                        <input
+                          type="submit"
+                          value="Early Access"
+                          name="subscribe"
+                          id="mc-embedded-subscribe"
+                          className="font-medium text-base bg-blue-600 hover:bg-blue-500 text-white rounded-xl px-4 py-2 cursor-pointer"
+                          readOnly
+                        />
+                      </div>
+                    </div>
+                  </form>
                 </div>
-                <img
-                  className="absolute -bottom-10 right-0 w-3/12 z-50"
-                  src="images/jumpingCat.svg"
-                  alt="Jumping Cat"
-                />
               </div>
+              <img
+                className="absolute -bottom-10 right-0 w-3/12 z-50"
+                src="images/jumpingCat.svg"
+                alt="Jumping Cat"
+              />
             </div>
           </div>
         </section>
