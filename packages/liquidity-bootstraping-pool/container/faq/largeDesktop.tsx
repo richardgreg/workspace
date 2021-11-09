@@ -539,7 +539,7 @@ export default function LargeDesktop(): JSX.Element {
         </section>
 
         <section className="grid mx-auto">
-          <div className="flex flex-row mb-10">
+          <div className="flex flex-row my-10">
             <p className="">
               <a href="https://popcorn.network">popcorn.network</a>
             </p>
