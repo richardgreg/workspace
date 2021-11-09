@@ -200,7 +200,7 @@ const IndexPage = () => {
             <div className="min-w-480 w-10/12 mx-auto flex flex-col lg:flex-row justify-between pb-48 items-center">
               <div className="w-full lg:w-6/12 xl:w-5/12 order-2 lg:order-1">
                 <div className="w-10/12 text-center mx-auto lg:text-left lg:mx-0">
-                  <h1 className="font-bold lg:text-5xl xl:text-7xl leading-snug mb-8 ">
+                  <h1 className="font-bold lg:text-5xl xl:text-7xl leading-snug mb-6 ">
                     Start doing good with DeFi
                   </h1>
                   <p className="text-2xl font-landing">
@@ -218,7 +218,7 @@ const IndexPage = () => {
                   >
                     <div
                       id="mc_embed_signup_scroll"
-                      className="shadow-xl bg-white rounded-xl py-2 px-2 mt-8 w-full flex flex-row items-center justify-between"
+                      className="shadow-xl bg-white rounded-xl py-2 mt-8 w-full flex flex-row items-center justify-between"
                     >
                       <input
                         type="email"
@@ -251,9 +251,9 @@ const IndexPage = () => {
                     </div>
                   </form>
 
-                  <div className="w-fit-content pt-8">
-              <div className="w-fit-content mx-auto mt-10">
-                <h3 className="font-medium text-xl text-left w-fit-content">
+                  <div className="w-fit-content mt-8">
+              <div className="w-fit-content mx-auto py-2">
+                <h3 className="font-landing text-2xl text-left w-fit-content">
                   Don’t miss the liquidity bootstrapping event!
                 </h3>
                 <div className="mx-auto flex flex-row justify-between pb-20 mt-7 w-full">
@@ -764,7 +764,7 @@ const IndexPage = () => {
                   </div>
                 </div>
               </form>
-              <div className="w-full pt-32">
+              <div className="w-full">
               <div className="w-10/12 mx-auto">
                 <h3 className="font-medium text-2xl pt-20 pb-12 text-center leading-8">
                   Don’t miss the liquidity bootstrapping event!
