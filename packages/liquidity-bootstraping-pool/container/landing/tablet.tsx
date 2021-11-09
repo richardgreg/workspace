@@ -54,7 +54,7 @@ export default function Tablet(): JSX.Element {
                 />
                 <div className="absolute mx-auto flex flex-col justify-between top-80 items-center z-20">
                   <div>
-                    <h1 className="text-center text-5xl font-light leading-snug font-landing">
+                    <h1 className="text-center text-3xl font-light leading-snug font-landing">
                       POPCORN
                     </h1>
                     <h1 className="text-center font-light text-3xl leading-snug mb-2 font-landing">

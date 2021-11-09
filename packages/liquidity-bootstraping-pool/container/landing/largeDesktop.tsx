@@ -47,13 +47,13 @@ export default function LargeDesktop(): JSX.Element {
                 alt="Upper background"
               />
               <img
-                className="absolute -top-24 left-42 w-3/4 z-10"
+                className="absolute -top-0 left-42 w-3/4 z-10"
                 src="images/rocket.svg"
                 alt="Cat riding a rocket with orange shooting stars"
               />
-              <div className="absolute mx-auto flex flex-col justify-between bottom-18 items-center z-20">
+              <div className="absolute mx-auto flex flex-col justify-between bottom-0 items-center z-20">
                 <div>
-                  <h1 className="text-center font-normal text-8xl leading-snug mb-2 font-landing">
+                  <h1 className="text-center font-normal text-7xl leading-snug mb-2 font-landing">
                     POPCORN
                   </h1>
                   <h1 className="text-center font-normal text-7xl leading-snug mb-2 font-landing">

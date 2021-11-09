@@ -43,50 +43,25 @@ export default function LargeDesktop(): JSX.Element {
         <section className="-mt-1">
           <div className="w-full">
             <img
-              className="w-full object-cover z-0"
+              className="w-full object-cover z-0 -mt-129"
               src="images/bgUpperFaq.svg"
               alt="Upper background"
             />
-            <div className="absolute flex flex-row z-10 top-80">
-              <div className="w-8/12 mx-auto flex flex-col lg:flex-row justify-between pb-20 items-center">
-                <div className="w-full pt-32">
-                  <div>
-                    <h1 className="text-center font-light text-7xl leading-10 font-landing">
-                      Liquidity Bootstrapping FAQ
-                    </h1>
-                    <p className="w-3/5 mx-auto text-center text-3xl font-landing leading-10 font-light mt-14">
-                      Popcorn Liquidity Bootstrapping Event Details:
-                    </p>
+            <div className="absolute z-10 top-32 w-full mx-auto flex flex-col pb-20 pt-32">
+                <h1 className="text-center font-light text-7xl leading-10 font-landing">
+                  Liquidity Bootstrapping FAQ
+                </h1>
+                <p className="text-center text-3xl font-landing leading-10 font-light mt-14">
+                  Popcorn Liquidity Bootstrapping Event Details:
+                </p>
 
-                    <p className="w-3/5 mx-auto text-center text-3xl font-landing leading-10  font-medium mt-14">
-                      $POP Tokens Offered: 5,000,000
-                    </p>
-                    <p className="w-3/5 mx-auto text-center text-3xl leading-10 font-landing">
-                      When? November 26, 2021 16:30 UTC till November 28, 2021
-                      ~16:30pm UTC.
-                    </p>
-                    <p className="w-3/5 mx-auto text-center text-3xl font-landing leading-10  font-light mt-18">
-                      The liquidity bootstrapping event will take place on
-                      Balancer, a decentralized exchange where the $POP token
-                      will be offered in a Liquidity Bootstrapping Pool. All
-                      proceeds will go to the Popcorn Treasury, a smart contract
-                      entirely controlled by Popcorn token holders. The
-                      intention is to bootstrap liquidity on decentralized
-                      exchanges through a fair launch mechanism.
-                    </p>
-
-                    <p className="w-3/5 mx-auto text-center text-3xl font-landing leading-10 font-light mt-18">
-                      The Popcorn Team will tweet out the contract address on
-                      the official Popcorn Twitter account and the Popcorn blog,
-                      and you will be able to track the status of the LBP event
-                      on lbp.popcorn.network. Before proceeding, verify that the
-                      contract address comes from an official source and that
-                      the Balancer address is the same as the contract address —
-                      everything else should be considered a scam.
-                    </p>
-                  </div>
-                </div>
-              </div>
+                <p className="text-center text-3xl font-landing leading-10  font-medium mt-14">
+                  $POP Tokens Offered: 5,000,000
+                </p>
+                <p className="text-center text-3xl leading-10 font-landing">
+                  When? November 26, 2021 16:30 UTC till November 28, 2021
+                  ~16:30pm UTC.
+                </p>
             </div>
           </div>
         </section>
@@ -109,6 +84,24 @@ export default function LargeDesktop(): JSX.Element {
             </div>
             <div className="col-span-2">
               <div className="w-full mx-auto my-20">
+                <p className="w-full mx-auto text-center text-3xl font-landing leading-10  font-light mt-18">
+                  The liquidity bootstrapping event will take place on Balancer,
+                  a decentralized exchange where the $POP token will be offered
+                  in a Liquidity Bootstrapping Pool. All proceeds will go to the
+                  Popcorn Treasury, a smart contract entirely controlled by
+                  Popcorn token holders. The intention is to bootstrap liquidity
+                  on decentralized exchanges through a fair launch mechanism.
+                </p>
+
+                <p className="w-full mx-auto text-center text-3xl font-landing leading-10 font-light my-18">
+                  The Popcorn Team will tweet out the contract address on the
+                  official Popcorn Twitter account and the Popcorn blog, and you
+                  will be able to track the status of the LBP event on
+                  lbp.popcorn.network. Before proceeding, verify that the
+                  contract address comes from an official source and that the
+                  Balancer address is the same as the contract address —
+                  everything else should be considered a scam.
+                </p>
                 <p className="font-medium text-5xl mb-4 mx-auto ">
                   What is the purpose of this event?
                 </p>

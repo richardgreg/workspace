@@ -41,7 +41,7 @@ export default function Desktop(): JSX.Element {
                     </div>
                   </nav>
                 </header>
-                <div className="h-60" style={{backgroundColor: '#FDEAA7'}}></div>
+                <div className="h-32" style={{backgroundColor: '#FDEAA7'}}></div>
                 <img
                   className="w-full object-cover z-0 "
                   src="images/bgLandingPageUpper.svg"
@@ -54,7 +54,7 @@ export default function Desktop(): JSX.Element {
                 />
                 <div className="absolute mx-auto flex flex-col justify-between -bottom-0 items-center z-20">
                   <div>
-                    <h1 className="text-center text-7xl font-light leading-snug font-landing">
+                    <h1 className="text-center text-6xl font-light leading-snug font-landing">
                       POPCORN
                     </h1>
                     <h1 className="text-center font-light text-6xl leading-snug mb-2 font-landing">
