@@ -11,7 +11,7 @@ export default function Desktop(): JSX.Element {
               <Link href="/" passHref>
                 <a>
                   <img
-                    src="/images/textLogo.png"
+                    src="/images/logo-svg.svg"
                     alt="Logo"
                     className="h-12"
                   ></img>
