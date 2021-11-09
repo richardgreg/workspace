@@ -540,7 +540,7 @@ export default function LargeDesktop(): JSX.Element {
             </div>
             <img
               src="/images/Illustration_ Shooting star.svg"
-              className="absolute z-0 -bottom-48 transform rotate-12 w-5/12 right-84"
+              className="absolute z-0 transform rotate-12 w-5/12 right-84"
             />
           </div>
         </section>

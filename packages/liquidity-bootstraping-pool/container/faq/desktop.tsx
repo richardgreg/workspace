@@ -541,7 +541,7 @@ export default function Desktop(): JSX.Element {
             </div>
             <img
               src="/images/Illustration_ Shooting star.svg"
-              className="absolute z-0 -bottom-48 transform rotate-12 w-1/2 right-80"
+              className="absolute z-0 transform rotate-12 w-1/2 right-80"
             />
           </div>
         </section>
