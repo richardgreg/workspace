@@ -1,6 +1,24 @@
 import Link from 'next/link';
+import { useEffect } from 'react';
+
+
 
 export default function LargeDesktop(): JSX.Element {
+  const startDate = new Date(1638172800000).toLocaleDateString(undefined, {
+    timeZone: 'UTC',
+  });
+  const startTime = new Date(1638172800000).toLocaleTimeString(undefined, {
+    timeZone: 'UTC',
+  });
+  const endDate = new Date(1638172800000 + 216000000).toLocaleDateString(
+    undefined,
+    { timeZone: 'UTC' },
+  );
+  const endTime = new Date(1638172800000 + 216000000).toLocaleTimeString(
+    undefined,
+    { timeZone: 'UTC' },
+  );
+  
   return (
     <div className="hidden 2xl:flex flex-col w-full h-full font-landing">
       {/* NavBar*/}
@@ -32,7 +50,7 @@ export default function LargeDesktop(): JSX.Element {
                   className="font-medium text-xl cursor-default"
                   target="_window"
                 >
-                  Liquidity Bootstrapping FAQ
+                 Fair Launch FAQ
                 </a>
               </Link>
             </div>
@@ -49,18 +67,18 @@ export default function LargeDesktop(): JSX.Element {
             />
             <div className="absolute z-10 top-32 w-full mx-auto flex flex-col pb-20 pt-32">
                 <h1 className="text-center font-light text-7xl leading-10 font-landing">
-                  Liquidity Bootstrapping FAQ
+                  Fair Launch FAQ
                 </h1>
                 <p className="text-center text-3xl font-landing leading-10 font-light mt-14">
-                  Popcorn Liquidity Bootstrapping Event Details:
+                  <span translate="no">Popcorn</span>{" "} Fair Launch Auction Details:
                 </p>
 
-                <p className="text-center text-3xl font-landing leading-10  font-medium mt-14">
-                  $POP Tokens Offered: 5,000,000
+                <p className="text-center text-2xl font-landing leading-10  font-medium mt-14">
+                  POP Tokens Offered: 3,750,000
                 </p>
-                <p className="text-center text-3xl leading-10 font-landing">
-                  When? November 26, 2021 16:30 UTC till November 28, 2021
-                  ~16:30pm UTC.
+                <p className="text-center text-2xl leading-10 font-landing">
+                  When? {startDate} ~{startTime} UTC until {endDate} ~
+                    {endTime} UTC
                 </p>
             </div>
           </div>
@@ -84,23 +102,20 @@ export default function LargeDesktop(): JSX.Element {
             </div>
             <div className="col-span-2">
               <div className="w-full mx-auto my-20">
-                <p className="w-full mx-auto text-center text-3xl font-landing leading-10  font-light mt-18">
-                  The liquidity bootstrapping event will take place on Balancer,
-                  a decentralized exchange where the $POP token will be offered
-                  in a Liquidity Bootstrapping Pool. All proceeds will go to the
-                  Popcorn Treasury, a smart contract entirely controlled by
-                  Popcorn token holders. The intention is to bootstrap liquidity
-                  on decentralized exchanges through a fair launch mechanism.
+                <p className="w-full mx-auto text-center text-2xl font-landing leading-10  font-light mt-18">
+                The auction will take place on Balancer, a decentralized exchange where the POP token will be offered in a Liquidity Bootstrapping Pool. All proceeds will go to the <span translate="no">Popcorn</span>{" "} Treasury, a smart contract entirely controlled by <span translate="no">Popcorn</span>{" "} token holders. The intention is to bootstrap liquidity on decentralized exchanges through a fair launch mechanism.
                 </p>
 
-                <p className="w-full mx-auto text-center text-3xl font-landing leading-10 font-light my-18">
-                  The Popcorn Team will tweet out the contract address on the
-                  official Popcorn Twitter account and the Popcorn blog, and you
-                  will be able to track the status of the LBP event on
-                  lbp.popcorn.network. Before proceeding, verify that the
-                  contract address comes from an official source and that the
-                  Balancer address is the same as the contract address —
-                  everything else should be considered a scam.
+                <p className="w-full mx-auto text-center text-2xl font-landing leading-10 font-light my-18">
+                The official  <Link href="/faq">
+                      <a className="text-blue-600 hover:text-blue-700 underline">
+                      <span translate="no">Popcorn</span>{" "} Twitter account
+                      </a>
+                    </Link> will tweet the contract address. You can track the status of the LBP event on <Link href="/faq" passHref>
+                      <a className="text-blue-600 hover:text-blue-700 underline">
+                        lbp.popcorn.network
+                      </a>
+                    </Link>. Everything else should be considered a scam. Please make sure the Balancer address is the same as the contract address when proceeding.
                 </p>
                 <p className="font-medium text-5xl mb-4 mx-auto ">
                   What is the purpose of this event?
@@ -116,7 +131,7 @@ export default function LargeDesktop(): JSX.Element {
                     of the core team, advisors, and investors
                   </li>
                   <li className="text-2xl mx-auto font-light leading-10 ">
-                    Inject liquidity into the Popcorn ecosystem
+                    Inject liquidity into the <span translate="no">Popcorn</span>{" "} ecosystem
                   </li>
                   <li className="text-2xl mx-auto font-light leading-10 ">
                     Initiate price discovery for $POP
@@ -178,7 +193,7 @@ export default function LargeDesktop(): JSX.Element {
                   Why are we using an LBP?
                 </p>
                 <p className="text-2xl mx-auto font-light leading-10 ">
-                  The LBP is advantageous for Popcorn because it:
+                  The LBP is advantageous for <span translate="no">Popcorn</span>{" "} because it:
                 </p>
                 <ul className="list-inside list-disc">
                   <li className="text-2xl mx-auto font-light leading-10 ">
@@ -201,7 +216,7 @@ export default function LargeDesktop(): JSX.Element {
                   Where will the proceeds go?
                 </p>
                 <p className="text-2xl mx-auto font-light leading-10 ">
-                  All proceeds will go to the Popcorn Treasury, a smart contract
+                  All proceeds will go to the <span translate="no">Popcorn</span>{" "} Treasury, a smart contract
                   entirely controlled by $POP token holders. Please read the{' '}
                   <a
                     href="https://popcorn.network/docs/Popcorn_whitepaper_v1.pdf"
@@ -380,10 +395,10 @@ export default function LargeDesktop(): JSX.Element {
 
               <div className="w-full mx-auto my-20">
                 <p className="font-medium text-5xl mb-4 mx-auto ">
-                  Who founded Popcorn?
+                  Who founded <span translate="no">Popcorn</span>?{" "}
                 </p>
                 <p className="text-2xl mx-auto font-light leading-10 ">
-                  Popcorn was founded by Anthony D Martin and Michael Kisselgof
+                  <span translate="no">Popcorn</span>{" "} was founded by Anthony D Martin and Michael Kisselgof
                   in January 2021.
                 </p>
                 <p className="text-2xl mx-auto font-light leading-10 ">
@@ -399,7 +414,7 @@ export default function LargeDesktop(): JSX.Element {
 
               <div className="w-full mx-auto my-20">
                 <p className="font-medium text-5xl mb-4 mx-auto ">
-                  Who are the early contributors to Popcorn?
+                  Who are the early contributors to <span translate="no">Popcorn</span>?{" "}
                 </p>
                 <p className="text-2xl mx-auto font-light leading-10 ">
                   New Form Capital, Kinetic Capital, Sarson Funds, The Crypto
@@ -416,7 +431,7 @@ export default function LargeDesktop(): JSX.Element {
 
               <div className="w-full mx-auto my-20">
                 <p className="font-medium text-5xl mb-4 mx-auto ">
-                  How much did Popcorn raise in previous rounds?
+                  How much did <span translate="no">Popcorn</span>{" "} raise in previous rounds?
                 </p>
                 <p className="text-2xl mx-auto font-light leading-10 ">
                   The Private Sale and Presale raised the following:

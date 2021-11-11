@@ -1,6 +1,20 @@
 import Link from 'next/link';
 
 export default function Desktop(): JSX.Element {
+  const startDate = new Date(1638172800000).toLocaleDateString(undefined, {
+    timeZone: 'UTC',
+  });
+  const startTime = new Date(1638172800000).toLocaleTimeString(undefined, {
+    timeZone: 'UTC',
+  });
+  const endDate = new Date(1638172800000 + 216000000).toLocaleDateString(
+    undefined,
+    { timeZone: 'UTC' },
+  );
+  const endTime = new Date(1638172800000 + 216000000).toLocaleTimeString(
+    undefined,
+    { timeZone: 'UTC' },
+  );
   return (
     <div className="hidden xl:flex 2xl:hidden flex-col w-full h-full font-landing">
       {/* NavBar*/}
@@ -52,7 +66,7 @@ export default function Desktop(): JSX.Element {
                 Liquidity Bootstrapping FAQ
               </h1>
               <p className="text-center text-xl font-landing font-light mt-10">
-                Popcorn Liquidity Bootstrapping Event Details:
+                <span translate="no">Popcorn</span>{" "} Liquidity Bootstrapping Event Details:
               </p>
 
               <p className="text-center text-xl font-landing font-medium mt-8">
@@ -88,14 +102,14 @@ export default function Desktop(): JSX.Element {
                   The liquidity bootstrapping event will take place on Balancer,
                   a decentralized exchange where the $POP token will be offered
                   in a Liquidity Bootstrapping Pool. All proceeds will go to the
-                  Popcorn Treasury, a smart contract entirely controlled by
-                  Popcorn token holders. The intention is to bootstrap liquidity
+                  <span translate="no">Popcorn</span>{" "}{" "}Treasury, a smart contract entirely controlled by
+                  <span translate="no">Popcorn</span>{" "} token holders. The intention is to bootstrap liquidity
                   on decentralized exchanges through a fair launch mechanism.
                 </p>
 
                 <p className="w-full mx-auto text-center text-xl font-landing leading-10 font-light my-18">
-                  The Popcorn Team will tweet out the contract address on the
-                  official Popcorn Twitter account and the Popcorn blog, and you
+                  The <span translate="no">Popcorn</span>{" "} Team will tweet out the contract address on the
+                  official <span translate="no">Popcorn</span>{" "} Twitter account and the <span translate="no">Popcorn</span>{" "} blog, and you
                   will be able to track the status of the LBP event on
                   lbp.popcorn.network. Before proceeding, verify that the
                   contract address comes from an official source and that the
@@ -116,7 +130,7 @@ export default function Desktop(): JSX.Element {
                     of the core team, advisors, and investors
                   </li>
                   <li className="text-xl mx-auto font-light ">
-                    Inject liquidity into the Popcorn ecosystem
+                    Inject liquidity into the <span translate="no">Popcorn</span>{" "} ecosystem
                   </li>
                   <li className="text-xl mx-auto font-light ">
                     Initiate price discovery for $POP
@@ -178,7 +192,7 @@ export default function Desktop(): JSX.Element {
                   Why are we using an LBP?
                 </p>
                 <p className="text-xl mx-auto font-light ">
-                  The LBP is advantageous for Popcorn because it:
+                  The LBP is advantageous for <span translate="no">Popcorn</span>{" "} because it:
                 </p>
                 <ul className="list-inside list-disc">
                   <li className="text-xl mx-auto font-light ">
@@ -201,7 +215,7 @@ export default function Desktop(): JSX.Element {
                   Where will the proceeds go?
                 </p>
                 <p className="text-xl mx-auto font-light ">
-                  All proceeds will go to the Popcorn Treasury, a smart contract
+                  All proceeds will go to the <span translate="no">Popcorn</span>{" "} Treasury, a smart contract
                   entirely controlled by $POP token holders. Please read the{' '}
                   <a
                     href="https://popcorn.network/docs/Popcorn_whitepaper_v1.pdf"
@@ -380,10 +394,10 @@ export default function Desktop(): JSX.Element {
 
               <div className="w-full mx-auto my-14">
                 <p className="font-medium text-4xl mb-2 mx-auto ">
-                  Who founded Popcorn?
+                  Who founded <span translate="no">Popcorn</span>?{" "}
                 </p>
                 <p className="text-xl mx-auto font-light ">
-                  Popcorn was founded by Anthony D Martin and Michael Kisselgof
+                  <span translate="no">Popcorn</span>{" "} was founded by Anthony D Martin and Michael Kisselgof
                   in January 2021.
                 </p>
                 <p className="text-xl mx-auto font-light ">
@@ -399,7 +413,7 @@ export default function Desktop(): JSX.Element {
 
               <div className="w-full mx-auto my-14">
                 <p className="font-medium text-4xl mb-2 mx-auto ">
-                  Who are the early contributors to Popcorn?
+                  Who are the early contributors to <span translate="no">Popcorn</span>?{" "}
                 </p>
                 <p className="text-xl mx-auto font-light ">
                   New Form Capital, Kinetic Capital, Sarson Funds, The Crypto
@@ -416,7 +430,7 @@ export default function Desktop(): JSX.Element {
 
               <div className="w-full mx-auto my-14">
                 <p className="font-medium text-4xl mb-2 mx-auto ">
-                  How much did Popcorn raise in previous rounds?
+                  How much did <span translate="no">Popcorn</span>{" "} raise in previous rounds?
                 </p>
                 <p className="text-xl mx-auto font-light ">
                   The Private Sale and Presale raised the following:

@@ -98,7 +98,7 @@ export default function Mobile({
                   <div>
  
                     <h1 className="text-center font-light text-2xl  leading-snug font-landing">
-                      Popcorn's Fair Launch Auction
+                      <span translate="no">Popcorn's</span>{" "} Fair Launch Auction
                     </h1>
                     <p className="w-11/12 mx-auto text-center text-sm font-light font-landing mt-4">
                     The <span translate="no">Popcorn</span>{" "} Fair Launch Auction (FLA) will be the first opportunity for the
@@ -172,7 +172,7 @@ export default function Mobile({
         <section className="mt-80">
           <div className="w-9/12 mt-10 mx-auto flex flex-col lg:flex-row justify-between items-center">
             <div className="">
-              <p className="font-bold text-xl mb-1">What is Popcorn?</p>
+              <p className="font-bold text-xl mb-1">What is <span translate="no">Popcorn</span>?{" "}</p>
               <p className="text-base font-light mt-4">
               <span translate="no">Popcorn</span>{" "} is aiding a revolutionary shift in global systems
                   through accessible DeFi products that align financial

@@ -81,7 +81,7 @@ export default function Desktop(): JSX.Element {
     <div>
 
                     <h1 className="text-center font-light text-6xl leading-snug mb-2 font-landing">
-                      Popcorn's Fair Launch Auction
+                      <span translate="no">Popcorn's</span>{" "} Fair Launch Auction
                     </h1>
                     <p className="w-1/2 mx-auto text-center text-xl leading-8 font-landing font-light mt-6">                    The <span translate="no">Popcorn</span>{" "} Fair Launch Auction (FLA) will be the first opportunity for the
                     general public to join the PopcornDAO by acquiring the POP
@@ -161,7 +161,7 @@ export default function Desktop(): JSX.Element {
           <div className="w-9/12 mx-auto flex flex-row justify-between items-center mt-48">
             <div className="w-full pt-12 grid grid-cols-2 ">
               <div className="mr-8">
-                <p className="font-medium text-4xl mb-6">What is Popcorn?</p>
+                <p className="font-medium text-4xl mb-6">What is <span translate="no">Popcorn</span>?{" "}</p>
                 <p className="text-xl font-light">
                   <span translate="no">Popcorn</span>{" "} is aiding a revolutionary shift in global systems
                   through accessible DeFi products that align financial

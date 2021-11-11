@@ -80,7 +80,7 @@ export default function LargeDesktop(): JSX.Element {
                 <div>
 
                   <h1 className="text-center font-light text-7xl leading-snug mb-2 font-landing"  translate="no">
-                    Popcorn's Fair Launch Auction
+                    <span translate="no">Popcorn's</span>{" "} Fair Launch Auction
                   </h1>
                   <p className="w-4/12 mx-auto text-center text-2xl leading-10 font-landing mt-6">
                     The <span translate="no">Popcorn</span>{" "} Fair Launch Auction (FLA) will be the first opportunity for the
@@ -160,7 +160,7 @@ export default function LargeDesktop(): JSX.Element {
           <div className="w-1/2 mx-auto flex flex-row justify-between items-center mt-24">
             <div className="w-full pt-12 grid grid-cols-2 ">
               <div className="mr-8">
-                <p className="font-bold text-4xl mb-6">What is Popcorn?</p>
+                <p className="font-bold text-4xl mb-6">What is <span translate="no">Popcorn</span>?{" "}</p>
                 <p className="text-xl font-light">
                   <span translate="no">Popcorn</span>{" "} is aiding a revolutionary shift in global systems
                   through accessible DeFi products that align financial
