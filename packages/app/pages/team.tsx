@@ -10,8 +10,8 @@ import { Facebook, GitHub, Menu, Twitter, X } from 'react-feather';
 const TeamMemberCard = ({ name, position, image, linkedIn, twitter }) => {
   return (
     <div
-      className="w-full flex flex-col items-center mr-5"
-      style={{ width: 359, height: 330 }}
+      className="w-full mx-auto flex flex-col items-center "
+      style={{ width: 330, height: 330 }}
     >
       <div className="w-36 h-36 flex items-center">
         <img
@@ -42,7 +42,7 @@ const TeamMemberCard = ({ name, position, image, linkedIn, twitter }) => {
 const TeamMemberCardMobile = ({ name, position, image, linkedIn, twitter }) => {
   return (
     <div
-      className="w-full flex flex-col items-center mx-auto mb-10"
+      className="w-full mx-auto flex flex-col items-center mx-auto mb-10"
       style={{ height: 330 }}
     >
       <div className="w-36 h-36 flex items-center">
@@ -73,7 +73,7 @@ const TeamMemberCardMobile = ({ name, position, image, linkedIn, twitter }) => {
 const ContributorCard = ({ name, position, image, linkedIn, twitter }) => {
   return (
     <div
-      className="w-full flex flex-col items-center "
+      className="w-full mx-auto flex flex-col items-center"
       style={{ width: 359, height: 330 }}
     >
       <div className="w-36 h-36  flex items-center relative">
@@ -375,14 +375,14 @@ const TeamPage = () => {
                 <img src="images/team.svg" />
               </div>
             </div>
-            <div className="w-full h-24"></div>
+            <div className="w-full h-24 2xl:h-100"></div>
           </div>
         </section>
-        <section className="w-10/12 mx-auto mb-24 ">
-          <h2 className="font-normal font-landing text-5xl xl:text-6xl mb-4">
+        <section className="w-full mx-auto mb-24 ">
+          <h2 className="w-10/12 font-normal font-landing text-5xl xl:text-6xl mb-4 mx-auto">
             Core Team
           </h2>
-          <div className="w-10/12 mt-12 grid grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-24">
+          <div className="w-10/12 mx-auto mt-12 grid grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-24">
             <TeamMemberCard
               name={'Anthony Martin'}
               position={'Founder & CTO'}
@@ -484,7 +484,7 @@ const TeamPage = () => {
           <h2 className="font-normal font-landing text-5xl xl:text-6xl mb-12">
             Contributors
           </h2>
-          <div className="w-10/12 mt-12 grid grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-24">
+          <div className="w-full mt-12 grid grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-24 mx-auto">
             <ContributorCard
               name={'Name'}
               position={'Job'}
@@ -528,7 +528,7 @@ const TeamPage = () => {
               backgroundPosition: 'center',
             }}
           >
-            <div className="w-full pt-32">
+            <div className="pt-32">
               <div className="w-10/12 mx-auto rounded-xl shadow-xl bg-white">
                 <h3 className="font-medium text-4xl pt-20 pb-12 text-center">
                   Don’t miss the liquidity event!
@@ -707,7 +707,7 @@ const TeamPage = () => {
       <div className="w-full h-full lg:hidden">
         {menuVisible && (
           <div className="absolute z-10 w-screen">
-            <div className="relative w-full bg-gradient-to-br from-startPopupGradient to-endPopupGradient  py-6">
+            <div className="relative w-full bg-bg-gradient py-6">
               <div className="w-10/12 mx-auto ">
                 <div className="grid justify-items-stretch">
                   <XIcon

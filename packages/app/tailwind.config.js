@@ -48,6 +48,7 @@ module.exports = {
         endPopupGradient: '#FDEAA7',
       },
       backgroundImage: (theme) => ({
+        'bg-gradient': "url('/images/bgGradient.svg')",
         'header-team': "url('/images/bgHeaderTeam.svg')",
         'hero-pattern': "url('/images/bgHero.svg')",
         'impact-pattern': "url('/images/bgImpact.svg')",
