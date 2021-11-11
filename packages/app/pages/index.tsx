@@ -712,7 +712,7 @@ const IndexPage = () => {
               backgroundPosition: 'center',
             }}
           >
-            <div className="w-10/12 mx-auto flex flex-col lg:flex-row justify-between pb-48 items-center text-center">
+            <div className="w-10/12 mx-auto flex flex-col lg:flex-row justify-between pb-16 items-center text-center">
               <CatPool />
               <h1 className="font-bold text-4xl leading-snug mb-8">
                 Start doing good with DeFi
@@ -766,7 +766,7 @@ const IndexPage = () => {
               </form>
               <div className="w-full">
               <div className="w-10/12 mx-auto">
-                <h3 className="font-medium text-2xl pt-48 pb-12 text-center leading-8">
+                <h3 className="font-medium text-2xl pt-16 pb-12 text-center leading-8">
                   Don’t miss the liquidity bootstrapping event!
                 </h3>
                 <div className="w-9/12 mx-auto">
