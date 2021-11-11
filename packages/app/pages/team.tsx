@@ -22,13 +22,18 @@ const TeamMemberCard = ({ name, position, image, linkedIn, twitter }) => {
       </div>
       <h3 className="font-semibold text-3xl pt-8">{name}</h3>
       <h3 className="font-normal text-2xl pt-3">{position}</h3>
+
       <div className="w-10/12 flex flex-row justify-center mt-4">
-        <h3 className="inline-flex px-8 mr-1 py-2 rounded-full text-md font-light  bg-primaryLight border-2 border-gray-700">
-          <a href={linkedIn}>LinkedIn</a>
-        </h3>
-        <h3 className="inline-flex px-8 ml-1 py-2 rounded-full text-md font-light border-2 border-gray-700">
-          <a href={twitter}>Twitter</a>
-        </h3>
+        <a href={linkedIn}>
+          <h3 className="inline-flex px-8 mr-1 py-2 rounded-full text-md font-light hover:bg-primaryLight border-2 border-gray-700">
+            LinkedIn
+          </h3>
+        </a>
+        <a href={twitter}>
+          <h3 className="inline-flex px-8 ml-1 py-2 rounded-full text-md font-light hover:bg-primaryLight border-2 border-gray-700">
+            Twitter
+          </h3>
+        </a>
       </div>
     </div>
   );
@@ -38,7 +43,7 @@ const TeamMemberCardMobile = ({ name, position, image, linkedIn, twitter }) => {
   return (
     <div
       className="w-full flex flex-col items-center mx-auto mb-10"
-      style={{height: 330 }}
+      style={{ height: 330 }}
     >
       <div className="w-36 h-36 flex items-center">
         <img
@@ -50,12 +55,16 @@ const TeamMemberCardMobile = ({ name, position, image, linkedIn, twitter }) => {
       <h3 className="font-semibold text-3xl pt-8">{name}</h3>
       <h3 className="font-normal text-2xl pt-3">{position}</h3>
       <div className="w-10/12 flex flex-row justify-center mt-4">
-        <h3 className="inline-flex px-8 mr-1 py-2 rounded-full text-md font-light  bg-primaryLight border-2 border-gray-700">
-          <a href={linkedIn}>LinkedIn</a>
-        </h3>
-        <h3 className="inline-flex px-8 ml-1 py-2 rounded-full text-md font-light border-2 border-gray-700">
-          <a href={twitter}>Twitter</a>
-        </h3>
+        <a href={linkedIn}>
+          <h3 className="inline-flex px-8 mr-1 py-2 rounded-full text-md font-light  hover:bg-primaryLight border-2 border-gray-700">
+            LinkedIn
+          </h3>
+        </a>
+        <a href={twitter}>
+          <h3 className="inline-flex px-8 ml-1 py-2 rounded-full text-md font-light hover:bg-primaryLight border-2 border-gray-700">
+            Twitter
+          </h3>
+        </a>
       </div>
     </div>
   );
@@ -87,12 +96,16 @@ const ContributorCard = ({ name, position, image, linkedIn, twitter }) => {
       <h3 className="font-semibold text-3xl pt-16">{name}</h3>
       <h3 className="font-normal text-2xl pt-3">{position}</h3>
       <div className="w-10/12 flex flex-row justify-center mt-4">
-        <h3 className="inline-flex px-8 mr-1 py-2 rounded-full text-md font-semibold  bg-primaryLight border-2 border-gray-700">
-          <a href={linkedIn}>LinkedIn</a>
-        </h3>
-        <h3 className="inline-flex px-8 ml-1 py-2 rounded-full text-md font-light border-2 border-gray-700">
-          <a href={twitter}>Twitter</a>
-        </h3>
+        <a href={linkedIn}>
+          <h3 className="inline-flex px-8 mr-1 py-2 rounded-full text-md font-light hover:bg-primaryLight border-2 border-gray-700">
+            LinkedIn
+          </h3>
+        </a>
+        <a href={twitter}>
+          <h3 className="inline-flex px-8 ml-1 py-2 rounded-full text-md font-light hover:bg-primaryLight border-2 border-gray-700">
+            Twitter
+          </h3>
+        </a>
       </div>
     </div>
   );
@@ -130,12 +143,16 @@ const ContributorCardMobile = ({
       <h3 className="font-semibold text-3xl pt-16">{name}</h3>
       <h3 className="font-normal text-2xl pt-3">{position}</h3>
       <div className="w-full flex flex-row justify-center mt-4">
-        <h3 className="inline-flex px-8 mr-1 py-2 rounded-full text-md font-semibold  bg-primaryLight border-2 border-gray-700">
-          <a href={linkedIn}>LinkedIn</a>
-        </h3>
-        <h3 className="inline-flex px-8 ml-1 py-2 rounded-full text-md font-light border-2 border-gray-700">
-          <a href={twitter}>Twitter</a>
-        </h3>
+        <a href={linkedIn}>
+          <h3 className="inline-flex px-8 mr-1 py-2 rounded-full text-md font-light  hover:bg-primaryLight border-2 border-gray-700">
+            LinkedIn
+          </h3>
+        </a>
+        <a href={twitter}>
+          <h3 className="inline-flex px-8 ml-1 py-2 rounded-full text-md font-light hover:bg-primaryLight border-2 border-gray-700">
+            Twitter
+          </h3>
+        </a>
       </div>
     </div>
   );
@@ -361,7 +378,7 @@ const TeamPage = () => {
             <div className="w-full h-24"></div>
           </div>
         </section>
-        <section className="w-10/12 mx-auto mb-24">
+        <section className="w-10/12 mx-auto mb-24 ">
           <h2 className="font-normal font-landing text-5xl xl:text-6xl mb-4">
             Core Team
           </h2>
@@ -698,23 +715,38 @@ const TeamPage = () => {
                     className="my-3 text-white h-5 w-5 justify-self-end"
                   />
                 </div>
-                <div className="w-full bg-white " style={{ height: 0.32 }}></div>
+                <div
+                  className="w-full bg-white "
+                  style={{ height: 0.32 }}
+                ></div>
                 <h1 className="ml-3 my-3 text-4xl font-bold text-white font-landing">
                   About Us
                 </h1>
-                <div className="w-full bg-white opacity-50" style={{ height: 0.72 }}></div>
+                <div
+                  className="w-full bg-white opacity-50"
+                  style={{ height: 0.72 }}
+                ></div>
                 <h1 className="ml-3 my-3 text-4xl font-bold text-white font-landing">
                   Products
                 </h1>
-                <div className="w-full bg-white opacity-50" style={{ height: 0.72 }}></div>
+                <div
+                  className="w-full bg-white opacity-50"
+                  style={{ height: 0.72 }}
+                ></div>
                 <h1 className="ml-3 my-3 text-4xl font-bold text-white font-landing">
                   PopcornDAO
                 </h1>
-                <div className="w-full bg-white opacity-50" style={{ height: 0.72 }}></div>
+                <div
+                  className="w-full bg-white opacity-50"
+                  style={{ height: 0.72 }}
+                ></div>
                 <h1 className="ml-3 my-3 text-4xl font-bold text-gray-700 font-landing">
                   Team
                 </h1>
-                <div className="w-full bg-white opacity-50" style={{ height: 0.72 }}></div>
+                <div
+                  className="w-full bg-white opacity-50"
+                  style={{ height: 0.72 }}
+                ></div>
                 <div className="w-10/12 grid grid-cols-4 my-5 mx-auto">
                   <div>
                     <Link href="https://github.com/popcorndao" passHref>
