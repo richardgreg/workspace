@@ -10,27 +10,52 @@ export default function Mobile({
   showMenu,
   setMenu,
 }: MobileProps): JSX.Element {
+  const startDate = new Date(1638172800000).toLocaleDateString(undefined, {
+    timeZone: 'UTC',
+  });
+  const startTime = new Date(1638172800000).toLocaleTimeString(undefined, {
+    timeZone: 'UTC',
+  });
+  const endDate = new Date(1638172800000 + 216000000).toLocaleDateString(
+    undefined,
+    { timeZone: 'UTC' },
+  );
+  const endTime = new Date(1638172800000 + 216000000).toLocaleTimeString(
+    undefined,
+    { timeZone: 'UTC' },
+  );
   return (
     <div className="w-full h-full md:hidden lg:hidden xl:hidden 2xl:hidden">
       {showMenu && (
         <div className="fixed bg-primaryLight border-b border-gray-500 z-10 mx-auto w-full flex flex-row justify-between px-8 py-8">
           <div className="flex flex-col space-y-4">
-            <Link href="/guide" passHref>
-              <a
-                className="font-light text-base hover:text-blue-600"
-                target="_window"
+          <Link href="/guide" passHref>
+                <a
+                  className="font-light text-normal cursor-pointer hover:text-blue-600"
+                  target="_window"
+                >
+                  Step-by-Step Guide
+                </a>
+              </Link>
+              <Link href="/faq" passHref>
+                <a
+                  className="font-light text-normal cursor-pointer hover:text-blue-600"
+                  target="_window"
+                >
+                 Fair Launch FAQ
+                </a>
+              </Link>
+              <Link
+                href="https://medium.com/popcorndao/pop-token-economics-5a580f0bf712"
+                passHref
               >
-                Step-by-Step Guide
-              </a>
-            </Link>
-            <Link href="/faq" passHref>
-              <a
-                className="font-light text-base hover:text-blue-600"
-                target="_window"
-              >
-                Liquidity Bootstrapping FAQ
-              </a>
-            </Link>
+                <a
+                  className="font-light text-normal cursor-pointer hover:text-blue-600"
+                  target="_window"
+                >
+                  Tokenomics
+                </a>
+              </Link>
           </div>
           <Icon.X onClick={() => setMenu(false)} />
         </div>
@@ -69,21 +94,31 @@ export default function Mobile({
                   src="images/rocket.svg"
                   alt="Cat riding a rocket with orange shooting stars"
                 />
-                <div className="absolute top-56 mx-auto flex flex-col justify-between pb-10 items-center">
+                <div className="absolute top-56 mx-auto flex flex-col justify-between pb-10 pt-20 items-center">
                   <div>
-                    <h1 className="text-center font-light text-4xl leading-snug font-landing">
-                      POPCORN
+ 
+                    <h1 className="text-center font-light text-2xl  leading-snug font-landing">
+                      Popcorn's Fair Launch Auction
                     </h1>
-                    <h1 className="text-center font-light text-2xl leading-snug font-landing">
-                      Liquidity Bootstrapping Event
-                    </h1>
-                    <p className="w-11/12 mx-auto text-center text-base font-light font-landing mt-4">
-                      You ready to POP? The Popcorn LBP will be the first
-                      opportunity for the general public to join the PopcornDAO
-                      by acquiring the $POP token. This is a two-day event for
-                      the Popcorn community where all proceeds raised will go to
-                      the Popcorn Treasury, a smart contract entirely controlled
-                      by $POP token holders.
+                    <p className="w-11/12 mx-auto text-center text-sm font-light font-landing mt-4">
+                    The <span translate="no">Popcorn</span>{" "} Fair Launch Auction (FLA) will be the first opportunity for the
+                    general public to join the PopcornDAO by acquiring the POP
+                    token. This is a 2.5 day, multi-chain event for the <span translate="no">Popcorn</span>{" "}
+                    community where all proceeds raised will go to the <span translate="no">Popcorn</span>{" "}
+                    Treasury, a smart contract entirely controlled by POP token
+                    holders. Please refer to this{' '}
+                    <Link href="#">
+                      <a className="text-blue-600 hover:text-blue-700 underline">
+                        Step-by-Step Guide
+                      </a>
+                    </Link>{' '}
+                    on how to safely participate in the FLA and{' '}
+                    <Link href="/faq">
+                      <a className="text-blue-600 hover:text-blue-700 underline">
+                        check out the FAQ
+                      </a>
+                    </Link>{' '}
+                    for more on how the auction works.
                     </p>
                     <form
                       action="https://network.us1.list-manage.com/subscribe/post?u=5ce5e82d673fd2cfaf12849a5&amp;id=e85a091ed3"
@@ -134,33 +169,44 @@ export default function Mobile({
             </div>
           </div>
         </section>
-        <section>
-          <img
-            className="w-3/12 z-50 mx-auto mt-12"
-            src="images/jumpingCat.svg"
-            alt="Jumping Cat"
-          />
-        </section>
-        <section className="mt-20">
-          <div className="w-9/12 mt-40 mx-auto flex flex-col lg:flex-row justify-between items-center">
+        <section className="mt-80">
+          <div className="w-9/12 mt-10 mx-auto flex flex-col lg:flex-row justify-between items-center">
             <div className="">
-              <p className="font-medium text-xl mb-1">What is Popcorn?</p>
-              <p className="text-base font-light">
-                Popcorn bakes social good into the very foundation of the
-                protocol by creating novel, yield-generating DeFi products,
-                where a small fee is charged which is later allocated to
-                non-profits. Members of the PopcornDAO, or $POP token holders,
-                are stewards of Popcorn and share the common goal of fueling the
-                growth of the protocol, decentralizing the organization, and
-                nurturing the mission of driving social impact for the public
-                benefit in perpetuity.
+              <p className="font-bold text-xl mb-1">What is Popcorn?</p>
+              <p className="text-base font-light mt-4">
+              <span translate="no">Popcorn</span>{" "} is aiding a revolutionary shift in global systems
+                  through accessible DeFi products that align financial
+                  wellbeing with positive global impact.
               </p>
+              <p className="text-base font-light mt-4">
+              In the next months, the roadmap offers multi-chain curated
+                  pools of strategies and DeFi products (on Ethereum, Arbitrum,
+                  Polygon, Fantom, Avalanche, Solana). These products generate
+                  high yield while also funding community selected social impact
+                  and non-profit organizations without any extra costs to the
+                  end user.
+</p>
+<p className="text-base font-light mt-4">
+In 2022, the roadmap includes launching DeFi primitives such
+                  as a lending protocol that produces a native decentralized
+                  stablecoin which has the extraordinary characteristic of
+                  creating impact on a community-wide and global level. How?
+                  Just holding it supports non-profits and public goods; that’s
+                  something that can’t be said of the dollar or any stablecoin
+                  in existence.
+</p>
+<p className="text-base font-light mt-4">
+<span translate="no">Popcorn</span>{" "} bakes social and environmental impact into the very foundation of the protocol through its extractive and composable DeFi primitives and products where basis points are used to fund social impact and non-profit organizations.
+</p>
+<p className="text-base font-light mt-4">
+Members of the PopcornDAO, or POP token holders, are stewards of <span translate="no">Popcorn</span>{" "} and share the common long-term goal of fueling the growth of the protocol, decentralizing the organization, and nurturing the mission of driving social impact for the public benefit in perpetuity.
+</p>
             </div>
             <div className="mt-8">
-              <p className="font-medium text-xl mb-1">The POP Token</p>
+              <p className="font-bold text-xl mb-1">The POP Token</p>
               <p className="text-base font-light">
                 PopcornDAO is a decentralized autonomous organization of members
-                holding the Popcorn governance token $POP. Token holders are
+                holding the <span translate="no">Popcorn</span>{" "} governance token $POP. Token holders are
                 able to vote on proposals that influence the parameters of
                 Popcorn’s smart contracts. Yield farming and staking incentives
                 are also made available to token holders to further increase
@@ -179,16 +225,40 @@ export default function Mobile({
             <div className="mt-8">
               <div className=" mx-auto w-3/4">
                 <p className="font-medium text-center text-2xl mb-2">
-                  How to participate?
+                  Fair Launch Auction Details
                 </p>
-                <p className="text-base font-light text-center">
-                  The Popcorn network will offer 3.75m POP tokens over 48 hours,
-                  from 25.2.2021 ~16:30 UTC till 27.2.2021 ~16:30pm UTC. This
-                  supply will be available on a POP/USDC Balancer Liquidity
-                  Bootstrapping Pool. All proceeds will go to the Popcorn
-                  Treasury, a smart contract entirely controlled by Popcorn
-                  token holders
-                </p>
+                <p className="text-sm  leading-10">
+                    <span className="font-bold">POP Tokens Offered</span>{" "}:
+                    3,750,000
+                  </p>
+                  <p className="text-sm leading-10">
+                    <span className="font-bold">When?</span>{" "} <br /> {startDate} ~
+                    {startTime} UTC until<br /> {endDate} ~{endTime} UTC
+                  </p>
+                  <p className="text-sm leading-10">
+                    <span className="font-bold">Where?</span>{" "} POP/USDC{' '}
+                    <Link href="https://docs.alchemist.wtf/copper/fair-launch-auctions/what-is-a-fair-launch-auction" passHref>
+                      <a  className="text-blue-600 hover:text-blue-700 underline">Copper Fair Launch Auction Pool</a>
+                    </Link>
+                  </p>
+                  <p className="text-sm leading-10">
+                    <span className="font-bold">Networks supported?</span>{" "}{' '}
+                    Ethereum, Polygon &amp; Arbitrum
+                  </p>
+                  <p className="text-sm leading-10">
+                    For more information please{' '}
+                    <Link href="/faq" passHref>
+                      <a className="text-blue-600 hover:text-blue-700 underline">
+                        see the FAQ
+                      </a>
+                    </Link>{' '}
+                    and the{' '}
+                    <Link href="#" passHref>
+                      <a className="text-blue-600 hover:text-blue-700 underline">
+                        Step-by-Step Guide
+                      </a>
+                    </Link>{' '}
+                  </p>
               </div>
             </div>
             <div className="bg-gray-100 rounded-2xl flex flex-col w-10/12 mx-auto mt-8 p-8">
@@ -199,11 +269,11 @@ export default function Mobile({
                   className="w-8 h-6 mb-2"
                 />
                 <p className="text-base font-medium">
-                  The Balancer LBP is not like a regular Balancer pool. The
-                  price will start high to disincentivize bots, front-running
-                  and speculation. Over time, downwards price pressure will be
-                  created by the change of relative weights between the two
-                  assets. Only participate if you know what you are doing.
+                A Fair Launch Auction is not like a regular decentralized exchange pool. The
+                    price will start high to disincentivize bots, front-running
+                    and speculation. Over time, downwards price pressure will be
+                    created by the change of relative weights between the two
+                    assets. Only participate if you know what you are doing.
                 </p>
               </div>
             </div>
@@ -222,14 +292,14 @@ export default function Mobile({
 
         <section className="w-10/12 mx-auto pt-4 border-t border-gray-500">
           <div className="flex flex-row">
-            <p className="w-1/2">
+            <p className="w-1/2 mt-2">
               <a href="https://popcorn.network">popcorn.network</a>
             </p>
-            <p className="w-1/2">
-              <a href="https://forum.popcorn.network/">popcorn.community</a>
+            <p className="w-1/2 mt-2">
+              <a href="https://forum.popcorn.network/">forum.popcorn.network</a>
             </p>
           </div>
-          <div className="flex flex-row">
+          <div className="flex flex-row mt-2 mb-4">
             <p className="w-1/2">
               <a href="https://discord.gg/w9zeRTSZsq">discord</a>
             </p>

@@ -1,6 +1,20 @@
 import Link from 'next/link';
 
 export default function Desktop(): JSX.Element {
+  const startDate = new Date(1638172800000).toLocaleDateString(undefined, {
+    timeZone: 'UTC',
+  });
+  const startTime = new Date(1638172800000).toLocaleTimeString(undefined, {
+    timeZone: 'UTC',
+  });
+  const endDate = new Date(1638172800000 + 216000000).toLocaleDateString(
+    undefined,
+    { timeZone: 'UTC' },
+  );
+  const endTime = new Date(1638172800000 + 216000000).toLocaleTimeString(
+    undefined,
+    { timeZone: 'UTC' },
+  );
   return (
     <div className="hidden xl:flex 2xl:hidden flex-col w-full h-full font-landing">
       <div className="flex flex-col w-full h-full">
@@ -10,35 +24,46 @@ export default function Desktop(): JSX.Element {
               <div className="relative">
                 <header className="w-full bg-primary pt-12">
                   <nav className="w-9/12 mx-auto pb-4 flex flex-row items-center justify-between">
-                    <div>
-                      <Link href="/" passHref>
-                        <a>
-                          <img
-                            src="/images/textLogo.png"
-                            alt="Logo"
-                            className="h-12"
-                          ></img>
-                        </a>
-                      </Link>
-                    </div>
-                    <div className="space-x-8 relative z-20">
-                      <Link href="/guide" passHref>
-                        <a
-                          className="font-light text-xl cursor-pointer hover:text-blue-600"
-                          target="_window"
-                        >
-                          Step-by-Step Guide
-                        </a>
-                      </Link>
-                      <Link href="/faq" passHref>
-                        <a
-                          className="font-light text-xl cursor-pointer hover:text-blue-600"
-                          target="_window"
-                        >
-                          Liquidity Bootstrapping FAQ
-                        </a>
-                      </Link>
-                    </div>
+                  <div>
+              <Link href="/" passHref>
+                <a>
+                  <img
+                    src="/images/textLogo.png"
+                    alt="Logo"
+                    className="h-12"
+                  ></img>
+                </a>
+              </Link>
+            </div>
+            <div className="space-x-8  relative z-20">
+              <Link href="/guide" passHref>
+                <a
+                  className="font-light text-xl cursor-pointer hover:text-blue-600"
+                  target="_window"
+                >
+                  Step-by-Step Guide
+                </a>
+              </Link>
+              <Link href="/faq" passHref>
+                <a
+                  className="font-light text-xl cursor-pointer hover:text-blue-600"
+                  target="_window"
+                >
+                  Liquidity Bootstrapping FAQ
+                </a>
+              </Link>
+              <Link
+                href="https://medium.com/popcorndao/pop-token-economics-5a580f0bf712"
+                passHref
+              >
+                <a
+                  className="font-light text-xl cursor-pointer hover:text-blue-600"
+                  target="_window"
+                >
+                  Tokenomics
+                </a>
+              </Link>
+            </div>
                   </nav>
                 </header>
                 <div className="h-32" style={{backgroundColor: '#FDEAA7'}}></div>
@@ -53,23 +78,30 @@ export default function Desktop(): JSX.Element {
                   alt="Cat riding a rocket with orange shooting stars"
                 />
                 <div className="absolute mx-auto flex flex-col justify-between -bottom-0 items-center z-20">
-                  <div>
-                    <h1 className="text-center text-6xl font-light leading-snug font-landing">
-                      POPCORN
-                    </h1>
+    <div>
+
                     <h1 className="text-center font-light text-6xl leading-snug mb-2 font-landing">
-                      Liquidity Bootstrapping Event
+                      Popcorn's Fair Launch Auction
                     </h1>
-                    <p className="w-1/2 mx-auto text-center text-xl leading-8 font-landing font-light mt-6">
-                      The Popcorn LBP Event is a two-day liquidity bootstrapping
-                      event for the Popcorn community. This is the first
-                      opportunity for the general public to buy POP to
-                      participate in the governance of the network. All proceeds
-                      will go to the Popcorn Treasury, a smart contract entirely
-                      controlled by Popcorn token holders. Please refer to this
-                      Step-by-Step Guide on how to safely participate in the LBP
-                      and check out the FAQ for more on how LBPs work.
-                    </p>
+                    <p className="w-1/2 mx-auto text-center text-xl leading-8 font-landing font-light mt-6">                    The <span translate="no">Popcorn</span>{" "} Fair Launch Auction (FLA) will be the first opportunity for the
+                    general public to join the PopcornDAO by acquiring the POP
+                    token. This is a 2.5 day, multi-chain event for the <span translate="no">Popcorn</span>{" "} {" "}
+                    community where all proceeds raised will go to the <span translate="no">Popcorn</span>{" "}{" "}
+                    Treasury, a smart contract entirely controlled by POP token
+                    holders. Please refer to this{' '}
+                    <Link href="#">
+                      <a className="text-blue-600 hover:text-blue-700 underline">
+                        Step-by-Step Guide
+                      </a>
+                    </Link>{' '}
+                    on how to safely participate in the FLA and{' '}
+                    <Link href="/faq">
+                      <a className="text-blue-600 hover:text-blue-700 underline">
+                        check out the FAQ
+                      </a>
+                    </Link>{' '}
+                    for more on how the auction works.
+                  </p>
                     <form
                       action="https://network.us1.list-manage.com/subscribe/post?u=5ce5e82d673fd2cfaf12849a5&amp;id=e85a091ed3"
                       method="post"
@@ -130,27 +162,47 @@ export default function Desktop(): JSX.Element {
             <div className="w-full pt-12 grid grid-cols-2 ">
               <div className="mr-8">
                 <p className="font-medium text-4xl mb-6">What is Popcorn?</p>
-                <p className="text-xl leading-8 font-light">
-                  Popcorn is the first open-source, community-led, and
-                  self-sustaining network for software collaboration. With
-                  Ethereum, Popcorn is harnessing the power of Ethereum and DeFi
-                  in order to enable developers to truly own their collaboration
-                  infrastructure. The network’s code and treasury of assets are
-                  publicly managed fully in the open allowing any developer to
-                  contribute and influence the direction of the project.
+                <p className="text-xl font-light">
+                  <span translate="no">Popcorn</span>{" "} is aiding a revolutionary shift in global systems
+                  through accessible DeFi products that align financial
+                  wellbeing with positive global impact.
+                </p>
+                <p className="text-xl mt-4 font-light">
+                  In the next months, the roadmap offers multi-chain curated
+                  pools of strategies and DeFi products (on Ethereum, Arbitrum,
+                  Polygon, Fantom, Avalanche, Solana). These products generate
+                  high yield while also funding community selected social impact
+                  and non-profit organizations without any extra costs to the
+                  end user.
+                </p>
+                <p className="text-xl mt-4 font-light">
+                  In 2022, the roadmap includes launching DeFi primitives such
+                  as a lending protocol that produces a native decentralized
+                  stablecoin which has the extraordinary characteristic of
+                  creating impact on a community-wide and global level. How?
+                  Just holding it supports non-profits and public goods; that’s
+                  something that can’t be said of the dollar or any stablecoin
+                  in existence.
+                </p>
+                <p className="text-xl mt-4 font-light">
+                <span translate="no">Popcorn</span>{" "} bakes social and environmental impact into the very foundation of the protocol through its extractive and composable DeFi primitives and products where basis points are used to fund social impact and non-profit organizations.
+                </p>
+                <p className="text-xl mt-4 font-light">
+                Members of the PopcornDAO, or POP token holders, are stewards of <span translate="no">Popcorn</span>{" "} and share the common long-term goal of fueling the growth of the protocol, decentralizing the organization, and nurturing the mission of driving social impact for the public benefit in perpetuity.
                 </p>
               </div>
               <div className="ml-8">
                 <p className="font-medium text-4xl mb-6">The POP Token</p>
-                <p className="text-xl leading-8 font-light">
-                  The POP token (POP) is designed as a governance token that
-                  enables a number of Ethereum-based features as well as the
-                  communal ownership, collective governance, and long-term
-                  sustainability of the Popcorn network. Its holders govern
-                  Popcorn’s Ethereum integration, a smart contract system that
-                  enables unique global names, decentralized organizations, and
-                  experiences that help maintainers sustain their open-source
-                  work. Read more about the POP token and Ethereum integration.
+                <p className="text-xl font-light">
+                  PopcornDAO is a decentralized autonomous organization of
+                  members holding the <span translate="no">Popcorn</span>{" "} governance token POP.
+                </p>
+                <p className="text-xl mt-4 font-light">
+                  Token holders are eligible to participate in the network by
+                  running keeper nodes and voting on proposals that influence
+                  the parameters of Popcorn’s smart contracts. Yield farming and
+                  staking incentives are also made available to token holders to
+                  further increase their yield.
                 </p>
               </div>
             </div>
@@ -166,15 +218,41 @@ export default function Desktop(): JSX.Element {
             <div className="absolute w-full mt-52">
               <div className="mx-auto w-full">
                 <p className="font-medium text-4xl mb-6 text-center ">
-                  How to participate?
+                  Fair Launch Auction Details
                 </p>
                 <p className="w-6/12 mx-auto text-center text-xl leading-8 font-light mt-6">
-                  The Popcorn network will offer 3.75m POP tokens over 48 hours,
-                  from 25.2.2021 ~16:30 UTC till 27.2.2021 ~16:30pm UTC. This
-                  supply will be available on a POP/USDC Balancer Liquidity
-                  Bootstrapping Pool. All proceeds will go to the Popcorn
-                  Treasury, a smart contract entirely controlled by Popcorn
-                  token holders
+                <p className="text-xl  leading-10">
+                    <span className="font-bold">POP Tokens Offered</span>{" "}:
+                    3,750,000
+                  </p>
+                  <p className="text-xl leading-10">
+                    <span className="font-bold">When?</span>{" "} {startDate} ~
+                    {startTime} UTC until {endDate} ~{endTime} UTC
+                  </p>
+                  <p className="text-xl leading-10">
+                    <span className="font-bold">Where?</span>{" "} POP/USDC{' '}
+                    <Link href="https://docs.alchemist.wtf/copper/fair-launch-auctions/what-is-a-fair-launch-auction" passHref>
+                      <a  className="text-blue-600 hover:text-blue-700 underline">Copper Fair Launch Auction Pool</a>
+                    </Link>
+                  </p>
+                  <p className="text-xl leading-10">
+                    <span className="font-bold">Networks supported?</span>{" "}{' '}
+                    Ethereum, Polygon &amp; Arbitrum
+                  </p>
+                  <p className="text-xl leading-10">
+                    For more information please{' '}
+                    <Link href="/faq" passHref>
+                      <a className="text-blue-600 hover:text-blue-700 underline">
+                        see the FAQ
+                      </a>
+                    </Link>{' '}
+                    and the{' '}
+                    <Link href="#" passHref>
+                      <a className="text-blue-600 hover:text-blue-700 underline">
+                        Step-by-Step Guide
+                      </a>
+                    </Link>{' '}
+                  </p>
                 </p>
               </div>
               <div className="bg-gray-100 rounded-2xl flex flex-row w-10/12 mx-auto pt-14 mt-24 px-4">
@@ -192,7 +270,7 @@ export default function Desktop(): JSX.Element {
                     className="w-18 h-12 mb-6"
                   />
                   <p className="text-xl font-medium leading-8 mb-18">
-                    The Balancer LBP is not like a regular Balancer pool. The
+                    A Fair Launch Auction is not like a regular decentralized exchange pool. The
                     price will start high to disincentivize bots, front-running
                     and speculation. Over time, downwards price pressure will be
                     created by the change of relative weights between the two
@@ -212,24 +290,31 @@ export default function Desktop(): JSX.Element {
         </section>
 
         <section className="grid z-10 mt-128 pt-40">
+
           <div className="flex flex-row mb-10 justify-self-center pt-40 mt-114">
-            <p className="mx-4">
-              <a href="https://popcorn.network" target="_blank">
+
+          <p className="mx-4">
+              <a className=" cursor-pointer hover:text-blue-600" href="https://popcorn.network" target="_blank">
                 popcorn.network
               </a>
             </p>
             <p className="mx-4">•</p>
             <p className="mx-4">
-              <a href="https://discord.gg/w9zeRTSZsq" target="_blank">
-                popcorn.discord
+              <a  className=" cursor-pointer hover:text-blue-600" href="https://discord.gg/w9zeRTSZsq" target="_blank">
+                <span translate="no">Popcorn</span>{" "} discord
               </a>
             </p>
             <p className="mx-4">•</p>
-            <p className="mx-4">popcorn.community</p>
+            <p >
+              {' '}
+              <a href="https://forum.popcorn.network"  className=" cursor-pointer hover:text-blue-600 mx-4" target="_blank">
+                forum.popcorn.network
+              </a>
+            </p>
             <p className="mx-4">•</p>
             <p className="mx-4">
-              <a href="https://twitter.com/Popcorn_DAO" target="_blank">
-                @popcorn on twitter
+              <a className=" cursor-pointer hover:text-blue-600" href="https://twitter.com/Popcorn_DAO" target="_blank">
+                @popcorn_dao on twitter
               </a>
             </p>
           </div>
