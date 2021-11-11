@@ -1,3 +1,5 @@
+const { url } = require('inspector');
+
 module.exports = {
   purge: [
     './pages/**/*.{js,ts,jsx,tsx}',
@@ -34,12 +36,19 @@ module.exports = {
 
         secondary: '#73B7EA',
         secondaryLight: '#DBEAFE',
-        secondaryDark: "#25283D",
+        secondaryDark: '#25283D',
+
+        inactiveYellow: '#FFF5CF',
+        activeYellow: '#FFDC38',
 
         ctaYellow: '#F6CB22',
         ctaYellowLight: '#FFD324',
+
+        startPopupGradient: '#F9A058',
+        endPopupGradient: '#FDEAA7',
       },
       backgroundImage: (theme) => ({
+        'header-team': "url('/images/bgHeaderTeam.svg')",
         'hero-pattern': "url('/images/bgHero.svg')",
         'impact-pattern': "url('/images/bgImpact.svg')",
         'countdown-pattern': "url('/images/bgCountdown.svg')",
