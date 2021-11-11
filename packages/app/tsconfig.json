@@ -9,5 +9,13 @@
     "isolatedModules": true
   },
   "exclude": ["dist", ".next", "out", "next.config.js"],
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "paths": {
+    "@popcorn/ui": ["../ui/src"],
+    "@popcorn/ui/*": ["../ui/src/*"],
+    "@popcorn/utils": ["../utils/src"],
+    "@popcorn/utils/*": ["../utils/src/*"],
+    "@popcorn/contracts": ["../contracts/src"],
+    "@popcorn/contracts/*": ["../contracts/src/*"]
+  }
 }
