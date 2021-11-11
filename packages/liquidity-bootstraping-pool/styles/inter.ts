@@ -20,4 +20,6 @@ export default [
   Inter(400),
   Inter(500),
   Inter(600),
+  Inter(700),
+  Inter(800),
 ];
