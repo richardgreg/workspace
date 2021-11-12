@@ -7,43 +7,107 @@ import { useRouter } from 'next/router';
 import React, { Fragment, useEffect, useState } from 'react';
 import { Facebook, GitHub, Menu, Twitter, X } from 'react-feather';
 
+interface TeamMember {
+  name: string;
+  position: string;
+  img: string;
+  linkedIn: string;
+  twitter: string;
+}
+
+const TEAM: TeamMember[] = [
+  {
+    name: 'Anthony Martin',
+    position: 'Founder & CTO',
+    img: 'anthony',
+    linkedIn: 'https://www.linkedin.com/',
+    twitter: 'https://www.twitter.com/',
+  },
+  {
+    name: 'Michael Kisselgof',
+    position: 'Co-founder',
+    img: 'michael',
+    linkedIn: 'https://www.linkedin.com/',
+    twitter: 'https://www.twitter.com/',
+  },
+  {
+    name: 'Mehul Mandania',
+    position: 'Dev',
+    img: 'mehul',
+    linkedIn: 'https://www.linkedin.com/',
+    twitter: 'https://www.twitter.com/',
+  },
+
+  {
+    name: 'Oscar',
+    position: 'Exec Asst',
+    img: 'oscar',
+    linkedIn: 'https://www.linkedin.com/',
+    twitter: 'https://www.twitter.com/',
+  },
+  {
+    name: 'Anna Marie',
+    position: '',
+    img: 'annamarie',
+    linkedIn: 'https://www.linkedin.com/',
+    twitter: 'https://www.twitter.com/',
+  },
+  {
+    name: 'Melody',
+    position: '',
+    img: 'melody',
+    linkedIn: 'https://www.linkedin.com/',
+    twitter: 'https://www.twitter.com/',
+  },
+  {
+    name: 'Melody',
+    position: '',
+    img: 'melody',
+    linkedIn: 'https://www.linkedin.com/',
+    twitter: 'https://www.twitter.com/',
+  },
+  {
+    name: 'Melody',
+    position: '',
+    img: 'melody',
+    linkedIn: 'https://www.linkedin.com/',
+    twitter: 'https://www.twitter.com/',
+  },
+  {
+    name: 'Melody',
+    position: '',
+    img: 'melody',
+    linkedIn: 'https://www.linkedin.com/',
+    twitter: 'https://www.twitter.com/',
+  },
+  {
+    name: 'Melody',
+    position: '',
+    img: 'melody',
+    linkedIn: 'https://www.linkedin.com/',
+    twitter: 'https://www.twitter.com/',
+  },
+  {
+    name: 'Melody',
+    position: '',
+    img: 'melody',
+    linkedIn: 'https://www.linkedin.com/',
+    twitter: 'https://www.twitter.com/',
+  },
+  {
+    name: 'Melody',
+    position: '',
+    img: 'melody',
+    linkedIn: 'https://www.linkedin.com/',
+    twitter: 'https://www.twitter.com/',
+  },
+];
+
 const TeamMemberCard = ({ name, position, image, linkedIn, twitter }) => {
   return (
     <div
-      className="w-full mx-auto flex flex-col items-center "
-      style={{ width: 330, height: 330 }}
-    >
-      <div className="w-36 h-36 flex items-center">
-        <img
-          src={`/images/team/${image}.svg`}
-          alt="Cartoon of team member"
-          className="mx-auto mb-1"
-        ></img>
-      </div>
-      <h3 className="font-semibold text-3xl pt-8">{name}</h3>
-      <h3 className="font-normal text-2xl pt-3">{position}</h3>
-
-      <div className="w-10/12 flex flex-row justify-center mt-4">
-        <a href={linkedIn}>
-          <h3 className="inline-flex px-8 mr-1 py-2 rounded-full text-md font-light hover:bg-primaryLight border-2 border-gray-700">
-            LinkedIn
-          </h3>
-        </a>
-        <a href={twitter}>
-          <h3 className="inline-flex px-8 ml-1 py-2 rounded-full text-md font-light hover:bg-primaryLight border-2 border-gray-700">
-            Twitter
-          </h3>
-        </a>
-      </div>
-    </div>
-  );
-};
-
-const TeamMemberCardMobile = ({ name, position, image, linkedIn, twitter }) => {
-  return (
-    <div
-      className="w-full mx-auto flex flex-col items-center mx-auto mb-10"
-      style={{ height: 330 }}
+      className="mx-auto flex flex-col items-center "
+      style={{ width: 359, height: 441 }}
     >
       <div className="w-36 h-36 flex items-center">
         <img
@@ -56,12 +120,12 @@ const TeamMemberCardMobile = ({ name, position, image, linkedIn, twitter }) => {
       <h3 className="font-normal text-2xl pt-3">{position}</h3>
       <div className="w-10/12 flex flex-row justify-center mt-4">
         <a href={linkedIn}>
-          <h3 className="inline-flex px-8 mr-1 py-2 rounded-full text-md font-light  hover:bg-primaryLight border-2 border-gray-700">
+          <h3 className="inline-flex px-8 mr-1 py-2 rounded-full text-xl font-light hover:bg-primaryLight border-2 border-gray-700">
             LinkedIn
           </h3>
         </a>
         <a href={twitter}>
-          <h3 className="inline-flex px-8 ml-1 py-2 rounded-full text-md font-light hover:bg-primaryLight border-2 border-gray-700">
+          <h3 className="inline-flex px-8 ml-1 py-2 rounded-full text-xl font-light hover:bg-primaryLight border-2 border-gray-700">
             Twitter
           </h3>
         </a>
@@ -73,14 +137,14 @@ const TeamMemberCardMobile = ({ name, position, image, linkedIn, twitter }) => {
 const ContributorCard = ({ name, position, image, linkedIn, twitter }) => {
   return (
     <div
-      className="w-full mx-auto flex flex-col items-center"
+      className="mx-auto flex flex-col items-center mb-12"
       style={{ width: 359, height: 330 }}
     >
       <div className="w-36 h-36  flex items-center relative">
         <img
-          src={`/images/contributors/popcorn.svg`}
+          src={`/images/contributors/popcorn-v2.svg`}
           className="mx-auto mb-1 rounded-full absolute -bottom-10 -left-8 z-30"
-          style={{ width: 46, height: 47 }}
+          // style={{ width: 46, height: 47 }}
         ></img>
         <img
           src={`/images/contributors/bg.svg`}
@@ -89,7 +153,7 @@ const ContributorCard = ({ name, position, image, linkedIn, twitter }) => {
         ></img>
         <img
           src={`/images/contributors/${image}.png`}
-          alt="Black and white contributor headshot"
+          alt="Black and white contributor headshot with overlayed cartoon popcorn"
           className="mx-auto mb-1 rounded-full absolute top-5 right-4 z-20"
         ></img>
       </div>
@@ -97,59 +161,12 @@ const ContributorCard = ({ name, position, image, linkedIn, twitter }) => {
       <h3 className="font-normal text-2xl pt-3">{position}</h3>
       <div className="w-10/12 flex flex-row justify-center mt-4">
         <a href={linkedIn}>
-          <h3 className="inline-flex px-8 mr-1 py-2 rounded-full text-md font-light hover:bg-primaryLight border-2 border-gray-700">
+          <h3 className="inline-flex px-8 mr-1 py-2 rounded-full text-xl font-light hover:bg-primaryLight border-2 border-gray-700">
             LinkedIn
           </h3>
         </a>
         <a href={twitter}>
-          <h3 className="inline-flex px-8 ml-1 py-2 rounded-full text-md font-light hover:bg-primaryLight border-2 border-gray-700">
-            Twitter
-          </h3>
-        </a>
-      </div>
-    </div>
-  );
-};
-
-const ContributorCardMobile = ({
-  name,
-  position,
-  image,
-  linkedIn,
-  twitter,
-}) => {
-  return (
-    <div
-      className="w-full flex flex-col items-center mx-auto mb-10   "
-      style={{ height: 330 }}
-    >
-      <div className="w-36 h-36 flex items-center relative ml-10">
-        <img
-          src={`/images/contributors/popcorn.svg`}
-          className="mx-auto mb-1 rounded-full absolute -bottom-10 -left-8 z-30"
-          style={{ width: 46, height: 47 }}
-        ></img>
-        <img
-          src={`/images/contributors/bg.svg`}
-          className="mx-auto mb-1 rounded-full absolute top-0 left-0 z-10"
-          style={{ width: 241, height: 223 }}
-        ></img>
-        <img
-          src={`/images/contributors/${image}.png`}
-          alt="Black and white contributor headshot"
-          className="mx-auto mb-1 rounded-full absolute top-5 right-4 z-20"
-        ></img>
-      </div>
-      <h3 className="font-semibold text-3xl pt-16">{name}</h3>
-      <h3 className="font-normal text-2xl pt-3">{position}</h3>
-      <div className="w-full flex flex-row justify-center mt-4">
-        <a href={linkedIn}>
-          <h3 className="inline-flex px-8 mr-1 py-2 rounded-full text-md font-light  hover:bg-primaryLight border-2 border-gray-700">
-            LinkedIn
-          </h3>
-        </a>
-        <a href={twitter}>
-          <h3 className="inline-flex px-8 ml-1 py-2 rounded-full text-md font-light hover:bg-primaryLight border-2 border-gray-700">
+          <h3 className="inline-flex px-8 mr-1 py-2 rounded-full text-xl font-light hover:bg-primaryLight border-2 border-gray-700">
             Twitter
           </h3>
         </a>
@@ -292,7 +309,7 @@ const TeamPage = () => {
       </Transition.Root>
       {/* DESKTOP + TABLET VERSION */}
       <div className="hidden lg:flex flex-col w-full h-full">
-        <header className="w-full bg-primary">
+        <header className=" bg-primary">
           <nav className="w-10/12 mx-auto pt-12 pb-4 border-b border-primaryLight flex flex-row items-center justify-between">
             <div>
               <Link href="/" passHref>
@@ -344,8 +361,10 @@ const TeamPage = () => {
             </div>
           </nav>
         </header>
+
+        {/* Hero/Header */}
         <section className="min-h-full">
-          <div className="bg-primary w-full h-8 2xl:h-28"></div>
+          <div className="bg-primary w-full h-8 2xl:h-28 "></div>
           <div
             className="bg-header-team flex-shrink-0 flex-grow-0 w-full h-full"
             style={{
@@ -354,7 +373,7 @@ const TeamPage = () => {
               backgroundPosition: 'center',
             }}
           >
-            <div className="w-10/12 mx-auto flex flex-col lg:flex-row justify-between pb-48 items-center">
+            <div className="w-10/12 mx-auto flex flex-col lg:flex-row justify-between pb-48 items-center ">
               <div className="w-full lg:w-6/12 xl:w-5/12 order-2 lg:order-1">
                 <div className="w-10/12 text-center mx-auto lg:text-left lg:mx-0">
                   <h1 className="font-normal font-landing lg:text-5xl xl:text-7xl leading-snug mb-3">
@@ -378,93 +397,29 @@ const TeamPage = () => {
             <div className="w-full h-24 2xl:h-100"></div>
           </div>
         </section>
+
+        {/* Core team */}
         <section className="w-full mx-auto mb-24 ">
           <h2 className="w-10/12 font-normal font-landing text-5xl xl:text-6xl mb-4 mx-auto">
             Core Team
           </h2>
-          <div className="w-10/12 mx-auto mt-12 grid grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-24">
-            <TeamMemberCard
-              name={'Anthony Martin'}
-              position={'Founder & CTO'}
-              image={'anthony'}
-              linkedIn={'https://www.linkedin.com/ex'}
-              twitter={'https://www.twitter.com/ex'}
-            />
-            <TeamMemberCard
-              name={'Michael Kisselgof'}
-              position={'Founder'}
-              image={'michael'}
-              linkedIn={'https://www.linkedin.com/ex'}
-              twitter={'https://www.twitter.com/ex'}
-            />
-            <TeamMemberCard
-              name={'Oscar Jacobson'}
-              position={'Executive Assistant'}
-              image={'oscar'}
-              linkedIn={'https://www.linkedin.com/ex'}
-              twitter={'https://www.twitter.com/ex'}
-            />
-            <TeamMemberCard
-              name={'Dawqi Lueamw'}
-              position={'Role & Position'}
-              image={'dawqi'}
-              linkedIn={'https://www.linkedin.com/ex'}
-              twitter={'https://www.twitter.com/ex'}
-            />
-            <TeamMemberCard
-              name={'Member Name'}
-              position={'Role & Position'}
-              image={'melody'}
-              linkedIn={'https://www.linkedin.com/ex'}
-              twitter={'https://www.twitter.com/ex'}
-            />
-            <TeamMemberCard
-              name={'Member Name'}
-              position={'Role & Position'}
-              image={'mehul'}
-              linkedIn={'https://www.linkedin.com/ex'}
-              twitter={'https://www.twitter.com/ex'}
-            />
-            <TeamMemberCard
-              name={'Member Name'}
-              position={'Role & Position'}
-              image={'annamarie'}
-              linkedIn={'https://www.linkedin.com/ex'}
-              twitter={'https://www.twitter.com/ex'}
-            />
-            <TeamMemberCard
-              name={'Member Name'}
-              position={'Role & Position'}
-              image={'dawqi2'}
-              linkedIn={'https://www.linkedin.com/ex'}
-              twitter={'https://www.twitter.com/ex'}
-            />
-            <TeamMemberCard
-              name={'Member Name'}
-              position={'Role & Position'}
-              image={'leon'}
-              linkedIn={'https://www.linkedin.com/ex'}
-              twitter={'https://www.twitter.com/ex'}
-            />
-            <TeamMemberCard
-              name={'Member Name'}
-              position={'Role & Position'}
-              image={'anthony'}
-              linkedIn={'https://www.linkedin.com/ex'}
-              twitter={'https://www.twitter.com/ex'}
-            />
-            <TeamMemberCard
-              name={'Member Name'}
-              position={'Role & Position'}
-              image={'annisha'}
-              linkedIn={'https://www.linkedin.com/ex'}
-              twitter={'https://www.twitter.com/ex'}
-            />
+          <div className="w-10/12 mx-auto mt-12 grid grid-cols-2 laptop:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+            {TEAM.map((teamMember) => {
+              return (
+                <TeamMemberCard
+                  name={teamMember.name}
+                  position={teamMember.position}
+                  image={teamMember.img}
+                  linkedIn={teamMember.linkedIn}
+                  twitter={teamMember.twitter}
+                />
+              );
+            })}
           </div>
         </section>
 
+        {/* Divider with image in centre*/}
         <section>
-          {/* Divider with image in centre*/}
           <div className="relative w-10/12 mx-auto">
             <div
               className="absolute inset-0 flex items-center"
@@ -480,11 +435,12 @@ const TeamPage = () => {
           </div>
         </section>
 
-        <section className="w-10/12 mx-auto my-24">
-          <h2 className="font-normal font-landing text-5xl xl:text-6xl mb-12">
+        {/* Contributors */}
+        <section className="w-full mx-auto my-24">
+          <h2 className="w-10/12 font-normal font-landing text-5xl xl:text-6xl mb-4 mx-auto">
             Contributors
           </h2>
-          <div className="w-full mt-12 grid grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-24 mx-auto">
+          <div className="w-10/12 mx-auto mt-12 grid grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 ">
             <ContributorCard
               name={'Name'}
               position={'Job'}
@@ -521,10 +477,10 @@ const TeamPage = () => {
         <section>
           <div
             className="bg-countdown-pattern flex-shrink-0 flex-grow-0 w-full
-          h-full pt-60"
+          h-full pt-60 xl:pt-72 2xl:pt-104"
             style={{
               backgroundRepeat: 'no-repeat',
-              backgroundSize: 'auto',
+              backgroundSize: 'cover',
               backgroundPosition: 'center',
             }}
           >
@@ -624,7 +580,6 @@ const TeamPage = () => {
             <div className="w-6/12">
               <Link href="/" passHref>
                 <a>
-                  {/*TODO The logo is slightly blurred even though its copied strcmdaight from figma*/}
                   <img src="/images/logo.png" alt="Logo" className="h-10"></img>
                 </a>
               </Link>
@@ -656,9 +611,7 @@ const TeamPage = () => {
               <Link href="/" passHref>
                 <a className="hover:text-blue-600">Home</a>
               </Link>
-              {/*<Link href="/" passHref>
-                <a className="hover:text-blue-600">About us</a>
-              </Link>*/}
+
               <Link href="https://medium.com/popcorndao" passHref>
                 <a className="hover:text-blue-600" target="_window">
                   Blog
@@ -691,12 +644,6 @@ const TeamPage = () => {
                 </a>
               </Link>
             </div>
-            {/*<div className="flex flex-col space-y-3">
-            <p className="font-medium text-base uppercase">Documentation</p>
-            <Link href="/" passHref>
-              <a className="hover:text-blue-600">Gitbook</a>
-            </Link>
-          </div>*/}
           </div>
           <p className="font-base text-center py-4">
             ©2021, Popcorn Network. All Rights Reserved
@@ -706,7 +653,7 @@ const TeamPage = () => {
       {/* MOBILE VERSION */}
       <div className="w-full h-full lg:hidden">
         {menuVisible && (
-          <div className="absolute z-10 w-screen">
+          <div className="absolute z-10 w-full">
             <div className="relative w-full bg-bg-gradient py-6">
               <div className="w-10/12 mx-auto ">
                 <div className="grid justify-items-stretch">
@@ -914,77 +861,77 @@ const TeamPage = () => {
         {teamVisible && (
           <section className="w-10/12 mx-auto mb-24">
             <h2 className="font-bold text-3xl mb-8 text-center">Core Team</h2>
-            <TeamMemberCardMobile
+            <TeamMemberCard
               name={'Anthony Martin'}
               position={'Founder & CTO'}
               image={'anthony'}
               linkedIn={'https://www.linkedin.com/ex'}
               twitter={'https://www.twitter.com/ex'}
             />
-            <TeamMemberCardMobile
+            <TeamMemberCard
               name={'Michael Kisselgof'}
               position={'Founder'}
               image={'michael'}
               linkedIn={'https://www.linkedin.com/ex'}
               twitter={'https://www.twitter.com/ex'}
             />
-            <TeamMemberCardMobile
+            <TeamMemberCard
               name={'Oscar Jacobson'}
               position={'Executive Assistant'}
               image={'oscar'}
               linkedIn={'https://www.linkedin.com/ex'}
               twitter={'https://www.twitter.com/ex'}
             />
-            <TeamMemberCardMobile
+            <TeamMemberCard
               name={'Dawqi Lueamw'}
               position={'Role & Position'}
               image={'dawqi'}
               linkedIn={'https://www.linkedin.com/ex'}
               twitter={'https://www.twitter.com/ex'}
             />
-            <TeamMemberCardMobile
+            <TeamMemberCard
               name={'Member Name'}
               position={'Role & Position'}
               image={'melody'}
               linkedIn={'https://www.linkedin.com/ex'}
               twitter={'https://www.twitter.com/ex'}
             />
-            <TeamMemberCardMobile
+            <TeamMemberCard
               name={'Member Name'}
               position={'Role & Position'}
               image={'mehul'}
               linkedIn={'https://www.linkedin.com/ex'}
               twitter={'https://www.twitter.com/ex'}
             />
-            <TeamMemberCardMobile
+            <TeamMemberCard
               name={'Member Name'}
               position={'Role & Position'}
               image={'annamarie'}
               linkedIn={'https://www.linkedin.com/ex'}
               twitter={'https://www.twitter.com/ex'}
             />
-            <TeamMemberCardMobile
+            <TeamMemberCard
               name={'Member Name'}
               position={'Role & Position'}
               image={'dawqi2'}
               linkedIn={'https://www.linkedin.com/ex'}
               twitter={'https://www.twitter.com/ex'}
             />
-            <TeamMemberCardMobile
+            <TeamMemberCard
               name={'Member Name'}
               position={'Role & Position'}
               image={'leon'}
               linkedIn={'https://www.linkedin.com/ex'}
               twitter={'https://www.twitter.com/ex'}
             />
-            <TeamMemberCardMobile
+            <TeamMemberCard
               name={'Member Name'}
               position={'Role & Position'}
               image={'anthony'}
               linkedIn={'https://www.linkedin.com/ex'}
               twitter={'https://www.twitter.com/ex'}
             />
-            <TeamMemberCardMobile
+            <TeamMemberCard
               name={'Member Name'}
               position={'Role & Position'}
               image={'annisha'}
@@ -999,14 +946,14 @@ const TeamPage = () => {
             <h2 className="font-bold text-3xl mb-4 text-center">
               Contributors
             </h2>
-            <ContributorCardMobile
+            <ContributorCard
               name={'Name'}
               position={'Job'}
               image={'contributor'}
               linkedIn={'https://www.linkedin.com/ex'}
               twitter={'https://www.twitter.com/ex'}
             />
-            <ContributorCardMobile
+            <ContributorCard
               name={'Name'}
               position={'Job'}
               image={'contributor'}
@@ -1014,7 +961,7 @@ const TeamPage = () => {
               twitter={'https://www.twitter.com/ex'}
             />
 
-            <ContributorCardMobile
+            <ContributorCard
               name={'Name'}
               position={'Job'}
               image={'contributor'}
