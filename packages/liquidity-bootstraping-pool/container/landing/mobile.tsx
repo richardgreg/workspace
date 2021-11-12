@@ -206,7 +206,7 @@ Members of the PopcornDAO, or POP token holders, are stewards of <span translate
               <p className="font-bold text-xl mb-1">The POP Token</p>
               <p className="text-base font-light">
                 PopcornDAO is a decentralized autonomous organization of members
-                holding the <span translate="no">Popcorn</span>{" "} governance token $POP. Token holders are
+                holding the <span translate="no">Popcorn</span>{" "} governance token POP. Token holders are
                 able to vote on proposals that influence the parameters of
                 Popcorn’s smart contracts. Yield farming and staking incentives
                 are also made available to token holders to further increase

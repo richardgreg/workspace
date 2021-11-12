@@ -70,7 +70,7 @@ export default function Desktop(): JSX.Element {
               </p>
 
               <p className="text-center text-xl font-landing font-medium mt-8">
-                $POP Tokens Offered: 5,000,000
+                POP Tokens Offered: 5,000,000
               </p>
               <p className="text-center text-xl font-landing">
                 When? November 26, 2021 16:30 UTC till November 28, 2021
@@ -100,7 +100,7 @@ export default function Desktop(): JSX.Element {
               <div className="w-full mx-auto my-14">
                 <p className="w-full mx-auto text-center text-xl font-landing leading-10  font-light mt-18">
                   The liquidity bootstrapping event will take place on Balancer,
-                  a decentralized exchange where the $POP token will be offered
+                  a decentralized exchange where the POP token will be offered
                   in a Liquidity Bootstrapping Pool. All proceeds will go to the
                   <span translate="no">Popcorn</span>{" "}{" "}Treasury, a smart contract entirely controlled by
                   <span translate="no">Popcorn</span>{" "} token holders. The intention is to bootstrap liquidity
@@ -111,7 +111,7 @@ export default function Desktop(): JSX.Element {
                   The <span translate="no">Popcorn</span>{" "} Team will tweet out the contract address on the
                   official <span translate="no">Popcorn</span>{" "} Twitter account and the <span translate="no">Popcorn</span>{" "} blog, and you
                   will be able to track the status of the LBP event on
-                  lbp.popcorn.network. Before proceeding, verify that the
+                  launch.popcorn.network. Before proceeding, verify that the
                   contract address comes from an official source and that the
                   Balancer address is the same as the contract address —
                   everything else should be considered a scam.
@@ -121,7 +121,7 @@ export default function Desktop(): JSX.Element {
                 </p>
                 <p className="text-xl mx-auto font-light ">
                   This is the first opportunity for the general public to buy
-                  $POP and participate in the governance of the network. The
+                  POP and participate in the governance of the network. The
                   purpose of this liquidity bootstrapping pool is to:
                 </p>
                 <ul className="list-inside list-disc">
@@ -133,7 +133,7 @@ export default function Desktop(): JSX.Element {
                     Inject liquidity into the <span translate="no">Popcorn</span>{" "} ecosystem
                   </li>
                   <li className="text-xl mx-auto font-light ">
-                    Initiate price discovery for $POP
+                    Initiate price discovery for POP
                   </li>
                 </ul>
               </div>
@@ -173,10 +173,10 @@ export default function Desktop(): JSX.Element {
                   and whale buying.
                 </p>
                 <p className="text-xl mx-auto font-light ">
-                  During the LBP, the price of $POP will start high to
+                  During the LBP, the price of POP will start high to
                   disincentivize bots, front-running, and speculation, then
                   automatically decrease over time. Early investors and team
-                  members that currently hold $POP have their tokens locked up
+                  members that currently hold POP have their tokens locked up
                   and will not be able to dump them during the event. You’re
                   advised to only participate in the LBP if you are familiar
                   with the risks associated with them.
@@ -205,7 +205,7 @@ export default function Desktop(): JSX.Element {
                     Helps prevent whales
                   </li>
                   <li className="text-xl mx-auto font-light ">
-                    Makes $POP open and accessible
+                    Makes POP open and accessible
                   </li>
                 </ul>
               </div>
@@ -216,7 +216,7 @@ export default function Desktop(): JSX.Element {
                 </p>
                 <p className="text-xl mx-auto font-light ">
                   All proceeds will go to the <span translate="no">Popcorn</span>{" "} Treasury, a smart contract
-                  entirely controlled by $POP token holders. Please read the{' '}
+                  entirely controlled by POP token holders. Please read the{' '}
                   <a
                     href="https://popcorn.network/docs/Popcorn_whitepaper_v1.pdf"
                     className="text-xl text-indigo-600"
@@ -233,9 +233,9 @@ export default function Desktop(): JSX.Element {
                   the capital or technical expertise to participate in the LBP?
                 </p>
                 <p className="text-xl mx-auto font-light ">
-                  There will be other ways to acquire $POP tokens in the near
-                  future, including $POP rewards for network contributions and
-                  the ability to purchase $POP on exchanges.
+                  There will be other ways to acquire POP tokens in the near
+                  future, including POP rewards for network contributions and
+                  the ability to purchase POP on exchanges.
                 </p>
               </div>
 
@@ -247,18 +247,18 @@ export default function Desktop(): JSX.Element {
                 <p className="text-xl mx-auto font-light ">
                   Participating in yield farming requires time, capital, and an
                   APY that economically justifies the amount of gas you will
-                  spend in farming and harvesting your $POP rewards. The LBP
+                  spend in farming and harvesting your POP rewards. The LBP
                   comparatively provides a quick and easy way for you to acquire
-                  $POP and immediately become a member of the PopcornDAO.
+                  POP and immediately become a member of the PopcornDAO.
                 </p>
               </div>
 
               <div className="w-full mx-auto my-14">
                 <p className="font-medium text-4xl mb-2 mx-auto ">
-                  What is the total supply of $POP?
+                  What is the total supply of POP?
                 </p>
                 <p className="text-xl mx-auto font-light ">
-                  There is a fixed total supply of 100M $POP.
+                  There is a fixed total supply of 100M POP.
                 </p>
               </div>
 
@@ -267,7 +267,7 @@ export default function Desktop(): JSX.Element {
                   How many tokens are in circulation?
                 </p>
                 <p className="text-xl mx-auto font-light ">
-                  There are 5,500,000 $POP tokens in circulation, including the
+                  There are 5,500,000 POP tokens in circulation, including the
                   tokens made available in the LBP.
                 </p>
               </div>
@@ -278,19 +278,19 @@ export default function Desktop(): JSX.Element {
                 </p>
                 <ul className="list-inside list-disc">
                   <li className="text-xl mx-auto font-light ">
-                    Pool tokens: $POP and USDC
+                    Pool tokens: POP and USDC
                   </li>
                   <li className="text-xl mx-auto font-light ">
-                    $POP start balance: ____
+                    POP start balance: ____
                   </li>
                   <li className="text-xl mx-auto font-light ">
                     USDC start balance: ____
                   </li>
                   <li className="text-xl mx-auto font-light ">
-                    $POP start weight: _____
+                    POP start weight: _____
                   </li>
                   <li className="text-xl mx-auto font-light ">
-                    $POP end weight: _____
+                    POP end weight: _____
                   </li>
                   <li className="text-xl mx-auto font-light ">
                     USDC start weight: ____
@@ -312,8 +312,8 @@ export default function Desktop(): JSX.Element {
                   What tokens does the pool accept?
                 </p>
                 <p className="text-xl mx-auto font-light ">
-                  The pool accepts swapping $POP for any token available on
-                  Balancer, however, it will be cheapest to swap $POP for USDC.
+                  The pool accepts swapping POP for any token available on
+                  Balancer, however, it will be cheapest to swap POP for USDC.
                 </p>
               </div>
 
@@ -326,8 +326,8 @@ export default function Desktop(): JSX.Element {
                   Balancer pool and their weights:
                 </p>
                 <p className="text-xl mx-auto font-light ">
-                  X $POP and Y USDC in weights Z : W = (X*Z)/(Y*W) = _____ USDC
-                  per $POP
+                  X POP and Y USDC in weights Z : W = (X*Z)/(Y*W) = _____ USDC
+                  per POP
                 </p>
               </div>
 
@@ -340,8 +340,8 @@ export default function Desktop(): JSX.Element {
                   given will be:
                 </p>
                 <p className="text-xl mx-auto font-light ">
-                  X $POP and Y USDC with weights 50 : 50 = (X*50)/(Y*50) = ____
-                  USDC per $POP
+                  X POP and Y USDC with weights 50 : 50 = (X*50)/(Y*50) = ____
+                  USDC per POP
                 </p>
 
                 <p className="text-xl mx-auto font-light ">
@@ -423,7 +423,7 @@ export default function Desktop(): JSX.Element {
 
               <div className="w-full mx-auto my-14">
                 <p className="font-medium text-4xl mb-2 mx-auto ">
-                  How is $POP allocated?
+                  How is POP allocated?
                 </p>
                 <img src="images/popallocation.png" />
               </div>
@@ -451,12 +451,12 @@ export default function Desktop(): JSX.Element {
                   supporters and team?
                 </p>
                 <p className="text-xl mx-auto font-light ">
-                  A fixed supply of 100M $POP tokens have been minted at genesis
+                  A fixed supply of 100M POP tokens have been minted at genesis
                   and will be vested over 5 years.
                 </p>
                 <ul className="list-inside list-disc z-10">
                   <li className="text-xl mx-auto font-light ">
-                    $POP Ecosystem 55.2% - Offered in Liquidity Mining. See
+                    POP Ecosystem 55.2% - Offered in Liquidity Mining. See
                     Token Economics
                   </li>
                   <li className="text-xl mx-auto font-light ">

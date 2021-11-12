@@ -74,7 +74,7 @@ export default function Mobile({
                     </p>
 
                     <p className="mx-auto text-center text-base font-landing font-semibold">
-                      $POP Tokens Offered: 5,000,000
+                      POP Tokens Offered: 5,000,000
                     </p>
                     <p className="mx-auto text-center text-base font-landing font-semibold mb-10">
                       When? November 26, 2021 16:30 UTC till November 28, 2021
@@ -82,7 +82,7 @@ export default function Mobile({
                     </p>
                     <p className="mx-auto text-base font-landing mb-10">
                       The liquidity bootstrapping event will take place on
-                      Balancer, a decentralized exchange where the $POP token
+                      Balancer, a decentralized exchange where the POP token
                       will be offered in a Liquidity Bootstrapping Pool. All
                       proceeds will go to the <span translate="no">Popcorn</span>{" "} Treasury, a smart contract
                       entirely controlled by <span translate="no">Popcorn</span>{" "} token holders. The
@@ -94,7 +94,7 @@ export default function Mobile({
                       The <span translate="no">Popcorn</span>{" "} Team will tweet out the contract address on
                       the official <span translate="no">Popcorn</span>{" "} Twitter account and the <span translate="no">Popcorn</span>{" "} blog,
                       and you will be able to track the status of the LBP event
-                      on lbp.popcorn.network. Before proceeding, verify that the
+                      on launch.popcorn.network. Before proceeding, verify that the
                       contract address comes from an official source and that
                       the Balancer address is the same as the contract address —
                       everything else should be considered a scam.
@@ -116,7 +116,7 @@ export default function Mobile({
                 What is the purpose of this event?
               </p>
               <p className="text-base mx-auto ">
-                This is the first opportunity for the general public to buy $POP
+                This is the first opportunity for the general public to buy POP
                 and participate in the governance of the network. The purpose of
                 this liquidity bootstrapping pool is to:
               </p>
@@ -129,7 +129,7 @@ export default function Mobile({
                   Inject liquidity into the <span translate="no">Popcorn</span>{" "} ecosystem
                 </li>
                 <li className="text-base mx-auto ">
-                  Initiate price discovery for $POP
+                  Initiate price discovery for POP
                 </li>
               </ul>
             </div>
@@ -168,10 +168,10 @@ export default function Mobile({
                 and disincentivize front-running, speculation, and whale buying.
               </p>
               <p className="text-base mx-auto ">
-                During the LBP, the price of $POP will start high to
+                During the LBP, the price of POP will start high to
                 disincentivize bots, front-running, and speculation, then
                 automatically decrease over time. Early investors and team
-                members that currently hold $POP have their tokens locked up and
+                members that currently hold POP have their tokens locked up and
                 will not be able to dump them during the event. You’re advised
                 to only participate in the LBP if you are familiar with the
                 risks associated with them.
@@ -198,7 +198,7 @@ export default function Mobile({
                 </li>
                 <li className="text-base mx-auto ">Helps prevent whales</li>
                 <li className="text-base mx-auto ">
-                  Makes $POP open and accessible
+                  Makes POP open and accessible
                 </li>
               </ul>
             </div>
@@ -209,7 +209,7 @@ export default function Mobile({
               </p>
               <p className="text-base mx-auto ">
                 All proceeds will go to the <span translate="no">Popcorn</span>{" "} Treasury, a smart contract
-                entirely controlled by $POP token holders. Please read the{' '}
+                entirely controlled by POP token holders. Please read the{' '}
                 <a
                   href="https://popcorn.network/docs/Popcorn_whitepaper_v1.pdf"
                   className="text-base text-indigo-600"
@@ -226,9 +226,9 @@ export default function Mobile({
                 capital or technical expertise to participate in the LBP?
               </p>
               <p className="text-base mx-auto ">
-                There will be other ways to acquire $POP tokens in the near
-                future, including $POP rewards for network contributions and the
-                ability to purchase $POP on exchanges.
+                There will be other ways to acquire POP tokens in the near
+                future, including POP rewards for network contributions and the
+                ability to purchase POP on exchanges.
               </p>
             </div>
 
@@ -240,18 +240,18 @@ export default function Mobile({
               <p className="text-base mx-auto ">
                 Participating in yield farming requires time, capital, and an
                 APY that economically justifies the amount of gas you will spend
-                in farming and harvesting your $POP rewards. The LBP
+                in farming and harvesting your POP rewards. The LBP
                 comparatively provides a quick and easy way for you to acquire
-                $POP and immediately become a member of the PopcornDAO.
+                POP and immediately become a member of the PopcornDAO.
               </p>
             </div>
 
             <div className="w-10/12 mx-auto my-8">
               <p className="font-bold text-xl mx-auto">
-                What is the total supply of $POP?
+                What is the total supply of POP?
               </p>
               <p className="text-base mx-auto ">
-                There is a fixed total supply of 100M $POP.
+                There is a fixed total supply of 100M POP.
               </p>
             </div>
 
@@ -260,7 +260,7 @@ export default function Mobile({
                 How many tokens are in circulation?
               </p>
               <p className="text-base mx-auto ">
-                There are 5,500,000 $POP tokens in circulation, including the
+                There are 5,500,000 POP tokens in circulation, including the
                 tokens made available in the LBP.
               </p>
             </div>
@@ -270,11 +270,11 @@ export default function Mobile({
                 What are the specifications for the LBP?
               </p>
               <ul className="list-inside list-disc">
-                <li className="text-base mx-auto ">Pool tokens: $POP and USDC</li>
-                <li className="text-base mx-auto ">$POP start balance: ____</li>
+                <li className="text-base mx-auto ">Pool tokens: POP and USDC</li>
+                <li className="text-base mx-auto ">POP start balance: ____</li>
                 <li className="text-base mx-auto ">USDC start balance: ____</li>
-                <li className="text-base mx-auto ">$POP start weight: _____</li>
-                <li className="text-base mx-auto ">$POP end weight: _____</li>
+                <li className="text-base mx-auto ">POP start weight: _____</li>
+                <li className="text-base mx-auto ">POP end weight: _____</li>
                 <li className="text-base mx-auto ">USDC start weight: ____</li>
                 <li className="text-base mx-auto ">USDC end weight: ____</li>
                 <li className="text-base mx-auto ">Swap fee: ______</li>
@@ -287,8 +287,8 @@ export default function Mobile({
                 What tokens does the pool accept?
               </p>
               <p className="text-base mx-auto ">
-                The pool accepts swapping $POP for any token available on
-                Balancer, however, it will be cheapest to swap $POP for USDC.
+                The pool accepts swapping POP for any token available on
+                Balancer, however, it will be cheapest to swap POP for USDC.
               </p>
             </div>
 
@@ -301,8 +301,8 @@ export default function Mobile({
                 Balancer pool and their weights:
               </p>
               <p className="text-base mx-auto ">
-                X $POP and Y USDC in weights Z : W = (X*Z)/(Y*W) = _____ USDC
-                per $POP
+                X POP and Y USDC in weights Z : W = (X*Z)/(Y*W) = _____ USDC
+                per POP
               </p>
             </div>
 
@@ -315,8 +315,8 @@ export default function Mobile({
                 given will be:
               </p>
               <p className="text-base mx-auto ">
-                X $POP and Y USDC with weights 50 : 50 = (X*50)/(Y*50) = ____
-                USDC per $POP
+                X POP and Y USDC with weights 50 : 50 = (X*50)/(Y*50) = ____
+                USDC per POP
               </p>
 
               <p className="text-base mx-auto ">
@@ -398,7 +398,7 @@ export default function Mobile({
 
             <div className="w-10/12 mx-auto my-8">
               <p className="font-bold text-xl mx-auto">
-                How is $POP allocated?
+                How is POP allocated?
               </p>
               <img src="images/popallocation.png" />
             </div>
@@ -424,12 +424,12 @@ export default function Mobile({
                 and team?
               </p>
               <p className="text-base mx-auto ">
-                A fixed supply of 100M $POP tokens have been minted at genesis
+                A fixed supply of 100M POP tokens have been minted at genesis
                 and will be vested over 5 years.
               </p>
               <ul className="list-inside list-disc">
                 <li className="text-base mx-auto ">
-                  $POP Ecosystem 55.2% - Offered in Liquidity Mining. See Token
+                  POP Ecosystem 55.2% - Offered in Liquidity Mining. See Token
                   Economics
                 </li>
                 <li className="text-base mx-auto ">
