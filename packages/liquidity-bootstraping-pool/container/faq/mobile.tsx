@@ -455,7 +455,7 @@ export default function Mobile({
                 and change linearly over time towards a 50%-50% split after 60
                 hours. The graph below visualizes the change:
               </p>
-              <img src="images/lbpweights.png" />
+              <img src="images/lbp_weights.png" />
             </div>
 
             <div className="w-10/12 mx-auto my-12">
@@ -573,7 +573,7 @@ export default function Mobile({
                 A fixed supply of 100M POP tokens have been minted at genesis
                 and will be vested over 5 years.
               </p>
-              <img src="https://miro.medium.com/max/1400/0*-ZshbjUeI9JdOihS" className="mt-2"/>
+              <img src="https://miro.medium.com/max/4800/1*BVV33YEx7R6M-1K38FvgGw.png" className="mt-2"/>
               <img src="images/releaseschedule.png" />
             </div>
 

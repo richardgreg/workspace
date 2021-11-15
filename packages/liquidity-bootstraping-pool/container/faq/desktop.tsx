@@ -470,7 +470,7 @@ export default function Desktop(): JSX.Element {
                   W and change linearly over time towards a 50%-50% split after
                   60 hours. The graph below visualizes the change:
                 </p>
-                <img src="images/lbpweights.png" />
+                <img src="images/lbp_weights.png" />
               </div>
 
               <div className="w-full mx-auto my-14">
@@ -588,7 +588,7 @@ export default function Desktop(): JSX.Element {
                   What is the token allocation and release schedule for
                   supporters and team?
                 </p>
-                <img src="https://miro.medium.com/max/1400/0*-ZshbjUeI9JdOihS" className="relative z-10 mt-4"/>
+                <img src="https://miro.medium.com/max/4800/1*BVV33YEx7R6M-1K38FvgGw.png" className="relative z-10 mt-4"/>
                 <img
                   src="images/releaseschedule.png"
                   className="relative z-10"
