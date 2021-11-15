@@ -16,7 +16,7 @@ export default function Tablet(): JSX.Element {
     { timeZone: 'UTC' },
   );
   return (
-    <div className="hidden md:flex lg:flex xl:hidden 2xl:hidden flex-col w-full h-full font-landing">
+    <div className="hidden md:flex lg:hidden xl:hidden 2xl:hidden flex-col w-full h-full font-landing">
       <div className="flex flex-col w-full h-full">
         <section className="-mt-1">
           <div className="w-full">

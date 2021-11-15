@@ -57,7 +57,7 @@ export default function Desktop(): JSX.Element {
         <section>
           <div className="w-full">
             <img
-              className="w-full object-cover z-0 -mt-96"
+              className="w-full object-cover z-0 lg:-mt-48 xl:-mt-96"
               src="images/bgUpperFaq.svg"
               alt="Upper background"
             />

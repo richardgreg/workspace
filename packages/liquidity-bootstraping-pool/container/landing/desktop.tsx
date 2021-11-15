@@ -16,7 +16,7 @@ export default function Desktop(): JSX.Element {
     { timeZone: 'UTC' },
   );
   return (
-    <div className="hidden xl:flex 2xl:hidden flex-col w-full h-full font-landing">
+    <div className="hidden lg:flex 2xl:hidden flex-col w-full h-full font-landing">
       <div className="flex flex-col w-full h-full">
         <section className="-mt-1">
           <div className="w-full">
