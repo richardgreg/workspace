@@ -674,7 +674,7 @@ const TeamPage = () => {
                 <div className="grid justify-items-stretch">
                   <XIcon
                     onClick={() => toggleMenu(!menuVisible)}
-                    className="my-12 text-white justify-self-end"
+                    className="mt-10 mb-2 text-white justify-self-end"
                     style={{ width: 24, height: 24 }}
                   />
                 </div>
