@@ -55,7 +55,7 @@ p {
 
 @layer components {
   .button {
-    @apply flex-shrink-0 block px-4 py-2 text-base font-medium rounded-md border border-transparent text-base align-middle text-center leading-button shadow-sm;
+    @apply flex-shrink-0 block px-4 py-2 font-medium rounded-md border border-transparent text-base align-middle text-center leading-button shadow-sm;
   }
 
   .button:disabled {
