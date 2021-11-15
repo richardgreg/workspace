@@ -19,7 +19,7 @@ export default function Desktop(): JSX.Element {
     <div className="hidden xl:flex 2xl:hidden flex-col w-full h-full font-landing">
       {/* NavBar*/}
       <div className="flex flex-col w-full h-full">
-        <header className="absolute w-full bg-primary top-20 z-10">
+        <header className="absolute w-full bg-none top-20 z-10">
           <nav className="w-9/12 mx-auto pb-4 flex flex-row items-center justify-between">
             <div>
               <Link href="/" passHref>
@@ -46,7 +46,7 @@ export default function Desktop(): JSX.Element {
                   className="font-medium text-xl cursor-default"
                   target="_window"
                 >
-                  Liquidity Bootstrapping FAQ
+                  Fair Launch FAQ
                 </a>
               </Link>
             </div>
@@ -57,24 +57,27 @@ export default function Desktop(): JSX.Element {
         <section>
           <div className="w-full">
             <img
-              className="w-full object-cover z-0 -mt-72"
+              className="w-full object-cover z-0 -mt-96"
               src="images/bgUpperFaq.svg"
               alt="Upper background"
             />
-            <div className="absolute z-10 top-32 w-full mx-auto flex flex-col pb-10 pt-20">
-            <h1 className="text-center font-light text-6xl leading-snug font-landing">
-                Liquidity Bootstrapping FAQ
+            <div className="absolute z-10 top-40 w-full mx-auto flex flex-col pb-10 pt-20">
+              <h1 className="text-center font-light text-6xl leading-snug font-landing">
+                Fair Launch FAQ
               </h1>
               <p className="text-center text-xl font-landing font-light mt-10">
-                <span translate="no">Popcorn</span>{" "} Liquidity Bootstrapping Event Details:
+                <span translate="no">Popcorn</span> Fair Launch Auction Details:
               </p>
 
               <p className="text-center text-xl font-landing font-medium mt-8">
-                POP Tokens Offered: 5,000,000
+                <span className="font-bold">POP Tokens Offered</span>: 3,750,000
               </p>
               <p className="text-center text-xl font-landing">
-                When? November 26, 2021 16:30 UTC till November 28, 2021
-                ~16:30pm UTC.
+                <span className="font-bold">Networks</span>: Ethereum, Polygon
+                &amp; Arbitrum
+              </p>
+              <p className="text-center text-xl  font-landing">
+                {startDate} ~{startTime} UTC until {endDate} ~{endTime} UTC
               </p>
             </div>
           </div>
@@ -96,25 +99,36 @@ export default function Desktop(): JSX.Element {
                 ></img>
               </div>
             </div>
-            <div className="col-span-2">
+            <div className="col-span-2 relative z-20">
               <div className="w-full mx-auto my-14">
-                <p className="w-full mx-auto text-center text-xl font-landing leading-10  font-light mt-18">
-                  The liquidity bootstrapping event will take place on Balancer,
-                  a decentralized exchange where the POP token will be offered
-                  in a Liquidity Bootstrapping Pool. All proceeds will go to the
-                  <span translate="no">Popcorn</span>{" "}{" "}Treasury, a smart contract entirely controlled by
-                  <span translate="no">Popcorn</span>{" "} token holders. The intention is to bootstrap liquidity
-                  on decentralized exchanges through a fair launch mechanism.
+                <p className="w-full mx-auto text-center text-xl font-landing   font-light mt-18">
+                  The auction will take place on{' '}
+                  <Link href="https://copperlaunch.com" passHref>
+                    <a className="text-blue-600 hover:text-blue-700 underline">
+                      Copperlaunch.com
+                    </a>
+                  </Link>
+                  , a site for Fair Launch Auctions. All proceeds will go to the{' '}
+                  <span translate="no">Popcorn</span> Treasury, a smart contract
+                  entirely controlled by <span translate="no">Popcorn</span>{' '}
+                  token holders.
                 </p>
 
-                <p className="w-full mx-auto text-center text-xl font-landing leading-10 font-light my-18">
-                  The <span translate="no">Popcorn</span>{" "} Team will tweet out the contract address on the
-                  official <span translate="no">Popcorn</span>{" "} Twitter account and the <span translate="no">Popcorn</span>{" "} blog, and you
-                  will be able to track the status of the LBP event on
-                  launch.popcorn.network. Before proceeding, verify that the
-                  contract address comes from an official source and that the
-                  Balancer address is the same as the contract address —
-                  everything else should be considered a scam.
+                <p className="w-full mx-auto text-center text-xl font-landing  font-light mt-6 mb-18">
+                  The official{' '}
+                  <Link href="/faq">
+                    <a className="text-blue-600 hover:text-blue-700 underline">
+                      <span translate="no">Popcorn</span> Twitter account
+                    </a>
+                  </Link>{' '}
+                  will tweet the contract address. You can track the status of
+                  the FLA event on{' '}
+                  <Link href="/faq" passHref>
+                    <a className="text-blue-600 hover:text-blue-700 underline">
+                      launch.popcorn.network
+                    </a>
+                  </Link>
+                  . Everything else should be considered a scam.
                 </p>
                 <p className="font-medium text-4xl mb-2 mx-auto ">
                   What is the purpose of this event?
@@ -130,7 +144,8 @@ export default function Desktop(): JSX.Element {
                     of the core team, advisors, and investors
                   </li>
                   <li className="text-xl mx-auto font-light ">
-                    Inject liquidity into the <span translate="no">Popcorn</span>{" "} ecosystem
+                    Inject liquidity into the{' '}
+                    <span translate="no">Popcorn</span> ecosystem
                   </li>
                   <li className="text-xl mx-auto font-light ">
                     Initiate price discovery for POP
@@ -140,14 +155,101 @@ export default function Desktop(): JSX.Element {
 
               <div className="w-full mx-auto my-14">
                 <p className="font-medium text-4xl mb-2 mx-auto ">
-                  What is a Liquidity Bootstrapping Pool?
+                  What is a Fair Launch Auction (FLA)?
                 </p>
                 <p className="text-xl mx-auto font-light ">
-                  A liquidity bootstrapping pool allows projects to create
-                  meaningful liquidity and distribution at launch, resulting in
-                  a fully customizable token distribution mechanic that gives
-                  teams and governance token holders control and flexibility for
-                  the long term.
+                  Fair Launch Auctions (FLAs) are a specific configuration of
+                  Balancer’s{' '}
+                  <Link
+                    href="https://docs.balancer.fi/products/balancer-pools/liquidity-bootstrapping-pools-lbps"
+                    passHref
+                  >
+                    <a
+                      className="text-blue-600 hover:text-blue-700 underline"
+                      target="_blank"
+                    >
+                      Liquidity Bootstrapping Pools (LBPs)
+                    </a>
+                  </Link>
+                  .
+                </p>
+                <p className="text-xl mx-auto font-light  mt-5 ">
+                  Their primary use cases are to:
+                  <ol className="list-decimal list-inside">
+                    <li>Launch and/or distribute ERC-20 tokens</li>
+                    <li>
+                      Drop collections of ERC-721 NFTs represented by ERC-20
+                      tokens
+                    </li>
+                  </ol>
+                </p>
+                <p className="text-xl font-bold mx-auto  mt-5 ">
+                  Key Features
+                </p>
+
+                <div>
+                  <ul className="list-inside list-disc text-xl  ">
+                    <li>
+                      <span className="font-bold">Price discovery</span>. The
+                      price of the token starts high and drops based on a
+                      pre-configured price decay curve that can be resisted by
+                      buying pressure from auction participants. Anyone can buy
+                      into or sell out of the auction freely at any time, so
+                      price truly regulates itself.
+                    </li>
+                    <li>
+                      <span className="font-bold">
+                        Open and permissionless participation
+                      </span>
+                      . Freely launch tokens and participate in auctions. No
+                      whitelists, hard caps, or listing requirements. There is
+                      no minimum or maximum allocation. Auction participants
+                      choose how much they want to buy.
+                    </li>
+                    <li>
+                      <span className="font-bold">Fair distribution</span>. FLAs
+                      flip the first-come-first-serve launch model on its head
+                      and change token launches from being a race where the
+                      first bot in or the transaction with the highest gas fee
+                      wins. Get your token into the hands of as many people as
+                      possible in a fair way that disincentivizes front-runners
+                      and whales getting better rates than smaller participants.
+                    </li>
+                    <li>
+                      <span className="font-bold">Capital efficiency</span>. The
+                      initial price of the token being auctioned can be
+                      magnified by up to 99 times relative to the collateral
+                      deposited along with it. Additionally, the collateral can
+                      be fully retrieved at the end of the auction unless the
+                      auctioned tokens already exist outside of the FLA and
+                      someone decides to sell into the auction.
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <div className="w-full mx-auto my-14">
+                <p className="font-bold text-4xl mb-2 mx-auto">
+                  Which networks will be supported?
+                </p>
+                <p className="text-xl mx-auto font-light">
+                  The Fair Launch Auction will be deployed on Ethereum, Arbitrum
+                  and Polygon. To participate you will need to acquire the
+                  native token of the chain you wish to participate on (ETH,
+                  AETH, and MATIC respectively) and USDC to purchase POP.
+                </p>
+              </div>
+
+              <div className="w-full mx-auto my-14">
+                <p className="font-bold text-4xl mb-2 mx-auto">
+                  What is a liquidity bootstrapping pool?
+                </p>
+                <p className="text-xl mx-auto font-light ">
+                  A liquidity bootstrapping pool (used by the Fair Launch
+                  Auction) allows projects to create meaningful liquidity and
+                  distribution at launch, resulting in a fully customizable
+                  token distribution mechanic that gives teams and governance
+                  token holders control and flexibility for the long term.
                 </p>
               </div>
 
@@ -156,15 +258,14 @@ export default function Desktop(): JSX.Element {
                   What is Balancer and How Does It Work?
                 </p>
                 <p className="text-xl mx-auto font-light ">
-                  Balancer is a decentralized exchange platform built on
-                  Ethereum that is designed to provide an open alternative to
-                  swap tokens in a permissionless environment. Users can also
-                  use Balancer to create liquidity pools that can be used to
-                  generate yield on trades.
+                  Balancer is a decentralized exchange platform with deployments
+                  on Ethereum, Polygon and Arbitrum. It is designed to provide
+                  an open alternative to swap tokens in a permissionless
+                  environment.
                 </p>
                 <p className="text-xl mx-auto font-light ">
-                  Balancer’s Liquidity Bootstrapping Pool (LBP) is a method used
-                  for launching a token with low capital requirements, where a
+                  Balancer’s Liquidity Bootstrapping Pool (LBP) is used for
+                  launching a token with low capital requirements, where a
                   two-token pool with the project and collateral token are set
                   up with weights that automatically adjust over time. Balancer
                   pools allow projects to release a token and build deep
@@ -175,11 +276,9 @@ export default function Desktop(): JSX.Element {
                 <p className="text-xl mx-auto font-light ">
                   During the LBP, the price of POP will start high to
                   disincentivize bots, front-running, and speculation, then
-                  automatically decrease over time. Early investors and team
-                  members that currently hold POP have their tokens locked up
-                  and will not be able to dump them during the event. You’re
-                  advised to only participate in the LBP if you are familiar
-                  with the risks associated with them.
+                  automatically decrease over time. You should only participate
+                  in the LBP if you are familiar with the risks associated with
+                  them.
                 </p>
                 <p className="text-xl mx-auto font-light ">
                   See Balancer’s Liquidity Bootstrapping Pool FAQ for more
@@ -189,10 +288,11 @@ export default function Desktop(): JSX.Element {
 
               <div className="w-full mx-auto my-14">
                 <p className="font-medium text-4xl mb-2 mx-auto ">
-                  Why are we using an LBP?
+                  Why use an LBP?
                 </p>
                 <p className="text-xl mx-auto font-light ">
-                  The LBP is advantageous for <span translate="no">Popcorn</span>{" "} because it:
+                  The LBP is advantageous for{' '}
+                  <span translate="no">Popcorn</span> because it:
                 </p>
                 <ul className="list-inside list-disc">
                   <li className="text-xl mx-auto font-light ">
@@ -215,7 +315,8 @@ export default function Desktop(): JSX.Element {
                   Where will the proceeds go?
                 </p>
                 <p className="text-xl mx-auto font-light ">
-                  All proceeds will go to the <span translate="no">Popcorn</span>{" "} Treasury, a smart contract
+                  All proceeds will go to the{' '}
+                  <span translate="no">Popcorn</span> Treasury, a smart contract
                   entirely controlled by POP token holders. Please read the{' '}
                   <a
                     href="https://popcorn.network/docs/Popcorn_whitepaper_v1.pdf"
@@ -245,10 +346,19 @@ export default function Desktop(): JSX.Element {
                   why should I buy a token now?
                 </p>
                 <p className="text-xl mx-auto font-light ">
-                  Participating in yield farming requires time, capital, and an
-                  APY that economically justifies the amount of gas you will
-                  spend in farming and harvesting your POP rewards. The LBP
-                  comparatively provides a quick and easy way for you to acquire
+                  Staking rewards (on Ethereum, Polygon &amp; Arbitrum) will
+                  immediately follow the end of the Fair Launch Auction in
+                  December. The only way to take advantage of the staking
+                  rewards and liquidity mining incentives is to have POP tokens.
+                  The POP tokenomic model specifies that the greatest amount of
+                  staking rewards emitted will be during the first several weeks
+                  of the liquidity mining incentives program.
+                </p>
+                <p className="text-xl mx-auto font-light ">
+                  Additionally, participating in yield farming requires time,
+                  capital, and an APY that economically justifies the amount of
+                  gas you will spend in farming and harvesting your POP rewards.
+                  The LBP comparatively provides a quick and easy way to acquire
                   POP and immediately become a member of the PopcornDAO.
                 </p>
               </div>
@@ -258,7 +368,10 @@ export default function Desktop(): JSX.Element {
                   What is the total supply of POP?
                 </p>
                 <p className="text-xl mx-auto font-light ">
-                  There is a fixed total supply of 100M POP.
+                  There is a fixed total supply of 99,999,700 POP. However,
+                  because of the way the smart contracts have been developed,
+                  this number is expected to decline over time due to token
+                  burning associated with keeper incentives.
                 </p>
               </div>
 
@@ -267,7 +380,7 @@ export default function Desktop(): JSX.Element {
                   How many tokens are in circulation?
                 </p>
                 <p className="text-xl mx-auto font-light ">
-                  There are 5,500,000 POP tokens in circulation, including the
+                  There are 4,477,900 POP tokens in circulation, including the
                   tokens made available in the LBP.
                 </p>
               </div>
@@ -281,28 +394,25 @@ export default function Desktop(): JSX.Element {
                     Pool tokens: POP and USDC
                   </li>
                   <li className="text-xl mx-auto font-light ">
-                    POP start balance: ____
+                    POP start balance: 3,750,000
                   </li>
                   <li className="text-xl mx-auto font-light ">
-                    USDC start balance: ____
+                    USDC start balance: 1,125,000
                   </li>
                   <li className="text-xl mx-auto font-light ">
-                    POP start weight: _____
+                    POP start weight: 99%
                   </li>
                   <li className="text-xl mx-auto font-light ">
-                    POP end weight: _____
+                    POP end weight: 50%
                   </li>
                   <li className="text-xl mx-auto font-light ">
-                    USDC start weight: ____
+                    USDC start weight: 1%
                   </li>
                   <li className="text-xl mx-auto font-light ">
-                    USDC end weight: ____
+                    USDC end weight: 50%
                   </li>
                   <li className="text-xl mx-auto font-light ">
-                    Swap fee: ______
-                  </li>
-                  <li className="text-xl mx-auto font-light ">
-                    Duration: 2 days
+                    Duration: 60 hours
                   </li>
                 </ul>
               </div>
@@ -312,8 +422,7 @@ export default function Desktop(): JSX.Element {
                   What tokens does the pool accept?
                 </p>
                 <p className="text-xl mx-auto font-light ">
-                  The pool accepts swapping POP for any token available on
-                  Balancer, however, it will be cheapest to swap POP for USDC.
+                  The pool accepts USDC to purchase POP.
                 </p>
               </div>
 
@@ -326,7 +435,7 @@ export default function Desktop(): JSX.Element {
                   Balancer pool and their weights:
                 </p>
                 <p className="text-xl mx-auto font-light ">
-                  X POP and Y USDC in weights Z : W = (X*Z)/(Y*W) = _____ USDC
+                  X POP and Y USDC in weights Z : W = (X*Z)/(Y*W) = 29.7 USDC
                   per POP
                 </p>
               </div>
@@ -340,7 +449,7 @@ export default function Desktop(): JSX.Element {
                   given will be:
                 </p>
                 <p className="text-xl mx-auto font-light ">
-                  X POP and Y USDC with weights 50 : 50 = (X*50)/(Y*50) = ____
+                  X POP and Y USDC with weights 50 : 50 = (X*50)/(Y*50) = 0.3
                   USDC per POP
                 </p>
 
@@ -359,7 +468,7 @@ export default function Desktop(): JSX.Element {
                 <p className="text-xl mx-auto font-light ">
                   Yes, they will start with the defined weight specification Z :
                   W and change linearly over time towards a 50%-50% split after
-                  48 hours. The graph below visualizes the change:
+                  60 hours. The graph below visualizes the change:
                 </p>
                 <img src="images/lbpweights.png" />
               </div>
@@ -369,9 +478,9 @@ export default function Desktop(): JSX.Element {
                   Is there a minimum or maximum to how much I can contribute?
                 </p>
                 <p className="text-xl mx-auto font-light ">
-                  LBPs do not have restrictions on minimum and maximum
-                  contribution amounts, so you can contribute as much or as
-                  little as you want.
+                  There are no restrictions on minimum and maximum contribution
+                  amounts, so you can contribute as much or as little as you
+                  want.
                 </p>
               </div>
 
@@ -394,30 +503,64 @@ export default function Desktop(): JSX.Element {
 
               <div className="w-full mx-auto my-14">
                 <p className="font-medium text-4xl mb-2 mx-auto ">
-                  Who founded <span translate="no">Popcorn</span>?{" "}
+                  Who founded <span translate="no">Popcorn</span>?{' '}
                 </p>
                 <p className="text-xl mx-auto font-light ">
-                  <span translate="no">Popcorn</span>{" "} was founded by Anthony D Martin and Michael Kisselgof
-                  in January 2021.
+                  <span translate="no">Popcorn</span> was founded by{' '}
+                  <Link href="https://linkedin.com/in/admartin" passHref>
+                    <a
+                      target="_blank"
+                      className="text-blue-600 hover:text-blue-700 underline"
+                    >
+                      Anthony D. Martin
+                    </a>
+                  </Link>{' '}
+                  and{' '}
+                  <Link
+                    href="https://www.linkedin.com/in/michael-kisselgof-8932a38/"
+                    passHref
+                  >
+                    <a
+                      target="_blank"
+                      className="text-blue-600 hover:text-blue-700 underline"
+                    >
+                      Michael Kisselgof
+                    </a>
+                  </Link>{' '}
+                  in early 2021.
                 </p>
-                <p className="text-xl mx-auto font-light ">
-                  Anthony is an experienced leader in technology companies from
-                  seed to public.
+                <p className="text-xl mx-auto font-light mt-5">
+                  Anthony Martin is an experienced technology leader and
+                  entrepreneur having worked with several venture-backed
+                  start-ups and publicly traded companies over the past 12
+                  years. He is the author of{' '}
+                  <Link href="https://github.com/anthonymartin" passHref>
+                    <a
+                      target="_blank"
+                      className="text-blue-600 hover:text-blue-700 underline"
+                    >
+                      several open source projects
+                    </a>
+                  </Link>{' '}
+                  and has worked in the blockchain industry since 2017.
                 </p>
-                <p className="text-xl mx-auto font-light ">
-                  Michael is a crypto veteran. His previous project tokenized IP
-                  on Ethereum to fund biotech R&D with IKU and worked on the
-                  first iterations of erc-1155.
+                <p className="text-xl mx-auto font-light mt-5 ">
+                  Michael Kisselgof is a crypto veteran. His previous project
+                  tokenized IP on Ethereum to fund biotech R&D with IKU and
+                  worked on the first iterations of erc-1155.
                 </p>
               </div>
 
               <div className="w-full mx-auto my-14">
                 <p className="font-medium text-4xl mb-2 mx-auto ">
-                  Who are the early contributors to <span translate="no">Popcorn</span>?{" "}
+                  Who are the early contributors to{' '}
+                  <span translate="no">Popcorn</span>?{' '}
                 </p>
                 <p className="text-xl mx-auto font-light ">
-                  New Form Capital, Kinetic Capital, Sarson Funds, The Crypto
-                  Founders Network, Hestia VC…..
+                  New Form Capital, Kenetic Capital, The LAO, Impossible
+                  Finance, The Crypto Founders Network, Hestia Holdings and
+                  angels from MakerDAO, IBM, NASA, Google and Deloitte to name a
+                  few.
                 </p>
               </div>
 
@@ -430,19 +573,14 @@ export default function Desktop(): JSX.Element {
 
               <div className="w-full mx-auto my-14">
                 <p className="font-medium text-4xl mb-2 mx-auto ">
-                  How much did <span translate="no">Popcorn</span>{" "} raise in previous rounds?
+                  How much did <span translate="no">Popcorn</span> raise in
+                  previous rounds?
                 </p>
                 <p className="text-xl mx-auto font-light ">
-                  The Private Sale and Presale raised the following:
+                  To date, <span translate="no">Popcorn</span> has raised
+                  $3,056,234.44 to support the development of the project, at an
+                  average of $0.223 per POP.
                 </p>
-                <ul className="list-inside list-disc">
-                  <li className="text-xl mx-auto font-light ">
-                    Private Sale: $1,459,675.44
-                  </li>
-                  <li className="text-xl mx-auto font-light ">
-                    Pre-sale: $2,400,000
-                  </li>
-                </ul>
               </div>
 
               <div className="w-full mx-auto my-14">
@@ -450,39 +588,11 @@ export default function Desktop(): JSX.Element {
                   What is the token allocation and release schedule for
                   supporters and team?
                 </p>
-                <p className="text-xl mx-auto font-light ">
-                  A fixed supply of 100M POP tokens have been minted at genesis
-                  and will be vested over 5 years.
-                </p>
-                <ul className="list-inside list-disc z-10">
-                  <li className="text-xl mx-auto font-light ">
-                    POP Ecosystem 55.2% - Offered in Liquidity Mining. See
-                    Token Economics
-                  </li>
-                  <li className="text-xl mx-auto font-light ">
-                    Early Contributors 18.8% - 1 year lock-up, 3 month vesting
-                  </li>
-                  <li className="text-xl mx-auto font-light ">
-                    Team 12.0% - 1 year lock-up, 1 - 4 year linear vesting
-                  </li>
-                  <li className="text-xl mx-auto font-light ">
-                    Foundation 5.0% - N/A
-                  </li>
-                  <li className="text-xl mx-auto font-light ">
-                    LBP 5.0% - No Vesting
-                  </li>
-                  <li className="text-xl mx-auto font-light ">
-                    Partners/Advisors 2.0% - 6 month lock-up, 10% at cliff, 1
-                    year linear vesting
-                  </li>
-                  <li className="text-xl mx-auto font-light ">
-                    Airdrop 2.0% - Variable
-                  </li>
-                  <img
-                    src="images/releaseschedule.png"
-                    className="relative z-10"
-                  />
-                </ul>
+                <img src="https://miro.medium.com/max/1400/0*-ZshbjUeI9JdOihS" className="relative z-10 mt-4"/>
+                <img
+                  src="images/releaseschedule.png"
+                  className="relative z-10"
+                />
               </div>
 
               <div className="w-full mx-auto my-14 relative">
@@ -491,6 +601,14 @@ export default function Desktop(): JSX.Element {
                   pools?
                 </p>
                 <div className="z-20 relative">
+                <p>
+                    <a
+                      href="https://lbp.radicle.network"
+                      className="text-xl text-indigo-600"
+                    >
+                      Radicle LBP
+                    </a>
+                  </p>
                   <p>
                     <a
                       href="https://medium.com/perpetual-protocol/why-we-chose-to-distribute-perp-using-a-balancer-liquidity-bootstrapping-pool-aac7f1ab6181"

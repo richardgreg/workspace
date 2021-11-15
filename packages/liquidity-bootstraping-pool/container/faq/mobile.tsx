@@ -66,43 +66,59 @@ export default function Mobile({
               <div className="flex flex-row">
                 <div className="relative w-full mx-auto flex flex-col lg:flex-row justify-between items-center">
                   <h1 className="text-center font-normal text-4xl leading-snug mb-2 font-landing pt-12">
-                    Liquidity Bootstrapping FAQ
+                    Fair Launch FAQ
                   </h1>
                   <div className="w-10/12">
                     <p className="mx-auto text-center text-base font-landing mb-10">
-                      <span translate="no">Popcorn</span>{" "} Liquidity Bootstrapping Event Details:
+                      <span translate="no">Popcorn</span> Fair Launch Auction
+                      Details:
                     </p>
 
-                    <p className="mx-auto text-center text-base font-landing font-semibold">
-                      POP Tokens Offered: 5,000,000
+                    <p className="mx-auto text-center text-base font-landing">
+                      <span className="font-bold">POP Tokens Offered</span>:
+                      3,750,000
                     </p>
-                    <p className="mx-auto text-center text-base font-landing font-semibold mb-10">
-                      When? November 26, 2021 16:30 UTC till November 28, 2021
-                      ~16:30pm UTC.
+                    <p className="mx-auto text-center text-base font-landing">
+                      <span className="font-bold">Networks</span>: Ethereum,
+                      Polygon &amp; Arbitrum
                     </p>
-                    <p className="mx-auto text-base font-landing mb-10">
-                      The liquidity bootstrapping event will take place on
-                      Balancer, a decentralized exchange where the POP token
-                      will be offered in a Liquidity Bootstrapping Pool. All
-                      proceeds will go to the <span translate="no">Popcorn</span>{" "} Treasury, a smart contract
-                      entirely controlled by <span translate="no">Popcorn</span>{" "} token holders. The
-                      intention is to bootstrap liquidity on decentralized
-                      exchanges through a fair launch mechanism.
+                    <p className="mx-auto text-center text-base font-landing mt-2 mb-10">
+                      {startDate} ~{startTime} UTC until {endDate} ~{endTime}{' '}
+                      UTC
+                    </p>
+                    <p className="mx-auto text-base font-landing mb-5">
+                      The auction will take place on{' '}
+                      <Link href="https://copperlaunch.com" passHref>
+                        <a className="text-blue-600 hover:text-blue-700 underline">
+                          Copperlaunch.com
+                        </a>
+                      </Link>
+                      , a site for Fair Launch Auctions. All proceeds will go to
+                      the <span translate="no">Popcorn</span> Treasury, a smart
+                      contract entirely controlled by{' '}
+                      <span translate="no">Popcorn</span> token holders.
                     </p>
 
                     <p className="mx-auto text-base font-landing mb-10">
-                      The <span translate="no">Popcorn</span>{" "} Team will tweet out the contract address on
-                      the official <span translate="no">Popcorn</span>{" "} Twitter account and the <span translate="no">Popcorn</span>{" "} blog,
-                      and you will be able to track the status of the LBP event
-                      on launch.popcorn.network. Before proceeding, verify that the
-                      contract address comes from an official source and that
-                      the Balancer address is the same as the contract address —
-                      everything else should be considered a scam.
+                      The official{' '}
+                      <Link href="/faq">
+                        <a className="text-blue-600 hover:text-blue-700 underline">
+                          <span translate="no">Popcorn</span> Twitter account
+                        </a>
+                      </Link>{' '}
+                      will tweet the contract address. You can track the status
+                      of the FLA event on{' '}
+                      <Link href="/faq" passHref>
+                        <a className="text-blue-600 hover:text-blue-700 underline">
+                          launch.popcorn.network
+                        </a>
+                      </Link>
+                      . Everything else should be considered a scam.
                     </p>
                   </div>
                 </div>
               </div>
-              <img src="/images/leftcatfaq.svg" className="mx-auto w-1/2"/>
+              <img src="/images/leftcatfaq.svg" className="mx-auto w-1/2" />
             </div>
           </div>
         </div>
@@ -118,7 +134,7 @@ export default function Mobile({
               <p className="text-base mx-auto ">
                 This is the first opportunity for the general public to buy POP
                 and participate in the governance of the network. The purpose of
-                this liquidity bootstrapping pool is to:
+                the fair launch auction is to:
               </p>
               <ul className="list-inside list-disc">
                 <li className="text-base mx-auto ">
@@ -126,7 +142,12 @@ export default function Mobile({
                   the core team, advisors, and investors
                 </li>
                 <li className="text-base mx-auto ">
-                  Inject liquidity into the <span translate="no">Popcorn</span>{" "} ecosystem
+                  Inject liquidity into the <span translate="no">Popcorn</span>{' '}
+                  ecosystem.
+                </li>
+                <li className="text-base mx-auto ">
+                  Allow users to operate keeper nodes in the future when
+                  contracts are deployed.
                 </li>
                 <li className="text-base mx-auto ">
                   Initiate price discovery for POP
@@ -136,14 +157,98 @@ export default function Mobile({
 
             <div className="w-10/12 mx-auto my-8">
               <p className="font-bold text-xl mx-auto">
+                What is a Fair Launch Auction (FLA)?
+              </p>
+              <p className="text-base mx-auto ">
+                Fair Launch Auctions (FLAs) are a specific configuration of
+                Balancer’s{' '}
+                <Link
+                  href="https://docs.balancer.fi/products/balancer-pools/liquidity-bootstrapping-pools-lbps"
+                  passHref
+                >
+                  <a
+                    className="text-blue-600 hover:text-blue-700 underline"
+                    target="_blank"
+                  >
+                    Liquidity Bootstrapping Pools (LBPs)
+                  </a>
+                </Link>
+                .
+              </p>
+              <p className="text-base mx-auto ">
+                Their primary use cases are to:
+                <ol className="list-decimal list-inside">
+                  <li>Launch and/or distribute ERC-20 tokens</li>
+                  <li>
+                    Drop collections of ERC-721 NFTs represented by ERC-20
+                    tokens
+                  </li>
+                </ol>
+              </p>
+              <p className="text-base font-bold mx-auto mt-5">Key Features</p>
+              <div>
+                <ul className="list-inside list-disc text-base">
+                  <li>
+                    <span className="font-bold">Price discovery</span>. The
+                    price of the token starts high and drops based on a
+                    pre-configured price decay curve that can be resisted by
+                    buying pressure from auction participants. Anyone can buy
+                    into or sell out of the auction freely at any time, so price
+                    truly regulates itself.
+                  </li>
+                  <li>
+                    <span className="font-bold">
+                      Open and permissionless participation
+                    </span>
+                    . Freely launch tokens and participate in auctions. No
+                    whitelists, hard caps, or listing requirements. There is no
+                    minimum or maximum allocation. Auction participants choose
+                    how much they want to buy.
+                  </li>
+                  <li>
+                    <span className="font-bold">Fair distribution</span>. FLAs
+                    flip the first-come-first-serve launch model on its head and
+                    change token launches from being a race where the first bot
+                    in or the transaction with the highest gas fee wins. Get
+                    your token into the hands of as many people as possible in a
+                    fair way that disincentivizes front-runners and whales
+                    getting better rates than smaller participants.
+                  </li>
+                  <li>
+                    <span className="font-bold">Capital efficiency</span>. The
+                    initial price of the token being auctioned can be magnified
+                    by up to 99 times relative to the collateral deposited along
+                    with it. Additionally, the collateral can be fully retrieved
+                    at the end of the auction unless the auctioned tokens
+                    already exist outside of the FLA and someone decides to sell
+                    into the auction.
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div className="w-10/12 mx-auto my-8">
+              <p className="font-bold text-xl mx-auto">
+                Which networks will be supported?
+              </p>
+              <p className="text-base mx-auto ">
+                The Fair Launch Auction will be deployed on Ethereum, Arbitrum
+                and Polygon. To participate you will need to acquire the native
+                token of the chain you wish to participate on (ETH, AETH, and
+                MATIC respectively) and USDC to purchase POP.
+              </p>
+            </div>
+
+            <div className="w-10/12 mx-auto my-8">
+              <p className="font-bold text-xl mx-auto">
                 What is a Liquidity Bootstrapping Pool?
               </p>
               <p className="text-base mx-auto ">
-                A liquidity bootstrapping pool allows projects to create
-                meaningful liquidity and distribution at launch, resulting in a
-                fully customizable token distribution mechanic that gives teams
-                and governance token holders control and flexibility for the
-                long term.
+                A liquidity bootstrapping pool (used by the Fair Launch Auction)
+                allows projects to create meaningful liquidity and distribution
+                at launch, resulting in a fully customizable token distribution
+                mechanic that gives teams and governance token holders control
+                and flexibility for the long term.
               </p>
             </div>
 
@@ -152,42 +257,36 @@ export default function Mobile({
                 What is Balancer and How Does It Work?
               </p>
               <p className="text-base mx-auto ">
-                Balancer is a decentralized exchange platform built on Ethereum
-                that is designed to provide an open alternative to swap tokens
-                in a permissionless environment. Users can also use Balancer to
-                create liquidity pools that can be used to generate yield on
-                trades.
+                Balancer is a decentralized exchange platform with deployments
+                on Ethereum, Polygon and Arbitrum. It is designed to provide an
+                open alternative to swap tokens in a permissionless environment.
               </p>
-              <p className="text-base mx-auto ">
-                Balancer’s Liquidity Bootstrapping Pool (LBP) is a method used
-                for launching a token with low capital requirements, where a
+              <p className="text-base mx-auto mt-4">
+                Balancer’s Liquidity Bootstrapping Pool (LBP) is used for
+                launching a token with low capital requirements, where a
                 two-token pool with the project and collateral token are set up
                 with weights that automatically adjust over time. Balancer pools
                 allow projects to release a token and build deep liquidity at
                 the same time. They apply downward price pressure on the token
                 and disincentivize front-running, speculation, and whale buying.
               </p>
-              <p className="text-base mx-auto ">
+              <p className="text-base mx-auto mt-4">
                 During the LBP, the price of POP will start high to
                 disincentivize bots, front-running, and speculation, then
-                automatically decrease over time. Early investors and team
-                members that currently hold POP have their tokens locked up and
-                will not be able to dump them during the event. You’re advised
-                to only participate in the LBP if you are familiar with the
-                risks associated with them.
+                automatically decrease over time. You should only participate in
+                the LBP if you are familiar with the risks associated with them.
               </p>
-              <p className="text-base mx-auto ">
+              <p className="text-base mx-auto mt-4">
                 See Balancer’s Liquidity Bootstrapping Pool FAQ for more
                 information.
               </p>
             </div>
 
             <div className="w-10/12 mx-auto my-8">
-              <p className="font-bold text-xl mx-auto">
-                Why are we using an LBP?
-              </p>
+              <p className="font-bold text-xl mx-auto">Why use an LBP?</p>
               <p className="text-base mx-auto ">
-                The LBP is advantageous for <span translate="no">Popcorn</span>{" "} because it:
+                The LBP is advantageous for <span translate="no">Popcorn</span>{' '}
+                because it:
               </p>
               <ul className="list-inside list-disc">
                 <li className="text-base mx-auto ">
@@ -200,6 +299,9 @@ export default function Mobile({
                 <li className="text-base mx-auto ">
                   Makes POP open and accessible
                 </li>
+                <li className="text-base mx-auto ">
+                  Balancer pools are secure and battle-tested
+                </li>
               </ul>
             </div>
 
@@ -208,11 +310,12 @@ export default function Mobile({
                 Where will the proceeds go?
               </p>
               <p className="text-base mx-auto ">
-                All proceeds will go to the <span translate="no">Popcorn</span>{" "} Treasury, a smart contract
-                entirely controlled by POP token holders. Please read the{' '}
+                All proceeds will go to the <span translate="no">Popcorn</span>{' '}
+                Treasury, a smart contract entirely controlled by POP token
+                holders. Please read the{' '}
                 <a
                   href="https://popcorn.network/docs/Popcorn_whitepaper_v1.pdf"
-                  className="text-base text-indigo-600"
+                  className="text-blue-600 hover:text-blue-700 underline"
                 >
                   White Paper
                 </a>{' '}
@@ -238,10 +341,19 @@ export default function Mobile({
                 why should I buy a token now?
               </p>
               <p className="text-base mx-auto ">
-                Participating in yield farming requires time, capital, and an
-                APY that economically justifies the amount of gas you will spend
-                in farming and harvesting your POP rewards. The LBP
-                comparatively provides a quick and easy way for you to acquire
+                Staking rewards (on Ethereum, Polygon &amp; Arbitrum) will
+                immediately follow the end of the Fair Launch Auction in
+                December. The only way to take advantage of the staking rewards
+                and liquidity mining incentives is to have POP tokens. The POP
+                tokenomic model specifies that the greatest amount of staking
+                rewards emitted will be during the first several weeks of the
+                liquidity mining incentives program.
+              </p>
+              <p className="text-base mx-auto mt-4">
+                Additionally, participating in yield farming requires time,
+                capital, and an APY that economically justifies the amount of
+                gas you will spend in farming and harvesting your POP rewards.
+                The LBP comparatively provides a quick and easy way to acquire
                 POP and immediately become a member of the PopcornDAO.
               </p>
             </div>
@@ -251,7 +363,10 @@ export default function Mobile({
                 What is the total supply of POP?
               </p>
               <p className="text-base mx-auto ">
-                There is a fixed total supply of 100M POP.
+                There is a fixed total supply of 99,999,700 POP. However,
+                because of the way the smart contracts have been developed, this
+                number is expected to decline over time due to token burning
+                associated with keeper incentives.
               </p>
             </div>
 
@@ -260,8 +375,8 @@ export default function Mobile({
                 How many tokens are in circulation?
               </p>
               <p className="text-base mx-auto ">
-                There are 5,500,000 POP tokens in circulation, including the
-                tokens made available in the LBP.
+                There are 4,477,900 POP tokens in circulation, including the
+                tokens that will become available through the FLA.
               </p>
             </div>
 
@@ -270,15 +385,20 @@ export default function Mobile({
                 What are the specifications for the LBP?
               </p>
               <ul className="list-inside list-disc">
-                <li className="text-base mx-auto ">Pool tokens: POP and USDC</li>
-                <li className="text-base mx-auto ">POP start balance: ____</li>
-                <li className="text-base mx-auto ">USDC start balance: ____</li>
-                <li className="text-base mx-auto ">POP start weight: _____</li>
-                <li className="text-base mx-auto ">POP end weight: _____</li>
-                <li className="text-base mx-auto ">USDC start weight: ____</li>
-                <li className="text-base mx-auto ">USDC end weight: ____</li>
-                <li className="text-base mx-auto ">Swap fee: ______</li>
-                <li className="text-base mx-auto ">Duration: 2 days</li>
+                <li className="text-base mx-auto ">
+                  Pool tokens: POP and USDC
+                </li>
+                <li className="text-base mx-auto ">
+                  POP start balance: 3,750,000
+                </li>
+                <li className="text-base mx-auto ">
+                  USDC start balance: 1,125,000
+                </li>
+                <li className="text-base mx-auto ">POP start weight: 99%</li>
+                <li className="text-base mx-auto ">POP end weight: 50%</li>
+                <li className="text-base mx-auto ">USDC start weight: 1%</li>
+                <li className="text-base mx-auto ">USDC end weight: 50%</li>
+                <li className="text-base mx-auto ">Duration: 60 hours</li>
               </ul>
             </div>
 
@@ -287,8 +407,7 @@ export default function Mobile({
                 What tokens does the pool accept?
               </p>
               <p className="text-base mx-auto ">
-                The pool accepts swapping POP for any token available on
-                Balancer, however, it will be cheapest to swap POP for USDC.
+                The pool accepts USDC to purchase POP.
               </p>
             </div>
 
@@ -301,8 +420,8 @@ export default function Mobile({
                 Balancer pool and their weights:
               </p>
               <p className="text-base mx-auto ">
-                X POP and Y USDC in weights Z : W = (X*Z)/(Y*W) = _____ USDC
-                per POP
+                X POP and Y USDC in weights Z : W = (X*Z)/(Y*W) = 29.7 USDC per
+                POP
               </p>
             </div>
 
@@ -315,8 +434,8 @@ export default function Mobile({
                 given will be:
               </p>
               <p className="text-base mx-auto ">
-                X POP and Y USDC with weights 50 : 50 = (X*50)/(Y*50) = ____
-                USDC per POP
+                X POP and Y USDC with weights 50 : 50 = (X*50)/(Y*50) = 0.3 USDC
+                per POP
               </p>
 
               <p className="text-base mx-auto ">
@@ -333,7 +452,7 @@ export default function Mobile({
               </p>
               <p className="text-base mx-auto ">
                 Yes, they will start with the defined weight specification Z : W
-                and change linearly over time towards a 50%-50% split after 48
+                and change linearly over time towards a 50%-50% split after 60
                 hours. The graph below visualizes the change:
               </p>
               <img src="images/lbpweights.png" />
@@ -344,9 +463,8 @@ export default function Mobile({
                 Is there a minimum or maximum to how much I can contribute?
               </p>
               <p className="text-base mx-auto ">
-                LBPs do not have restrictions on minimum and maximum
-                contribution amounts, so you can contribute as much or as little
-                as you want.
+                There are no restrictions on minimum and maximum contribution
+                amounts, so you can contribute as much or as little as you want.
               </p>
             </div>
 
@@ -369,53 +487,84 @@ export default function Mobile({
 
             <div className="w-10/12 mx-auto my-8">
               <p className="font-bold text-xl mx-auto">
-                Who founded <span translate="no">Popcorn</span>?{" "}
+                Who founded <span translate="no">Popcorn</span>?{' '}
               </p>
               <p className="text-base mx-auto ">
-                <span translate="no">Popcorn</span>{" "} was founded by Anthony D Martin and Michael Kisselgof in
-                January 2021.
+                <span translate="no">Popcorn</span> was founded by{' '}
+                <Link href="https://linkedin.com/in/admartin" passHref>
+                  <a
+                    target="_blank"
+                    className="text-blue-600 hover:text-blue-700 underline"
+                  >
+                    Anthony D. Martin
+                  </a>
+                </Link>{' '}
+                and{' '}
+                <Link
+                  href="https://www.linkedin.com/in/michael-kisselgof-8932a38/"
+                  passHref
+                >
+                  <a
+                    target="_blank"
+                    className="text-blue-600 hover:text-blue-700 underline"
+                  >
+                    Michael Kisselgof
+                  </a>
+                </Link>{' '}
+                in early 2021.
               </p>
               <p className="text-base mx-auto ">
-                Anthony is an experienced leader in technology companies from
-                seed to public.
+                Anthony Martin is an experienced technology leader and
+                entrepreneur having worked with several venture-backed start-ups
+                and publicly traded companies over the past 12 years. He is the
+                author of{' '}
+                <Link href="https://github.com/anthonymartin" passHref>
+                  <a
+                    target="_blank"
+                    className="text-blue-600 hover:text-blue-700 underline"
+                  >
+                    several open source projects
+                  </a>
+                </Link>{' '}
+                and has worked in the blockchain industry since 2017.
               </p>
               <p className="text-base mx-auto ">
-                Michael is a crypto veteran. His previous project tokenized IP
-                on Ethereum to fund biotech R&D with IKU and worked on the first
-                iterations of erc-1155.
+                Michael Kisselgof is a crypto veteran. His previous project
+                tokenized IP on Ethereum to fund biotech R&D with IKU and worked
+                on the first iterations of erc-1155.
               </p>
             </div>
 
             <div className="w-10/12 mx-auto my-8">
               <p className="font-bold text-xl mx-auto">
-                Who are the early contributors to <span translate="no">Popcorn</span>?{" "}
+                Who are the early contributors to{' '}
+                <span translate="no">Popcorn</span>?{' '}
               </p>
               <p className="text-base mx-auto ">
-                New Form Capital, Kinetic Capital, Sarson Funds, The Crypto
-                Founders Network, Hestia VC…..
+                New Form Capital, Kenetic Capital, The LAO, Impossible Finance,
+                The Crypto Founders Network, Hestia Holdings and angels from
+                MakerDAO, IBM, NASA, Google and Deloitte to name a few.
               </p>
             </div>
 
             <div className="w-10/12 mx-auto my-8">
-              <p className="font-bold text-xl mx-auto">
-                How is POP allocated?
-              </p>
+              <p className="font-bold text-xl mx-auto">How is POP allocated?</p>
               <img src="images/popallocation.png" />
             </div>
 
             <div className="w-10/12 mx-auto my-8">
               <p className="font-bold text-xl mx-auto">
-                How much did <span translate="no">Popcorn</span>{" "} raise in previous rounds?
+                How much did <span translate="no">Popcorn</span> raise in
+                previous rounds?
               </p>
               <p className="text-base mx-auto ">
                 The Private Sale and Presale raised the following:
               </p>
-              <ul className="list-inside list-disc">
-                <li className="text-base mx-auto ">
-                  Private Sale: $1,459,675.44
-                </li>
-                <li className="text-base mx-auto ">Pre-sale: $2,400,000</li>
-              </ul>
+              <p className="text-base mx-auto ">
+                To date, <span translate="no">Popcorn</span> has raised
+                $3,056,234.44 to support the development of the project, at an
+                average of $0.223 per POP.
+              </p>
             </div>
 
             <div className="w-10/12 mx-auto my-8">
@@ -427,31 +576,21 @@ export default function Mobile({
                 A fixed supply of 100M POP tokens have been minted at genesis
                 and will be vested over 5 years.
               </p>
-              <ul className="list-inside list-disc">
-                <li className="text-base mx-auto ">
-                  POP Ecosystem 55.2% - Offered in Liquidity Mining. See Token
-                  Economics
-                </li>
-                <li className="text-base mx-auto ">
-                  Early Contributors 18.8% - 1 year lock-up, 3 month vesting
-                </li>
-                <li className="text-base mx-auto ">
-                  Team 12.0% - 1 year lock-up, 1 - 4 year linear vesting
-                </li>
-                <li className="text-base mx-auto ">Foundation 5.0% - N/A</li>
-                <li className="text-base mx-auto ">LBP 5.0% - No Vesting</li>
-                <li className="text-base mx-auto ">
-                  Partners/Advisors 2.0% - 6 month lock-up, 10% at cliff, 1 year
-                  linear vesting
-                </li>
-                <li className="text-base mx-auto ">Airdrop 2.0% - Variable</li>
-                <img src="images/releaseschedule.png" />
-              </ul>
+              <img src="https://miro.medium.com/max/1400/0*-ZshbjUeI9JdOihS" />
+              <img src="images/releaseschedule.png" />
             </div>
 
             <div className="w-10/12 mx-auto mt-14">
               <p className="font-bold text-xl mx-auto">
                 Where can I read more about other Liquidity Bootstrapping pools?
+              </p>
+              <p>
+                <a
+                  href="https://lbp.radicle.network"
+                  className="text-base text-indigo-600"
+                >
+                  Radicle LBP
+                </a>
               </p>
               <p>
                 <a
@@ -492,23 +631,23 @@ export default function Mobile({
       </section>
 
       <section className="w-10/12 mx-auto mt-8 border-t border-gray-500">
-          <div className="flex flex-row">
-            <p className="w-1/2">
-              <a href="https://popcorn.network">popcorn.network</a>
-            </p>
-            <p className="w-1/2">
-              <a href="https://forum.popcorn.network/">popcorn.community</a>
-            </p>
-          </div>
-          <div className="flex flex-row">
-            <p className="w-1/2">
-              <a href="https://discord.gg/w9zeRTSZsq">discord</a>
-            </p>
-            <p className="w-1/2">
-              <a href="https://twitter.com/Popcorn_DAO">@popcorn on twitter</a>
-            </p>
-          </div>
-        </section>
+        <div className="flex flex-row">
+          <p className="w-1/2">
+            <a href="https://popcorn.network">popcorn.network</a>
+          </p>
+          <p className="w-1/2">
+            <a href="https://forum.popcorn.network/">popcorn.community</a>
+          </p>
+        </div>
+        <div className="flex flex-row">
+          <p className="w-1/2">
+            <a href="https://discord.gg/w9zeRTSZsq">discord</a>
+          </p>
+          <p className="w-1/2">
+            <a href="https://twitter.com/Popcorn_DAO">@popcorn on twitter</a>
+          </p>
+        </div>
+      </section>
     </div>
   );
 }
