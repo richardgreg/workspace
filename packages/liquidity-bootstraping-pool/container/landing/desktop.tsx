@@ -24,49 +24,52 @@ export default function Desktop(): JSX.Element {
               <div className="relative">
                 <header className="w-full bg-primary pt-12">
                   <nav className="w-9/12 mx-auto pb-4 flex flex-row items-center justify-between">
-                  <div>
-              <Link href="/" passHref>
-                <a>
-                  <img
-                    src="/images/textLogo.png"
-                    alt="Logo"
-                    className="h-12"
-                  ></img>
-                </a>
-              </Link>
-            </div>
-            <div className="space-x-8  relative z-20">
-              <Link href="/guide" passHref>
-                <a
-                  className="font-light text-xl cursor-pointer hover:text-blue-600"
-                  target="_window"
-                >
-                  Step-by-Step Guide
-                </a>
-              </Link>
-              <Link href="/faq" passHref>
-                <a
-                  className="font-light text-xl cursor-pointer hover:text-blue-600"
-                  target="_window"
-                >
-                  Liquidity Bootstrapping FAQ
-                </a>
-              </Link>
-              <Link
-                href="https://medium.com/popcorndao/pop-token-economics-5a580f0bf712"
-                passHref
-              >
-                <a
-                  className="font-light text-xl cursor-pointer hover:text-blue-600"
-                  target="_window"
-                >
-                  Tokenomics
-                </a>
-              </Link>
-            </div>
+                    <div>
+                      <Link href="/" passHref>
+                        <a>
+                          <img
+                            src="/images/textLogo.png"
+                            alt="Logo"
+                            className="h-12"
+                          ></img>
+                        </a>
+                      </Link>
+                    </div>
+                    <div className="space-x-8  relative z-20">
+                      <Link href="/guide" passHref>
+                        <a
+                          className="font-light text-xl cursor-pointer hover:text-blue-600"
+                          target="_window"
+                        >
+                          Step-by-Step Guide
+                        </a>
+                      </Link>
+                      <Link href="/faq" passHref>
+                        <a
+                          className="font-light text-xl cursor-pointer hover:text-blue-600"
+                          target="_window"
+                        >
+                          Liquidity Bootstrapping FAQ
+                        </a>
+                      </Link>
+                      <Link
+                        href="https://medium.com/popcorndao/pop-token-economics-5a580f0bf712"
+                        passHref
+                      >
+                        <a
+                          className="font-light text-xl cursor-pointer hover:text-blue-600"
+                          target="_window"
+                        >
+                          Tokenomics
+                        </a>
+                      </Link>
+                    </div>
                   </nav>
                 </header>
-                <div className="h-32" style={{backgroundColor: '#FDEAA7'}}></div>
+                <div
+                  className="h-32"
+                  style={{ backgroundColor: '#FDEAA7' }}
+                ></div>
                 <img
                   className="w-full object-cover z-0 "
                   src="images/bgLandingPageUpper.svg"
@@ -77,31 +80,34 @@ export default function Desktop(): JSX.Element {
                   src="images/rocket.svg"
                   alt="Cat riding a rocket with orange shooting stars"
                 />
-                <div className="absolute mx-auto flex flex-col justify-between -bottom-0 items-center z-20">
-    <div>
-
+                <div className="absolute mx-auto flex flex-col justify-between -bottom-6 items-center z-20">
+                  <div>
                     <h1 className="text-center font-light text-6xl leading-snug mb-2 font-landing">
-                      <span translate="no">Popcorn's</span>{" "} Fair Launch Auction
+                      <span translate="no">Popcorn's</span> Fair Launch Auction
                     </h1>
-                    <p className="w-1/2 mx-auto text-center text-xl leading-8 font-landing font-light mt-6">                    The <span translate="no">Popcorn</span>{" "} Fair Launch Auction (FLA) will be the first opportunity for the
-                    general public to join the PopcornDAO by acquiring the POP
-                    token. This is a 2.5 day, multi-chain event for the <span translate="no">Popcorn</span>{" "} {" "}
-                    community where all proceeds raised will go to the <span translate="no">Popcorn</span>{" "}{" "}
-                    Treasury, a smart contract entirely controlled by POP token
-                    holders. Please refer to this{' '}
-                    <Link href="#">
-                      <a className="text-blue-600 hover:text-blue-700 underline">
-                        Step-by-Step Guide
-                      </a>
-                    </Link>{' '}
-                    on how to safely participate in the FLA and{' '}
-                    <Link href="/faq">
-                      <a className="text-blue-600 hover:text-blue-700 underline">
-                        check out the FAQ
-                      </a>
-                    </Link>{' '}
-                    for more on how the auction works.
-                  </p>
+                    <p className="w-1/2 mx-auto text-center text-xl leading-8 font-landing font-light mt-6">
+                      The <span translate="no">Popcorn</span> Fair Launch
+                      Auction (FLA) will be the first opportunity for the
+                      general public to join the PopcornDAO by acquiring the POP
+                      token. This is a 2.5 day, multi-chain event for the{' '}
+                      <span translate="no">Popcorn</span> community where all
+                      proceeds raised will go to the{' '}
+                      <span translate="no">Popcorn</span> Treasury, a smart
+                      contract entirely controlled by POP token holders. Please
+                      refer to this{' '}
+                      <Link href="#">
+                        <a className="text-blue-600 hover:text-blue-700 underline">
+                          Step-by-Step Guide
+                        </a>
+                      </Link>{' '}
+                      on how to safely participate in the FLA and{' '}
+                      <Link href="/faq">
+                        <a className="text-blue-600 hover:text-blue-700 underline">
+                          check out the FAQ
+                        </a>
+                      </Link>{' '}
+                      for more on how the auction works.
+                    </p>
                     <form
                       action="https://network.us1.list-manage.com/subscribe/post?u=5ce5e82d673fd2cfaf12849a5&amp;id=e85a091ed3"
                       method="post"
@@ -161,11 +167,13 @@ export default function Desktop(): JSX.Element {
           <div className="w-9/12 mx-auto flex flex-row justify-between items-center mt-48">
             <div className="w-full pt-12 grid grid-cols-2 ">
               <div className="mr-8">
-                <p className="font-medium text-4xl mb-6">What is <span translate="no">Popcorn</span>?{" "}</p>
+                <p className="font-medium text-4xl mb-6">
+                  What is <span translate="no">Popcorn</span>?{' '}
+                </p>
                 <p className="text-xl font-light">
-                  <span translate="no">Popcorn</span>{" "} is aiding a revolutionary shift in global systems
-                  through accessible DeFi products that align financial
-                  wellbeing with positive global impact.
+                  <span translate="no">Popcorn</span> is aiding a revolutionary
+                  shift in global systems through accessible DeFi products that
+                  align financial wellbeing with positive global impact.
                 </p>
                 <p className="text-xl mt-4 font-light">
                   In the next months, the roadmap offers multi-chain curated
@@ -185,17 +193,26 @@ export default function Desktop(): JSX.Element {
                   in existence.
                 </p>
                 <p className="text-xl mt-4 font-light">
-                <span translate="no">Popcorn</span>{" "} bakes social and environmental impact into the very foundation of the protocol through its extractive and composable DeFi primitives and products where basis points are used to fund social impact and non-profit organizations.
+                  <span translate="no">Popcorn</span> bakes social and
+                  environmental impact into the very foundation of the protocol
+                  through its extractive and composable DeFi primitives and
+                  products where basis points are used to fund social impact and
+                  non-profit organizations.
                 </p>
                 <p className="text-xl mt-4 font-light">
-                Members of the PopcornDAO, or POP token holders, are stewards of <span translate="no">Popcorn</span>{" "} and share the common long-term goal of fueling the growth of the protocol, decentralizing the organization, and nurturing the mission of driving social impact for the public benefit in perpetuity.
+                  Members of the PopcornDAO, or POP token holders, are stewards
+                  of <span translate="no">Popcorn</span> and share the common
+                  long-term goal of fueling the growth of the protocol,
+                  decentralizing the organization, and nurturing the mission of
+                  driving social impact for the public benefit in perpetuity.
                 </p>
               </div>
               <div className="ml-8">
                 <p className="font-medium text-4xl mb-6">The POP Token</p>
                 <p className="text-xl font-light">
                   PopcornDAO is a decentralized autonomous organization of
-                  members holding the <span translate="no">Popcorn</span>{" "} governance token POP.
+                  members holding the <span translate="no">Popcorn</span>{' '}
+                  governance token POP.
                 </p>
                 <p className="text-xl mt-4 font-light">
                   Token holders are eligible to participate in the network by
@@ -215,28 +232,33 @@ export default function Desktop(): JSX.Element {
               src="images/bgLBPIndexLower.svg"
               className="absolute w-full -top-72 pt-18 z-0"
             ></img>
-            <div className="absolute w-full mt-52">
+            <div className="absolute w-full mt-80">
               <div className="mx-auto w-full">
                 <p className="font-medium text-4xl mb-6 text-center ">
                   Fair Launch Auction Details
                 </p>
                 <p className="w-6/12 mx-auto text-center text-xl leading-8 font-light mt-6">
-                <p className="text-xl  leading-10">
-                    <span className="font-bold">POP Tokens Offered</span>{" "}:
+                  <p className="text-xl  leading-10">
+                    <span className="font-bold">POP Tokens Offered</span> :
                     3,750,000
                   </p>
                   <p className="text-xl leading-10">
-                    <span className="font-bold">When?</span>{" "} {startDate} ~
+                    <span className="font-bold">When?</span> {startDate} ~
                     {startTime} UTC until {endDate} ~{endTime} UTC
                   </p>
                   <p className="text-xl leading-10">
-                    <span className="font-bold">Where?</span>{" "} POP/USDC{' '}
-                    <Link href="https://docs.alchemist.wtf/copper/fair-launch-auctions/what-is-a-fair-launch-auction" passHref>
-                      <a  className="text-blue-600 hover:text-blue-700 underline">Copper Fair Launch Auction Pool</a>
+                    <span className="font-bold">Where?</span> POP/USDC{' '}
+                    <Link
+                      href="https://docs.alchemist.wtf/copper/fair-launch-auctions/what-is-a-fair-launch-auction"
+                      passHref
+                    >
+                      <a className="text-blue-600 hover:text-blue-700 underline">
+                        Copper Fair Launch Auction Pool
+                      </a>
                     </Link>
                   </p>
                   <p className="text-xl leading-10">
-                    <span className="font-bold">Networks supported?</span>{" "}{' '}
+                    <span className="font-bold">Networks supported?</span>{' '}
                     Ethereum, Polygon &amp; Arbitrum
                   </p>
                   <p className="text-xl leading-10">
@@ -270,11 +292,12 @@ export default function Desktop(): JSX.Element {
                     className="w-18 h-12 mb-6"
                   />
                   <p className="text-xl font-medium leading-8 mb-18">
-                    A Fair Launch Auction is not like a regular decentralized exchange pool. The
-                    price will start high to disincentivize bots, front-running
-                    and speculation. Over time, downwards price pressure will be
-                    created by the change of relative weights between the two
-                    assets. Only participate if you know what you are doing.
+                    A Fair Launch Auction is not like a regular decentralized
+                    exchange pool. The price will start high to disincentivize
+                    bots, front-running and speculation. Over time, downwards
+                    price pressure will be created by the change of relative
+                    weights between the two assets. Only participate if you know
+                    what you are doing.
                   </p>
                 </div>
                 <div className="w-2/12 relative">
@@ -289,31 +312,45 @@ export default function Desktop(): JSX.Element {
           </div>
         </section>
 
-        <section className="grid z-10 mt-128 pt-40">
-
+        <section className="grid z-10 mt-128 pt-60">
           <div className="flex flex-row mb-10 justify-self-center pt-40 mt-114">
-
-          <p className="mx-4">
-              <a className=" cursor-pointer hover:text-blue-600" href="https://popcorn.network" target="_blank">
+            <p className="mx-4">
+              <a
+                className=" cursor-pointer hover:text-blue-600"
+                href="https://popcorn.network"
+                target="_blank"
+              >
                 popcorn.network
               </a>
             </p>
             <p className="mx-4">•</p>
             <p className="mx-4">
-              <a  className=" cursor-pointer hover:text-blue-600" href="https://discord.gg/w9zeRTSZsq" target="_blank">
-                <span translate="no">Popcorn</span>{" "} discord
+              <a
+                className=" cursor-pointer hover:text-blue-600"
+                href="https://discord.gg/w9zeRTSZsq"
+                target="_blank"
+              >
+                <span translate="no">Popcorn</span> discord
               </a>
             </p>
             <p className="mx-4">•</p>
-            <p >
+            <p>
               {' '}
-              <a href="https://forum.popcorn.network"  className=" cursor-pointer hover:text-blue-600 mx-4" target="_blank">
+              <a
+                href="https://forum.popcorn.network"
+                className=" cursor-pointer hover:text-blue-600 mx-4"
+                target="_blank"
+              >
                 forum.popcorn.network
               </a>
             </p>
             <p className="mx-4">•</p>
             <p className="mx-4">
-              <a className=" cursor-pointer hover:text-blue-600" href="https://twitter.com/Popcorn_DAO" target="_blank">
+              <a
+                className=" cursor-pointer hover:text-blue-600"
+                href="https://twitter.com/Popcorn_DAO"
+                target="_blank"
+              >
                 @popcorn_dao on twitter
               </a>
             </p>
