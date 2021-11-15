@@ -16,7 +16,7 @@ export default function Desktop(): JSX.Element {
     { timeZone: 'UTC' },
   );
   return (
-    <div className="hidden xl:flex 2xl:hidden flex-col w-full h-full font-landing">
+    <div className="hidden lg:flex 2xl:hidden flex-col w-full h-full font-landing">
       {/* NavBar*/}
       <div className="flex flex-col w-full h-full">
         <header className="absolute w-full bg-none top-20 z-10">
@@ -69,7 +69,7 @@ export default function Desktop(): JSX.Element {
                 <span translate="no">Popcorn</span> Fair Launch Auction Details:
               </p>
 
-              <p className="text-center text-xl font-landing font-medium mt-8">
+              <p className="text-center text-xl font-landing font-medium mt-2">
                 <span className="font-bold">POP Tokens Offered</span>: 3,750,000
               </p>
               <p className="text-center text-xl font-landing">
@@ -101,7 +101,7 @@ export default function Desktop(): JSX.Element {
             </div>
             <div className="col-span-2 relative z-20">
               <div className="w-full mx-auto my-14">
-                <p className="w-full mx-auto text-center text-xl font-landing   font-light mt-18">
+                <p className="w-full mx-auto text-xl font-landing font-light mt-18">
                   The auction will take place on{' '}
                   <Link href="https://copperlaunch.com" passHref>
                     <a className="text-blue-600 hover:text-blue-700 underline">
@@ -114,7 +114,7 @@ export default function Desktop(): JSX.Element {
                   token holders.
                 </p>
 
-                <p className="w-full mx-auto text-center text-xl font-landing  font-light mt-6 mb-18">
+                <p className="w-full mx-auto text-xl font-landing  font-light mt-6 mb-18">
                   The official{' '}
                   <Link href="/faq">
                     <a className="text-blue-600 hover:text-blue-700 underline">
@@ -138,7 +138,7 @@ export default function Desktop(): JSX.Element {
                   POP and participate in the governance of the network. The
                   purpose of this liquidity bootstrapping pool is to:
                 </p>
-                <ul className="list-inside list-disc">
+                <ul className="list-inside list-disc mt-2">
                   <li className="text-xl mx-auto font-light ">
                     Distribute governance power to a broader community outside
                     of the core team, advisors, and investors
@@ -175,7 +175,7 @@ export default function Desktop(): JSX.Element {
                 </p>
                 <p className="text-xl mx-auto font-light  mt-5 ">
                   Their primary use cases are to:
-                  <ol className="list-decimal list-inside">
+                  <ol className="list-decimal list-inside mt-1">
                     <li>Launch and/or distribute ERC-20 tokens</li>
                     <li>
                       Drop collections of ERC-721 NFTs represented by ERC-20
@@ -183,12 +183,12 @@ export default function Desktop(): JSX.Element {
                     </li>
                   </ol>
                 </p>
-                <p className="text-xl font-bold mx-auto  mt-5 ">
-                  Key Features
+                <p className="text-xl font-bold mt-5">
+                  Key Features:
                 </p>
 
                 <div>
-                  <ul className="list-inside list-disc text-xl  ">
+                  <ul className="list-inside list-disc text-xl space-y-3 mt-2">
                     <li>
                       <span className="font-bold">Price discovery</span>. The
                       price of the token starts high and drops based on a
@@ -229,7 +229,7 @@ export default function Desktop(): JSX.Element {
               </div>
 
               <div className="w-full mx-auto my-14">
-                <p className="font-bold text-4xl mb-2 mx-auto">
+                <p className="font-medium text-4xl mb-2 mx-auto">
                   Which networks will be supported?
                 </p>
                 <p className="text-xl mx-auto font-light">
@@ -241,7 +241,7 @@ export default function Desktop(): JSX.Element {
               </div>
 
               <div className="w-full mx-auto my-14">
-                <p className="font-bold text-4xl mb-2 mx-auto">
+                <p className="font-medium text-4xl mb-2 mx-auto">
                   What is a liquidity bootstrapping pool?
                 </p>
                 <p className="text-xl mx-auto font-light ">
@@ -254,7 +254,7 @@ export default function Desktop(): JSX.Element {
               </div>
 
               <div className="w-full mx-auto my-14">
-                <p className="font-medium text-4xl mb-2 mx-auto ">
+                <p className="font-medium text-4xl mb-2 mx-auto">
                   What is Balancer and How Does It Work?
                 </p>
                 <p className="text-xl mx-auto font-light ">
@@ -263,7 +263,7 @@ export default function Desktop(): JSX.Element {
                   an open alternative to swap tokens in a permissionless
                   environment.
                 </p>
-                <p className="text-xl mx-auto font-light ">
+                <p className="text-xl mx-auto font-light mt-4">
                   Balancer’s Liquidity Bootstrapping Pool (LBP) is used for
                   launching a token with low capital requirements, where a
                   two-token pool with the project and collateral token are set
@@ -273,14 +273,14 @@ export default function Desktop(): JSX.Element {
                   on the token and disincentivize front-running, speculation,
                   and whale buying.
                 </p>
-                <p className="text-xl mx-auto font-light ">
+                <p className="text-xl mx-auto font-light mt-4">
                   During the LBP, the price of POP will start high to
                   disincentivize bots, front-running, and speculation, then
                   automatically decrease over time. You should only participate
                   in the LBP if you are familiar with the risks associated with
                   them.
                 </p>
-                <p className="text-xl mx-auto font-light ">
+                <p className="text-xl mx-auto font-light mt-4">
                   See Balancer’s Liquidity Bootstrapping Pool FAQ for more
                   information.
                 </p>
@@ -294,7 +294,7 @@ export default function Desktop(): JSX.Element {
                   The LBP is advantageous for{' '}
                   <span translate="no">Popcorn</span> because it:
                 </p>
-                <ul className="list-inside list-disc">
+                <ul className="list-inside list-disc mt-2">
                   <li className="text-xl mx-auto font-light ">
                     Distributes governance tokens in a fair launch
                   </li>
@@ -345,7 +345,7 @@ export default function Desktop(): JSX.Element {
                   If you are going to offer liquidity mining in the future, then
                   why should I buy a token now?
                 </p>
-                <p className="text-xl mx-auto font-light ">
+                <p className="text-xl mx-auto font-light">
                   Staking rewards (on Ethereum, Polygon &amp; Arbitrum) will
                   immediately follow the end of the Fair Launch Auction in
                   December. The only way to take advantage of the staking
@@ -354,7 +354,7 @@ export default function Desktop(): JSX.Element {
                   staking rewards emitted will be during the first several weeks
                   of the liquidity mining incentives program.
                 </p>
-                <p className="text-xl mx-auto font-light ">
+                <p className="text-xl mx-auto font-light mt-4">
                   Additionally, participating in yield farming requires time,
                   capital, and an APY that economically justifies the amount of
                   gas you will spend in farming and harvesting your POP rewards.
@@ -448,12 +448,12 @@ export default function Desktop(): JSX.Element {
                   In the scenario that there is no demand at all the last price
                   given will be:
                 </p>
-                <p className="text-xl mx-auto font-light ">
+                <p className="text-xl mx-auto font-light mt-2">
                   X POP and Y USDC with weights 50 : 50 = (X*50)/(Y*50) = 0.3
                   USDC per POP
                 </p>
 
-                <p className="text-xl mx-auto font-light ">
+                <p className="text-xl mx-auto font-light mt-2">
                   You can use the simulation we created with token amounts and
                   weights to predict the price as it is difficult to determine
                   the last price precisely. Thank you to the Perpetual Protocol
@@ -502,10 +502,10 @@ export default function Desktop(): JSX.Element {
               </div>
 
               <div className="w-full mx-auto my-14">
-                <p className="font-medium text-4xl mb-2 mx-auto ">
+                <p className="font-medium text-4xl mb-2 mx-auto">
                   Who founded <span translate="no">Popcorn</span>?{' '}
                 </p>
-                <p className="text-xl mx-auto font-light ">
+                <p className="text-xl mx-auto font-light">
                   <span translate="no">Popcorn</span> was founded by{' '}
                   <Link href="https://linkedin.com/in/admartin" passHref>
                     <a

@@ -190,8 +190,8 @@ export default function LargeDesktop(): JSX.Element {
                     </li>
                   </ol>
                 </p>
-                <p className="text-xl font-bold mx-auto leading-10 mt-5 ">
-                  Key Features
+                <p className="text-xl font-bold leading-10 mt-5 ">
+                  Key Features:
                 </p>
 
                 <div>

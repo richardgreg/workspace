@@ -65,11 +65,11 @@ export default function Mobile({
             <div className="bg-primary">
               <div className="flex flex-row">
                 <div className="relative w-full mx-auto flex flex-col lg:flex-row justify-between items-center">
-                  <h1 className="text-center font-normal text-4xl leading-snug mb-2 font-landing pt-12">
+                  <h1 className="text-center font-normal text-4xl mb-2 font-landing pt-12 w-10/12">
                     Fair Launch FAQ
                   </h1>
                   <div className="w-10/12">
-                    <p className="mx-auto text-center text-base font-landing mb-10">
+                    <p className="mx-auto text-base text-center font-landing mb-10">
                       <span translate="no">Popcorn</span> Fair Launch Auction
                       Details:
                     </p>
@@ -127,8 +127,8 @@ export default function Mobile({
       <section className="">
         <div className="">
           <div className="">
-            <div className="w-10/12 mx-auto my-8">
-              <p className="font-bold text-xl mx-auto">
+            <div className="w-10/12 mx-auto my-12">
+              <p className="font-bold text-xl mx-auto mb-1">
                 What is the purpose of this event?
               </p>
               <p className="text-base mx-auto ">
@@ -136,7 +136,7 @@ export default function Mobile({
                 and participate in the governance of the network. The purpose of
                 the fair launch auction is to:
               </p>
-              <ul className="list-inside list-disc">
+              <ul className="list-inside list-disc mt-2 space-y-1">
                 <li className="text-base mx-auto ">
                   Distribute governance power to a broader community outside of
                   the core team, advisors, and investors
@@ -155,8 +155,8 @@ export default function Mobile({
               </ul>
             </div>
 
-            <div className="w-10/12 mx-auto my-8">
-              <p className="font-bold text-xl mx-auto">
+            <div className="w-10/12 mx-auto my-12">
+              <p className="font-bold text-xl mx-auto mb-1">
                 What is a Fair Launch Auction (FLA)?
               </p>
               <p className="text-base mx-auto ">
@@ -175,9 +175,9 @@ export default function Mobile({
                 </Link>
                 .
               </p>
-              <p className="text-base mx-auto ">
+              <p className="text-base mt-5">
                 Their primary use cases are to:
-                <ol className="list-decimal list-inside">
+                <ol className="list-decimal list-inside mt-1">
                   <li>Launch and/or distribute ERC-20 tokens</li>
                   <li>
                     Drop collections of ERC-721 NFTs represented by ERC-20
@@ -185,9 +185,9 @@ export default function Mobile({
                   </li>
                 </ol>
               </p>
-              <p className="text-base font-bold mx-auto mt-5">Key Features</p>
+              <p className="text-base font-bold mt-5">Key Features:</p>
               <div>
-                <ul className="list-inside list-disc text-base">
+                <ul className="list-inside list-disc text-base mt-1 space-y-2">
                   <li>
                     <span className="font-bold">Price discovery</span>. The
                     price of the token starts high and drops based on a
@@ -227,8 +227,8 @@ export default function Mobile({
               </div>
             </div>
 
-            <div className="w-10/12 mx-auto my-8">
-              <p className="font-bold text-xl mx-auto">
+            <div className="w-10/12 mx-auto my-12">
+              <p className="font-bold text-xl mx-auto mb-1">
                 Which networks will be supported?
               </p>
               <p className="text-base mx-auto ">
@@ -239,8 +239,8 @@ export default function Mobile({
               </p>
             </div>
 
-            <div className="w-10/12 mx-auto my-8">
-              <p className="font-bold text-xl mx-auto">
+            <div className="w-10/12 mx-auto my-12">
+              <p className="font-bold text-xl mx-auto mb-1">
                 What is a Liquidity Bootstrapping Pool?
               </p>
               <p className="text-base mx-auto ">
@@ -252,8 +252,8 @@ export default function Mobile({
               </p>
             </div>
 
-            <div className="w-10/12 mx-auto my-8">
-              <p className="font-bold text-xl mx-auto">
+            <div className="w-10/12 mx-auto my-12">
+              <p className="font-bold text-xl mx-auto mb-1">
                 What is Balancer and How Does It Work?
               </p>
               <p className="text-base mx-auto ">
@@ -282,13 +282,13 @@ export default function Mobile({
               </p>
             </div>
 
-            <div className="w-10/12 mx-auto my-8">
-              <p className="font-bold text-xl mx-auto">Why use an LBP?</p>
+            <div className="w-10/12 mx-auto my-12">
+              <p className="font-bold text-xl mx-auto mb-1">Why use an LBP?</p>
               <p className="text-base mx-auto ">
                 The LBP is advantageous for <span translate="no">Popcorn</span>{' '}
                 because it:
               </p>
-              <ul className="list-inside list-disc">
+              <ul className="list-inside list-disc mt-1 space-y-1">
                 <li className="text-base mx-auto ">
                   Distributes governance tokens in a fair launch
                 </li>
@@ -305,8 +305,8 @@ export default function Mobile({
               </ul>
             </div>
 
-            <div className="w-10/12 mx-auto my-8">
-              <p className="font-bold text-xl mx-auto">
+            <div className="w-10/12 mx-auto my-12">
+              <p className="font-bold text-xl mx-auto mb-1">
                 Where will the proceeds go?
               </p>
               <p className="text-base mx-auto ">
@@ -323,8 +323,8 @@ export default function Mobile({
               </p>
             </div>
 
-            <div className="w-10/12 mx-auto my-8">
-              <p className="font-bold text-xl mx-auto">
+            <div className="w-10/12 mx-auto my-12">
+              <p className="font-bold text-xl mx-auto mb-1">
                 What if you want to be part of the community but do not have the
                 capital or technical expertise to participate in the LBP?
               </p>
@@ -335,8 +335,8 @@ export default function Mobile({
               </p>
             </div>
 
-            <div className="w-10/12 mx-auto my-8">
-              <p className="font-bold text-xl mx-auto">
+            <div className="w-10/12 mx-auto my-12">
+              <p className="font-bold text-xl mx-auto mb-1">
                 If you are going to offer liquidity mining in the future, then
                 why should I buy a token now?
               </p>
@@ -358,8 +358,8 @@ export default function Mobile({
               </p>
             </div>
 
-            <div className="w-10/12 mx-auto my-8">
-              <p className="font-bold text-xl mx-auto">
+            <div className="w-10/12 mx-auto my-12">
+              <p className="font-bold text-xl mx-auto mb-1">
                 What is the total supply of POP?
               </p>
               <p className="text-base mx-auto ">
@@ -370,8 +370,8 @@ export default function Mobile({
               </p>
             </div>
 
-            <div className="w-10/12 mx-auto my-8">
-              <p className="font-bold text-xl mx-auto">
+            <div className="w-10/12 mx-auto my-12">
+              <p className="font-bold text-xl mx-auto mb-1">
                 How many tokens are in circulation?
               </p>
               <p className="text-base mx-auto ">
@@ -380,8 +380,8 @@ export default function Mobile({
               </p>
             </div>
 
-            <div className="w-10/12 mx-auto my-8">
-              <p className="font-bold text-xl mx-auto">
+            <div className="w-10/12 mx-auto my-12">
+              <p className="font-bold text-xl mx-auto mb-1">
                 What are the specifications for the LBP?
               </p>
               <ul className="list-inside list-disc">
@@ -402,8 +402,8 @@ export default function Mobile({
               </ul>
             </div>
 
-            <div className="w-10/12 mx-auto my-8">
-              <p className="font-bold text-xl mx-auto">
+            <div className="w-10/12 mx-auto my-12">
+              <p className="font-bold text-xl mx-auto mb-1">
                 What tokens does the pool accept?
               </p>
               <p className="text-base mx-auto ">
@@ -411,8 +411,8 @@ export default function Mobile({
               </p>
             </div>
 
-            <div className="w-10/12 mx-auto my-8">
-              <p className="font-bold text-xl mx-auto">
+            <div className="w-10/12 mx-auto my-12">
+              <p className="font-bold text-xl mx-auto mb-1">
                 How was the initial price calculated?
               </p>
               <p className="text-base mx-auto ">
@@ -425,8 +425,8 @@ export default function Mobile({
               </p>
             </div>
 
-            <div className="w-10/12 mx-auto my-8">
-              <p className="font-bold text-xl mx-auto">
+            <div className="w-10/12 mx-auto my-12">
+              <p className="font-bold text-xl mx-auto mb-1">
                 How is the last price calculated?
               </p>
               <p className="text-base mx-auto ">
@@ -446,8 +446,8 @@ export default function Mobile({
               </p>
             </div>
 
-            <div className="w-10/12 mx-auto my-8">
-              <p className="font-bold text-xl mx-auto">
+            <div className="w-10/12 mx-auto my-12">
+              <p className="font-bold text-xl mx-auto mb-1">
                 Will the price weights change over time?
               </p>
               <p className="text-base mx-auto ">
@@ -458,8 +458,8 @@ export default function Mobile({
               <img src="images/lbpweights.png" />
             </div>
 
-            <div className="w-10/12 mx-auto my-8">
-              <p className="font-bold text-xl mx-auto">
+            <div className="w-10/12 mx-auto my-12">
+              <p className="font-bold text-xl mx-auto mb-1">
                 Is there a minimum or maximum to how much I can contribute?
               </p>
               <p className="text-base mx-auto ">
@@ -468,8 +468,8 @@ export default function Mobile({
               </p>
             </div>
 
-            <div className="w-10/12 mx-auto my-8">
-              <p className="font-bold text-xl mx-auto">
+            <div className="w-10/12 mx-auto my-12">
+              <p className="font-bold text-xl mx-auto mb-1">
                 If there is no maximum, can someone buy all the tokens?
               </p>
               <p className="text-base mx-auto ">
@@ -485,8 +485,8 @@ export default function Mobile({
               </p>
             </div>
 
-            <div className="w-10/12 mx-auto my-8">
-              <p className="font-bold text-xl mx-auto">
+            <div className="w-10/12 mx-auto my-12">
+              <p className="font-bold text-xl mx-auto mb-1">
                 Who founded <span translate="no">Popcorn</span>?{' '}
               </p>
               <p className="text-base mx-auto ">
@@ -513,7 +513,7 @@ export default function Mobile({
                 </Link>{' '}
                 in early 2021.
               </p>
-              <p className="text-base mx-auto ">
+              <p className="text-base mx-auto mt-2">
                 Anthony Martin is an experienced technology leader and
                 entrepreneur having worked with several venture-backed start-ups
                 and publicly traded companies over the past 12 years. He is the
@@ -528,15 +528,15 @@ export default function Mobile({
                 </Link>{' '}
                 and has worked in the blockchain industry since 2017.
               </p>
-              <p className="text-base mx-auto ">
+              <p className="text-base mx-auto mt-2">
                 Michael Kisselgof is a crypto veteran. His previous project
                 tokenized IP on Ethereum to fund biotech R&D with IKU and worked
                 on the first iterations of erc-1155.
               </p>
             </div>
 
-            <div className="w-10/12 mx-auto my-8">
-              <p className="font-bold text-xl mx-auto">
+            <div className="w-10/12 mx-auto my-12">
+              <p className="font-bold text-xl mx-auto mb-1">
                 Who are the early contributors to{' '}
                 <span translate="no">Popcorn</span>?{' '}
               </p>
@@ -547,18 +547,15 @@ export default function Mobile({
               </p>
             </div>
 
-            <div className="w-10/12 mx-auto my-8">
-              <p className="font-bold text-xl mx-auto">How is POP allocated?</p>
+            <div className="w-10/12 mx-auto my-12">
+              <p className="font-bold text-xl mx-auto mb-1">How is POP allocated?</p>
               <img src="images/popallocation.png" />
             </div>
 
-            <div className="w-10/12 mx-auto my-8">
-              <p className="font-bold text-xl mx-auto">
+            <div className="w-10/12 mx-auto my-12">
+              <p className="font-bold text-xl mx-auto mb-1">
                 How much did <span translate="no">Popcorn</span> raise in
                 previous rounds?
-              </p>
-              <p className="text-base mx-auto ">
-                The Private Sale and Presale raised the following:
               </p>
               <p className="text-base mx-auto ">
                 To date, <span translate="no">Popcorn</span> has raised
@@ -567,8 +564,8 @@ export default function Mobile({
               </p>
             </div>
 
-            <div className="w-10/12 mx-auto my-8">
-              <p className="font-bold text-xl mx-auto">
+            <div className="w-10/12 mx-auto my-12">
+              <p className="font-bold text-xl mx-auto mb-1">
                 What is the token allocation and release schedule for supporters
                 and team?
               </p>
@@ -576,12 +573,12 @@ export default function Mobile({
                 A fixed supply of 100M POP tokens have been minted at genesis
                 and will be vested over 5 years.
               </p>
-              <img src="https://miro.medium.com/max/1400/0*-ZshbjUeI9JdOihS" />
+              <img src="https://miro.medium.com/max/1400/0*-ZshbjUeI9JdOihS" className="mt-2"/>
               <img src="images/releaseschedule.png" />
             </div>
 
             <div className="w-10/12 mx-auto mt-14">
-              <p className="font-bold text-xl mx-auto">
+              <p className="font-bold text-xl mx-auto mb-1">
                 Where can I read more about other Liquidity Bootstrapping pools?
               </p>
               <p>

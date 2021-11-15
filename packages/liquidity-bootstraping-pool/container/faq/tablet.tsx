@@ -16,7 +16,7 @@ export default function Tablet(): JSX.Element {
     { timeZone: 'UTC' },
   );
   return (
-    <div className="hidden md:flex lg:flex xl:hidden 2xl:hidden flex-col w-full h-full font-landing">
+    <div className="hidden md:flex lg:hidden xl:hidden 2xl:hidden flex-col w-full h-full font-landing">
       {/* NavBar*/}
       <div className="flex flex-col w-full h-full">
         <header className="absolute w-full bg-primary pt-12">
@@ -99,8 +99,8 @@ export default function Tablet(): JSX.Element {
             </div>
             <div className="col-span-2">
               <div className="w-full mx-auto my-14">
-                <p className="w-full mx-auto text-center text-normal font-landing mb-4">
-                  TThe auction will take place on{' '}
+                <p className="w-full mx-auto text-normal font-landing mb-4">
+                  The auction will take place on{' '}
                   <Link href="https://copperlaunch.com" passHref>
                     <a className="text-blue-600 hover:text-blue-700 underline">
                       Copperlaunch.com
@@ -112,7 +112,7 @@ export default function Tablet(): JSX.Element {
                   token holders.
                 </p>
 
-                <p className="w-full mx-auto text-center text-normal font-landing mb-4">
+                <p className="w-full mx-auto text-normal font-landing mb-4">
                   The official{' '}
                   <Link href="/faq">
                     <a className="text-blue-600 hover:text-blue-700 underline">
@@ -136,7 +136,7 @@ export default function Tablet(): JSX.Element {
                   POP and participate in the governance of the network. The
                   purpose of the fair launch auction is to:
                 </p>
-                <ul className="list-inside list-disc">
+                <ul className="list-inside list-disc mt-1">
                   <li className="text-md mx-auto ">
                     Distribute governance power to a broader community outside
                     of the core team, advisors, and investors.
@@ -175,9 +175,9 @@ export default function Tablet(): JSX.Element {
                   </Link>
                   .
                 </p>
-                <p className="text-md mx-auto ">
+                <p className="text-md mx-auto mt-3">
                   Their primary use cases are to:
-                  <ol className="list-decimal list-inside">
+                  <ol className="list-decimal list-inside mt-1">
                     <li>Launch and/or distribute ERC-20 tokens</li>
                     <li>
                       Drop collections of ERC-721 NFTs represented by ERC-20
@@ -185,10 +185,10 @@ export default function Tablet(): JSX.Element {
                     </li>
                   </ol>
                 </p>
-                <p className="text-md font-bold mx-auto mt-5 ">Key Features</p>
+                <p className="text-md font-bold mx-auto mt-5">Key Features:</p>
 
                 <div>
-                  <ul className="list-inside list-disc text-md">
+                  <ul className="list-inside list-disc text-md space-y-2 mt-1">
                     <li>
                       <span className="font-bold">Price discovery</span>. The
                       price of the token starts high and drops based on a
@@ -263,7 +263,7 @@ export default function Tablet(): JSX.Element {
                   an open alternative to swap tokens in a permissionless
                   environment.
                 </p>
-                <p className="text-md mx-auto ">
+                <p className="text-md mx-auto mt-2">
                   Balancer’s Liquidity Bootstrapping Pool (LBP) is used for
                   launching a token with low capital requirements, where a
                   two-token pool with the project and collateral token are set
@@ -273,14 +273,14 @@ export default function Tablet(): JSX.Element {
                   on the token and disincentivize front-running, speculation,
                   and whale buying.
                 </p>
-                <p className="text-md mx-auto ">
+                <p className="text-md mx-auto mt-2">
                   During the LBP, the price of POP will start high to
                   disincentivize bots, front-running, and speculation, then
                   automatically decrease over time. You should only participate
                   in the LBP if you are familiar with the risks associated with
                   them.
                 </p>
-                <p className="text-md mx-auto ">
+                <p className="text-md mx-auto mt-2">
                   See Balancer’s Liquidity Bootstrapping Pool FAQ for more
                   information.
                 </p>
@@ -355,7 +355,7 @@ export default function Tablet(): JSX.Element {
                   staking rewards emitted will be during the first several weeks
                   of the liquidity mining incentives program.
                 </p>
-                <p className="text-md mx-auto ">
+                <p className="text-md mx-auto mt-2">
                   Additionally, participating in yield farming requires time,
                   capital, and an APY that economically justifies the amount of
                   gas you will spend in farming and harvesting your POP rewards.
@@ -419,10 +419,7 @@ export default function Tablet(): JSX.Element {
                 </p>
                 <p className="text-md mx-auto ">
                   The price was calculated based on the amounts of tokens in the
-                  Balancer pool and their weights:
-                </p>
-                <p className="text-md mx-auto ">
-                  X POP and Y USDC in weights Z : W = (X*Z)/(Y*W) = 29.7 USDC
+                  Balancer pool and their weights: X POP and Y USDC in weights Z : W = (X*Z)/(Y*W) = 29.7 USDC
                   per POP
                 </p>
               </div>
@@ -440,7 +437,7 @@ export default function Tablet(): JSX.Element {
                   USDC per POP
                 </p>
 
-                <p className="text-md mx-auto ">
+                <p className="text-md mx-auto mt-2">
                   You can use the simulation we created with token amounts and
                   weights to predict the price as it is difficult to determine
                   the last price precisely. Thank you to the Perpetual Protocol
@@ -516,7 +513,7 @@ export default function Tablet(): JSX.Element {
                   </Link>{' '}
                   in early 2021.
                 </p>
-                <p className="text-md mx-auto ">
+                <p className="text-md mx-auto mt-2">
                   Anthony Martin is an experienced technology leader and
                   entrepreneur having worked with several venture-backed
                   start-ups and publicly traded companies over the past 12
@@ -531,7 +528,7 @@ export default function Tablet(): JSX.Element {
                   </Link>{' '}
                   and has worked in the blockchain industry since 2017.
                 </p>
-                <p className="text-md mx-auto ">
+                <p className="text-md mx-auto mt-2">
                   Michael Kisselgof is a crypto veteran. His previous project
                   tokenized IP on Ethereum to fund biotech R&D with IKU and
                   worked on the first iterations of erc-1155.
@@ -562,9 +559,6 @@ export default function Tablet(): JSX.Element {
                 <p className="font-bold text-3xl mb-5 mx-auto ">
                   How much did <span translate="no">Popcorn</span> raise in
                   previous rounds?
-                </p>
-                <p className="text-md mx-auto ">
-                  The Private Sale and Presale raised the following:
                 </p>
                 <p className="text-md mx-auto">
                   To date, <span translate="no">Popcorn</span> has raised
