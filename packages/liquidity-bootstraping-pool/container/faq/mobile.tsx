@@ -160,7 +160,7 @@ export default function Mobile({
                 What is a Token Launch Auction (FLA)?
               </p>
               <p className="text-base mx-auto ">
-                Token Launch Auctions (FLAs) are a specific configuration of
+                Token Launch Auctions (TLAs) are a specific configuration of
                 Balancer’s{' '}
                 <Link
                   href="https://docs.balancer.fi/products/balancer-pools/liquidity-bootstrapping-pools-lbps"
@@ -206,7 +206,7 @@ export default function Mobile({
                     how much they want to buy.
                   </li>
                   <li>
-                    <span className="font-bold">Fair distribution</span>. FLAs
+                    <span className="font-bold">Fair distribution</span>. TLAs
                     flip the first-come-first-serve launch model on its head and
                     change token launches from being a race where the first bot
                     in or the transaction with the highest gas fee wins. Get
