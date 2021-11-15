@@ -48,7 +48,7 @@ export default function LargeDesktop(): JSX.Element {
                   className="font-bold text-xl cursor-default"
                   target="_window"
                 >
-                  Fair Launch FAQ
+                  Token Launch FAQ
                 </a>
               </Link>
             </div>
@@ -65,10 +65,10 @@ export default function LargeDesktop(): JSX.Element {
             />
             <div className="absolute z-10 top-32 w-full mx-auto flex flex-col pb-20 pt-32">
               <h1 className="text-center font-light text-7xl leading-10 font-landing">
-                Fair Launch FAQ
+                Token Launch FAQ
               </h1>
               <p className="text-center text-3xl font-landing leading-10 font-light mt-14">
-                <span translate="no">Popcorn</span> Fair Launch Auction Details:
+                <span translate="no">Popcorn</span> Token Launch Auction Details:
               </p>
 
               <p className="text-center text-xl font-landing leading-10  font-light mt-14">
@@ -111,7 +111,7 @@ export default function LargeDesktop(): JSX.Element {
                       Copperlaunch.com
                     </a>
                   </Link>
-                  , a site for Fair Launch Auctions. All proceeds will go to the{' '}
+                  , a site for Token Launch Auctions. All proceeds will go to the{' '}
                   <span translate="no">Popcorn</span> Treasury, a smart contract
                   entirely controlled by <span translate="no">Popcorn</span>{' '}
                   token holders.
@@ -139,7 +139,7 @@ export default function LargeDesktop(): JSX.Element {
                 <p className="text-xl mx-auto font-light leading-10 ">
                   This is the first opportunity for the general public to buy
                   POP and participate in the governance of the network. The
-                  purpose of the fair launch auction is to:
+                  purpose of the Token Launch auction is to:
                 </p>
                 <ul className="list-inside list-disc">
                   <li className="text-xl mx-auto font-light leading-10 ">
@@ -162,10 +162,10 @@ export default function LargeDesktop(): JSX.Element {
 
               <div className="w-full mx-auto my-20">
                 <p className="font-bold text-3xl font-bold mb-4 mx-auto ">
-                  What is a Fair Launch Auction (FLA)?
+                  What is a Token Launch Auction (FLA)?
                 </p>
                 <p className="text-xl mx-auto font-light leading-10 ">
-                  Fair Launch Auctions (FLAs) are a specific configuration of
+                  Token Launch Auctions (FLAs) are a specific configuration of
                   Balancer’s{' '}
                   <Link
                     href="https://docs.balancer.fi/products/balancer-pools/liquidity-bootstrapping-pools-lbps"
@@ -240,7 +240,7 @@ export default function LargeDesktop(): JSX.Element {
                   Which networks will be supported?
                 </p>
                 <p className="text-xl mx-auto font-light leading-10 ">
-                  The Fair Launch Auction will be deployed on Ethereum, Arbitrum
+                  The Token Launch Auction will be deployed on Ethereum, Arbitrum
                   and Polygon. To participate you will need to acquire the
                   native token of the chain you wish to participate on (ETH,
                   AETH, and MATIC respectively) and USDC to purchase POP.
@@ -252,7 +252,7 @@ export default function LargeDesktop(): JSX.Element {
                   What is a liquidity bootstrapping pool?
                 </p>
                 <p className="text-xl mx-auto font-light leading-10 ">
-                  A liquidity bootstrapping pool (used by the Fair Launch
+                  A liquidity bootstrapping pool (used by the Token Launch
                   Auction) allows projects to create meaningful liquidity and
                   distribution at launch, resulting in a fully customizable
                   token distribution mechanic that gives teams and governance
@@ -303,7 +303,7 @@ export default function LargeDesktop(): JSX.Element {
                 </p>
                 <ul className="list-inside list-disc">
                   <li className="text-xl mx-auto font-light leading-10 ">
-                    Distributes governance tokens in a fair launch
+                    Distributes governance tokens in a Token Launch
                   </li>
                   <li className="text-xl mx-auto font-light leading-10 ">
                     Helps prevent front-running
@@ -357,7 +357,7 @@ export default function LargeDesktop(): JSX.Element {
                 </p>
                 <p className="text-xl mx-auto font-light leading-10 ">
                   Staking rewards (on Ethereum, Polygon &amp; Arbitrum) will
-                  immediately follow the end of the Fair Launch Auction in
+                  immediately follow the end of the Token Launch Auction in
                   December. The only way to take advantage of the staking
                   rewards and liquidity mining incentives is to have POP tokens.
                   The POP tokenomic model specifies that the greatest amount of

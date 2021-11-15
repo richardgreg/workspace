@@ -42,7 +42,7 @@ export default function Mobile({
                   className="font-light text-normal cursor-pointer hover:text-blue-600"
                   target="_window"
                 >
-                 Fair Launch FAQ
+                 Token Launch FAQ
                 </a>
               </Link>
               <Link
@@ -98,10 +98,10 @@ export default function Mobile({
                   <div>
  
                     <h1 className="text-center font-light text-2xl  leading-snug font-landing">
-                      <span translate="no">Popcorn's</span>{" "} Fair Launch Auction
+                      <span translate="no">Popcorn's</span>{" "} Token Launch Auction
                     </h1>
                     <p className="w-11/12 mx-auto text-center text-sm font-light font-landing mt-4">
-                    The <span translate="no">Popcorn</span>{" "} Fair Launch Auction (FLA) will be the first opportunity for the
+                    The <span translate="no">Popcorn</span>{" "} Token Launch Auction (FLA) will be the first opportunity for the
                     general public to join the PopcornDAO by acquiring the POP
                     token. This is a 2.5 day, multi-chain event for the <span translate="no">Popcorn</span>{" "}
                     community where all proceeds raised will go to the <span translate="no">Popcorn</span>{" "}
@@ -225,7 +225,7 @@ Members of the PopcornDAO, or POP token holders, are stewards of <span translate
             <div className="mt-8">
               <div className=" mx-auto w-3/4">
                 <p className="font-medium text-center text-2xl mb-2">
-                  Fair Launch Auction Details
+                  Token Launch Auction Details
                 </p>
                 <p className="text-sm  leading-10">
                     <span className="font-bold">POP Tokens Offered</span>{" "}:
@@ -238,7 +238,7 @@ Members of the PopcornDAO, or POP token holders, are stewards of <span translate
                   <p className="text-sm leading-10">
                     <span className="font-bold">Where?</span>{" "} POP/USDC{' '}
                     <Link href="https://docs.alchemist.wtf/copper/fair-launch-auctions/what-is-a-fair-launch-auction" passHref>
-                      <a  className="text-blue-600 hover:text-blue-700 underline">Copper Fair Launch Auction Pool</a>
+                      <a  className="text-blue-600 hover:text-blue-700 underline">Copper Token Launch Auction Pool</a>
                     </Link>
                   </p>
                   <p className="text-sm leading-10">
@@ -269,7 +269,7 @@ Members of the PopcornDAO, or POP token holders, are stewards of <span translate
                   className="w-8 h-6 mb-2"
                 />
                 <p className="text-base font-medium">
-                A Fair Launch Auction is not like a regular decentralized exchange pool. The
+                A Token Launch Auction is not like a regular decentralized exchange pool. The
                     price will start high to disincentivize bots, front-running
                     and speculation. Over time, downwards price pressure will be
                     created by the change of relative weights between the two

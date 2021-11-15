@@ -49,7 +49,7 @@ export default function Tablet(): JSX.Element {
                   className="font-light text-normal cursor-pointer hover:text-blue-600"
                   target="_window"
                 >
-                  Liquidity Bootstrapping FAQ
+                  Token Launch FAQ
                 </a>
               </Link>
               <Link
@@ -80,10 +80,10 @@ export default function Tablet(): JSX.Element {
                 <div className="absolute mx-auto flex flex-col justify-between top-80 items-center mt-20 z-20">
                   <div>
                     <h1 className="text-center font-light text-3xl leading-snug mb-2 font-landing">
-                     <span translate="no">Popcorn's</span>{" "} Fair Launch Auction
+                     <span translate="no">Popcorn's</span>{" "} Token Launch Auction
                     </h1>
                     <p className="w-1/2 mx-auto text-center text-normal font-landing font-light mt-6">
-                    The <span translate="no">Popcorn</span>{" "} Fair Launch Auction (FLA) will be the first opportunity for the
+                    The <span translate="no">Popcorn</span>{" "} Token Launch Auction (FLA) will be the first opportunity for the
                     general public to join the PopcornDAO by acquiring the POP
                     token. This is a 2.5 day, multi-chain event for the <span translate="no">Popcorn</span>{" "}
                     community where all proceeds raised will go to the <span translate="no">Popcorn</span>{" "}
@@ -213,7 +213,7 @@ export default function Tablet(): JSX.Element {
             <div className="absolute w-full mt-52">
               <div className="mx-auto w-full">
                 <p className="font-bold text-2xl text-center mb-2">
-                  Fair Launch Auction Details
+                  Token Launch Auction Details
                 </p>
                 <div className="w-6/12 mx-auto text-center text-lg leading-2 font-light">
                   <p className="text-md ">
@@ -227,7 +227,7 @@ export default function Tablet(): JSX.Element {
                   <p className="text-md">
                     <span className="font-bold">Where?</span>{" "} POP/USDC{' '}
                     <Link href="https://docs.alchemist.wtf/copper/fair-launch-auctions/what-is-a-fair-launch-auction" passHref>
-                      <a  className="text-blue-600 hover:text-blue-700 underline">Copper Fair Launch Auction Pool</a>
+                      <a  className="text-blue-600 hover:text-blue-700 underline">Copper Token Launch Auction Pool</a>
                     </Link>
                   </p>
                   <p className="text-md ">
@@ -265,7 +265,7 @@ export default function Tablet(): JSX.Element {
                     className="w-14 h-10 mb-2"
                   />
                   <p className="text-lg font-medium leading-2 mb-18">
-                  A Fair Launch Auction is not like a regular decentralized exchange pool. The
+                  A Token Launch Auction is not like a regular decentralized exchange pool. The
                     price will start high to disincentivize bots, front-running
                     and speculation. Over time, downwards price pressure will be
                     created by the change of relative weights between the two

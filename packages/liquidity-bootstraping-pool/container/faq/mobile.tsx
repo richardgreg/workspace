@@ -66,11 +66,11 @@ export default function Mobile({
               <div className="flex flex-row">
                 <div className="relative w-full mx-auto flex flex-col lg:flex-row justify-between items-center">
                   <h1 className="text-center font-normal text-4xl mb-2 font-landing pt-12 w-10/12">
-                    Fair Launch FAQ
+                    Token Launch FAQ
                   </h1>
                   <div className="w-10/12">
                     <p className="mx-auto text-base text-center font-landing mb-10">
-                      <span translate="no">Popcorn</span> Fair Launch Auction
+                      <span translate="no">Popcorn</span> Token Launch Auction
                       Details:
                     </p>
 
@@ -93,7 +93,7 @@ export default function Mobile({
                           Copperlaunch.com
                         </a>
                       </Link>
-                      , a site for Fair Launch Auctions. All proceeds will go to
+                      , a site for Token Launch Auctions. All proceeds will go to
                       the <span translate="no">Popcorn</span> Treasury, a smart
                       contract entirely controlled by{' '}
                       <span translate="no">Popcorn</span> token holders.
@@ -134,7 +134,7 @@ export default function Mobile({
               <p className="text-base mx-auto ">
                 This is the first opportunity for the general public to buy POP
                 and participate in the governance of the network. The purpose of
-                the fair launch auction is to:
+                the Token Launch auction is to:
               </p>
               <ul className="list-inside list-disc mt-2 space-y-1">
                 <li className="text-base mx-auto ">
@@ -157,10 +157,10 @@ export default function Mobile({
 
             <div className="w-10/12 mx-auto my-12">
               <p className="font-bold text-xl mx-auto mb-1">
-                What is a Fair Launch Auction (FLA)?
+                What is a Token Launch Auction (FLA)?
               </p>
               <p className="text-base mx-auto ">
-                Fair Launch Auctions (FLAs) are a specific configuration of
+                Token Launch Auctions (FLAs) are a specific configuration of
                 Balancer’s{' '}
                 <Link
                   href="https://docs.balancer.fi/products/balancer-pools/liquidity-bootstrapping-pools-lbps"
@@ -232,7 +232,7 @@ export default function Mobile({
                 Which networks will be supported?
               </p>
               <p className="text-base mx-auto ">
-                The Fair Launch Auction will be deployed on Ethereum, Arbitrum
+                The Token Launch Auction will be deployed on Ethereum, Arbitrum
                 and Polygon. To participate you will need to acquire the native
                 token of the chain you wish to participate on (ETH, AETH, and
                 MATIC respectively) and USDC to purchase POP.
@@ -244,7 +244,7 @@ export default function Mobile({
                 What is a Liquidity Bootstrapping Pool?
               </p>
               <p className="text-base mx-auto ">
-                A liquidity bootstrapping pool (used by the Fair Launch Auction)
+                A liquidity bootstrapping pool (used by the Token Launch Auction)
                 allows projects to create meaningful liquidity and distribution
                 at launch, resulting in a fully customizable token distribution
                 mechanic that gives teams and governance token holders control
@@ -290,7 +290,7 @@ export default function Mobile({
               </p>
               <ul className="list-inside list-disc mt-1 space-y-1">
                 <li className="text-base mx-auto ">
-                  Distributes governance tokens in a fair launch
+                  Distributes governance tokens in a Token Launch
                 </li>
                 <li className="text-base mx-auto ">
                   Helps prevent front-running
@@ -342,7 +342,7 @@ export default function Mobile({
               </p>
               <p className="text-base mx-auto ">
                 Staking rewards (on Ethereum, Polygon &amp; Arbitrum) will
-                immediately follow the end of the Fair Launch Auction in
+                immediately follow the end of the Token Launch Auction in
                 December. The only way to take advantage of the staking rewards
                 and liquidity mining incentives is to have POP tokens. The POP
                 tokenomic model specifies that the greatest amount of staking

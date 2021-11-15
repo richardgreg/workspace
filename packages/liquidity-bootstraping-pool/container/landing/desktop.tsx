@@ -49,7 +49,7 @@ export default function Desktop(): JSX.Element {
                           className="font-light text-xl cursor-pointer hover:text-blue-600"
                           target="_window"
                         >
-                          Liquidity Bootstrapping FAQ
+                          Token Launch FAQ
                         </a>
                       </Link>
                       <Link
@@ -83,10 +83,10 @@ export default function Desktop(): JSX.Element {
                 <div className="absolute mx-auto flex flex-col justify-between -bottom-6 items-center z-20">
                   <div>
                     <h1 className="text-center font-light text-6xl leading-snug mb-2 font-landing">
-                      <span translate="no">Popcorn's</span> Fair Launch Auction
+                      <span translate="no">Popcorn's</span> Token Launch Auction
                     </h1>
                     <p className="w-1/2 mx-auto text-center text-xl leading-8 font-landing font-light mt-6">
-                      The <span translate="no">Popcorn</span> Fair Launch
+                      The <span translate="no">Popcorn</span> Token Launch
                       Auction (FLA) will be the first opportunity for the
                       general public to join the PopcornDAO by acquiring the POP
                       token. This is a 2.5 day, multi-chain event for the{' '}
@@ -235,7 +235,7 @@ export default function Desktop(): JSX.Element {
             <div className="absolute w-full mt-80">
               <div className="mx-auto w-full">
                 <p className="font-medium text-4xl mb-6 text-center ">
-                  Fair Launch Auction Details
+                  Token Launch Auction Details
                 </p>
                 <p className="w-6/12 mx-auto text-center text-xl leading-8 font-light mt-6">
                   <p className="text-xl  leading-10">
@@ -253,7 +253,7 @@ export default function Desktop(): JSX.Element {
                       passHref
                     >
                       <a className="text-blue-600 hover:text-blue-700 underline">
-                        Copper Fair Launch Auction Pool
+                        Copper Token Launch Auction Pool
                       </a>
                     </Link>
                   </p>
@@ -292,7 +292,7 @@ export default function Desktop(): JSX.Element {
                     className="w-18 h-12 mb-6"
                   />
                   <p className="text-xl font-medium leading-8 mb-18">
-                    A Fair Launch Auction is not like a regular decentralized
+                    A Token Launch Auction is not like a regular decentralized
                     exchange pool. The price will start high to disincentivize
                     bots, front-running and speculation. Over time, downwards
                     price pressure will be created by the change of relative
