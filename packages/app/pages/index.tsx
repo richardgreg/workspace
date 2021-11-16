@@ -160,8 +160,11 @@ const IndexPage = () => {
                 About us
               </a>
             </Link>*/}
-              <Link href="/" passHref>
-                <a className="font-normal text-base hover:text-blue-600">
+              <Link href="https://launch.popcorn.network/" passHref>
+                <a
+                  className="font-normal text-base hover:text-blue-600"
+                  target="_window"
+                >
                   Token Launch Auction
                 </a>
               </Link>
@@ -597,8 +600,10 @@ const IndexPage = () => {
                   Popcorn (POP) Token
                 </a>
               </Link>
-              <Link href="/" passHref>
-                <a className="hover:text-blue-600">Token Launch Auction</a>
+              <Link href="https://launch.popcorn.network/" passHref>
+                <a className="hover:text-blue-600" target="_window">
+                  Token Launch Auction
+                </a>
               </Link>
             </div>
             <div className="flex flex-col space-y-3">
@@ -658,8 +663,11 @@ const IndexPage = () => {
                 About us
               </a>
             </Link>*/}
-                <Link href="/" passHref>
-                  <a className="font-normal text-base hover:text-blue-600">
+                <Link href="https://launch.popcorn.network/" passHref>
+                  <a
+                    className="font-normal text-base hover:text-blue-600"
+                    target="_window"
+                  >
                     Token Launch Auction
                   </a>
                 </Link>
@@ -1078,8 +1086,8 @@ const IndexPage = () => {
                     Popcorn (POP) Token
                   </a>
                 </Link>
-                <Link href="/" passHref>
-                  <a className="hover:text-blue-600">Token Launch Auction</a>
+                <Link href="https://launch.popcorn.network/" passHref>
+                  <a className="hover:text-blue-600" target="_window">Token Launch Auction</a>
                 </Link>
               </div>
               <div className="flex flex-col space-y-3 w-1/2">
