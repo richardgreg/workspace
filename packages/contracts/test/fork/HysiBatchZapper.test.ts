@@ -478,7 +478,7 @@ describe("HysiBatchZapper Network Test", function () {
   beforeEach(async function () {
     await deployAndAssignContracts();
   });
-  describe.only("zapIntoBatch", function () {
+  describe("zapIntoBatch", function () {
     it("zaps into a mint queue with dai", async function () {
       const result = await contracts.hysiBatchZapper
         .connect(depositor)
