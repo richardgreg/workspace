@@ -2,6 +2,7 @@ import { Dialog, Transition } from '@headlessui/react';
 
 import { XIcon } from '@heroicons/react/solid';
 import FacebookPixel from 'components/FacebookPixel';
+import { MobileExpandableMenu } from 'components/MobileExpandableMenu';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { Fragment, useEffect, useState } from 'react';
@@ -193,7 +194,7 @@ const TeamPage = () => {
   const endDate = 1638172800000; //Nov 29, 08.00.00 UTC
   const [countdown, setCountdown] = useState<number[]>([]);
   const [countdownActive, disableCountdown] = useState<boolean>(true);
-  const [menuVisible, toggleMenu] = useState<boolean>(false);
+  const [menuVisible, toggleMenuVisible] = useState<boolean>(false);
   const [ctaModalVisible, toggleCtaModal] = useState<boolean>(false);
   const [teamVisible, setTeamVisible] = useState<boolean>(true);
 
@@ -674,182 +675,7 @@ const TeamPage = () => {
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="absolute z-10 w-full overflow-y-auto ">
-            <div className="relative w-full h-full mobile-menu-bg transition-opacity duration-1000 ease-in-out">
-              <div className="w-10/12 mx-auto ">
-                <div className="grid justify-items-stretch">
-                  <XIcon
-                    onClick={() => toggleMenu(!menuVisible)}
-                    className="mt-8 mb-2 text-white justify-self-end"
-                    style={{ width: 24, height: 24 }}
-                  />
-                </div>
-                <div
-                  className="w-full bg-white "
-                  style={{ height: 0.32 }}
-                ></div>
-                <Link href="/about" passHref>
-                  <a>
-                    <h1
-                      className="ml-3 text-4xl font-bold text-white hover:text-gray-700 font-landing"
-                      style={{ marginTop: 18, marginBottom: 18 }}
-                    >
-                      About Us
-                    </h1>
-                  </a>
-                </Link>
-                <div
-                  className="w-full bg-white opacity-50"
-                  style={{ height: 0.72 }}
-                ></div>
-                <Link href="/products" passHref>
-                  <a>
-                    <h1
-                      className="ml-3 text-4xl font-bold text-white hover:text-gray-700 font-landing"
-                      style={{ marginTop: 18, marginBottom: 18 }}
-                    >
-                      Products
-                    </h1>
-                  </a>
-                </Link>
-                <div
-                  className="w-full bg-white opacity-50"
-                  style={{ height: 0.72 }}
-                ></div>
-                <Link href="/" passHref>
-                  <a>
-                    <h1
-                      className="ml-3 text-4xl font-bold text-white hover:text-gray-700 font-landing"
-                      style={{ marginTop: 18, marginBottom: 18 }}
-                    >
-                      PopcornDAO
-                    </h1>
-                  </a>
-                </Link>
-                <div
-                  className="w-full bg-white opacity-50"
-                  style={{ height: 0.72 }}
-                ></div>
-                <Link href="/team" passHref>
-                  <a>
-                    <h1
-                      className="ml-3 text-4xl font-bold text-white hover:text-gray-700 font-landing"
-                      style={{ marginTop: 18, marginBottom: 18 }}
-                    >
-                      Team
-                    </h1>
-                  </a>
-                </Link>
-                <div
-                  className="w-full bg-white opacity-50"
-                  style={{ height: 0.72 }}
-                ></div>
-                <div
-                  className="w-10/12 grid grid-cols-4 my-5 mx-auto"
-                  style={{ marginTop: 18, marginBottom: 18 }}
-                >
-                  <div>
-                    <Link href="https://github.com/popcorndao" passHref>
-                      <GitHub
-                        className="text-white cursor-pointer"
-                        style={{ width: 33, height: 33 }}
-                      />
-                    </Link>
-                  </div>
-                  <div>
-                    <Link href="https://www.facebook.com/PopcornDAO" passHref>
-                      <Facebook
-                        className="text-white cursor-pointer"
-                        style={{ width: 33, height: 33 }}
-                      />
-                    </Link>
-                  </div>
-                  <div>
-                    <Link href="https://twitter.com/Popcorn_DAO" passHref>
-                      <Twitter
-                        className="text-white cursor-pointer"
-                        style={{ width: 33, height: 33 }}
-                      />
-                    </Link>
-                  </div>
-                  <div>
-                    <Link href="https://discord.gg/w9zeRTSZsq" passHref>
-                      <img
-                        src="/images/discord-white.svg"
-                        alt="discord"
-                        className=" text-white cursor-pointer discord"
-                        style={{ width: 33, height: 33 }}
-                      ></img>
-                    </Link>
-                  </div>
-                </div>
-                <div className="w-full bg-white" style={{ height: 0.72 }}></div>
-                <div className="flex flex-row justify-evenly py-6">
-                  <div className="flex flex-col space-y-3 w-1/2">
-                    <p className="font-bold uppercase text-base font-landing text-white">
-                      Site
-                    </p>
-                    <Link href="/" passHref>
-                      <a className="text-xl text-white text-semibold">Home</a>
-                    </Link>
-                    <Link href="/about" passHref>
-                      <a
-                        className="text-xl text-white text-semibold"
-                        target="_window"
-                      >
-                        About us
-                      </a>
-                    </Link>
-                    <Link href="https://medium.com/popcorndao" passHref>
-                      <a
-                        className="text-xl text-white text-semibold"
-                        target="_window"
-                      >
-                        Blog
-                      </a>
-                    </Link>
-                  </div>
-                  <div className="ml-20 flex flex-col space-y-3 w-1/2">
-                    <p className="font-bold uppercase text-base font-landing text-white">
-                      Connect
-                    </p>
-                    <Link href="https://twitter.com/Popcorn_DAO" passHref>
-                      <a
-                        className="text-xl text-white text-semibold"
-                        target="_window"
-                      >
-                        Twitter
-                      </a>
-                    </Link>
-                    <Link href="https://discord.gg/w9zeRTSZsq" passHref>
-                      <a
-                        className="text-xl text-white text-semibold"
-                        target="_window"
-                      >
-                        Discord
-                      </a>
-                    </Link>
-                    <Link href="https://github.com/popcorndao" passHref>
-                      <a
-                        className="text-xl text-white text-semibold"
-                        target="_window"
-                      >
-                        Github
-                      </a>
-                    </Link>
-                  </div>
-                </div>
-                <div className="flex flex-col space-y-3 mt-10">
-                  <p className="font-bold uppercase text-base font-landing text-white">
-                    Documentation
-                  </p>
-                  <Link href="/" passHref>
-                    <a className="text-xl text-white text-semibold">Gitbook</a>
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </div>
+          <MobileExpandableMenu toggleMenuVisible={toggleMenuVisible} />
         </Transition>
 
         {!menuVisible && (
@@ -868,7 +694,7 @@ const TeamPage = () => {
                     </a>
                   </Link>
                 </div>
-                <Menu style={{}} onClick={(e) => toggleMenu(true)} />
+                <Menu style={{}} onClick={(e) => toggleMenuVisible(true)} />
               </nav>
             </header>
             <section className="min-h-full">
