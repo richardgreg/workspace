@@ -88,7 +88,6 @@ export class BeneficiaryGovernanceAdapter {
     const proposalCount = await this.contract.getNumberOfProposals(
       proposalType
     );
-
     const proposalTypeName =
       proposalType === ProposalType.Nomination ? "nominations" : "takedowns";
 
@@ -97,7 +96,6 @@ export class BeneficiaryGovernanceAdapter {
         return this.contract[proposalTypeName](i);
       })
     );
-
     return Promise.all(
       proposalIds.map(async (id) => {
         return this.getProposal(Number(id));

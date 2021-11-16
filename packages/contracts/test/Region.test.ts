@@ -8,8 +8,8 @@ let owner: SignerWithAddress, nonOwner: SignerWithAddress;
 
 let contract: Region;
 let mockBeneficiaryVaults: MockContract;
-const DEFAULT_REGION = "0x5757";
-const newRegion = "0x1111";
+const DEFAULT_REGION = ethers.utils.id("World");
+const newRegion = ethers.utils.id("NewRegion");
 
 describe("Region", function () {
   beforeEach(async function () {
@@ -21,10 +21,28 @@ describe("Region", function () {
       owner,
       BeneficiaryVaults.interface.format() as any
     );
+
+    const aclRegistry = await (
+      await (await ethers.getContractFactory("ACLRegistry")).deploy()
+    ).deployed();
+
+    const contractRegistry = await (
+      await (
+        await ethers.getContractFactory("ContractRegistry")
+      ).deploy(aclRegistry.address)
+    ).deployed();
+
     const regionFactory = await ethers.getContractFactory("Region");
     contract = await (
-      await regionFactory.deploy(mockBeneficiaryVaults.address)
+      await regionFactory.deploy(
+        mockBeneficiaryVaults.address,
+        contractRegistry.address
+      )
     ).deployed();
+
+    await aclRegistry
+      .connect(owner)
+      .grantRole(ethers.utils.id("DAO"), owner.address);
   });
   it("initates correct default values", async function () {
     expect(await contract.regionExists(DEFAULT_REGION)).to.be.equal(true);
@@ -36,9 +54,7 @@ describe("Region", function () {
         contract
           .connect(nonOwner)
           .addRegion(newRegion, mockBeneficiaryVaults.address)
-      ).to.be.revertedWith(
-        "Only the contract governance may perform this action"
-      );
+      ).to.be.revertedWith("you dont have the right role");
     });
     it("reverts when the region already exists", async function () {
       await expect(

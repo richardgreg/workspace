@@ -7,6 +7,7 @@ import {
 } from "@setprotocol/set-protocol-v2/dist/typechain";
 import { expect } from "chai";
 import { BigNumber } from "ethers";
+import { utils } from "ethers";
 import { parseEther } from "ethers/lib/utils";
 import { ethers, network, waffle } from "hardhat";
 import HysiBatchInteractionAdapter, {
@@ -14,18 +15,23 @@ import HysiBatchInteractionAdapter, {
 } from "../../adapters/HYSIBatchInteraction/HYSIBatchInteractionAdapter";
 import CurveMetapoolAbi from "../../lib/Curve/CurveMetapoolAbi.json";
 import {
+  ACLRegistry,
+  ContractRegistry,
   Curve3Pool,
   CurveMetapool,
   ERC20,
   Faucet,
   HysiBatchInteraction,
   HysiBatchZapper,
+  KeeperIncentive,
   MockYearnV2Vault,
+  Staking,
 } from "../../typechain";
 
 const provider = waffle.provider;
 
 interface Contracts {
+  pop: ERC20;
   dai: ERC20;
   usdc: ERC20;
   usdt: ERC20;
@@ -47,7 +53,11 @@ interface Contracts {
   setToken: SetToken; // alias for hysi
   basicIssuanceModule: BasicIssuanceModule;
   hysiBatchInteraction: HysiBatchInteraction;
+  staking: Staking;
+  keeperIncentive: KeeperIncentive;
   faucet: Faucet;
+  aclRegistry: ACLRegistry;
+  contractRegistry: ContractRegistry;
   hysiBatchZapper: HysiBatchZapper;
 }
 
@@ -96,22 +106,18 @@ const CURVE_FACTORY_METAPOOL_DEPOSIT_ZAP_ADDRESS =
 
 const componentMap: ComponentMap = {
   [YDUSD_TOKEN_ADDRESS]: {
-    name: "yDUSD",
     metaPool: undefined,
     yPool: undefined,
   },
   [YFRAX_TOKEN_ADDRESS]: {
-    name: "yFRAX",
     metaPool: undefined,
     yPool: undefined,
   },
   [YUSDN_TOKEN_ADDRESS]: {
-    name: "yUSDN",
     metaPool: undefined,
     yPool: undefined,
   },
   [YUST_TOKEN_ADDRESS]: {
-    name: "yUST",
     metaPool: undefined,
     yPool: undefined,
   },
@@ -232,14 +238,37 @@ async function deployContracts(): Promise<Contracts> {
     SET_BASIC_ISSUANCE_MODULE_ADDRESS
   )) as unknown as BasicIssuanceModule;
 
+  const aclRegistry = await (
+    await (await ethers.getContractFactory("ACLRegistry")).deploy()
+  ).deployed();
+
+  const contractRegistry = await (
+    await (
+      await ethers.getContractFactory("ContractRegistry")
+    ).deploy(aclRegistry.address)
+  ).deployed();
+
+  const keeperIncentive = await (
+    await (
+      await ethers.getContractFactory("KeeperIncentive")
+    ).deploy(contractRegistry.address, 0, 0)
+  ).deployed();
+
+  const staking = await (
+    await (
+      await ethers.getContractFactory("Staking")
+    ).deploy(contractRegistry.address)
+  ).deployed();
+
   //Deploy HysiBatchInteraction
   const HysiBatchInteraction = await ethers.getContractFactory(
     "HysiBatchInteraction"
   );
   const hysiBatchInteraction = await (
     await HysiBatchInteraction.deploy(
-      THREE_CRV_TOKEN_ADDRESS,
+      contractRegistry.address,
       HYSI_TOKEN_ADDRESS,
+      THREE_CRV_TOKEN_ADDRESS,
       SET_BASIC_ISSUANCE_MODULE_ADDRESS,
       [
         YDUSD_TOKEN_ADDRESS,
@@ -267,19 +296,18 @@ async function deployContracts(): Promise<Contracts> {
       ],
       2500,
       parseEther("200"),
-      parseEther("1"),
-      owner.address,
-      pop.address
+      parseEther("1")
     )
   ).deployed();
 
   const hysiBatchZapper = await (
     await (
       await ethers.getContractFactory("HysiBatchZapper")
-    ).deploy(hysiBatchInteraction.address, threePool.address, threeCrv.address)
+    ).deploy(contractRegistry.address, threePool.address, threeCrv.address)
   ).deployed();
 
   return {
+    pop,
     dai,
     usdc,
     usdt,
@@ -301,7 +329,11 @@ async function deployContracts(): Promise<Contracts> {
     setToken: hysi,
     basicIssuanceModule,
     hysiBatchInteraction,
+    staking,
+    keeperIncentive,
     faucet,
+    aclRegistry,
+    contractRegistry,
     hysiBatchZapper,
   };
 }
@@ -313,14 +345,76 @@ const deployAndAssignContracts = async () => {
     contracts.faucet.address,
     "0x152d02c7e14af6800000", // 100k ETH
   ]);
-  await contracts.hysiBatchInteraction
+
+  await contracts.aclRegistry.grantRole(ethers.utils.id("DAO"), owner.address);
+  await contracts.aclRegistry.grantRole(ethers.utils.id("DAO"), owner.address);
+  await contracts.aclRegistry.grantRole(
+    ethers.utils.id("Keeper"),
+    owner.address
+  );
+  await contracts.aclRegistry.grantRole(
+    ethers.utils.id("HysiZapper"),
+    contracts.hysiBatchZapper.address
+  );
+
+  await contracts.contractRegistry
     .connect(owner)
-    .setZapper(contracts.hysiBatchZapper.address);
+    .addContract(
+      ethers.utils.id("POP"),
+      contracts.pop.address,
+      ethers.utils.id("1")
+    );
+  await contracts.contractRegistry
+    .connect(owner)
+    .addContract(
+      ethers.utils.id("KeeperIncentive"),
+      contracts.keeperIncentive.address,
+      ethers.utils.id("1")
+    );
+  await contracts.contractRegistry
+    .connect(owner)
+    .addContract(
+      ethers.utils.id("HysiBatchInteraction"),
+      contracts.hysiBatchInteraction.address,
+      ethers.utils.id("1")
+    );
+  await contracts.contractRegistry
+    .connect(owner)
+    .addContract(
+      ethers.utils.id("Staking"),
+      contracts.staking.address,
+      ethers.utils.id("1")
+    );
+
+  await contracts.keeperIncentive
+    .connect(owner)
+    .createIncentive(
+      utils.formatBytes32String("HysiBatchInteraction"),
+      0,
+      true,
+      false
+    );
+  await contracts.keeperIncentive
+    .connect(owner)
+    .createIncentive(
+      utils.formatBytes32String("HysiBatchInteraction"),
+      0,
+      true,
+      false
+    );
+  await contracts.keeperIncentive
+    .connect(owner)
+    .addControllerContract(
+      utils.formatBytes32String("HysiBatchInteraction"),
+      contracts.hysiBatchInteraction.address
+    );
+
   await contracts.faucet.sendTokens(
     contracts.dai.address,
     4,
     depositor.address
   );
+
   DepositorInitial = await contracts.dai.balanceOf(depositor.address);
   await contracts.faucet.sendThreeCrv(100, depositor.address);
   await contracts.dai

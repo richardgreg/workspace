@@ -5,13 +5,19 @@ import { BigNumber } from "ethers";
 import { parseEther } from "ethers/lib/utils";
 import { ethers, waffle } from "hardhat";
 import { generateClaims, makeElement, merklize } from "../scripts/merkle";
-import { BeneficiaryVaults, MockERC20, Region } from "../typechain";
+import {
+  BeneficiaryVaults,
+  ContractRegistry,
+  MockERC20,
+  Region,
+} from "../typechain";
 const provider = waffle.provider;
 
 interface Contracts {
   mockPop: MockERC20;
   beneficiaryRegistry: MockContract;
   region: Region;
+  contractRegistry: ContractRegistry;
   beneficiaryVaults: BeneficiaryVaults;
 }
 
@@ -48,22 +54,60 @@ async function deployContracts(): Promise<Contracts> {
   );
   await beneficiaryRegistry.mock.beneficiaryExists.returns(true); //assume true
 
+  const aclRegistry = await (
+    await (await ethers.getContractFactory("ACLRegistry")).deploy()
+  ).deployed();
+
+  const contractRegistry = await (
+    await (
+      await ethers.getContractFactory("ContractRegistry")
+    ).deploy(aclRegistry.address)
+  ).deployed();
+
   const beneficiaryVaults = await (
     await (
       await ethers.getContractFactory("BeneficiaryVaults")
-    ).deploy(mockPop.address)
+    ).deploy(contractRegistry.address)
   ).deployed();
-  await beneficiaryVaults
-    .connect(owner)
-    .setBeneficiaryRegistry(beneficiaryRegistry.address);
 
   const region = await (
     await (
       await ethers.getContractFactory("Region")
-    ).deploy(beneficiaryVaults.address)
+    ).deploy(beneficiaryVaults.address, contractRegistry.address)
   ).deployed();
 
-  return { mockPop, beneficiaryRegistry, region, beneficiaryVaults };
+  await aclRegistry
+    .connect(owner)
+    .grantRole(ethers.utils.id("DAO"), owner.address);
+  await aclRegistry
+    .connect(owner)
+    .grantRole(ethers.utils.id("BeneficiaryGovernance"), owner.address);
+
+  await contractRegistry
+    .connect(owner)
+    .addContract(
+      ethers.utils.id("BeneficiaryRegistry"),
+      beneficiaryRegistry.address,
+      ethers.utils.id("1")
+    );
+  await contractRegistry
+    .connect(owner)
+    .addContract(
+      ethers.utils.id("Region"),
+      region.address,
+      ethers.utils.id("1")
+    );
+  await contractRegistry
+    .connect(owner)
+    .addContract(ethers.utils.id("POP"), mockPop.address, ethers.utils.id("1"));
+
+  return {
+    mockPop,
+    beneficiaryRegistry,
+    region,
+    contractRegistry,
+    beneficiaryVaults,
+  };
 }
 
 describe("BeneficiaryVaults", function () {
@@ -76,11 +120,8 @@ describe("BeneficiaryVaults", function () {
   });
 
   it("should be constructed with correct addresses", async function () {
-    expect(await contracts.beneficiaryVaults.pop()).to.equal(
-      contracts.mockPop.address
-    );
-    expect(await contracts.beneficiaryVaults.beneficiaryRegistry()).to.equal(
-      contracts.beneficiaryRegistry.address
+    expect(await contracts.beneficiaryVaults.contractRegistry()).to.equal(
+      contracts.contractRegistry.address
     );
   });
 
@@ -97,47 +138,9 @@ describe("BeneficiaryVaults", function () {
   });
 
   it("reverts when trying to initialize an invalid vault id", async function () {
-    const currentBlock = (await provider.getBlock("latest")).number;
     await expect(
       contracts.beneficiaryVaults.openVault(4, merkleRoot)
     ).to.be.revertedWith("Invalid vault id");
-  });
-
-  it("cannot nominate new owner as non-owner", async function () {
-    await expect(
-      contracts.beneficiaryVaults
-        .connect(beneficiary1)
-        .transferOwnership(beneficiary1.address)
-    ).to.be.revertedWith("caller is not the owner");
-  });
-
-  it("should revert setting to same Beneficiary Registry", async function () {
-    await expect(
-      contracts.beneficiaryVaults.setBeneficiaryRegistry(
-        contracts.beneficiaryRegistry.address
-      )
-    ).to.be.revertedWith("Same BeneficiaryRegistry");
-  });
-
-  describe("sets new dependent contracts", function () {
-    it("sets new BeneficiaryRegistry", async function () {
-      const newBeneficiaryRegistry = await waffle.deployMockContract(
-        owner,
-        contracts.beneficiaryRegistry.interface.format() as any[]
-      );
-      const result = await contracts.beneficiaryVaults.setBeneficiaryRegistry(
-        newBeneficiaryRegistry.address
-      );
-      expect(await contracts.beneficiaryVaults.beneficiaryRegistry()).to.equal(
-        newBeneficiaryRegistry.address
-      );
-      expect(result)
-        .to.emit(contracts.beneficiaryVaults, "BeneficiaryRegistryChanged")
-        .withArgs(
-          contracts.beneficiaryRegistry.address,
-          newBeneficiaryRegistry.address
-        );
-    });
   });
 
   describe("vault 0 is opened", function () {

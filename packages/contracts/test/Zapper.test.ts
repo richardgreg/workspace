@@ -1,19 +1,20 @@
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
+import { expect } from "chai";
+import { deployMockContract, MockContract } from "ethereum-waffle";
+import { parseEther } from "ethers/lib/utils";
+import { ethers } from "hardhat";
+import curveAddressProviderABI from "../contracts/mocks/abis/curveAddressProvider.json";
+import curveRegistryABI from "../contracts/mocks/abis/curveRegistry.json";
+import yearnRegistryABI from "../contracts/mocks/abis/yearnRegistry.json";
 import {
-  MockERC20,
-  MockCurveThreepool,
+  ACLRegistry,
   MockCurveMetapool,
+  MockCurveThreepool,
+  MockERC20,
   MockYearnV2Vault,
   Pool,
   Zapper,
 } from "../typechain";
-import { expect } from "chai";
-import { ethers } from "hardhat";
-import { parseEther } from "ethers/lib/utils";
-import { deployMockContract, MockContract } from "ethereum-waffle";
-import yearnRegistryABI from "../contracts/mocks/abis/yearnRegistry.json";
-import curveAddressProviderABI from "../contracts/mocks/abis/curveAddressProvider.json";
-import curveRegistryABI from "../contracts/mocks/abis/curveRegistry.json";
 
 const { AddressZero } = ethers.constants;
 
@@ -32,9 +33,12 @@ interface Contracts {
   mockYearnRegistry: MockContract;
   pool: Pool;
   zapper: Zapper;
+  aclRegistry: ACLRegistry;
 }
 
-let owner: SignerWithAddress, depositor: SignerWithAddress, rewardsManager: SignerWithAddress;
+let owner: SignerWithAddress,
+  depositor: SignerWithAddress,
+  rewardsManager: SignerWithAddress;
 let contracts: Contracts;
 
 async function deployContracts(): Promise<Contracts> {
@@ -90,39 +94,48 @@ async function deployContracts(): Promise<Contracts> {
   ).deployed();
 
   const mockCurveRegistry = await deployMockContract(owner, curveRegistryABI);
-  await mockCurveRegistry.mock.get_lp_token.withArgs(mockCurveMetapool.address).returns(mockLPToken.address);
-  await mockCurveRegistry.mock.get_pool_from_lp_token.withArgs(mockLPToken.address).returns(mockCurveMetapool.address);
+  await mockCurveRegistry.mock.get_lp_token
+    .withArgs(mockCurveMetapool.address)
+    .returns(mockLPToken.address);
+  await mockCurveRegistry.mock.get_pool_from_lp_token
+    .withArgs(mockLPToken.address)
+    .returns(mockCurveMetapool.address);
 
-  await mockCurveRegistry.mock.get_lp_token.withArgs(mockCurveThreepool.address).returns(mock3crv.address);
-  await mockCurveRegistry.mock.get_pool_from_lp_token.withArgs(mock3crv.address).returns(mockCurveThreepool.address);
+  await mockCurveRegistry.mock.get_lp_token
+    .withArgs(mockCurveThreepool.address)
+    .returns(mock3crv.address);
+  await mockCurveRegistry.mock.get_pool_from_lp_token
+    .withArgs(mock3crv.address)
+    .returns(mockCurveThreepool.address);
 
-  await mockCurveRegistry.mock.get_coins.returns(
-    [
-      mockToken.address,
-      mock3crv.address,
-      AddressZero,
-      AddressZero,
-      AddressZero,
-      AddressZero,
-      AddressZero,
-      AddressZero
-    ]
+  await mockCurveRegistry.mock.get_coins.returns([
+    mockToken.address,
+    mock3crv.address,
+    AddressZero,
+    AddressZero,
+    AddressZero,
+    AddressZero,
+    AddressZero,
+    AddressZero,
+  ]);
+  await mockCurveRegistry.mock.get_underlying_coins.returns([
+    mockToken.address,
+    mockDai.address,
+    mockUSDC.address,
+    mockUSDT.address,
+    AddressZero,
+    AddressZero,
+    AddressZero,
+    AddressZero,
+  ]);
+
+  const mockCurveAddressProvider = await deployMockContract(
+    owner,
+    curveAddressProviderABI
   );
-  await mockCurveRegistry.mock.get_underlying_coins.returns(
-    [
-      mockToken.address,
-      mockDai.address,
-      mockUSDC.address,
-      mockUSDT.address,
-      AddressZero,
-      AddressZero,
-      AddressZero,
-      AddressZero
-    ]
+  await mockCurveAddressProvider.mock.get_registry.returns(
+    mockCurveRegistry.address
   );
-
-  const mockCurveAddressProvider = await deployMockContract(owner, curveAddressProviderABI);
-  await mockCurveAddressProvider.mock.get_registry.returns(mockCurveRegistry.address);
 
   const Zapper = await ethers.getContractFactory("Zapper");
   const zapper = await (
@@ -139,16 +152,38 @@ async function deployContracts(): Promise<Contracts> {
   await mockYearnRegistry.mock.numVaults.returns(1);
   await mockYearnRegistry.mock.vaults.returns(mockYearnVault.address);
 
+  const aclRegistry = await (
+    await (await ethers.getContractFactory("ACLRegistry")).deploy()
+  ).deployed();
+
+  const contractRegistry = await (
+    await (
+      await ethers.getContractFactory("ContractRegistry")
+    ).deploy(aclRegistry.address)
+  ).deployed();
+
   const Pool = await ethers.getContractFactory("Pool");
   const pool = await (
     await Pool.deploy(
       mockLPToken.address,
       mockYearnRegistry.address,
-      rewardsManager.address
+      contractRegistry.address
     )
   ).deployed();
 
-  await pool.approveContractAccess(zapper.address);
+  await aclRegistry.grantRole(ethers.utils.id("DAO"), owner.address);
+  await aclRegistry.grantRole(
+    ethers.utils.id("ApprovedContract"),
+    zapper.address
+  );
+
+  await contractRegistry
+    .connect(owner)
+    .addContract(
+      ethers.utils.id("RewardsManager"),
+      rewardsManager.address,
+      ethers.utils.id("1")
+    );
 
   return {
     mockToken,
@@ -165,6 +200,7 @@ async function deployContracts(): Promise<Contracts> {
     mockYearnRegistry,
     pool,
     zapper,
+    aclRegistry,
   };
 }
 

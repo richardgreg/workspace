@@ -7,7 +7,7 @@ import {
 } from "@setprotocol/set-protocol-v2/dist/typechain";
 import bluebird from "bluebird";
 import { expect } from "chai";
-import { BigNumber } from "ethers";
+import { BigNumber, utils } from "ethers";
 import { parseEther } from "ethers/lib/utils";
 import { ethers, network, waffle } from "hardhat";
 import HysiBatchInteractionAdapter, {
@@ -15,12 +15,16 @@ import HysiBatchInteractionAdapter, {
 } from "../../adapters/HYSIBatchInteraction/HYSIBatchInteractionAdapter";
 import CurveMetapoolAbi from "../../lib/Curve/CurveMetapoolAbi.json";
 import {
+  ACLRegistry,
+  ContractRegistry,
   CurveMetapool,
   ERC20,
   Faucet,
   HysiBatchInteraction,
+  KeeperIncentive,
   MockERC20,
   MockYearnV2Vault,
+  Staking,
 } from "../../typechain";
 
 const provider = waffle.provider;
@@ -45,7 +49,11 @@ interface Contracts {
   setToken: SetToken; // alias for hysi
   basicIssuanceModule: BasicIssuanceModule;
   hysiBatchInteraction: HysiBatchInteraction;
+  staking: Staking;
+  keeperIncentive: KeeperIncentive;
   faucet: Faucet;
+  aclRegistry: ACLRegistry;
+  contractRegistry: ContractRegistry;
 }
 
 enum BatchType {
@@ -65,7 +73,6 @@ const HYSI_TOKEN_ADDRESS = "0x8d1621a27bb8c84e59ca339cf9b21e15b907e408";
 
 const SET_BASIC_ISSUANCE_MODULE_ADDRESS =
   "0xd8EF3cACe8b4907117a45B0b125c68560532F94D";
-const SET_TOKEN_ADDRESS = "0x8d1621a27bb8c84e59ca339cf9b21e15b907e408";
 
 const THREE_CRV_TOKEN_ADDRESS = "0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490";
 
@@ -93,22 +100,18 @@ const CURVE_FACTORY_METAPOOL_DEPOSIT_ZAP_ADDRESS =
 
 const componentMap: ComponentMap = {
   [YDUSD_TOKEN_ADDRESS]: {
-    name: "yDUSD",
     metaPool: undefined,
     yPool: undefined,
   },
   [YFRAX_TOKEN_ADDRESS]: {
-    name: "yFRAX",
     metaPool: undefined,
     yPool: undefined,
   },
   [YUSDN_TOKEN_ADDRESS]: {
-    name: "yUSDN",
     metaPool: undefined,
     yPool: undefined,
   },
   [YUST_TOKEN_ADDRESS]: {
-    name: "yUST",
     metaPool: undefined,
     yPool: undefined,
   },
@@ -228,14 +231,37 @@ async function deployContracts(): Promise<Contracts> {
     SET_BASIC_ISSUANCE_MODULE_ADDRESS
   )) as unknown as BasicIssuanceModule;
 
+  const aclRegistry = await (
+    await (await ethers.getContractFactory("ACLRegistry")).deploy()
+  ).deployed();
+
+  const contractRegistry = await (
+    await (
+      await ethers.getContractFactory("ContractRegistry")
+    ).deploy(aclRegistry.address)
+  ).deployed();
+
+  const keeperIncentive = await (
+    await (
+      await ethers.getContractFactory("KeeperIncentive")
+    ).deploy(contractRegistry.address, 0, 0)
+  ).deployed();
+
+  const staking = await (
+    await (
+      await ethers.getContractFactory("Staking")
+    ).deploy(contractRegistry.address)
+  ).deployed();
+
   //Deploy HysiBatchInteraction
   const HysiBatchInteraction = await ethers.getContractFactory(
     "HysiBatchInteraction"
   );
   const hysiBatchInteraction = await (
     await HysiBatchInteraction.deploy(
-      THREE_CRV_TOKEN_ADDRESS,
+      contractRegistry.address,
       HYSI_TOKEN_ADDRESS,
+      THREE_CRV_TOKEN_ADDRESS,
       SET_BASIC_ISSUANCE_MODULE_ADDRESS,
       [
         YDUSD_TOKEN_ADDRESS,
@@ -263,9 +289,7 @@ async function deployContracts(): Promise<Contracts> {
       ],
       2500,
       parseEther("200"),
-      parseEther("1"),
-      owner.address,
-      mockPop.address
+      parseEther("1")
     )
   ).deployed();
 
@@ -289,7 +313,11 @@ async function deployContracts(): Promise<Contracts> {
     setToken: hysi,
     basicIssuanceModule,
     hysiBatchInteraction,
+    staking,
+    keeperIncentive,
     faucet,
+    aclRegistry,
+    contractRegistry,
   };
 }
 const getMinAmountOfHYSIToMint = async (): Promise<BigNumber> => {
@@ -303,7 +331,7 @@ const getMinAmountOfHYSIToMint = async (): Promise<BigNumber> => {
   );
   const components =
     await contracts.basicIssuanceModule.getRequiredComponentUnitsForIssue(
-      SET_TOKEN_ADDRESS,
+      HYSI_TOKEN_ADDRESS,
       parseEther("1")
     );
   const componentAddresses = components[0];
@@ -336,6 +364,52 @@ const getMinAmountOfHYSIToMint = async (): Promise<BigNumber> => {
     parseEther("1")
   );
   return minAmountToMint;
+};
+
+const getMinAmountOf3CrvToReceive = async (
+  slippage: number = 0.005
+): Promise<BigNumber> => {
+  const batchId = await contracts.hysiBatchInteraction.currentRedeemBatchId();
+
+  // get expected units of HYSI given 3crv amount:
+  const HYSIInBatch = (await contracts.hysiBatchInteraction.batches(batchId))
+    .suppliedTokenBalance;
+
+  const components =
+    await contracts.basicIssuanceModule.getRequiredComponentUnitsForIssue(
+      HYSI_TOKEN_ADDRESS,
+      HYSIInBatch
+    );
+  const componentAddresses = components[0];
+  const componentAmounts = components[1];
+
+  const componentVirtualPrices = await Promise.all(
+    componentAddresses.map(async (component) => {
+      const metapool = componentMap[component.toLowerCase()]
+        .metaPool as CurveMetapool;
+      const yPool = componentMap[component.toLowerCase()]
+        .yPool as MockYearnV2Vault;
+      const yPoolPricePerShare = await yPool.pricePerShare();
+      const metapoolPrice = await metapool.get_virtual_price();
+      return yPoolPricePerShare.mul(metapoolPrice).div(parseEther("1"));
+    })
+  );
+
+  const componentValuesInUSD = componentVirtualPrices.reduce(
+    (sum, componentPrice, i) => {
+      return sum.add(
+        componentPrice.mul(componentAmounts[i]).div(parseEther("1"))
+      );
+    },
+    parseEther("0")
+  );
+
+  // 50 bps slippage tolerance
+  const slippageTolerance = 1 - Number(slippage);
+  const minAmountToReceive = componentValuesInUSD
+    .mul(parseEther(slippageTolerance.toString()))
+    .div(parseEther("1"));
+  return minAmountToReceive;
 };
 
 async function depositForHysiMint(
@@ -426,6 +500,60 @@ describe("HysiBatchInteraction Network Test", function () {
     [depositor, depositor1, depositor2, depositor3].forEach(async (account) => {
       await contracts.faucet.sendThreeCrv(10000, account.address);
     });
+    await contracts.aclRegistry.grantRole(
+      ethers.utils.id("DAO"),
+      owner.address
+    );
+    await contracts.aclRegistry.grantRole(
+      ethers.utils.id("Keeper"),
+      owner.address
+    );
+
+    await contracts.contractRegistry
+      .connect(owner)
+      .addContract(
+        ethers.utils.id("POP"),
+        contracts.mockPop.address,
+        ethers.utils.id("1")
+      );
+    await contracts.contractRegistry
+      .connect(owner)
+      .addContract(
+        ethers.utils.id("KeeperIncentive"),
+        contracts.keeperIncentive.address,
+        ethers.utils.id("1")
+      );
+    await contracts.contractRegistry
+      .connect(owner)
+      .addContract(
+        ethers.utils.id("Staking"),
+        contracts.staking.address,
+        ethers.utils.id("1")
+      );
+
+    await contracts.keeperIncentive
+      .connect(owner)
+      .createIncentive(
+        utils.formatBytes32String("HysiBatchInteraction"),
+        0,
+        true,
+        false
+      );
+    await contracts.keeperIncentive
+      .connect(owner)
+      .createIncentive(
+        utils.formatBytes32String("HysiBatchInteraction"),
+        0,
+        true,
+        false
+      );
+
+    await contracts.keeperIncentive
+      .connect(owner)
+      .addControllerContract(
+        utils.formatBytes32String("HysiBatchInteraction"),
+        contracts.hysiBatchInteraction.address
+      );
   });
 
   context("setters and getters", () => {
@@ -662,7 +790,7 @@ describe("HysiBatchInteraction Network Test", function () {
 
           await expect(
             contracts.hysiBatchInteraction.connect(depositor).batchMint(0)
-          ).to.be.revertedWith("you are not approved as a keeper");
+          ).to.be.revertedWith("you dont have the right role");
         });
       });
       context("success", function () {
@@ -992,7 +1120,7 @@ describe("HysiBatchInteraction Network Test", function () {
 
           await expect(
             contracts.hysiBatchInteraction.connect(depositor).batchRedeem(0)
-          ).to.be.revertedWith("you are not approved as a keeper");
+          ).to.be.revertedWith("you dont have the right role");
         });
         it("reverts when amount of 3crv to receive is less than slippage tolerance", async function () {
           this.timeout(25000);
@@ -1007,7 +1135,11 @@ describe("HysiBatchInteraction Network Test", function () {
           const minAmount =
             await HysiBatchInteractionAdapter.getMinAmountOf3CrvToReceiveForBatchRedeem(
               0.0001,
-              contracts,
+              {
+                hysiBatchInteraction: contracts.hysiBatchInteraction,
+                basicIssuanceModule: contracts.basicIssuanceModule,
+                setToken: contracts.hysi,
+              },
               componentMap
             );
 
@@ -1027,7 +1159,11 @@ describe("HysiBatchInteraction Network Test", function () {
           const min3Crv =
             await HysiBatchInteractionAdapter.getMinAmountOf3CrvToReceiveForBatchRedeem(
               0.0046,
-              contracts,
+              {
+                hysiBatchInteraction: contracts.hysiBatchInteraction,
+                basicIssuanceModule: contracts.basicIssuanceModule,
+                setToken: contracts.hysi,
+              },
               componentMap
             );
           const result = await contracts.hysiBatchInteraction
@@ -1054,7 +1190,11 @@ describe("HysiBatchInteraction Network Test", function () {
           const min3Crv =
             await HysiBatchInteractionAdapter.getMinAmountOf3CrvToReceiveForBatchRedeem(
               0.0046,
-              contracts,
+              {
+                hysiBatchInteraction: contracts.hysiBatchInteraction,
+                basicIssuanceModule: contracts.basicIssuanceModule,
+                setToken: contracts.hysi,
+              },
               componentMap
             );
 
@@ -1085,7 +1225,11 @@ describe("HysiBatchInteraction Network Test", function () {
           const min3Crv =
             await HysiBatchInteractionAdapter.getMinAmountOf3CrvToReceiveForBatchRedeem(
               0.0046,
-              contracts,
+              {
+                hysiBatchInteraction: contracts.hysiBatchInteraction,
+                basicIssuanceModule: contracts.basicIssuanceModule,
+                setToken: contracts.hysi,
+              },
               componentMap
             );
 
@@ -1118,7 +1262,11 @@ describe("HysiBatchInteraction Network Test", function () {
           const min3Crv =
             await HysiBatchInteractionAdapter.getMinAmountOf3CrvToReceiveForBatchRedeem(
               0.0046,
-              contracts,
+              {
+                hysiBatchInteraction: contracts.hysiBatchInteraction,
+                basicIssuanceModule: contracts.basicIssuanceModule,
+                setToken: contracts.hysi,
+              },
               componentMap
             );
 

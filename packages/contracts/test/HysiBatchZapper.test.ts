@@ -1,10 +1,12 @@
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { expect } from "chai";
+import { utils } from "ethers";
 import { parseEther } from "ethers/lib/utils";
 import { ethers, waffle } from "hardhat";
 import { BatchType } from "../adapters/HYSIBatchInteraction/HYSIBatchInteractionAdapter";
 import {
   HysiBatchZapper,
+  KeeperIncentive,
   MockCurveMetapool,
   MockCurveThreepool,
   MockERC20,
@@ -29,6 +31,7 @@ interface Contracts {
   mockCurveMetapoolUST: MockCurveMetapool;
   mockCurveThreePool: MockCurveThreepool;
   mockBasicIssuanceModule: MockBasicIssuanceModule;
+  keeperIncentive: KeeperIncentive;
   hysiBatchInteraction: HysiBatchInteraction;
   hysiBatchZapper: HysiBatchZapper;
 }
@@ -118,12 +121,35 @@ async function deployContracts(): Promise<Contracts> {
     ).deploy([mockYearnVaultUSDX.address, mockYearnVaultUST.address], [50, 50])
   ).deployed()) as MockBasicIssuanceModule;
 
+  const aclRegistry = await (
+    await (await ethers.getContractFactory("ACLRegistry")).deploy()
+  ).deployed();
+
+  const contractRegistry = await (
+    await (
+      await ethers.getContractFactory("ContractRegistry")
+    ).deploy(aclRegistry.address)
+  ).deployed();
+
+  const keeperIncentive = await (
+    await (
+      await ethers.getContractFactory("KeeperIncentive")
+    ).deploy(contractRegistry.address, 0, 0)
+  ).deployed();
+
+  const staking = await (
+    await (
+      await ethers.getContractFactory("Staking")
+    ).deploy(contractRegistry.address)
+  ).deployed();
+
   const hysiBatchInteraction = (await (
     await (
       await ethers.getContractFactory("HysiBatchInteraction")
     ).deploy(
-      mock3Crv.address,
+      contractRegistry.address,
       mockSetToken.address,
+      mock3Crv.address,
       mockBasicIssuanceModule.address,
       [mockYearnVaultUSDX.address, mockYearnVaultUST.address],
       [
@@ -138,9 +164,7 @@ async function deployContracts(): Promise<Contracts> {
       ],
       1800,
       parseEther("20000"),
-      parseEther("200"),
-      owner.address,
-      mockPop.address
+      parseEther("200")
     )
   ).deployed()) as HysiBatchInteraction;
 
@@ -148,7 +172,7 @@ async function deployContracts(): Promise<Contracts> {
     await (
       await ethers.getContractFactory("HysiBatchZapper")
     ).deploy(
-      hysiBatchInteraction.address,
+      contractRegistry.address,
       mockCurveThreePool.address,
       mock3Crv.address
     )
@@ -180,7 +204,61 @@ async function deployContracts(): Promise<Contracts> {
     .connect(depositor)
     .approve(hysiBatchInteraction.address, DepositorInitial);
 
-  await hysiBatchInteraction.connect(owner).setZapper(hysiBatchZapper.address);
+  await aclRegistry.grantRole(ethers.utils.id("DAO"), owner.address);
+  await aclRegistry.grantRole(ethers.utils.id("Keeper"), owner.address);
+  await aclRegistry.grantRole(
+    ethers.utils.id("HysiZapper"),
+    hysiBatchZapper.address
+  );
+
+  await contractRegistry
+    .connect(owner)
+    .addContract(ethers.utils.id("POP"), mockPop.address, ethers.utils.id("1"));
+  await contractRegistry
+    .connect(owner)
+    .addContract(
+      ethers.utils.id("KeeperIncentive"),
+      keeperIncentive.address,
+      ethers.utils.id("1")
+    );
+  await contractRegistry
+    .connect(owner)
+    .addContract(
+      ethers.utils.id("HysiBatchInteraction"),
+      hysiBatchInteraction.address,
+      ethers.utils.id("1")
+    );
+  await contractRegistry
+    .connect(owner)
+    .addContract(
+      ethers.utils.id("Staking"),
+      staking.address,
+      ethers.utils.id("1")
+    );
+
+  await keeperIncentive
+    .connect(owner)
+    .createIncentive(
+      utils.formatBytes32String("HysiBatchInteraction"),
+      0,
+      true,
+      false
+    );
+  await keeperIncentive
+    .connect(owner)
+    .createIncentive(
+      utils.formatBytes32String("HysiBatchInteraction"),
+      0,
+      true,
+      false
+    );
+
+  await keeperIncentive
+    .connect(owner)
+    .addControllerContract(
+      utils.formatBytes32String("HysiBatchInteraction"),
+      hysiBatchInteraction.address
+    );
 
   return {
     mock3Crv,
@@ -196,6 +274,7 @@ async function deployContracts(): Promise<Contracts> {
     mockCurveMetapoolUST,
     mockCurveThreePool,
     mockBasicIssuanceModule,
+    keeperIncentive,
     hysiBatchInteraction,
     hysiBatchZapper,
   };

@@ -1,17 +1,13 @@
 # {{name}}
-
-
 {{{natspec.userdoc}}}
-
 ***
 
 {{{natspec.devdoc}}}
-
 {{#if ownFunctions}}
 ## Functions:
 {{#ownFunctions}}
 {{#if (or (eq visibility "public") (eq visibility "external"))}}
-- [`{{name}}()`](#{{name}}_)
+- [`{{name}}()`](#{{toc_format name}})
 {{/if}}
 {{/ownFunctions}}
 {{/if}}
@@ -19,19 +15,19 @@
 {{#if ownEvents}}
 ## Events:
 {{#ownEvents}}
-- [`{{name}}`](#{{name}}_)
+- [`{{name}}`](#{{toc_format name}})
 {{/ownEvents}}
 {{/if}}
 
 {{#if ownModifiers}}
 ## Modifiers:
 {{#ownModifiers}}
-- [`{{name}}()`](#{{name}}_)
+- [`{{name}}()`](#{{toc_format name}})
 {{/ownModifiers}}
 {{/if}}
 ## Graphs:
-- [`Dependency Graph`](#dependencyGraph)
-- [`Inheritance Graph`](#inheritanceGraph)
+- [Dependency Graph](#dependency-graph)
+- [Inheritance Graph](#inheritance-graph)
 ***
 
 ## Function Definitions:
@@ -39,7 +35,7 @@
 
 {{#if (or (eq visibility "public") (eq visibility "external"))}}
 
-### <a name="{{name}}_"></a> {{name}}() {#{{name}}_}
+###  {{name}}()
 
 ```
 {{name}}({{args}}) {{visibility}} {{#if outputs}} returns ({{outputs}}){{/if}}
@@ -48,32 +44,32 @@
 {{#if natspec.devdoc}}{{natspec.devdoc}}{{/if}}
 
 {{#if natspec.params}}
-
+[[linebreak]]
 | Parameter Name | Type | Description |
 |------------|-----| -------|
 {{#natspec.params}}
 | `{{param}}`| {{#lookup ../args.types @index}}{{/lookup}}| {{strip description}}|
 {{/natspec.params}}
-
-
+[[linebreak]]
 {{/if}}
 
 
 {{#if natspec.returns}}
 #### Return Values:
+[[linebreak]]
 | Return Name | Type | Description |
 |-------------|-------|------------|
 {{#natspec.returns}}
 |{{param}}| {{#lookup ../args.types @index}}{{/lookup}}|{{description}}|
 {{/natspec.returns}}
-
+[[linebreak]]
 {{/if}}
 {{/if}}
 {{/ownFunctions}}
 
 ## Events
 {{#ownEvents}}
-### <a name="{{name}}_"></a> {{name}} {#{{name}}_}
+### {{name}}
 ```
 {{name}}({{args}})
 ```
@@ -87,7 +83,6 @@
 {{#natspec.params}}
 - `{{param}}`: {{description}}
 {{/natspec.params}}
-
 {{/if}}
 {{/ownEvents}}
 
@@ -95,7 +90,7 @@
 {{#if ownModifiers}}
 ## Modifiers
 {{#ownModifiers}}
-### <a name="{{name}}_"></a> `{{name}}()` {#{{name}}_}
+### `{{name}}()`
 ```
 {{name}}({{args}})
 ```
@@ -109,14 +104,13 @@
 {{#natspec.params}}
 - `{{param}}`: {{description}}
 {{/natspec.params}}
-
 {{/if}}
 {{/ownModifiers}}
 {{/if}}
 
 ## Graphs
 
-### <a name="dependencyGraph"></a> `Dependency Graph` {#dependencyGraph}
-![Dependency Graph](images/{{name}}_dependency_graph.png)
-### <a name="inheritanceGraph"></a> `Inheritance Graph` {#inheritanceGraph}
-![Inheritance Graph](images/{{name}}_inheritance_graph.png)
+### Dependency Graph
+![Dependency Graph](/docs/images/{{name}}_dependency_graph.png)
+### Inheritance Graph
+![Inheritance Graph](/docs/images/{{name}}_inheritance_graph.png)
