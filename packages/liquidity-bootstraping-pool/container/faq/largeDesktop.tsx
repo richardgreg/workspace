@@ -556,8 +556,8 @@ export default function LargeDesktop(): JSX.Element {
                 </p>
                 <p className="text-xl mx-auto font-light leading-10 ">
                   To date, <span translate="no">Popcorn</span> has raised
-                  $3,056,234.44 to support the development of the project, at an
-                  average of $0.223 per POP.
+                  $3,556,234.44 to support the development of the project, at an
+                  average of $0.27 per POP.
                 </p>
               </div>
 

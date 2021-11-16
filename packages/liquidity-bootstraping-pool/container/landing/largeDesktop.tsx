@@ -47,6 +47,21 @@ export default function LargeDesktop(): JSX.Element {
                     <span translate="no">Popcorn's</span>{" "} Token Launch Auction
                   </h1>
                   <p className="w-4/12 mx-auto text-center text-2xl leading-10 font-landing mt-6">
+
+                  The <span translate="no">Popcorn</span>{" "} Token Launch Auction (TLA) will be the first opportunity for the
+                    general public to join the PopcornDAO by acquiring the POP
+                    token. This is a 2.5 day, multi-chain event for the Popcorn
+                    community where all proceeds raised will go to the Popcorn
+                    Treasury, a smart contract entirely controlled by POP token
+                    holders.{ " "}
+                    <Link href="/faq">
+                      <a className="text-blue-600 hover:text-blue-700 underline">
+                        Check out the FAQ
+                      </a>
+                    </Link>{' '}
+                    for more on how the auction works.
+
+                    {/*
                     The <span translate="no">Popcorn</span>{" "} Token Launch Auction (TLA) will be the first opportunity for the
                     general public to join the PopcornDAO by acquiring the POP
                     token. This is a 2.5 day, multi-chain event for the Popcorn
@@ -65,6 +80,7 @@ export default function LargeDesktop(): JSX.Element {
                       </a>
                     </Link>{' '}
                     for more on how the auction works.
+                    */}
                   </p>
                   <form
                     action="https://network.us1.list-manage.com/subscribe/post?u=5ce5e82d673fd2cfaf12849a5&amp;id=e85a091ed3"
@@ -204,6 +220,14 @@ Members of the PopcornDAO, or POP token holders, are stewards of <span translate
                     Ethereum, Polygon &amp; Arbitrum
                   </p>
                   <p className="text-xl leading-10">
+                  For more information please{' '}
+                    <Link href="/faq" passHref>
+                      <a className="text-blue-600 hover:text-blue-700 underline">
+                        see the FAQ
+                      </a>
+                    </Link>.{' '}
+                  
+                    {/*
                     For more information please{' '}
                     <Link href="/faq" passHref>
                       <a className="text-blue-600 hover:text-blue-700 underline">
@@ -216,6 +240,7 @@ Members of the PopcornDAO, or POP token holders, are stewards of <span translate
                         Step-by-Step Guide
                       </a>
                     </Link>{' '}
+                    */}
                   </p>
                 </div>
               </div>

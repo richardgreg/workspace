@@ -44,27 +44,39 @@ export default function Tablet(): JSX.Element {
                       <span translate="no">Popcorn's</span> Token Launch Auction
                     </h1>
                     <p className="w-1/2 mx-auto text-center text-normal font-landing font-light mt-6">
-                      The <span translate="no">Popcorn</span> Token Launch
-                      Auction (TLA) will be the first opportunity for the
-                      general public to join the PopcornDAO by acquiring the POP
-                      token. This is a 2.5 day, multi-chain event for the{' '}
-                      <span translate="no">Popcorn</span> community where all
-                      proceeds raised will go to the{' '}
-                      <span translate="no">Popcorn</span> Treasury, a smart
-                      contract entirely controlled by POP token holders. Please
-                      refer to this{' '}
-                      <Link href="#">
-                        <a className="text-blue-600 hover:text-blue-700 underline">
-                          Step-by-Step Guide
-                        </a>
-                      </Link>{' '}
-                      on how to safely participate in the TLA and{' '}
-                      <Link href="/faq">
-                        <a className="text-blue-600 hover:text-blue-700 underline">
-                          check out the FAQ
-                        </a>
-                      </Link>{' '}
-                      for more on how the auction works.
+                    The <span translate="no">Popcorn</span>{" "} Token Launch Auction (TLA) will be the first opportunity for the
+                    general public to join the PopcornDAO by acquiring the POP
+                    token. This is a 2.5 day, multi-chain event for the Popcorn
+                    community where all proceeds raised will go to the Popcorn
+                    Treasury, a smart contract entirely controlled by POP token
+                    holders.{ " "}
+                    <Link href="/faq">
+                      <a className="text-blue-600 hover:text-blue-700 underline">
+                        Check out the FAQ
+                      </a>
+                    </Link>{' '}
+                    for more on how the auction works.
+
+                    {/*
+                    The <span translate="no">Popcorn</span>{" "} Token Launch Auction (TLA) will be the first opportunity for the
+                    general public to join the PopcornDAO by acquiring the POP
+                    token. This is a 2.5 day, multi-chain event for the Popcorn
+                    community where all proceeds raised will go to the Popcorn
+                    Treasury, a smart contract entirely controlled by POP token
+                    holders. Please refer to this{' '}
+                    <Link href="#">
+                      <a className="text-blue-600 hover:text-blue-700 underline">
+                        Step-by-Step Guide
+                      </a>
+                    </Link>{' '}
+                    on how to safely participate in the TLA and{' '}
+                    <Link href="/faq">
+                      <a className="text-blue-600 hover:text-blue-700 underline">
+                        check out the FAQ
+                      </a>
+                    </Link>{' '}
+                    for more on how the auction works.
+                    */}
                     </p>
                     <form
                       action="https://network.us1.list-manage.com/subscribe/post?u=5ce5e82d673fd2cfaf12849a5&amp;id=e85a091ed3"
@@ -209,6 +221,14 @@ export default function Tablet(): JSX.Element {
                     Ethereum, Polygon &amp; Arbitrum
                   </p>
                   <p className="text-md ">
+                  For more information please{' '}
+                    <Link href="/faq" passHref>
+                      <a className="text-blue-600 hover:text-blue-700 underline">
+                        see the FAQ
+                      </a>
+                    </Link>.{' '}
+                  
+                    {/*
                     For more information please{' '}
                     <Link href="/faq" passHref>
                       <a className="text-blue-600 hover:text-blue-700 underline">
@@ -221,6 +241,7 @@ export default function Tablet(): JSX.Element {
                         Step-by-Step Guide
                       </a>
                     </Link>{' '}
+                    */}
                   </p>
                 </div>
               </div>
