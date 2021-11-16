@@ -262,7 +262,7 @@ const IndexPage = () => {
                   <div className="w-fit-content mt-4">
                     <div className="w-fit-content mx-auto py-2">
                       <h3 className="font-landing text-xl text-left w-fit-content">
-                        Don’t miss the liquidity bootstrapping event!
+                        Don’t miss the token launch event!
                       </h3>
                       <div className="mx-auto flex flex-row justify-between pb-20 mt-3 w-full">
                         <div className="text-center">
@@ -772,7 +772,7 @@ const IndexPage = () => {
               <div className="w-full">
                 <div className="w-10/12 mx-auto">
                   <h3 className="font-medium text-2xl pt-16 pb-12 text-center leading-8">
-                    Don’t miss the liquidity bootstrapping event!
+                    Don’t miss the token launch event!
                   </h3>
                   <div className="w-9/12 mx-auto">
                     <div className="flex flex-row justify-between mb-8">
@@ -930,7 +930,7 @@ const IndexPage = () => {
             <div className="w-full pt-32">
               <div className="w-10/12 mx-auto rounded-xl shadow-xl bg-white">
                 <h3 className="font-medium text-4xl pt-20 pb-12 text-center">
-                  Don’t miss the liquidity bootstrapping event!
+                  Don’t miss the token launch event!
                 </h3>
                 <div className="w-9/12 mx-auto pb-20">
                   <div className="flex flex-row justify-between mb-8">
