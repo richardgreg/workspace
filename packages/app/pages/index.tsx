@@ -456,17 +456,17 @@ const IndexPage = () => {
         <section>
           <div
             className="bg-countdown-pattern flex-shrink-0 flex-grow-0 w-full
-          h-full pt-60"
+          h-full pt-60 xl:pt-72 2xl:pt-104"
             style={{
               backgroundRepeat: 'no-repeat',
-              backgroundSize: 'auto',
+              backgroundSize: 'cover',
               backgroundPosition: 'center',
             }}
           >
-            <div className="w-full pt-32">
+            <div className="pt-32">
               <div className="w-10/12 mx-auto rounded-xl shadow-xl bg-white">
                 <h3 className="font-medium text-4xl pt-20 pb-12 text-center">
-                  Don’t miss the liquidity bootstrapping event!
+                  Don’t miss the liquidity event!
                 </h3>
                 <div className="w-9/12 mx-auto flex flex-row justify-between pb-20">
                   <div className="text-center">
@@ -559,14 +559,12 @@ const IndexPage = () => {
             <div className="w-6/12">
               <Link href="/" passHref>
                 <a>
-                  {/*TODO The logo is slightly blurred even though its copied strcmdaight from figma*/}
                   <img src="/images/logo.png" alt="Logo" className="h-10"></img>
                 </a>
               </Link>
               <p className="font-medium text-base w-7/12 py-4">
-                Popcorn is a new eco-friendly paradigm for DeFi, where users can
-                earn high yield on their crypto assets while creating real world
-                impact.
+                Popcorn is a carbon-neutral crypto savings account where fees
+                fund educational, environmental and open source initiatives
               </p>
               <div className="flex flex-row space-x-4 items-center">
                 <Link href="https://github.com/popcorndao" passHref>
@@ -592,6 +590,7 @@ const IndexPage = () => {
               <Link href="/" passHref>
                 <a className="hover:text-blue-600">Home</a>
               </Link>
+
               <Link href="https://medium.com/popcorndao" passHref>
                 <a className="hover:text-blue-600" target="_window">
                   Blog
@@ -603,11 +602,6 @@ const IndexPage = () => {
               >
                 <a className="hover:text-blue-600" target="_window">
                   Popcorn (POP) Token
-                </a>
-              </Link>
-              <Link href="https://launch.popcorn.network/" passHref>
-                <a className="hover:text-blue-600" target="_window">
-                  Token Launch Auction
                 </a>
               </Link>
             </div>
@@ -629,12 +623,6 @@ const IndexPage = () => {
                 </a>
               </Link>
             </div>
-            {/*<div className="flex flex-col space-y-3">
-            <p className="font-medium text-base uppercase">Documentation</p>
-            <Link href="/" passHref>
-              <a className="hover:text-blue-600">Gitbook</a>
-            </Link>
-          </div>*/}
           </div>
           <p className="font-base text-center py-4">
             ©2021, Popcorn Network. All Rights Reserved
@@ -928,6 +916,7 @@ const IndexPage = () => {
             partnering with carbon sequestration and negative emission projects.
           </p>
         </section>
+
         <section>
           <div
             className="bg-countdown-pattern flex-shrink-0 flex-grow-0 w-full
@@ -1092,7 +1081,9 @@ const IndexPage = () => {
                   </a>
                 </Link>
                 <Link href="https://launch.popcorn.network/" passHref>
-                  <a className="hover:text-blue-600" target="_window">Token Launch Auction</a>
+                  <a className="hover:text-blue-600" target="_window">
+                    Token Launch Auction
+                  </a>
                 </Link>
               </div>
               <div className="flex flex-col space-y-3 w-1/2">
