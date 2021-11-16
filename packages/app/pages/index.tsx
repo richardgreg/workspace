@@ -197,13 +197,13 @@ const IndexPage = () => {
               backgroundPosition: 'center',
             }}
           >
-            <div className="w-10/12 mx-auto flex flex-col lg:flex-row justify-between pb-48 items-center">
+            <div className="min-w-480 w-10/12 mx-auto flex flex-col lg:flex-row justify-between pb-48 items-center">
               <div className="w-full lg:w-6/12 xl:w-5/12 order-2 lg:order-1">
                 <div className="w-10/12 text-center mx-auto lg:text-left lg:mx-0">
-                  <h1 className="font-bold lg:text-5xl xl:text-7xl leading-snug mb-8 ">
+                  <h1 className="font-bold lg:text-5xl xl:text-7xl leading-snug mb-3 ">
                     Start doing good with DeFi
                   </h1>
-                  <p className="text-2xl font-landing">
+                  <p className="text-xl font-landing">
                     Earn high yield on your cryptoassets while creating real
                     world impact. Our earnings fund social impact organizations.
                   </p>
@@ -218,7 +218,7 @@ const IndexPage = () => {
                   >
                     <div
                       id="mc_embed_signup_scroll"
-                      className="shadow-xl bg-white rounded-xl py-2 px-2 mt-8 w-full flex flex-row items-center justify-between"
+                      className="shadow-xl bg-white rounded-xl py-2 px-2 mt-4 w-full flex flex-row items-center justify-between"
                     >
                       <input
                         type="email"
@@ -250,6 +250,44 @@ const IndexPage = () => {
                       </div>
                     </div>
                   </form>
+
+                  <div className="w-fit-content mt-4">
+              <div className="w-fit-content mx-auto py-2">
+                <h3 className="font-landing text-xl text-left w-fit-content">
+                  Don’t miss the liquidity bootstrapping event!
+                </h3>
+                <div className="mx-auto flex flex-row justify-between pb-20 mt-3 w-full">
+                  <div className="text-center">
+                    <h1 className="font-medium text-4xl leading-snug">
+                      {countdown[0]}
+                    </h1>
+                    <p className="text-5/12xl font-landing text-gray-500">Days</p>
+                  </div>
+                  <div className="text-center">
+                    <h1 className="font-medium text-4xl leading-snug">
+                      {countdown[1]}
+                    </h1>
+                    <p className="text-5/12xl font-landing text-gray-500">Hours</p>
+                  </div>
+                  <div className="text-center">
+                    <h1 className="font-medium text-4xl leading-snug">
+                      {countdown[2]}
+                    </h1>
+                    <p className="text-5/12xl font-landing text-gray-500">
+                      Minutes
+                    </p>
+                  </div>
+                  <div className="text-center">
+                    <h1 className="font-medium text-4xl leading-snug">
+                      {countdown[3]}
+                    </h1>
+                    <p className="text-5/12xl font-landing text-gray-500">
+                      Seconds
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
                 </div>
               </div>
               <div className="w-full lg:w-6/12 xl:w-7/12 order-1 lg:order-2 mb-8 lg:mb-0">
@@ -261,7 +299,7 @@ const IndexPage = () => {
         </section>
         <section className="w-10/12 mx-auto mb-24">
           <h2 className="font-bold text-5xl xl:text-6xl mb-4">How it works</h2>
-          <p className="text-2xl font-landing text-gray-500">
+          <p className="text-xl font-landing text-gray-500">
             Put your cryptoassets to work
           </p>
           <div className="w-full flex flex-wrap flex-row justify-between mt-16">
@@ -674,7 +712,7 @@ const IndexPage = () => {
               backgroundPosition: 'center',
             }}
           >
-            <div className="w-10/12 mx-auto flex flex-col lg:flex-row justify-between pb-48 items-center text-center">
+            <div className="w-10/12 mx-auto flex flex-col lg:flex-row justify-between pb-16 items-center text-center">
               <CatPool />
               <h1 className="font-bold text-4xl leading-snug mb-8">
                 Start doing good with DeFi
@@ -726,6 +764,51 @@ const IndexPage = () => {
                   </div>
                 </div>
               </form>
+              <div className="w-full">
+              <div className="w-10/12 mx-auto">
+                <h3 className="font-medium text-2xl pt-16 pb-12 text-center leading-8">
+                  Don’t miss the liquidity bootstrapping event!
+                </h3>
+                <div className="w-9/12 mx-auto">
+                  <div className="flex flex-row justify-between mb-8">
+                    <div className="w-5/12 text-center">
+                      <h1 className="font-bold text-4xl leading-snug">
+                        {countdown[0]}
+                      </h1>
+                      <p className="text-1.5xl font-landing text-gray-500">
+                        Days
+                      </p>
+                    </div>
+                    <div className="w-5/12 text-center">
+                      <h1 className="font-bold text-4xl leading-snug">
+                        {countdown[1]}
+                      </h1>
+                      <p className="text-lg font-landing text-gray-500">
+                        Hours
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex flex-row justify-between">
+                    <div className="w-5/12 text-center">
+                      <h1 className="font-bold text-4xl leading-snug">
+                        {countdown[2]}
+                      </h1>
+                      <p className="text-1xl font-landing text-gray-500">
+                        Minutes
+                      </p>
+                    </div>
+                    <div className="w-5/12 text-center">
+                      <h1 className="font-bold text-4xl leading-snug">
+                        {countdown[3]}
+                      </h1>
+                      <p className="text-1.5xl font-landing text-gray-500">
+                        Seconds
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
             </div>
           </div>
         </section>
