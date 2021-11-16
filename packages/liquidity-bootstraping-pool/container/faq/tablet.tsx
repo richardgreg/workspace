@@ -1,3 +1,4 @@
+import DesktopFooterNavigation from 'container/DesktopFooterNavigation';
 import DesktopNavigation from 'container/DesktopNavigation';
 import Link from 'next/link';
 import React from 'react';
@@ -88,9 +89,9 @@ export default function Tablet(): JSX.Element {
                 </p>
 
                 <p className="w-full mx-auto text-normal font-landing mb-4">
-                  The official{' '}
-                  <Link href="/faq">
-                    <a className="text-blue-600 hover:text-blue-700 underline">
+                The official{' '}
+                  <Link href="https://twitter.com/popcorn_dao" passHref>
+                    <a className="text-blue-600 hover:text-blue-700 underline" target="_blank">
                       <span translate="no">Popcorn</span> Twitter account
                     </a>
                   </Link>{' '}
@@ -619,21 +620,8 @@ export default function Tablet(): JSX.Element {
 
         <section className="grid">
           <div className="flex flex-row mb-10 justify-self-center">
-            <p className="mx-4">
-              <a href="https://popcorn.network">popcorn.network</a>
-            </p>
-            <p className="mx-4">•</p>
-            <p className="mx-4">
-              <a href="https://discord.gg/w9zeRTSZsq">discord</a>
-            </p>
-            <p className="mx-4">•</p>
-            <p className="mx-4">
-              <a href="https://forum.popcorn.network/">popcorn.community</a>
-            </p>
-            <p className="mx-4">•</p>
-            <p className="mx-4">
-              <a href="https://twitter.com/Popcorn_DAO">@popcorn on twitter</a>
-            </p>
+          <DesktopFooterNavigation />
+
           </div>
         </section>
       </div>

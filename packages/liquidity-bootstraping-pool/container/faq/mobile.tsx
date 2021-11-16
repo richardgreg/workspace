@@ -71,12 +71,12 @@ export default function Mobile({
                     </p>
 
                     <p className="mx-auto text-base font-landing mb-10">
-                      The official{' '}
-                      <Link href="/faq">
-                        <a className="text-blue-600 hover:text-blue-700 underline">
-                          <span translate="no">Popcorn</span> Twitter account
-                        </a>
-                      </Link>{' '}
+                    The official{' '}
+                  <Link href="https://twitter.com/popcorn_dao" passHref>
+                    <a className="text-blue-600 hover:text-blue-700 underline" target="_blank">
+                      <span translate="no">Popcorn</span> Twitter account
+                    </a>
+                  </Link>{' '}
                       will tweet the contract address. You can track the status
                       of the TLA event on{' '}
                       <Link href="/faq" passHref>

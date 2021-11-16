@@ -1,3 +1,4 @@
+import DesktopFooterNavigation from 'container/DesktopFooterNavigation';
 import DesktopNavigation from 'container/DesktopNavigation';
 import Link from 'next/link';
 import React from 'react';
@@ -280,30 +281,8 @@ Members of the PopcornDAO, or POP token holders, are stewards of <span translate
 
         <section className="grid z-10 mt-128">
           <div className="flex flex-row mb-10 justify-self-center mt-128">
-            <p className="mx-4">
-              <a className=" cursor-pointer hover:text-blue-600" href="https://popcorn.network" target="_blank">
-                popcorn.network
-              </a>
-            </p>
-            <p className="mx-4">•</p>
-            <p className="mx-4">
-              <a  className=" cursor-pointer hover:text-blue-600" href="https://discord.gg/w9zeRTSZsq" target="_blank">
-                <span translate="no">Popcorn</span>{" "} discord
-              </a>
-            </p>
-            <p className="mx-4">•</p>
-            <p  className=" cursor-pointer hover:text-blue-600 mx-4">
-              {' '}
-              <a href="https://forum.popcorn.network" target="_blank">
-                forum.popcorn.network
-              </a>
-            </p>
-            <p className="mx-4">•</p>
-            <p className="mx-4">
-              <a href="https://twitter.com/Popcorn_DAO" target="_blank">
-                @popcorn_dao on twitter
-              </a>
-            </p>
+          <DesktopFooterNavigation/>
+
           </div>
         </section>
       </div>

@@ -1,3 +1,4 @@
+import DesktopFooterNavigation from 'container/DesktopFooterNavigation';
 import DesktopNavigation from 'container/DesktopNavigation';
 import Link from 'next/link';
 import React, { useEffect } from 'react';
@@ -24,8 +25,7 @@ export default function LargeDesktop(): JSX.Element {
       <div className="flex flex-col w-full h-full">
         <header className="absolute w-full bg-primary top-20 z-10">
           <nav className="w-1/2 mx-auto pb-4 flex flex-row items-center justify-between">
-          <DesktopNavigation textSize="xl"></DesktopNavigation>
-
+            <DesktopNavigation textSize="xl"></DesktopNavigation>
           </nav>
         </header>
 
@@ -42,7 +42,8 @@ export default function LargeDesktop(): JSX.Element {
                 Token Launch FAQ
               </h1>
               <p className="text-center text-3xl font-landing leading-10 font-light mt-14">
-                <span translate="no">Popcorn</span> Token Launch Auction Details:
+                <span translate="no">Popcorn</span> Token Launch Auction
+                Details:
               </p>
 
               <p className="text-center text-xl font-landing leading-10  font-light mt-14">
@@ -85,16 +86,19 @@ export default function LargeDesktop(): JSX.Element {
                       Copperlaunch.com
                     </a>
                   </Link>
-                  , a site for Token Launch Auctions. All proceeds will go to the{' '}
-                  <span translate="no">Popcorn</span> Treasury, a smart contract
-                  entirely controlled by <span translate="no">Popcorn</span>{' '}
-                  token holders.
+                  , a site for Token Launch Auctions. All proceeds will go to
+                  the <span translate="no">Popcorn</span> Treasury, a smart
+                  contract entirely controlled by{' '}
+                  <span translate="no">Popcorn</span> token holders.
                 </p>
 
                 <p className="w-full mx-auto text-center text-xl font-landing leading-10 font-light my-18">
                   The official{' '}
-                  <Link href="/faq">
-                    <a className="text-blue-600 hover:text-blue-700 underline">
+                  <Link href="https://twitter.com/popcorn_dao" passHref>
+                    <a
+                      className="text-blue-600 hover:text-blue-700 underline"
+                      target="_blank"
+                    >
                       <span translate="no">Popcorn</span> Twitter account
                     </a>
                   </Link>{' '}
@@ -214,9 +218,9 @@ export default function LargeDesktop(): JSX.Element {
                   Which networks will be supported?
                 </p>
                 <p className="text-xl mx-auto font-light leading-10 ">
-                  The Token Launch Auction will be deployed on Ethereum, Arbitrum
-                  and Polygon. To participate you will need to acquire the
-                  native token of the chain you wish to participate on (ETH,
+                  The Token Launch Auction will be deployed on Ethereum,
+                  Arbitrum and Polygon. To participate you will need to acquire
+                  the native token of the chain you wish to participate on (ETH,
                   AETH, and MATIC respectively) and USDC to purchase POP.
                 </p>
               </div>
@@ -330,15 +334,16 @@ export default function LargeDesktop(): JSX.Element {
                   why should I buy a token now?
                 </p>
                 <p className="text-xl mx-auto font-light leading-10 ">
-                Staking rewards (on Ethereum, Polygon &amp; Arbitrum) will
+                  Staking rewards (on Ethereum, Polygon &amp; Arbitrum) will
                   immediately follow the end of the Token Launch Auction in
                   December. The only way to take advantage of the staking
                   rewards and liquidity mining incentives is to have POP tokens.
                   The POP tokenomic model specifies that the greatest amount of
                   staking rewards emitted will be during the first several weeks
-                  of the liquidity mining incentives program, therefore the earliest users will have the greatest possible opportunity to earn more POP tokens.
+                  of the liquidity mining incentives program, therefore the
+                  earliest users will have the greatest possible opportunity to
+                  earn more POP tokens.
                 </p>
-
               </div>
 
               <div className="w-full mx-auto my-20">
@@ -536,9 +541,9 @@ export default function LargeDesktop(): JSX.Element {
                 </p>
                 <p className="text-xl mx-auto font-light leading-10 ">
                   New Form Capital, Kenetic Capital, The LAO, Impossible
-                  Finance, The Crypto Founders Network, Big Brain Holdings, Hestia Holdings and
-                  angels from MakerDAO, IBM, NASA, Google and Deloitte to name a
-                  few.
+                  Finance, The Crypto Founders Network, Big Brain Holdings,
+                  Hestia Holdings and angels from MakerDAO, IBM, NASA, Google
+                  and Deloitte to name a few.
                 </p>
               </div>
 
@@ -657,21 +662,7 @@ export default function LargeDesktop(): JSX.Element {
 
         <section className="grid mx-auto">
           <div className="flex flex-row my-10">
-            <p className="">
-              <a href="https://popcorn.network">popcorn.network</a>
-            </p>
-            <p className="mx-4">•</p>
-            <p className="mx-4">
-              <a href="https://discord.gg/w9zeRTSZsq">discord</a>
-            </p>
-            <p className="mx-4">•</p>
-            <p className="mx-4">
-              <a href="https://forum.popcorn.network/">popcorn.community</a>
-            </p>
-            <p className="mx-4">•</p>
-            <p className="mx-4">
-              <a href="https://twitter.com/Popcorn_DAO">@popcorn on twitter</a>
-            </p>
+            <DesktopFooterNavigation />
           </div>
         </section>
       </div>

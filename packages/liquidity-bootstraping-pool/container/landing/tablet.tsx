@@ -1,5 +1,6 @@
 import DesktopNavigation from 'container/DesktopNavigation';
 import Link from 'next/link';
+import DesktopFooterNavigation from '../DesktopFooterNavigation';
 
 export default function Tablet(): JSX.Element {
   const startDate = new Date(1638172800000).toLocaleDateString(undefined, {
@@ -282,25 +283,7 @@ export default function Tablet(): JSX.Element {
 
         <section className="grid z-10 mt-128">
           <div className="flex flex-row mb-10 justify-self-center pt-40 mt-10">
-            <p className="mx-4">
-              <a href="https://popcorn.network" target="_blank">
-                popcorn.network
-              </a>
-            </p>
-            <p className="mx-4">•</p>
-            <p className="mx-4">
-              <a href="https://discord.gg/w9zeRTSZsq" target="_blank">
-                popcorn.discord
-              </a>
-            </p>
-            <p className="mx-4">•</p>
-            <p className="mx-4">popcorn.community</p>
-            <p className="mx-4">•</p>
-            <p className="mx-4">
-              <a href="https://twitter.com/Popcorn_DAO" target="_blank">
-                @popcorn on twitter
-              </a>
-            </p>
+            <DesktopFooterNavigation />
           </div>
         </section>
       </div>
