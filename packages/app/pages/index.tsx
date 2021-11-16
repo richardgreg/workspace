@@ -23,27 +23,32 @@ const IndexPage = () => {
 
   useEffect(() => {
     if (countdownActive) {
+      calcAndSetCountdown();
       setInterval(function () {
-        const now = new Date().getTime();
-
-        const distance = endDate - now;
-        if (distance < 0) {
-          disableCountdown(false);
-          setCountdown([0, 0, 0, 0]);
-        }
-
-        // Time calculations for days, hours, minutes and seconds
-        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        const hours = Math.floor(
-          (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
-        );
-        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-        setCountdown([days, hours, minutes, seconds]);
+        calcAndSetCountdown();
       }, 1000);
     }
   }, []);
+
+  function calcAndSetCountdown(): void {
+    const now = new Date().getTime();
+
+    const distance = endDate - now;
+    if (distance < 0) {
+      disableCountdown(false);
+      setCountdown([0, 0, 0, 0]);
+    }
+
+    // Time calculations for days, hours, minutes and seconds
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor(
+      (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
+    );
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    setCountdown([days, hours, minutes, seconds]);
+  }
 
   return (
     <div className="font-landing">
@@ -252,42 +257,46 @@ const IndexPage = () => {
                   </form>
 
                   <div className="w-fit-content mt-4">
-              <div className="w-fit-content mx-auto py-2">
-                <h3 className="font-landing text-xl text-left w-fit-content">
-                  Don’t miss the liquidity bootstrapping event!
-                </h3>
-                <div className="mx-auto flex flex-row justify-between pb-20 mt-3 w-full">
-                  <div className="text-center">
-                    <h1 className="font-medium text-4xl leading-snug">
-                      {countdown[0]}
-                    </h1>
-                    <p className="text-5/12xl font-landing text-gray-500">Days</p>
+                    <div className="w-fit-content mx-auto py-2">
+                      <h3 className="font-landing text-xl text-left w-fit-content">
+                        Don’t miss the liquidity bootstrapping event!
+                      </h3>
+                      <div className="mx-auto flex flex-row justify-between pb-20 mt-3 w-full">
+                        <div className="text-center">
+                          <h1 className="font-medium text-4xl leading-snug">
+                            {countdown[0]}
+                          </h1>
+                          <p className="text-5/12xl font-landing text-gray-500">
+                            Days
+                          </p>
+                        </div>
+                        <div className="text-center">
+                          <h1 className="font-medium text-4xl leading-snug">
+                            {countdown[1]}
+                          </h1>
+                          <p className="text-5/12xl font-landing text-gray-500">
+                            Hours
+                          </p>
+                        </div>
+                        <div className="text-center">
+                          <h1 className="font-medium text-4xl leading-snug">
+                            {countdown[2]}
+                          </h1>
+                          <p className="text-5/12xl font-landing text-gray-500">
+                            Minutes
+                          </p>
+                        </div>
+                        <div className="text-center">
+                          <h1 className="font-medium text-4xl leading-snug">
+                            {countdown[3]}
+                          </h1>
+                          <p className="text-5/12xl font-landing text-gray-500">
+                            Seconds
+                          </p>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <div className="text-center">
-                    <h1 className="font-medium text-4xl leading-snug">
-                      {countdown[1]}
-                    </h1>
-                    <p className="text-5/12xl font-landing text-gray-500">Hours</p>
-                  </div>
-                  <div className="text-center">
-                    <h1 className="font-medium text-4xl leading-snug">
-                      {countdown[2]}
-                    </h1>
-                    <p className="text-5/12xl font-landing text-gray-500">
-                      Minutes
-                    </p>
-                  </div>
-                  <div className="text-center">
-                    <h1 className="font-medium text-4xl leading-snug">
-                      {countdown[3]}
-                    </h1>
-                    <p className="text-5/12xl font-landing text-gray-500">
-                      Seconds
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
                 </div>
               </div>
               <div className="w-full lg:w-6/12 xl:w-7/12 order-1 lg:order-2 mb-8 lg:mb-0">
@@ -765,50 +774,50 @@ const IndexPage = () => {
                 </div>
               </form>
               <div className="w-full">
-              <div className="w-10/12 mx-auto">
-                <h3 className="font-medium text-2xl pt-16 pb-12 text-center leading-8">
-                  Don’t miss the liquidity bootstrapping event!
-                </h3>
-                <div className="w-9/12 mx-auto">
-                  <div className="flex flex-row justify-between mb-8">
-                    <div className="w-5/12 text-center">
-                      <h1 className="font-bold text-4xl leading-snug">
-                        {countdown[0]}
-                      </h1>
-                      <p className="text-1.5xl font-landing text-gray-500">
-                        Days
-                      </p>
+                <div className="w-10/12 mx-auto">
+                  <h3 className="font-medium text-2xl pt-16 pb-12 text-center leading-8">
+                    Don’t miss the liquidity bootstrapping event!
+                  </h3>
+                  <div className="w-9/12 mx-auto">
+                    <div className="flex flex-row justify-between mb-8">
+                      <div className="w-5/12 text-center">
+                        <h1 className="font-bold text-4xl leading-snug">
+                          {countdown[0]}
+                        </h1>
+                        <p className="text-1.5xl font-landing text-gray-500">
+                          Days
+                        </p>
+                      </div>
+                      <div className="w-5/12 text-center">
+                        <h1 className="font-bold text-4xl leading-snug">
+                          {countdown[1]}
+                        </h1>
+                        <p className="text-lg font-landing text-gray-500">
+                          Hours
+                        </p>
+                      </div>
                     </div>
-                    <div className="w-5/12 text-center">
-                      <h1 className="font-bold text-4xl leading-snug">
-                        {countdown[1]}
-                      </h1>
-                      <p className="text-lg font-landing text-gray-500">
-                        Hours
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex flex-row justify-between">
-                    <div className="w-5/12 text-center">
-                      <h1 className="font-bold text-4xl leading-snug">
-                        {countdown[2]}
-                      </h1>
-                      <p className="text-1xl font-landing text-gray-500">
-                        Minutes
-                      </p>
-                    </div>
-                    <div className="w-5/12 text-center">
-                      <h1 className="font-bold text-4xl leading-snug">
-                        {countdown[3]}
-                      </h1>
-                      <p className="text-1.5xl font-landing text-gray-500">
-                        Seconds
-                      </p>
+                    <div className="flex flex-row justify-between">
+                      <div className="w-5/12 text-center">
+                        <h1 className="font-bold text-4xl leading-snug">
+                          {countdown[2]}
+                        </h1>
+                        <p className="text-1xl font-landing text-gray-500">
+                          Minutes
+                        </p>
+                      </div>
+                      <div className="w-5/12 text-center">
+                        <h1 className="font-bold text-4xl leading-snug">
+                          {countdown[3]}
+                        </h1>
+                        <p className="text-1.5xl font-landing text-gray-500">
+                          Seconds
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
             </div>
           </div>
         </section>
