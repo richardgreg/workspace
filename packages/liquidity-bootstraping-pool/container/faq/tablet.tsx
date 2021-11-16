@@ -78,7 +78,7 @@ export default function Tablet(): JSX.Element {
                 <p className="w-full mx-auto text-normal font-landing mb-4">
                   The auction will take place on{' '}
                   <Link href="https://copperlaunch.com" passHref>
-                    <a className="text-blue-600 hover:text-blue-700 underline">
+                    <a className="text-blue-600 hover:text-blue-700 underline" target="_blank">
                       Copperlaunch.com
                     </a>
                   </Link>

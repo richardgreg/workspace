@@ -58,12 +58,12 @@ export default function Mobile({
                       UTC
                     </p>
                     <p className="mx-auto text-base font-landing mb-5">
-                      The auction will take place on{' '}
-                      <Link href="https://copperlaunch.com" passHref>
-                        <a className="text-blue-600 hover:text-blue-700 underline">
-                          Copperlaunch.com
-                        </a>
-                      </Link>
+                    The auction will take place on{' '}
+                  <Link href="https://copperlaunch.com" passHref>
+                    <a className="text-blue-600 hover:text-blue-700 underline" target="_blank">
+                      Copperlaunch.com
+                    </a>
+                  </Link>
                       , a site for Token Launch Auctions. All proceeds will go to
                       the <span translate="no">Popcorn</span> Treasury, a smart
                       contract entirely controlled by{' '}

@@ -78,9 +78,9 @@ export default function Desktop(): JSX.Element {
             <div className="col-span-2 relative z-20">
               <div className="w-full mx-auto my-14">
                 <p className="w-full mx-auto text-xl font-landing font-light mt-18">
-                  The auction will take place on{' '}
+                The auction will take place on{' '}
                   <Link href="https://copperlaunch.com" passHref>
-                    <a className="text-blue-600 hover:text-blue-700 underline">
+                    <a className="text-blue-600 hover:text-blue-700 underline" target="_blank">
                       Copperlaunch.com
                     </a>
                   </Link>
