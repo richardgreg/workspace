@@ -456,17 +456,17 @@ const IndexPage = () => {
         <section>
           <div
             className="bg-countdown-pattern flex-shrink-0 flex-grow-0 w-full
-          h-full pt-60"
+          h-full pt-60 xl:pt-72 2xl:pt-104"
             style={{
               backgroundRepeat: 'no-repeat',
-              backgroundSize: 'auto',
+              backgroundSize: 'cover',
               backgroundPosition: 'center',
             }}
           >
-            <div className="w-full pt-32">
+            <div className="pt-32">
               <div className="w-10/12 mx-auto rounded-xl shadow-xl bg-white">
                 <h3 className="font-medium text-4xl pt-20 pb-12 text-center">
-                  Don’t miss the liquidity bootstrapping event!
+                  Don’t miss the liquidity event!
                 </h3>
                 <div className="w-9/12 mx-auto flex flex-row justify-between pb-20">
                   <div className="text-center">
@@ -559,14 +559,12 @@ const IndexPage = () => {
             <div className="w-6/12">
               <Link href="/" passHref>
                 <a>
-                  {/*TODO The logo is slightly blurred even though its copied strcmdaight from figma*/}
                   <img src="/images/logo.png" alt="Logo" className="h-10"></img>
                 </a>
               </Link>
               <p className="font-medium text-base w-7/12 py-4">
-                Popcorn is a new eco-friendly paradigm for DeFi, where users can
-                earn high yield on their crypto assets while creating real world
-                impact.
+                Popcorn is a carbon-neutral crypto savings account where fees
+                fund educational, environmental and open source initiatives
               </p>
               <div className="flex flex-row space-x-4 items-center">
                 <Link href="https://github.com/popcorndao" passHref>
@@ -592,6 +590,7 @@ const IndexPage = () => {
               <Link href="/" passHref>
                 <a className="hover:text-blue-600">Home</a>
               </Link>
+
               <Link href="https://medium.com/popcorndao" passHref>
                 <a className="hover:text-blue-600" target="_window">
                   Blog
@@ -603,11 +602,6 @@ const IndexPage = () => {
               >
                 <a className="hover:text-blue-600" target="_window">
                   Popcorn (POP) Token
-                </a>
-              </Link>
-              <Link href="https://launch.popcorn.network/" passHref>
-                <a className="hover:text-blue-600" target="_window">
-                  Token Launch Auction
                 </a>
               </Link>
             </div>
@@ -629,12 +623,6 @@ const IndexPage = () => {
                 </a>
               </Link>
             </div>
-            {/*<div className="flex flex-col space-y-3">
-            <p className="font-medium text-base uppercase">Documentation</p>
-            <Link href="/" passHref>
-              <a className="hover:text-blue-600">Gitbook</a>
-            </Link>
-          </div>*/}
           </div>
           <p className="font-base text-center py-4">
             ©2021, Popcorn Network. All Rights Reserved
@@ -927,205 +915,6 @@ const IndexPage = () => {
             Popcorn calculates and neutralizes blockchain carbon emissions by
             partnering with carbon sequestration and negative emission projects.
           </p>
-        </section>
-        <section>
-          <div
-            className="bg-countdown-pattern flex-shrink-0 flex-grow-0 w-full
-          h-full pt-60"
-            style={{
-              backgroundRepeat: 'no-repeat',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-            }}
-          >
-            <div className="w-full pt-32">
-              <div className="w-10/12 mx-auto rounded-xl shadow-xl bg-white">
-                <h3 className="font-medium text-4xl pt-20 pb-12 text-center">
-                  Don’t miss the liquidity bootstrapping event!
-                </h3>
-                <div className="w-9/12 mx-auto pb-20">
-                  <div className="flex flex-row justify-between mb-8">
-                    <div className="w-5/12 text-center">
-                      <h1 className="font-bold text-7xl leading-snug">
-                        {countdown[0]}
-                      </h1>
-                      <p className="text-3xl font-landing text-gray-500">
-                        Days
-                      </p>
-                    </div>
-                    <div className="w-5/12 text-center">
-                      <h1 className="font-bold text-7xl leading-snug">
-                        {countdown[1]}
-                      </h1>
-                      <p className="text-3xl font-landing text-gray-500">
-                        Hours
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex flex-row justify-between">
-                    <div className="w-5/12 text-center">
-                      <h1 className="font-bold text-7xl leading-snug">
-                        {countdown[2]}
-                      </h1>
-                      <p className="text-3xl font-landing text-gray-500">
-                        Minutes
-                      </p>
-                    </div>
-                    <div className="w-5/12 text-center">
-                      <h1 className="font-bold text-7xl leading-snug">
-                        {countdown[3]}
-                      </h1>
-                      <p className="text-3xl font-landing text-gray-500">
-                        Seconds
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-        <section className="w-full bg-secondary py-24">
-          <div className="w-10/12 mx-auto text-center">
-            <h2 className="font-bold text-2xl leading-snug mb-4">Notify Me</h2>
-            <p className="text-lg">
-              Can’t wait to see you when we are launching. Get earlier
-              notification to be part of our journey
-            </p>
-            <form
-              action="https://network.us1.list-manage.com/subscribe/post?u=5ce5e82d673fd2cfaf12849a5&amp;id=e85a091ed3"
-              method="post"
-              id="mc-embedded-subscribe-form"
-              name="mc-embedded-subscribe-form"
-              className="validate"
-              target="_blank"
-              noValidate
-            >
-              <div
-                id="mc_embed_signup_scroll"
-                className="shadow-xl bg-white rounded-xl py-2 px-2 mt-8 w-full mx-auto flex flex-row items-center justify-between"
-              >
-                <input
-                  type="email"
-                  name="EMAIL"
-                  className="w-10/12 p-2 text-base mx-4 text-gray-900"
-                  id="mce-EMAIL"
-                  placeholder="Email Address"
-                  required
-                />
-                <div
-                  style={{ position: 'absolute', left: '-5000px' }}
-                  aria-hidden="true"
-                >
-                  <input
-                    type="text"
-                    name="b_5ce5e82d673fd2cfaf12849a5_e85a091ed3"
-                    tabIndex={-1}
-                  />
-                </div>
-                <div className="clear">
-                  <input
-                    type="submit"
-                    value="Join Waitlist"
-                    name="subscribe"
-                    id="mc-embedded-subscribe"
-                    className="font-medium text-base bg-blue-600 hover:bg-blue-500 text-white rounded-xl px-4 py-2 cursor-pointer"
-                    readOnly
-                  />
-                </div>
-              </div>
-            </form>
-          </div>
-        </section>
-        <section className="w-full bg-secondary">
-          <div className="w-10/12 mx-auto">
-            <Link href="/" passHref>
-              <a>
-                {/*TODO The logo is slightly blurred even though its copied straight from figma*/}
-                <img
-                  src="/images/logo.png"
-                  alt="Logo"
-                  className="h-10 flex-shrink-0 flex-grow-0"
-                ></img>
-              </a>
-            </Link>
-            <p className="font-medium text-base py-4">
-              Popcorn is a new eco-friendly paradigm for DeFi, where users can
-              earn high yield on their crypto assets while creating real world
-              impact.
-            </p>
-            <div className="flex flex-row space-x-4 items-center">
-              <Link href="https://github.com/popcorndao" passHref>
-                <GitHub className="hover:text-blue-600 cursor-pointer" />
-              </Link>
-              <Link href="https://www.facebook.com/PopcornDAO" passHref>
-                <Facebook className="hover:text-blue-600 cursor-pointer" />
-              </Link>
-              <Link href="https://twitter.com/Popcorn_DAO" passHref>
-                <Twitter className="hover:text-blue-600 cursor-pointer" />
-              </Link>
-              <Link href="https://discord.gg/w9zeRTSZsq" passHref>
-                <img
-                  src="/images/discord.svg"
-                  alt="discord"
-                  className="w-8 h-8 cursor-pointer discord"
-                ></img>
-              </Link>
-            </div>
-            <div className="flex flex-row justify-evenly py-6">
-              <div className="flex flex-col space-y-3 w-1/2">
-                <p className="font-medium text-base uppercase">Site</p>
-                <Link href="/" passHref>
-                  <a className="hover:text-blue-600">Home</a>
-                </Link>
-                <Link href="https://medium.com/popcorndao" passHref>
-                  <a className="hover:text-blue-600" target="_window">
-                    Blog
-                  </a>
-                </Link>
-                <Link
-                  href="https://etherscan.io/token/0xd0cd466b34a24fcb2f87676278af2005ca8a78c4"
-                  passHref
-                >
-                  <a className="hover:text-blue-600" target="_window">
-                    Popcorn (POP) Token
-                  </a>
-                </Link>
-                <Link href="https://launch.popcorn.network/" passHref>
-                  <a className="hover:text-blue-600" target="_window">Token Launch Auction</a>
-                </Link>
-              </div>
-              <div className="flex flex-col space-y-3 w-1/2">
-                <p className="font-medium text-base uppercase">Connect</p>
-                <Link href="https://twitter.com/Popcorn_DAO" passHref>
-                  <a className="hover:text-blue-600" target="_window">
-                    Twitter
-                  </a>
-                </Link>
-                <Link href="https://discord.gg/w9zeRTSZsq" passHref>
-                  <a className="hover:text-blue-600" target="_window">
-                    Discord
-                  </a>
-                </Link>
-                <Link href="https://github.com/popcorndao" passHref>
-                  <a className="hover:text-blue-600" target="_window">
-                    Github
-                  </a>
-                </Link>
-              </div>
-            </div>
-            {/*<div className="flex flex-col space-y-3">
-            <p className="font-medium text-base uppercase">Documentation</p>
-            <Link href="/" passHref>
-              <a className="hover:text-blue-600">Gitbook</a>
-            </Link>
-          </div>*/}
-          </div>
-          <div className="w-10/12 border-t border-gray-700 mt-12 mx-auto ">
-            <p className="font-base text-center py-4">
-              ©2021, Popcorn Network. All Rights Reserved
-            </p>
-          </div>
         </section>
       </div>
     </div>
