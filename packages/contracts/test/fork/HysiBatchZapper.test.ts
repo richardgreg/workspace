@@ -529,7 +529,7 @@ describe("HysiBatchZapper Network Test", function () {
   });
   describe("zapOutOfBatch", function () {
     it("zaps out of the queue into a stablecoin", async function () {
-      const expectedStableAmount = parseEther("12871.730619629678368476");
+      const expectedStableAmount = parseEther("37978.521811045440321487");
       //Create Batch
       await contracts.hysiBatchZapper
         .connect(depositor)
