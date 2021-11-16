@@ -384,7 +384,7 @@ export default function Mobile({
 
             <div className="w-10/12 mx-auto my-12">
               <p className="font-bold text-xl mx-auto mb-1">
-                How was the initial price calculated?
+                How is the initial price calculated?
               </p>
               <p className="text-base mx-auto ">
                 The price was calculated based on the amounts of tokens in the
@@ -513,7 +513,7 @@ export default function Mobile({
               </p>
               <p className="text-base mx-auto ">
                 New Form Capital, Kenetic Capital, The LAO, Impossible Finance,
-                The Crypto Founders Network, Hestia Holdings and angels from
+                The Crypto Founders Network, Big Brain Holdings, Hestia Holdings and angels from
                 MakerDAO, IBM, NASA, Google and Deloitte to name a few.
               </p>
             </div>

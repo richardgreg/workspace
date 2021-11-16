@@ -50,7 +50,7 @@ export default function Mobile({
                   src="images/rocket.svg"
                   alt="Cat riding a rocket with orange shooting stars"
                 />
-                <div className="absolute top-56 mx-auto flex flex-col justify-between pb-10 pt-20 items-center">
+                <div className="absolute top-56 mx-auto flex flex-col justify-between pb-10 pt-20 items-center sm3:mt-10">
                   <div>
  
                     <h1 className="text-center font-bold text-2xl  leading-snug font-landing">

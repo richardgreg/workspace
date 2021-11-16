@@ -415,7 +415,7 @@ export default function Tablet(): JSX.Element {
 
               <div className="w-full mx-auto my-14">
                 <p className="font-bold text-3xl mb-5 mx-auto ">
-                  How was the initial price calculated?
+                  How is the initial price calculated?
                 </p>
                 <p className="text-md mx-auto ">
                   The price was calculated based on the amounts of tokens in the
@@ -542,7 +542,7 @@ export default function Tablet(): JSX.Element {
                 </p>
                 <p className="text-md mx-auto ">
                   New Form Capital, Kenetic Capital, The LAO, Impossible
-                  Finance, The Crypto Founders Network, Hestia Holdings and
+                  Finance, The Crypto Founders Network, Big Brain Holdings, Hestia Holdings and
                   angels from MakerDAO, IBM, NASA, Google and Deloitte to name a
                   few.
                 </p>

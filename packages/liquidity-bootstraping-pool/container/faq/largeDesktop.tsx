@@ -191,7 +191,7 @@ export default function LargeDesktop(): JSX.Element {
                     </li>
                   </ol>
                 </p>
-                <p className="text-xl font-bold leading-10 mt-5 ">
+                <p className="text-2xl font-bold leading-10 mt-5 mb-5 ">
                   Key Features:
                 </p>
 
@@ -439,7 +439,7 @@ export default function LargeDesktop(): JSX.Element {
 
               <div className="w-full mx-auto my-20">
                 <p className="font-bold text-3xl mb-4 mx-auto ">
-                  How was the initial price calculated?
+                  How is the initial price calculated?
                 </p>
                 <p className="text-xl mx-auto font-light leading-10 ">
                   The price was calculated based on the amounts of tokens in the
@@ -569,7 +569,7 @@ export default function LargeDesktop(): JSX.Element {
                 </p>
                 <p className="text-xl mx-auto font-light leading-10 ">
                   New Form Capital, Kenetic Capital, The LAO, Impossible
-                  Finance, The Crypto Founders Network, Hestia Holdings and
+                  Finance, The Crypto Founders Network, Big Brain Holdings, Hestia Holdings and
                   angels from MakerDAO, IBM, NASA, Google and Deloitte to name a
                   few.
                 </p>
