@@ -1,5 +1,6 @@
+import DesktopNavigation from 'container/DesktopNavigation';
 import Link from 'next/link';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 
 export default function LargeDesktop(): JSX.Element {
   const startDate = new Date(1638172800000).toLocaleDateString(undefined, {
@@ -23,36 +24,8 @@ export default function LargeDesktop(): JSX.Element {
       <div className="flex flex-col w-full h-full">
         <header className="absolute w-full bg-primary top-20 z-10">
           <nav className="w-1/2 mx-auto pb-4 flex flex-row items-center justify-between">
-            <div>
-              <Link href="/" passHref>
-                <a>
-                  <img
-                    src="/images/textLogo.png"
-                    alt="Logo"
-                    className="h-12"
-                  ></img>
-                </a>
-              </Link>
-            </div>
-            <div className="space-x-8">
-              {/*
-              <Link href="/guide" passHref>
-                <a
-                  className="font-light text-xl hover:text-blue-600"
-                  target="_window"
-                >
-                  Step-by-Step Guide
-                </a>
-              </Link>
-              */}
-              <Link href="/faq" passHref>
-                <a
-                  className="font-bold text-xl cursor-default"
-                >
-                  Token Launch FAQ
-                </a>
-              </Link>
-            </div>
+          <DesktopNavigation textSize="xl"></DesktopNavigation>
+
           </nav>
         </header>
 
@@ -103,7 +76,7 @@ export default function LargeDesktop(): JSX.Element {
                 ></img>
               </div>
             </div>
-            <div className="col-span-2">
+            <div className="col-span-2 z-20">
               <div className="w-full mx-auto my-20">
                 <p className="w-full mx-auto text-center text-xl font-landing leading-10  font-light mt-18">
                   The auction will take place on{' '}

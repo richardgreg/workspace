@@ -1,4 +1,6 @@
+import DesktopNavigation from 'container/DesktopNavigation';
 import Link from 'next/link';
+import React from 'react';
 
 export default function Tablet(): JSX.Element {
   const startDate = new Date(1638172800000).toLocaleDateString(undefined, {
@@ -21,35 +23,8 @@ export default function Tablet(): JSX.Element {
       <div className="flex flex-col w-full h-full">
         <header className="absolute w-full bg-primary pt-12">
           <nav className="w-9/12 mx-auto pb-4 flex flex-row items-center justify-between">
-            <div>
-              <Link href="/" passHref>
-                <a>
-                  <img
-                    src="/images/textLogo.png"
-                    alt="Logo"
-                    className="h-8"
-                  ></img>
-                </a>
-              </Link>
-            </div>
-            <div className="space-x-8">
-              <Link href="/guide" passHref>
-                <a
-                  className="font-light text-normal hover:text-blue-600"
-                  target="_window"
-                >
-                  Step-by-Step Guide
-                </a>
-              </Link>
-              <Link href="/faq" passHref>
-                <a
-                  className="font-medium text-normal cursor-default"
-                  target="_window"
-                >
-                  Token Launch FAQ
-                </a>
-              </Link>
-            </div>
+          <DesktopNavigation textSize="normal"></DesktopNavigation>
+
           </nav>
         </header>
 

@@ -1,4 +1,6 @@
+import DesktopNavigation from 'container/DesktopNavigation';
 import Link from 'next/link';
+import React from 'react';
 
 export default function LargeDesktop(): JSX.Element {
   const startDate = new Date(1638172800000).toLocaleDateString(undefined, {
@@ -20,47 +22,8 @@ export default function LargeDesktop(): JSX.Element {
       <div className="flex flex-col w-full h-full">
         <header className="absolute w-full bg-primary top-20 z-20">
           <nav className="w-1/2 mx-auto pb-4 flex flex-row items-center justify-between">
-            <div>
-              <Link href="/" passHref>
-                <a>
-                  <img
-                    src="/images/textLogo.png"
-                    alt="Logo"
-                    className="h-12"
-                  ></img>
-                </a>
-              </Link>
-            </div>
-            <div className="space-x-8">
-              {/*
-              <Link href="/guide" passHref>
-                <a
-                  className="font-light text-xl cursor-pointer hover:text-blue-600"
-                  target="_window"
-                >
-                  Step-by-Step Guide
-                </a>
-              </Link>
-              */}
-              <Link href="/faq" passHref>
-                <a
-                  className="font-light text-xl cursor-pointer hover:text-blue-600"
-                >
-                  Token Launch FAQ
-                </a>
-              </Link>
-              <Link
-                href="https://medium.com/popcorndao/pop-token-economics-5a580f0bf712"
-                passHref
-              >
-                <a
-                  className="font-light text-xl cursor-pointer hover:text-blue-600"
-                  target="_window"
-                >
-                  Tokenomics
-                </a>
-              </Link>
-            </div>
+          <DesktopNavigation textSize="xl" />
+
           </nav>
         </header>
 

@@ -1,3 +1,4 @@
+import DesktopNavigation from 'container/DesktopNavigation';
 import Link from 'next/link';
 
 export default function Tablet(): JSX.Element {
@@ -24,47 +25,7 @@ export default function Tablet(): JSX.Element {
               <div className="relative">
                 <header className="w-full bg-primary pt-12">
                   <nav className="w-9/12 mx-auto pb-4 flex flex-row items-center justify-between">
-                    <div>
-                    <Link href="/" passHref>
-                <a>
-                  <img
-                    src="/images/textLogo.png"
-                    alt="Logo"
-                    className="h-12"
-                  ></img>
-                </a>
-              </Link>
-            </div>
-            <div className="space-x-8  relative z-20">
-              {/*
-              <Link href="/guide" passHref>
-                <a
-                  className="font-light text-normal cursor-pointer hover:text-blue-600"
-                  target="_window"
-                >
-                  Step-by-Step Guide
-                </a>
-              </Link>
-              */}
-              <Link href="/faq" passHref>
-                <a
-                  className="font-light text-normal cursor-pointer hover:text-blue-600"
-                >
-                  Token Launch FAQ
-                </a>
-              </Link>
-              <Link
-                href="https://medium.com/popcorndao/pop-token-economics-5a580f0bf712"
-                passHref
-              >
-                <a
-                  className="font-light text-normal cursor-pointer hover:text-blue-600"
-                  target="_window"
-                >
-                  Tokenomics
-                </a>
-              </Link>
-                    </div>
+                    <DesktopNavigation textSize="normal"></DesktopNavigation>
                   </nav>
                 </header>
                 <img
@@ -80,27 +41,30 @@ export default function Tablet(): JSX.Element {
                 <div className="absolute mx-auto flex flex-col justify-between top-80 md:top-60 lg:top-80 items-center mt-18 md2:mt-32 md4:mt-40 z-20">
                   <div>
                     <h1 className="text-center font-bold text-3xl leading-snug mb-2 mt-0 md:mt-8 md2:mt-12 font-landing">
-                     <span translate="no">Popcorn's</span>{" "} Token Launch Auction
+                      <span translate="no">Popcorn's</span> Token Launch Auction
                     </h1>
                     <p className="w-1/2 mx-auto text-center text-normal font-landing font-light mt-6">
-                    The <span translate="no">Popcorn</span>{" "} Token Launch Auction (TLA) will be the first opportunity for the
-                    general public to join the PopcornDAO by acquiring the POP
-                    token. This is a 2.5 day, multi-chain event for the <span translate="no">Popcorn</span>{" "}
-                    community where all proceeds raised will go to the <span translate="no">Popcorn</span>{" "}
-                    Treasury, a smart contract entirely controlled by POP token
-                    holders. Please refer to this{' '}
-                    <Link href="#">
-                      <a className="text-blue-600 hover:text-blue-700 underline">
-                        Step-by-Step Guide
-                      </a>
-                    </Link>{' '}
-                    on how to safely participate in the TLA and{' '}
-                    <Link href="/faq">
-                      <a className="text-blue-600 hover:text-blue-700 underline">
-                        check out the FAQ
-                      </a>
-                    </Link>{' '}
-                    for more on how the auction works.
+                      The <span translate="no">Popcorn</span> Token Launch
+                      Auction (TLA) will be the first opportunity for the
+                      general public to join the PopcornDAO by acquiring the POP
+                      token. This is a 2.5 day, multi-chain event for the{' '}
+                      <span translate="no">Popcorn</span> community where all
+                      proceeds raised will go to the{' '}
+                      <span translate="no">Popcorn</span> Treasury, a smart
+                      contract entirely controlled by POP token holders. Please
+                      refer to this{' '}
+                      <Link href="#">
+                        <a className="text-blue-600 hover:text-blue-700 underline">
+                          Step-by-Step Guide
+                        </a>
+                      </Link>{' '}
+                      on how to safely participate in the TLA and{' '}
+                      <Link href="/faq">
+                        <a className="text-blue-600 hover:text-blue-700 underline">
+                          check out the FAQ
+                        </a>
+                      </Link>{' '}
+                      for more on how the auction works.
                     </p>
                     <form
                       action="https://network.us1.list-manage.com/subscribe/post?u=5ce5e82d673fd2cfaf12849a5&amp;id=e85a091ed3"
@@ -161,14 +125,16 @@ export default function Tablet(): JSX.Element {
           <div className="w-9/12 mx-auto flex flex-row justify-between items-center mt-44">
             <div className="w-full pt-12 grid grid-cols-2 ">
               <div className="mr-8">
-                <p className="font-bold text-2xl mb-1">What is <span translate="no">Popcorn</span>?{" "}</p>
-                <p className="text-lg leading-2 mt-4 font-light">
-                <span translate="no">Popcorn</span>{" "} is aiding a revolutionary shift in global systems
-                  through accessible DeFi products that align financial
-                  wellbeing with positive global impact.
+                <p className="font-bold text-2xl mb-1">
+                  What is <span translate="no">Popcorn</span>?{' '}
                 </p>
                 <p className="text-lg leading-2 mt-4 font-light">
-                In the next months, the roadmap offers multi-chain curated
+                  <span translate="no">Popcorn</span> is aiding a revolutionary
+                  shift in global systems through accessible DeFi products that
+                  align financial wellbeing with positive global impact.
+                </p>
+                <p className="text-lg leading-2 mt-4 font-light">
+                  In the next months, the roadmap offers multi-chain curated
                   pools of strategies and DeFi products (on Ethereum, Arbitrum,
                   Polygon, Fantom, Avalanche, Solana). These products generate
                   high yield while also funding community selected social impact
@@ -176,7 +142,7 @@ export default function Tablet(): JSX.Element {
                   end user.
                 </p>
                 <p className="text-lg leading-2 mt-4 font-light">
-                In 2022, the roadmap includes launching DeFi primitives such
+                  In 2022, the roadmap includes launching DeFi primitives such
                   as a lending protocol that produces a native decentralized
                   stablecoin which has the extraordinary characteristic of
                   creating impact on a community-wide and global level. How?
@@ -184,16 +150,16 @@ export default function Tablet(): JSX.Element {
                   something that can’t be said of the dollar or any stablecoin
                   in existence.
                 </p>
-      
               </div>
               <div className="ml-8">
                 <p className="font-bold text-2xl mb-1">The POP Token</p>
                 <p className="text-lg leading-2 mt-4 font-light">
-                PopcornDAO is a decentralized autonomous organization of
-                  members holding the <span translate="no">Popcorn</span>{" "} governance token, POP.
+                  PopcornDAO is a decentralized autonomous organization of
+                  members holding the <span translate="no">Popcorn</span>{' '}
+                  governance token, POP.
                 </p>
                 <p className="text-lg leading-2 mt-4 font-light">
-                Token holders are eligible to participate in the network by
+                  Token holders are eligible to participate in the network by
                   running keeper nodes and voting on proposals that influence
                   the parameters of Popcorn’s smart contracts. Yield farming and
                   staking incentives are also made available to token holders to
@@ -217,21 +183,29 @@ export default function Tablet(): JSX.Element {
                 </p>
                 <div className="w-6/12 mx-auto text-center text-lg leading-2 font-light">
                   <p className="text-md ">
-                    <span className="font-bold">POP Tokens Offered</span>{" "}:
+                    <span className="font-bold">POP Tokens Offered</span> :
                     3,750,000
                   </p>
                   <p className="text-md ">
-                    <span className="font-bold">When?</span>{" "} {startDate} ~
+                    <span className="font-bold">When?</span> {startDate} ~
                     {startTime} UTC until {endDate} ~{endTime} UTC
                   </p>
                   <p className="text-md">
-                    <span className="font-bold">Where?</span>{" "} POP/USDC{' '}
-                    <Link href="https://docs.alchemist.wtf/copper/fair-launch-auctions/what-is-a-fair-launch-auction" passHref>
-                      <a  className="text-blue-600 hover:text-blue-700 underline"  target="_blank">Copper Token Launch Auction Pool</a>
+                    <span className="font-bold">Where?</span> POP/USDC{' '}
+                    <Link
+                      href="https://docs.alchemist.wtf/copper/fair-launch-auctions/what-is-a-fair-launch-auction"
+                      passHref
+                    >
+                      <a
+                        className="text-blue-600 hover:text-blue-700 underline"
+                        target="_blank"
+                      >
+                        Copper Token Launch Auction Pool
+                      </a>
                     </Link>
                   </p>
                   <p className="text-md ">
-                    <span className="font-bold">Networks supported?</span>{" "}{' '}
+                    <span className="font-bold">Networks supported?</span>{' '}
                     Ethereum, Polygon &amp; Arbitrum
                   </p>
                   <p className="text-md ">
@@ -265,11 +239,12 @@ export default function Tablet(): JSX.Element {
                     className="w-14 h-10 mb-2"
                   />
                   <p className="text-lg font-medium leading-2 mb-18">
-                  A Token Launch Auction is not like a regular decentralized exchange pool. The
-                    price will start high to disincentivize bots, front-running
-                    and speculation. Over time, downwards price pressure will be
-                    created by the change of relative weights between the two
-                    assets. Only participate if you know what you are doing.
+                    A Token Launch Auction is not like a regular decentralized
+                    exchange pool. The price will start high to disincentivize
+                    bots, front-running and speculation. Over time, downwards
+                    price pressure will be created by the change of relative
+                    weights between the two assets. Only participate if you know
+                    what you are doing.
                   </p>
                 </div>
                 <div className="w-2/12 relative">
