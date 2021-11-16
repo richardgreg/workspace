@@ -92,7 +92,83 @@ const TEAM: TeamMember[] = [
 ];
 
 const CONTRIBUTORS: Contributor[] = [
-  
+  {
+    name: 'Amir',
+    position: 'Developer',
+    img: 'Amirjab21.jpg',
+    linkedIn: 'https://www.linkedin.com/',
+    twitter: 'https://www.twitter.com/',
+  },
+  {
+    name: 'Codacy Badger',
+    position: 'Developer',
+    img: 'codacy-badger.png',
+    linkedIn: 'https://www.linkedin.com/',
+    twitter: 'https://www.twitter.com/',
+  },
+  {
+    name: 'Izayl',
+    position: 'Developer',
+    img: 'izayl.jpg',
+    linkedIn: 'https://www.linkedin.com/',
+    twitter: 'https://www.twitter.com/',
+  },
+  {
+    name: 'Rene Aavik',
+    position: 'Developer',
+    img: 'leetdev.jpg',
+    linkedIn: 'https://www.linkedin.com/',
+    twitter: 'https://www.twitter.com/',
+  },
+  {
+    name: 'Emilio Tagua',
+    position: 'Developer',
+    img: 'miloops.jpg',
+    linkedIn: 'https://www.linkedin.com/',
+    twitter: 'https://www.twitter.com/',
+  },
+  {
+    name: 'Partywave',
+    position: 'Developer',
+    img: 'partywave.png',
+    linkedIn: 'https://www.linkedin.com/',
+    twitter: 'https://www.twitter.com/',
+  },
+  {
+    name: 'Sahar',
+    position: 'Developer',
+    img: 'saharAP.jpg',
+    linkedIn: 'https://www.linkedin.com/',
+    twitter: 'https://www.twitter.com/',
+  },
+  {
+    name: 'Soptq',
+    position: 'Developer',
+    img: 'Soptq.jpg',
+    linkedIn: 'https://www.linkedin.com/',
+    twitter: 'https://www.twitter.com/',
+  },
+  {
+    name: 'Stanlee Okwii',
+    position: 'Developer',
+    img: 'stanley.jpg',
+    linkedIn: 'https://www.linkedin.com/',
+    twitter: 'https://www.twitter.com/',
+  },
+  {
+    name: 'The Emerald',
+    position: 'Developer',
+    img: 'the-emerald.png',
+    linkedIn: 'https://www.linkedin.com/',
+    twitter: 'https://www.twitter.com/',
+  },
+  {
+    name: 'Andrew Yao',
+    position: 'Developer',
+    img: 'yaoandrew.jpg',
+    linkedIn: 'https://www.linkedin.com/',
+    twitter: 'https://www.twitter.com/',
+  },
 ];
 
 const TeamMemberCard = ({ name, position, image, linkedIn, twitter }) => {
@@ -152,9 +228,9 @@ const ContributorCard = ({ name, position, image, linkedIn, twitter }) => {
           style={{ width: 241, height: 223 }}
         ></img>
         <img
-          src={`/images/contributors/${image}.png`}
+          src={`/images/contributors/${image}`}
           alt="Black and white contributor headshot with overlayed cartoon popcorn"
-          className="mx-auto mb-1 rounded-full absolute top-5 right-4 z-20"
+          className="filter grayscale mx-auto mb-1 rounded-full absolute top-5 right-4 z-20"
         ></img>
       </div>
       <h3 className="font-semibold text-3xl pt-16">{name}</h3>
@@ -447,36 +523,17 @@ const TeamPage = () => {
             Contributors
           </h2>
           <div className="w-10/12 mx-auto mt-12 grid grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 ">
-            <ContributorCard
-              name={'Name'}
-              position={'Job'}
-              image={'contributor'}
-              linkedIn={'https://www.linkedin.com/ex'}
-              twitter={'https://www.twitter.com/ex'}
-            />
-            <ContributorCard
-              name={'Name'}
-              position={'Job'}
-              image={'contributor'}
-              linkedIn={'https://www.linkedin.com/ex'}
-              twitter={'https://www.twitter.com/ex'}
-            />
-
-            <ContributorCard
-              name={'Name'}
-              position={'Job'}
-              image={'contributor'}
-              linkedIn={'https://www.linkedin.com/ex'}
-              twitter={'https://www.twitter.com/ex'}
-            />
-
-            <ContributorCard
-              name={'Name'}
-              position={'Job'}
-              image={'contributor'}
-              linkedIn={'https://www.linkedin.com/ex'}
-              twitter={'https://www.twitter.com/ex'}
-            />
+          {CONTRIBUTORS.map((teamMember) => {
+              return (
+                <ContributorCard
+                  name={teamMember.name}
+                  position={teamMember.position}
+                  image={teamMember.img}
+                  linkedIn={teamMember.linkedIn}
+                  twitter={teamMember.twitter}
+                />
+              );
+            })}
           </div>
         </section>
 
