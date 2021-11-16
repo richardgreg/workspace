@@ -665,7 +665,15 @@ const TeamPage = () => {
       </div>
       {/* MOBILE VERSION */}
       <div className="w-full h-full lg:hidden">
-        {menuVisible && (
+        <Transition
+          show={menuVisible}
+          enter="transition-opacity duration-150"
+          enterFrom="opacity-0"
+          enterTo="opacity-100"
+          leave="transition-opacity duration-150"
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
+        >
           <div className="absolute z-10 w-full overflow-y-auto ">
             <div className="relative w-full h-full mobile-menu-bg transition-opacity duration-1000 ease-in-out">
               <div className="w-10/12 mx-auto ">
@@ -842,7 +850,8 @@ const TeamPage = () => {
               </div>
             </div>
           </div>
-        )}
+        </Transition>
+
         {!menuVisible && (
           <div>
             <header className="w-full bg-primary">
