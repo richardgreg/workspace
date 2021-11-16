@@ -413,12 +413,27 @@ const deployAndAssignContracts = async () => {
     depositor.address
   );
 
+  await contracts.faucet.sendTokens(
+    contracts.usdc.address,
+    4,
+    depositor.address
+  );
+
+  await contracts.faucet.sendTokens(
+    contracts.usdt.address,
+    4,
+    depositor.address
+  );
+
   DepositorInitial = await contracts.dai.balanceOf(depositor.address);
   await contracts.faucet.sendThreeCrv(100, depositor.address);
   await contracts.dai
     .connect(depositor)
     .approve(contracts.hysiBatchZapper.address, parseEther("100000000"));
   await contracts.usdc
+    .connect(depositor)
+    .approve(contracts.hysiBatchZapper.address, parseEther("100000000"));
+  await contracts.usdt
     .connect(depositor)
     .approve(contracts.hysiBatchZapper.address, parseEther("100000000"));
   await contracts.threeCrv
@@ -478,6 +493,22 @@ describe("HysiBatchZapper Network Test", function () {
         .withArgs(depositor.address, parseEther("12852.524944794116252972"));
 
       expect(await contracts.dai.balanceOf(depositor.address)).to.equal(0);
+    });
+    it("zaps into mint queue with another stablecoin", async function () {
+      const result = await contracts.hysiBatchZapper
+        .connect(depositor)
+        .zapIntoBatch([0, BigNumber.from(1e6), 0], 0);
+      expect(result)
+        .to.emit(contracts.hysiBatchZapper, "ZappedIntoBatch")
+        .withArgs(parseEther("0.981292310493712083"), depositor.address);
+
+      expect(result)
+        .to.emit(contracts.hysiBatchInteraction, "Deposit")
+        .withArgs(depositor.address, parseEther("0.981292310493712083"));
+
+      expect(await contracts.dai.balanceOf(depositor.address)).to.equal(
+        parseEther("13095.457481892968798141")
+      );
     });
   });
   describe("zapOutOfBatch", function () {
