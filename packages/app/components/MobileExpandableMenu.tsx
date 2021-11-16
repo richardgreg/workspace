@@ -80,7 +80,7 @@ export const MobileExpandableMenu: React.FC<MobileExpandableMenuProps> = ({ togg
             style={{ height: 0.72 }}
           ></div>
           <div
-            className="w-10/12 grid grid-cols-4 my-5 mx-auto"
+            className="w-full grid grid-cols-4 my-5 mx-auto justify-items-center"
             style={{ marginTop: 18, marginBottom: 18 }}
           >
             <div>
