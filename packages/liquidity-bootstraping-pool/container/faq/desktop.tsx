@@ -37,7 +37,7 @@ export default function Desktop(): JSX.Element {
               alt="Upper background"
             />
             <div className="absolute z-10 top-40 w-full mx-auto flex flex-col pb-10 pt-20">
-              <h1 className="text-center font-light text-6xl leading-snug font-landing">
+              <h1 className="text-center font-bold text-6xl leading-snug font-landing">
                 Token Launch FAQ
               </h1>
               <p className="text-center text-xl font-landing font-light mt-10">
@@ -217,7 +217,7 @@ export default function Desktop(): JSX.Element {
 
               <div className="w-full mx-auto my-14">
                 <p className="font-medium text-4xl mb-2 mx-auto">
-                  What is a liquidity bootstrapping pool?
+                  What is a liquidity bootstrapping pool (LBP)?
                 </p>
                 <p className="text-xl mx-auto font-light ">
                   A liquidity bootstrapping pool (used by the Token Launch

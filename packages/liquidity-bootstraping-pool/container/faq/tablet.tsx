@@ -37,7 +37,7 @@ export default function Tablet(): JSX.Element {
               alt="Cats playing with popcorn"
             />
             <div className="absolute z-10 top-32 w-full mx-auto flex flex-col pt-8">
-              <h1 className="text-center font-normal text-4xl leading-snug mb-4 font-landing">
+              <h1 className="text-center font-bold text-4xl leading-snug mb-4 font-landing">
                 Token Launch FAQ
               </h1>
               <p className="mx-auto text-center text-normal font-landing mb-8">

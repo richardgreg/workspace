@@ -36,7 +36,7 @@ export default function Mobile({
             <div className="bg-primary">
               <div className="flex flex-row">
                 <div className="relative w-full mx-auto flex flex-col lg:flex-row justify-between items-center">
-                  <h1 className="text-center font-normal text-4xl mb-2 font-landing pt-12 w-10/12">
+                  <h1 className="text-center font-bold text-4xl mb-2 font-landing pt-12 w-10/12">
                     Token Launch FAQ
                   </h1>
                   <div className="w-10/12">
