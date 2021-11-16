@@ -16,6 +16,14 @@ interface TeamMember {
   twitter: string;
 }
 
+interface Contributor {
+  name: string;
+  position: string;
+  img: string;
+  linkedIn: string;
+  twitter: string;
+}
+
 const TEAM: TeamMember[] = [
   {
     name: 'Anthony Martin',
@@ -33,75 +41,58 @@ const TEAM: TeamMember[] = [
   },
   {
     name: 'Mehul Mandania',
-    position: 'Dev',
+    position: 'Developer',
     img: 'mehul',
     linkedIn: 'https://www.linkedin.com/',
     twitter: 'https://www.twitter.com/',
   },
 
   {
-    name: 'Oscar',
-    position: 'Exec Asst',
+    name: 'Connor Mendenhall',
+    position: 'Developer',
+    img: 'connor',
+    linkedIn: 'https://www.linkedin.com/',
+    twitter: 'https://www.twitter.com/',
+  },
+  {
+    name: 'Melody Song',
+    position: 'Director of Global Impact',
+    img: 'melody',
+    linkedIn: 'https://www.linkedin.com/',
+    twitter: 'https://www.twitter.com/',
+  },
+  {
+    name: 'Leon Adler',
+    position: 'Developer',
+    img: 'leon',
+    linkedIn: 'https://www.linkedin.com/',
+    twitter: 'https://www.twitter.com/',
+  },
+  {
+    name: 'Olga Semklo',
+    position: 'Illustrator',
+    img: 'olga',
+    linkedIn: 'https://www.linkedin.com/',
+    twitter: 'https://www.twitter.com/',
+  },
+  {
+    name: 'Annisha',
+    position: 'Product Designer',
+    img: 'annisha',
+    linkedIn: 'https://www.linkedin.com/',
+    twitter: 'https://www.twitter.com/',
+  },
+  {
+    name: 'Oscar Jacobsen',
+    position: 'Coordinator',
     img: 'oscar',
     linkedIn: 'https://www.linkedin.com/',
     twitter: 'https://www.twitter.com/',
   },
-  {
-    name: 'Anna Marie',
-    position: '',
-    img: 'annamarie',
-    linkedIn: 'https://www.linkedin.com/',
-    twitter: 'https://www.twitter.com/',
-  },
-  {
-    name: 'Melody',
-    position: '',
-    img: 'melody',
-    linkedIn: 'https://www.linkedin.com/',
-    twitter: 'https://www.twitter.com/',
-  },
-  {
-    name: 'Melody',
-    position: '',
-    img: 'melody',
-    linkedIn: 'https://www.linkedin.com/',
-    twitter: 'https://www.twitter.com/',
-  },
-  {
-    name: 'Melody',
-    position: '',
-    img: 'melody',
-    linkedIn: 'https://www.linkedin.com/',
-    twitter: 'https://www.twitter.com/',
-  },
-  {
-    name: 'Melody',
-    position: '',
-    img: 'melody',
-    linkedIn: 'https://www.linkedin.com/',
-    twitter: 'https://www.twitter.com/',
-  },
-  {
-    name: 'Melody',
-    position: '',
-    img: 'melody',
-    linkedIn: 'https://www.linkedin.com/',
-    twitter: 'https://www.twitter.com/',
-  },
-  {
-    name: 'Melody',
-    position: '',
-    img: 'melody',
-    linkedIn: 'https://www.linkedin.com/',
-    twitter: 'https://www.twitter.com/',
-  },
-  {
-    name: 'Melody',
-    position: '',
-    img: 'melody',
-    linkedIn: 'https://www.linkedin.com/',
-    twitter: 'https://www.twitter.com/',
-  },
+];
+
+const CONTRIBUTORS: Contributor[] = [
+  
 ];
 
 const TeamMemberCard = ({ name, position, image, linkedIn, twitter }) => {
