@@ -160,14 +160,14 @@ const IndexPage = () => {
                 About us
               </a>
             </Link>*/}
-              {/*<Link href="/" passHref>
-              <a className="font-medium text-base hover:text-blue-600">
-                Products
-              </a>
-            </Link>*/}
+              <Link href="/" passHref>
+                <a className="font-normal text-base hover:text-blue-600">
+                  Token Launch Auction
+                </a>
+              </Link>
               <Link href="/docs/Popcorn_whitepaper_v1.pdf" passHref>
                 <a
-                  className="font-medium text-base hover:text-blue-600"
+                  className="font-normal text-base hover:text-blue-600"
                   target="_window"
                 >
                   Whitepaper
@@ -252,42 +252,46 @@ const IndexPage = () => {
                   </form>
 
                   <div className="w-fit-content mt-4">
-              <div className="w-fit-content mx-auto py-2">
-                <h3 className="font-landing text-xl text-left w-fit-content">
-                  Don’t miss the liquidity bootstrapping event!
-                </h3>
-                <div className="mx-auto flex flex-row justify-between pb-20 mt-3 w-full">
-                  <div className="text-center">
-                    <h1 className="font-medium text-4xl leading-snug">
-                      {countdown[0]}
-                    </h1>
-                    <p className="text-5/12xl font-landing text-gray-500">Days</p>
+                    <div className="w-fit-content mx-auto py-2">
+                      <h3 className="font-landing text-xl text-left w-fit-content">
+                        Don’t miss the liquidity bootstrapping event!
+                      </h3>
+                      <div className="mx-auto flex flex-row justify-between pb-20 mt-3 w-full">
+                        <div className="text-center">
+                          <h1 className="font-medium text-4xl leading-snug">
+                            {countdown[0]}
+                          </h1>
+                          <p className="text-5/12xl font-landing text-gray-500">
+                            Days
+                          </p>
+                        </div>
+                        <div className="text-center">
+                          <h1 className="font-medium text-4xl leading-snug">
+                            {countdown[1]}
+                          </h1>
+                          <p className="text-5/12xl font-landing text-gray-500">
+                            Hours
+                          </p>
+                        </div>
+                        <div className="text-center">
+                          <h1 className="font-medium text-4xl leading-snug">
+                            {countdown[2]}
+                          </h1>
+                          <p className="text-5/12xl font-landing text-gray-500">
+                            Minutes
+                          </p>
+                        </div>
+                        <div className="text-center">
+                          <h1 className="font-medium text-4xl leading-snug">
+                            {countdown[3]}
+                          </h1>
+                          <p className="text-5/12xl font-landing text-gray-500">
+                            Seconds
+                          </p>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <div className="text-center">
-                    <h1 className="font-medium text-4xl leading-snug">
-                      {countdown[1]}
-                    </h1>
-                    <p className="text-5/12xl font-landing text-gray-500">Hours</p>
-                  </div>
-                  <div className="text-center">
-                    <h1 className="font-medium text-4xl leading-snug">
-                      {countdown[2]}
-                    </h1>
-                    <p className="text-5/12xl font-landing text-gray-500">
-                      Minutes
-                    </p>
-                  </div>
-                  <div className="text-center">
-                    <h1 className="font-medium text-4xl leading-snug">
-                      {countdown[3]}
-                    </h1>
-                    <p className="text-5/12xl font-landing text-gray-500">
-                      Seconds
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
                 </div>
               </div>
               <div className="w-full lg:w-6/12 xl:w-7/12 order-1 lg:order-2 mb-8 lg:mb-0">
@@ -580,9 +584,6 @@ const IndexPage = () => {
               <Link href="/" passHref>
                 <a className="hover:text-blue-600">Home</a>
               </Link>
-              {/*<Link href="/" passHref>
-                <a className="hover:text-blue-600">About us</a>
-              </Link>*/}
               <Link href="https://medium.com/popcorndao" passHref>
                 <a className="hover:text-blue-600" target="_window">
                   Blog
@@ -595,6 +596,9 @@ const IndexPage = () => {
                 <a className="hover:text-blue-600" target="_window">
                   Popcorn (POP) Token
                 </a>
+              </Link>
+              <Link href="/" passHref>
+                <a className="hover:text-blue-600">Token Launch Auction</a>
               </Link>
             </div>
             <div className="flex flex-col space-y-3">
@@ -654,14 +658,14 @@ const IndexPage = () => {
                 About us
               </a>
             </Link>*/}
-                {/*<Link href="/" passHref>
-              <a className="font-medium text-base hover:text-blue-600">
-                Products
-              </a>
-            </Link>*/}
+                <Link href="/" passHref>
+                  <a className="font-normal text-base hover:text-blue-600">
+                    Token Launch Auction
+                  </a>
+                </Link>
                 <Link href="/docs/Popcorn_whitepaper_v1.pdf" passHref>
                   <a
-                    className="font-medium text-base hover:text-blue-600"
+                    className="font-normal text-base hover:text-blue-600"
                     target="_window"
                   >
                     Whitepaper
@@ -765,50 +769,50 @@ const IndexPage = () => {
                 </div>
               </form>
               <div className="w-full">
-              <div className="w-10/12 mx-auto">
-                <h3 className="font-medium text-2xl pt-16 pb-12 text-center leading-8">
-                  Don’t miss the liquidity bootstrapping event!
-                </h3>
-                <div className="w-9/12 mx-auto">
-                  <div className="flex flex-row justify-between mb-8">
-                    <div className="w-5/12 text-center">
-                      <h1 className="font-bold text-4xl leading-snug">
-                        {countdown[0]}
-                      </h1>
-                      <p className="text-1.5xl font-landing text-gray-500">
-                        Days
-                      </p>
+                <div className="w-10/12 mx-auto">
+                  <h3 className="font-medium text-2xl pt-16 pb-12 text-center leading-8">
+                    Don’t miss the liquidity bootstrapping event!
+                  </h3>
+                  <div className="w-9/12 mx-auto">
+                    <div className="flex flex-row justify-between mb-8">
+                      <div className="w-5/12 text-center">
+                        <h1 className="font-bold text-4xl leading-snug">
+                          {countdown[0]}
+                        </h1>
+                        <p className="text-1.5xl font-landing text-gray-500">
+                          Days
+                        </p>
+                      </div>
+                      <div className="w-5/12 text-center">
+                        <h1 className="font-bold text-4xl leading-snug">
+                          {countdown[1]}
+                        </h1>
+                        <p className="text-lg font-landing text-gray-500">
+                          Hours
+                        </p>
+                      </div>
                     </div>
-                    <div className="w-5/12 text-center">
-                      <h1 className="font-bold text-4xl leading-snug">
-                        {countdown[1]}
-                      </h1>
-                      <p className="text-lg font-landing text-gray-500">
-                        Hours
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex flex-row justify-between">
-                    <div className="w-5/12 text-center">
-                      <h1 className="font-bold text-4xl leading-snug">
-                        {countdown[2]}
-                      </h1>
-                      <p className="text-1xl font-landing text-gray-500">
-                        Minutes
-                      </p>
-                    </div>
-                    <div className="w-5/12 text-center">
-                      <h1 className="font-bold text-4xl leading-snug">
-                        {countdown[3]}
-                      </h1>
-                      <p className="text-1.5xl font-landing text-gray-500">
-                        Seconds
-                      </p>
+                    <div className="flex flex-row justify-between">
+                      <div className="w-5/12 text-center">
+                        <h1 className="font-bold text-4xl leading-snug">
+                          {countdown[2]}
+                        </h1>
+                        <p className="text-1xl font-landing text-gray-500">
+                          Minutes
+                        </p>
+                      </div>
+                      <div className="w-5/12 text-center">
+                        <h1 className="font-bold text-4xl leading-snug">
+                          {countdown[3]}
+                        </h1>
+                        <p className="text-1.5xl font-landing text-gray-500">
+                          Seconds
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
             </div>
           </div>
         </section>
@@ -1061,9 +1065,6 @@ const IndexPage = () => {
                 <Link href="/" passHref>
                   <a className="hover:text-blue-600">Home</a>
                 </Link>
-                {/*<Link href="/" passHref>
-                  <a className="hover:text-blue-600">About us</a>
-                </Link>*/}
                 <Link href="https://medium.com/popcorndao" passHref>
                   <a className="hover:text-blue-600" target="_window">
                     Blog
@@ -1076,6 +1077,9 @@ const IndexPage = () => {
                   <a className="hover:text-blue-600" target="_window">
                     Popcorn (POP) Token
                   </a>
+                </Link>
+                <Link href="/" passHref>
+                  <a className="hover:text-blue-600">Token Launch Auction</a>
                 </Link>
               </div>
               <div className="flex flex-col space-y-3 w-1/2">
