@@ -22,6 +22,7 @@ interface Contributor {
   img: string;
   linkedIn: string;
   twitter: string;
+  github: string;
 }
 
 const TEAM: TeamMember[] = [
@@ -58,7 +59,8 @@ const TEAM: TeamMember[] = [
     name: 'Melody Song',
     position: 'Director of Global Impact',
     img: 'melody',
-    linkedIn: 'https://www.linkedin.com/in/melody-song-%E5%AE%8B%E5%80%A9-ma-cfre-83016714/',
+    linkedIn:
+      'https://www.linkedin.com/in/melody-song-%E5%AE%8B%E5%80%A9-ma-cfre-83016714/',
     twitter: '',
   },
   {
@@ -96,78 +98,89 @@ const CONTRIBUTORS: Contributor[] = [
     name: 'Amir',
     position: 'Developer',
     img: 'Amirjab21.jpg',
-    linkedIn: "",
-    twitter: "",
+    linkedIn: '',
+    twitter: '',
+    github: 'https://github.com/Amirjab21',
   },
   {
     name: 'Codacy Badger',
     position: 'Developer',
     img: 'codacy-badger.png',
-    linkedIn: "",
-    twitter: "",
+    linkedIn: '',
+    twitter: '',
+    github: 'https://github.com/codacy-badger',
   },
   {
     name: 'Izayl',
     position: 'Developer',
     img: 'izayl.jpg',
-    linkedIn: "",
-    twitter: "",
+    linkedIn: '',
+    twitter: '',
+    github: 'https://github.com/izayl',
   },
   {
     name: 'Rene Aavik',
     position: 'Developer',
     img: 'leetdev.jpg',
-    linkedIn: "",
-    twitter: "",
+    linkedIn: '',
+    twitter: '',
+    github: 'https://github.com/leetdev',
   },
   {
     name: 'Emilio Tagua',
     position: 'Developer',
     img: 'miloops.jpg',
-    linkedIn: "",
-    twitter: "",
+    linkedIn: '',
+    twitter: '',
+    github: 'https://github.com/miloops',
   },
   {
     name: 'Partywave',
     position: 'Developer',
     img: 'partywave.png',
-    linkedIn: "",
-    twitter: "",
+    linkedIn: '',
+    twitter: '',
+    github: 'https://github.com/partywave',
   },
   {
     name: 'Sahar',
     position: 'Developer',
     img: 'saharAP.jpg',
-    linkedIn: "",
-    twitter: "",
+    linkedIn: '',
+    twitter: '',
+    github: 'https://github.com/saharAP',
   },
   {
     name: 'Soptq',
     position: 'Developer',
     img: 'Soptq.jpg',
-    linkedIn: "",
-    twitter: "",
+    linkedIn: '',
+    twitter: '',
+    github: 'https://github.com/Soptq',
   },
   {
     name: 'Stanlee Okwii',
     position: 'Developer',
     img: 'stanley.jpg',
-    linkedIn: "",
-    twitter: "",
+    linkedIn: '',
+    twitter: '',
+    github: 'https://github.com/Stanley-Okwii',
   },
   {
     name: 'The Emerald',
     position: 'Developer',
     img: 'the-emerald.png',
-    linkedIn: "",
-    twitter: "",
+    linkedIn: '',
+    twitter: '',
+    github: 'https://github.com/the-emerald',
   },
   {
     name: 'Andrew Yao',
     position: 'Developer',
     img: 'yaoandrew.jpg',
-    linkedIn: "",
-    twitter: "",
+    linkedIn: '',
+    twitter: '',
+    github: 'https://github.com/yaoandrew',
   },
 ];
 
@@ -188,28 +201,40 @@ const TeamMemberCard = ({ name, position, image, linkedIn, twitter }) => {
       <h3 className="font-semibold text-3xl pt-8">{name}</h3>
       <h3 className="font-normal text-2xl pt-3 pb-6">{position}</h3>
       <div className="w-10/12 flex flex-row justify-center mt-4">
-        <a href={linkedIn}>
-          <h3
-            className="inline-flex px-8 py-2 rounded-full text-xl font-light hover:bg-primaryLight border-gray-700"
-            style={{ border: 'solid', borderWidth: 1, marginRight: 16 }}
-          >
-            LinkedIn
-          </h3>
-        </a>
-        <a href={twitter}>
-          <h3
-            className="inline-flex px-8 py-2 rounded-full text-xl font-light hover:bg-primaryLight border-gray-700"
-            style={{ border: 'solid', borderWidth: 1, marginLeft: 16 }}
-          >
-            Twitter
-          </h3>
-        </a>
+        {linkedIn && (
+          <a href={linkedIn}>
+            <h3
+              className="inline-flex px-8 py-2 rounded-full text-xl font-light hover:bg-primaryLight border-gray-700"
+              style={{ border: 'solid', borderWidth: 1, marginRight: 16 }}
+            >
+              LinkedIn
+            </h3>
+          </a>
+        )}
+
+        {twitter && (
+          <a href={twitter}>
+            <h3
+              className="inline-flex px-8 py-2 rounded-full text-xl font-light hover:bg-primaryLight border-gray-700"
+              style={{ border: 'solid', borderWidth: 1, marginLeft: 16 }}
+            >
+              Twitter
+            </h3>
+          </a>
+        )}
       </div>
     </div>
   );
 };
 
-const ContributorCard = ({ name, position, image, linkedIn, twitter }) => {
+const ContributorCard = ({
+  name,
+  position,
+  image,
+  linkedIn,
+  twitter,
+  github,
+}) => {
   return (
     <div
       className="mx-auto flex flex-col items-center mb-12"
@@ -236,22 +261,37 @@ const ContributorCard = ({ name, position, image, linkedIn, twitter }) => {
       <h3 className="font-semibold text-3xl pt-16">{name}</h3>
       <h3 className="font-normal text-2xl pt-3">{position}</h3>
       <div className="w-10/12 flex flex-row justify-center mt-4">
-        <a href={linkedIn}>
-          <h3
-            className="inline-flex px-8 py-2 rounded-full text-xl font-light hover:bg-primaryLight border-gray-700"
-            style={{ border: 'solid', borderWidth: 1, marginRight: 16 }}
-          >
-            LinkedIn
-          </h3>
-        </a>
-        <a href={twitter}>
-          <h3
-            className="inline-flex px-8 py-2 rounded-full text-xl font-light hover:bg-primaryLight border-gray-700"
-            style={{ border: 'solid', borderWidth: 1, marginLeft: 16 }}
-          >
-            Twitter
-          </h3>
-        </a>
+        {linkedIn && (
+          <a href={linkedIn}>
+            <h3
+              className="inline-flex px-8 py-2 rounded-full text-xl font-light hover:bg-primaryLight border-gray-700"
+              style={{ border: 'solid', borderWidth: 1, marginRight: 16 }}
+            >
+              LinkedIn
+            </h3>
+          </a>
+        )}
+
+        {twitter && (
+          <a href={twitter}>
+            <h3
+              className="inline-flex px-8 py-2 rounded-full text-xl font-light hover:bg-primaryLight border-gray-700"
+              style={{ border: 'solid', borderWidth: 1, marginLeft: 16 }}
+            >
+              Twitter
+            </h3>
+          </a>
+        )}
+        {github && (
+          <a href={github}>
+            <h3
+              className="inline-flex px-8 py-2 rounded-full text-xl font-light hover:bg-primaryLight border-gray-700 mr-4"
+              style={{ border: 'solid', borderWidth: 1, marginLeft: 16 }}
+            >
+              GitHub
+            </h3>
+          </a>
+        )}
       </div>
     </div>
   );
@@ -523,14 +563,15 @@ const TeamPage = () => {
             Contributors
           </h2>
           <div className="w-10/12 mx-auto mt-12 grid grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 ">
-          {CONTRIBUTORS.map((teamMember) => {
+            {CONTRIBUTORS.map((contributor) => {
               return (
                 <ContributorCard
-                  name={teamMember.name}
-                  position={teamMember.position}
-                  image={teamMember.img}
-                  linkedIn={teamMember.linkedIn}
-                  twitter={teamMember.twitter}
+                  name={contributor.name}
+                  position={contributor.position}
+                  image={contributor.img}
+                  linkedIn={contributor.linkedIn}
+                  twitter={contributor.twitter}
+                  github={contributor.github}
                 />
               );
             })}
@@ -813,28 +854,18 @@ const TeamPage = () => {
                 <h2 className="font-bold text-3xl mb-4 text-center">
                   Contributors
                 </h2>
-                <ContributorCard
-                  name={'Name'}
-                  position={'Job'}
-                  image={'contributor'}
-                  linkedIn={'https://www.linkedin.com/ex'}
-                  twitter={'https://www.twitter.com/ex'}
-                />
-                <ContributorCard
-                  name={'Name'}
-                  position={'Job'}
-                  image={'contributor'}
-                  linkedIn={'https://www.linkedin.com/ex'}
-                  twitter={'https://www.twitter.com/ex'}
-                />
-
-                <ContributorCard
-                  name={'Name'}
-                  position={'Job'}
-                  image={'contributor'}
-                  linkedIn={'https://www.linkedin.com/ex'}
-                  twitter={'https://www.twitter.com/ex'}
-                />
+                {CONTRIBUTORS.map((contributor) => {
+                  return (
+                    <ContributorCard
+                      name={contributor.name}
+                      position={contributor.position}
+                      image={contributor.img}
+                      linkedIn={contributor.linkedIn}
+                      twitter={contributor.twitter}
+                      github={contributor.github}
+                    />
+                  );
+                })}
               </section>
             )}
 
