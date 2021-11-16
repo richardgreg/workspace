@@ -149,11 +149,12 @@ const ContributorCard = ({ name, position, image, linkedIn, twitter }) => {
       style={{ width: 359, height: 330 }}
     >
       <div className="w-36 h-36  flex items-center relative">
-        <img
+        {/* TODO: Fix popcorn overlay clipping issues */}
+        {/* <img
           src={`/images/contributors/popcorn.svg`}
           className="mx-auto mb-1 rounded-full absolute -bottom-10 -left-8 z-30"
           style={{ overflow: 'clip' }}
-        ></img>
+        ></img> */}
         <img
           src={`/images/contributors/bg.svg`}
           className="mx-auto mb-1 rounded-full absolute top-0 left-0 z-10"
