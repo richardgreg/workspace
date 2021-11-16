@@ -67,7 +67,6 @@ export default function Tablet(): JSX.Element {
                     </div>
                   </nav>
                 </header>
-                <div className="h-60" style={{backgroundColor: '#FDEAA7'}}></div>
                 <img
                   className="w-full object-cover z-0"
                   src="images/bgLandingPageUpper.svg"
@@ -78,9 +77,9 @@ export default function Tablet(): JSX.Element {
                   src="images/rocket.svg"
                   alt="Cat riding a rocket with orange shooting stars"
                 />
-                <div className="absolute mx-auto flex flex-col justify-between top-80 items-center mt-20 z-20">
+                <div className="absolute mx-auto flex flex-col justify-between top-80 md:top-60 lg:top-80 items-center mt-18 md2:mt-32 z-20">
                   <div>
-                    <h1 className="text-center font-bold text-3xl leading-snug mb-2 font-landing">
+                    <h1 className="text-center font-bold text-3xl leading-snug mb-2 mt-0 md:mt-8 md2:mt-12 font-landing">
                      <span translate="no">Popcorn's</span>{" "} Token Launch Auction
                     </h1>
                     <p className="w-1/2 mx-auto text-center text-normal font-landing font-light mt-6">
@@ -191,7 +190,7 @@ export default function Tablet(): JSX.Element {
                 <p className="font-bold text-2xl mb-1">The POP Token</p>
                 <p className="text-lg leading-2 mt-4 font-light">
                 PopcornDAO is a decentralized autonomous organization of
-                  members holding the <span translate="no">Popcorn</span>{" "} governance token POP.
+                  members holding the <span translate="no">Popcorn</span>{" "} governance token, POP.
                 </p>
                 <p className="text-lg leading-2 mt-4 font-light">
                 Token holders are eligible to participate in the network by
@@ -211,7 +210,7 @@ export default function Tablet(): JSX.Element {
               src="images/bgLBPIndexLower.svg"
               className="absolute w-full -top-28 z-0"
             ></img>
-            <div className="absolute w-full mt-52">
+            <div className="absolute w-full mt-48">
               <div className="mx-auto w-full">
                 <p className="font-bold text-2xl text-center mb-2">
                   Token Launch Auction Details
