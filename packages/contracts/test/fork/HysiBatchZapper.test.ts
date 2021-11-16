@@ -478,8 +478,8 @@ describe("HysiBatchZapper Network Test", function () {
   beforeEach(async function () {
     await deployAndAssignContracts();
   });
-  describe("zapIntoBatch", function () {
-    it("zaps into a mint queue with one stablecoin", async function () {
+  describe.only("zapIntoBatch", function () {
+    it("zaps into a mint queue with dai", async function () {
       const result = await contracts.hysiBatchZapper
         .connect(depositor)
         .zapIntoBatch([DepositorInitial, 0, 0], 0);
@@ -494,20 +494,36 @@ describe("HysiBatchZapper Network Test", function () {
 
       expect(await contracts.dai.balanceOf(depositor.address)).to.equal(0);
     });
-    it("zaps into mint queue with another stablecoin", async function () {
+    it("zaps into mint queue with usdc", async function () {
       const result = await contracts.hysiBatchZapper
         .connect(depositor)
         .zapIntoBatch([0, BigNumber.from(1e6), 0], 0);
       expect(result)
         .to.emit(contracts.hysiBatchZapper, "ZappedIntoBatch")
-        .withArgs(parseEther("0.981292310493712083"), depositor.address);
+        .withArgs(parseEther("0.981292392583226327"), depositor.address);
 
       expect(result)
         .to.emit(contracts.hysiBatchInteraction, "Deposit")
-        .withArgs(depositor.address, parseEther("0.981292310493712083"));
+        .withArgs(depositor.address, parseEther("0.981292392583226327"));
 
-      expect(await contracts.dai.balanceOf(depositor.address)).to.equal(
-        parseEther("13095.457481892968798141")
+      expect(await contracts.usdc.balanceOf(depositor.address)).to.equal(
+        BigNumber.from("26230376808")
+      );
+    });
+    it("zaps into mint queue with usdt", async function () {
+      const result = await contracts.hysiBatchZapper
+        .connect(depositor)
+        .zapIntoBatch([0, 0, BigNumber.from(1e6)], 0);
+      expect(result)
+        .to.emit(contracts.hysiBatchZapper, "ZappedIntoBatch")
+        .withArgs(parseEther("0.981368248319404492"), depositor.address);
+
+      expect(result)
+        .to.emit(contracts.hysiBatchInteraction, "Deposit")
+        .withArgs(depositor.address, parseEther("0.981368248319404492"));
+
+      expect(await contracts.usdt.balanceOf(depositor.address)).to.equal(
+        BigNumber.from("39303654861")
       );
     });
   });
