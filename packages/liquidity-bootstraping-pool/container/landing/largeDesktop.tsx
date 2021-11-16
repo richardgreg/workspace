@@ -32,6 +32,7 @@ export default function LargeDesktop(): JSX.Element {
               </Link>
             </div>
             <div className="space-x-8">
+              {/*
               <Link href="/guide" passHref>
                 <a
                   className="font-light text-xl cursor-pointer hover:text-blue-600"
@@ -40,10 +41,10 @@ export default function LargeDesktop(): JSX.Element {
                   Step-by-Step Guide
                 </a>
               </Link>
+              */}
               <Link href="/faq" passHref>
                 <a
                   className="font-light text-xl cursor-pointer hover:text-blue-600"
-                  target="_window"
                 >
                   Token Launch FAQ
                 </a>
@@ -79,11 +80,11 @@ export default function LargeDesktop(): JSX.Element {
               <div className="absolute mx-auto flex flex-col justify-between bottom-0 items-center z-20">
                 <div>
 
-                  <h1 className="text-center font-light text-7xl leading-snug mb-2 font-landing"  translate="no">
+                  <h1 className="text-center font-bold text-7xl leading-snug mb-2 font-landing"  translate="no">
                     <span translate="no">Popcorn's</span>{" "} Token Launch Auction
                   </h1>
                   <p className="w-4/12 mx-auto text-center text-2xl leading-10 font-landing mt-6">
-                    The <span translate="no">Popcorn</span>{" "} Token Launch Auction (FLA) will be the first opportunity for the
+                    The <span translate="no">Popcorn</span>{" "} Token Launch Auction (TLA) will be the first opportunity for the
                     general public to join the PopcornDAO by acquiring the POP
                     token. This is a 2.5 day, multi-chain event for the Popcorn
                     community where all proceeds raised will go to the Popcorn
@@ -94,7 +95,7 @@ export default function LargeDesktop(): JSX.Element {
                         Step-by-Step Guide
                       </a>
                     </Link>{' '}
-                    on how to safely participate in the FLA and{' '}
+                    on how to safely participate in the TLA and{' '}
                     <Link href="/faq">
                       <a className="text-blue-600 hover:text-blue-700 underline">
                         check out the FAQ
@@ -232,8 +233,8 @@ Members of the PopcornDAO, or POP token holders, are stewards of <span translate
                   </p>
                   <p className="text-xl leading-10">
                     <span className="font-bold">Where?</span>{" "} POP/USDC{' '}
-                    <Link href="https://docs.alchemist.wtf/copper/fair-launch-auctions/what-is-a-fair-launch-auction" passHref>
-                      <a  className="text-blue-600 hover:text-blue-700 underline">Copper Token Launch Auction Pool</a>
+                    <Link href="https://docs.alchemist.wtf/copper/fair-launch-auctions/what-is-a-fair-launch-auction"  passHref>
+                      <a  className="text-blue-600 hover:text-blue-700 underline"  target="_blank">Copper Token Launch Auction Pool</a>
                     </Link>
                   </p>
                   <p className="text-xl leading-10">

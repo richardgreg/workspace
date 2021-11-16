@@ -33,6 +33,7 @@ export default function Desktop(): JSX.Element {
               </Link>
             </div>
             <div className="space-x-8">
+              {/*
               <Link href="/guide" passHref>
                 <a
                   className="font-light text-xl hover:text-blue-600"
@@ -41,10 +42,10 @@ export default function Desktop(): JSX.Element {
                   Step-by-Step Guide
                 </a>
               </Link>
+              */}
               <Link href="/faq" passHref>
                 <a
                   className="font-medium text-xl cursor-default"
-                  target="_window"
                 >
                   Token Launch FAQ
                 </a>
@@ -122,7 +123,7 @@ export default function Desktop(): JSX.Element {
                     </a>
                   </Link>{' '}
                   will tweet the contract address. You can track the status of
-                  the FLA event on{' '}
+                  the TLA event on{' '}
                   <Link href="/faq" passHref>
                     <a className="text-blue-600 hover:text-blue-700 underline">
                       launch.popcorn.network
@@ -155,7 +156,7 @@ export default function Desktop(): JSX.Element {
 
               <div className="w-full mx-auto my-14">
                 <p className="font-medium text-4xl mb-2 mx-auto ">
-                  What is a Token Launch Auction (FLA)?
+                  What is a Token Launch Auction (TLA)?
                 </p>
                 <p className="text-xl mx-auto font-light ">
                   Token Launch Auctions (TLAs) are a specific configuration of
@@ -221,7 +222,7 @@ export default function Desktop(): JSX.Element {
                       magnified by up to 99 times relative to the collateral
                       deposited along with it. Additionally, the collateral can
                       be fully retrieved at the end of the auction unless the
-                      auctioned tokens already exist outside of the FLA and
+                      auctioned tokens already exist outside of the TLA and
                       someone decides to sell into the auction.
                     </li>
                   </ul>

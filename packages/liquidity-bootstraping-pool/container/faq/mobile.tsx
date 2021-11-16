@@ -1,5 +1,7 @@
+import MobileFooter from 'container/MobileFooter';
+import MobileHeader from 'container/MobileHeader';
 import Link from 'next/link';
-import * as Icon from 'react-feather';
+import React from 'react';
 
 interface MobileProps {
   showMenu: boolean;
@@ -26,38 +28,7 @@ export default function Mobile({
   );
   return (
     <div className="w-full h-full md:hidden lg:hidden xl:hidden 2xl:hidden">
-      {showMenu && (
-        <div className="fixed bg-primaryLight border-b border-gray-500 z-10 mx-auto w-full flex flex-row justify-between px-8 py-8">
-          <div className="flex flex-col space-y-4">
-            <Link href="/guide" passHref>
-              <a
-                className="font-light text-base hover:text-blue-600"
-                target="_window"
-              >
-                Step-by-Step Guide
-              </a>
-            </Link>
-          </div>
-          <Icon.X onClick={() => setMenu(false)} />
-        </div>
-      )}
-      <header className="w-full bg-primary">
-        <nav className="w-10/12 mx-auto pt-4 pb-4 border-b border-primaryLight flex flex-row items-center justify-between">
-          <div>
-            <Link href="/" passHref>
-              <a>
-                <img
-                  src="/images/textLogo.png"
-                  alt="Logo"
-                  className="h-12"
-                ></img>
-              </a>
-            </Link>
-          </div>
-          <Icon.Menu onClick={() => setMenu(true)} />
-        </nav>
-      </header>
-
+      <MobileHeader showMenu={showMenu} setMenu={setMenu} />
       <section>
         <div className="relative -mt-1">
           <div className="absolute inset-x-0 bottom-0 h-1/2" />
@@ -107,7 +78,7 @@ export default function Mobile({
                         </a>
                       </Link>{' '}
                       will tweet the contract address. You can track the status
-                      of the FLA event on{' '}
+                      of the TLA event on{' '}
                       <Link href="/faq" passHref>
                         <a className="text-blue-600 hover:text-blue-700 underline">
                           launch.popcorn.network
@@ -157,7 +128,7 @@ export default function Mobile({
 
             <div className="w-10/12 mx-auto my-12">
               <p className="font-bold text-xl mx-auto mb-1">
-                What is a Token Launch Auction (FLA)?
+                What is a Token Launch Auction (TLA)?
               </p>
               <p className="text-base mx-auto ">
                 Token Launch Auctions (TLAs) are a specific configuration of
@@ -220,7 +191,7 @@ export default function Mobile({
                     by up to 99 times relative to the collateral deposited along
                     with it. Additionally, the collateral can be fully retrieved
                     at the end of the auction unless the auctioned tokens
-                    already exist outside of the FLA and someone decides to sell
+                    already exist outside of the TLA and someone decides to sell
                     into the auction.
                   </li>
                 </ul>
@@ -376,7 +347,7 @@ export default function Mobile({
               </p>
               <p className="text-base mx-auto ">
                 There are 4,477,900 POP tokens in circulation, including the
-                tokens that will become available through the FLA.
+                tokens that will become available through the TLA.
               </p>
             </div>
 
@@ -627,24 +598,7 @@ export default function Mobile({
         </div>
       </section>
 
-      <section className="w-10/12 mx-auto mt-8 border-t border-gray-500">
-        <div className="flex flex-row">
-          <p className="w-1/2">
-            <a href="https://popcorn.network">popcorn.network</a>
-          </p>
-          <p className="w-1/2">
-            <a href="https://forum.popcorn.network/">popcorn.community</a>
-          </p>
-        </div>
-        <div className="flex flex-row">
-          <p className="w-1/2">
-            <a href="https://discord.gg/w9zeRTSZsq">discord</a>
-          </p>
-          <p className="w-1/2">
-            <a href="https://twitter.com/Popcorn_DAO">@popcorn on twitter</a>
-          </p>
-        </div>
-      </section>
+      <MobileFooter />
     </div>
   );
 }

@@ -1,4 +1,8 @@
+import MobileFooter from 'container/MobileFooter';
+import MobileHeader from 'container/MobileHeader';
+import { MobileNavigation } from 'container/MobileNavigation';
 import Link from 'next/link';
+import React from 'react';
 import * as Icon from 'react-feather';
 
 interface MobileProps {
@@ -26,57 +30,9 @@ export default function Mobile({
   );
   return (
     <div className="w-full h-full md:hidden lg:hidden xl:hidden 2xl:hidden">
-      {showMenu && (
-        <div className="fixed bg-primaryLight border-b border-gray-500 z-10 mx-auto w-full flex flex-row justify-between px-8 py-8">
-          <div className="flex flex-col space-y-4">
-          <Link href="/guide" passHref>
-                <a
-                  className="font-light text-normal cursor-pointer hover:text-blue-600"
-                  target="_window"
-                >
-                  Step-by-Step Guide
-                </a>
-              </Link>
-              <Link href="/faq" passHref>
-                <a
-                  className="font-light text-normal cursor-pointer hover:text-blue-600"
-                  target="_window"
-                >
-                 Token Launch FAQ
-                </a>
-              </Link>
-              <Link
-                href="https://medium.com/popcorndao/pop-token-economics-5a580f0bf712"
-                passHref
-              >
-                <a
-                  className="font-light text-normal cursor-pointer hover:text-blue-600"
-                  target="_window"
-                >
-                  Tokenomics
-                </a>
-              </Link>
-          </div>
-          <Icon.X onClick={() => setMenu(false)} />
-        </div>
-      )}
+
       <div className="flex flex-col w-full h-full">
-        <header className="w-full bg-primary">
-          <nav className="w-10/12 mx-auto pt-4 pb-4 border-b border-primaryLight flex flex-row items-center justify-between">
-            <div>
-              <Link href="/" passHref>
-                <a>
-                  <img
-                    src="/images/textLogo.png"
-                    alt="Logo"
-                    className="h-12"
-                  ></img>
-                </a>
-              </Link>
-            </div>
-            <Icon.Menu onClick={() => setMenu(true)} />
-          </nav>
-        </header>
+      <MobileHeader showMenu={showMenu} setMenu={setMenu} />
 
         <section className="-mt-1">
           <div className="w-full h-auto">
@@ -97,11 +53,11 @@ export default function Mobile({
                 <div className="absolute top-56 mx-auto flex flex-col justify-between pb-10 pt-20 items-center">
                   <div>
  
-                    <h1 className="text-center font-light text-2xl  leading-snug font-landing">
+                    <h1 className="text-center font-bold text-2xl  leading-snug font-landing">
                       <span translate="no">Popcorn's</span>{" "} Token Launch Auction
                     </h1>
                     <p className="w-11/12 mx-auto text-center text-sm font-light font-landing mt-4">
-                    The <span translate="no">Popcorn</span>{" "} Token Launch Auction (FLA) will be the first opportunity for the
+                    The <span translate="no">Popcorn</span>{" "} Token Launch Auction (TLA) will be the first opportunity for the
                     general public to join the PopcornDAO by acquiring the POP
                     token. This is a 2.5 day, multi-chain event for the <span translate="no">Popcorn</span>{" "}
                     community where all proceeds raised will go to the <span translate="no">Popcorn</span>{" "}
@@ -112,7 +68,7 @@ export default function Mobile({
                         Step-by-Step Guide
                       </a>
                     </Link>{' '}
-                    on how to safely participate in the FLA and{' '}
+                    on how to safely participate in the TLA and{' '}
                     <Link href="/faq">
                       <a className="text-blue-600 hover:text-blue-700 underline">
                         check out the FAQ
@@ -238,7 +194,7 @@ Members of the PopcornDAO, or POP token holders, are stewards of <span translate
                   <p className="text-sm leading-10">
                     <span className="font-bold">Where?</span>{" "} POP/USDC{' '}
                     <Link href="https://docs.alchemist.wtf/copper/fair-launch-auctions/what-is-a-fair-launch-auction" passHref>
-                      <a  className="text-blue-600 hover:text-blue-700 underline">Copper Token Launch Auction Pool</a>
+                      <a  className="text-blue-600 hover:text-blue-700 underline"  target="_blank">Copper Token Launch Auction Pool</a>
                     </Link>
                   </p>
                   <p className="text-sm leading-10">
@@ -290,24 +246,8 @@ Members of the PopcornDAO, or POP token holders, are stewards of <span translate
           </div>
         </section>
 
-        <section className="w-10/12 mx-auto pt-4 border-t border-gray-500">
-          <div className="flex flex-row">
-            <p className="w-1/2 mt-2">
-              <a href="https://popcorn.network">popcorn.network</a>
-            </p>
-            <p className="w-1/2 mt-2">
-              <a href="https://forum.popcorn.network/">forum.popcorn.network</a>
-            </p>
-          </div>
-          <div className="flex flex-row mt-2 mb-4">
-            <p className="w-1/2">
-              <a href="https://discord.gg/w9zeRTSZsq">discord</a>
-            </p>
-            <p className="w-1/2">
-              <a href="https://twitter.com/Popcorn_DAO">@popcorn on twitter</a>
-            </p>
-          </div>
-        </section>
+        <MobileFooter />
+
       </div>
     </div>
   );

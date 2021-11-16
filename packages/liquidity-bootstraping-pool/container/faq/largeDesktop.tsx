@@ -35,6 +35,7 @@ export default function LargeDesktop(): JSX.Element {
               </Link>
             </div>
             <div className="space-x-8">
+              {/*
               <Link href="/guide" passHref>
                 <a
                   className="font-light text-xl hover:text-blue-600"
@@ -43,10 +44,10 @@ export default function LargeDesktop(): JSX.Element {
                   Step-by-Step Guide
                 </a>
               </Link>
+              */}
               <Link href="/faq" passHref>
                 <a
                   className="font-bold text-xl cursor-default"
-                  target="_window"
                 >
                   Token Launch FAQ
                 </a>
@@ -125,7 +126,7 @@ export default function LargeDesktop(): JSX.Element {
                     </a>
                   </Link>{' '}
                   will tweet the contract address. You can track the status of
-                  the FLA event on{' '}
+                  the TLA event on{' '}
                   <Link href="/faq" passHref>
                     <a className="text-blue-600 hover:text-blue-700 underline">
                       launch.popcorn.network
@@ -162,7 +163,7 @@ export default function LargeDesktop(): JSX.Element {
 
               <div className="w-full mx-auto my-20">
                 <p className="font-bold text-3xl font-bold mb-4 mx-auto ">
-                  What is a Token Launch Auction (FLA)?
+                  What is a Token Launch Auction (TLA)?
                 </p>
                 <p className="text-xl mx-auto font-light leading-10 ">
                   Token Launch Auctions (TLAs) are a specific configuration of
@@ -228,7 +229,7 @@ export default function LargeDesktop(): JSX.Element {
                       magnified by up to 99 times relative to the collateral
                       deposited along with it. Additionally, the collateral can
                       be fully retrieved at the end of the auction unless the
-                      auctioned tokens already exist outside of the FLA and
+                      auctioned tokens already exist outside of the TLA and
                       someone decides to sell into the auction.
                     </li>
                   </ul>
@@ -391,7 +392,7 @@ export default function LargeDesktop(): JSX.Element {
                 </p>
                 <p className="text-xl mx-auto font-light leading-10 ">
                   There are 4,477,900 POP tokens in circulation, including the
-                  tokens that will become available through the FLA.
+                  tokens that will become available through the TLA.
                 </p>
               </div>
 
