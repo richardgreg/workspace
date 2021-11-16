@@ -666,8 +666,8 @@ const TeamPage = () => {
       {/* MOBILE VERSION */}
       <div className="w-full h-full lg:hidden">
         {menuVisible && (
-          <div className="absolute z-10 w-full overflow-y-auto">
-            <div className="relative w-full h-full mobile-menu-bg">
+          <div className="absolute z-10 w-full overflow-y-auto ">
+            <div className="relative w-full h-full mobile-menu-bg transition-opacity duration-1000 ease-in-out">
               <div className="w-10/12 mx-auto ">
                 <div className="grid justify-items-stretch">
                   <XIcon
@@ -1078,9 +1078,9 @@ const TeamPage = () => {
                   </a>
                 </Link>
                 <p className="font-medium text-base py-4">
-                  Popcorn is a new eco-friendly paradigm for DeFi, where users
-                  can earn high yield on their crypto assets while creating real
-                  world impact.
+                  <span translate="no">Popcorn</span> is a new eco-friendly
+                  paradigm for DeFi, where users can earn high yield on their
+                  crypto assets while creating real world impact.
                 </p>
                 <div className="flex flex-row space-x-4 items-center">
                   <Link href="https://github.com/popcorndao" passHref>
@@ -1119,7 +1119,7 @@ const TeamPage = () => {
                       passHref
                     >
                       <a className="hover:text-blue-600" target="_window">
-                        Popcorn (POP) Token
+                        <span translate="no">Popcorn</span> (POP) Token
                       </a>
                     </Link>
                   </div>
@@ -1151,7 +1151,8 @@ const TeamPage = () => {
               </div>
               <div className="w-10/12 border-t border-gray-700 mt-12 mx-auto ">
                 <p className="font-base text-center py-4">
-                  ©2021, Popcorn Network. All Rights Reserved
+                  ©2021, <span translate="no">Popcorn</span> Network. All Rights
+                  Reserved
                 </p>
               </div>
             </section>
