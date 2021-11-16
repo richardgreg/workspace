@@ -73,12 +73,12 @@ contract HysiBatchZapper {
         IERC20(curve3Pool.coins(i)).safeTransferFrom(
           msg.sender,
           address(this),
-          _amounts[0]
+          _amounts[i]
         );
         //Allow Stables for user in curve three-pool
         IERC20(curve3Pool.coins(i)).safeIncreaseAllowance(
           address(curve3Pool),
-          _amounts[0]
+          _amounts[i]
         );
       }
     }
@@ -207,7 +207,7 @@ contract HysiBatchZapper {
     If a user sends Stables to this contract by accident (Which cant be retrieved anyway) they will be used aswell.
     */
     uint256 stableBalance = IERC20(curve3Pool.coins(_stableCoinIndex))
-      .balanceOf(address(this));
+    .balanceOf(address(this));
 
     //Transfer stables to user
     IERC20(curve3Pool.coins(_stableCoinIndex)).safeTransfer(
