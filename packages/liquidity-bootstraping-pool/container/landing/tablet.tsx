@@ -77,7 +77,7 @@ export default function Tablet(): JSX.Element {
                   src="images/rocket.svg"
                   alt="Cat riding a rocket with orange shooting stars"
                 />
-                <div className="absolute mx-auto flex flex-col justify-between top-80 md:top-60 lg:top-80 items-center mt-18 md2:mt-32 z-20">
+                <div className="absolute mx-auto flex flex-col justify-between top-80 md:top-60 lg:top-80 items-center mt-18 md2:mt-32 md4:mt-40 z-20">
                   <div>
                     <h1 className="text-center font-bold text-3xl leading-snug mb-2 mt-0 md:mt-8 md2:mt-12 font-landing">
                      <span translate="no">Popcorn's</span>{" "} Token Launch Auction

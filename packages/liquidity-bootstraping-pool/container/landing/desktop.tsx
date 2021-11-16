@@ -69,7 +69,7 @@ export default function Desktop(): JSX.Element {
                 </header>
 
                 <img
-                  className="w-full object-cover z-0 "
+                  className="w-full  z-0 "
                   src="images/bgLandingPageUpper.svg"
                   alt="Upper background"
                 />
@@ -78,9 +78,9 @@ export default function Desktop(): JSX.Element {
                   src="images/rocket.svg"
                   alt="Cat riding a rocket with orange shooting stars"
                 />
-                <div className="absolute mx-auto flex flex-col justify-between -bottom-6 items-center z-20">
+                <div className="absolute mx-auto flex flex-col justify-between -bottom-6 lg:-bottom-16 lg2:-bottom-6 items-center z-20">
                   <div>
-                    <h1 className="text-center font-bold text-6xl leading-snug mb-2 font-landing">
+                    <h1 className="text-center font-bold text-6xl leading-snug mb-2 font-landing ">
                       <span translate="no">Popcorn's</span> Token Launch Auction
                     </h1>
                     <p className="w-1/2 mx-auto text-center text-xl leading-8 font-landing font-light mt-6">

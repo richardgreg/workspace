@@ -17,6 +17,7 @@ module.exports = {
       'md4': '1200px',
 
       'lg': '1380px',
+      'lg2': '1480px',
       // => @media (min-width: 1380px) { ... }
 
       'xl': '1840px',
