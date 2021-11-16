@@ -297,7 +297,7 @@ export default function Desktop(): JSX.Element {
                 </p>
                 <ul className="list-inside list-disc mt-2">
                   <li className="text-xl mx-auto font-light ">
-                    Distributes governance tokens in a Token Launch
+                    Distributes governance tokens in a fair manner
                   </li>
                   <li className="text-xl mx-auto font-light ">
                     Helps prevent front-running
@@ -353,15 +353,9 @@ export default function Desktop(): JSX.Element {
                   rewards and liquidity mining incentives is to have POP tokens.
                   The POP tokenomic model specifies that the greatest amount of
                   staking rewards emitted will be during the first several weeks
-                  of the liquidity mining incentives program.
+                  of the liquidity mining incentives program, therefore the earliest users will have the greatest possible opportunity to earn more POP tokens.
                 </p>
-                <p className="text-xl mx-auto font-light mt-4">
-                  Additionally, participating in yield farming requires time,
-                  capital, and an APY that economically justifies the amount of
-                  gas you will spend in farming and harvesting your POP rewards.
-                  The LBP comparatively provides a quick and easy way to acquire
-                  POP and immediately become a member of the PopcornDAO.
-                </p>
+
               </div>
 
               <div className="w-full mx-auto my-14">

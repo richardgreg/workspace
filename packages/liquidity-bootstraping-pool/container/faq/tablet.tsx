@@ -296,7 +296,7 @@ export default function Tablet(): JSX.Element {
                 </p>
                 <ul className="list-inside list-disc">
                   <li className="text-md mx-auto ">
-                    Distributes governance tokens in a Token Launch
+                    Distributes governance tokens in a fair manner
                   </li>
                   <li className="text-md mx-auto ">
                     Helps prevent front-running
@@ -347,20 +347,13 @@ export default function Tablet(): JSX.Element {
                   why should I buy a token now?
                 </p>
                 <p className="text-md mx-auto ">
-                  Staking rewards (on Ethereum, Polygon &amp; Arbitrum) will
+                Staking rewards (on Ethereum, Polygon &amp; Arbitrum) will
                   immediately follow the end of the Token Launch Auction in
                   December. The only way to take advantage of the staking
                   rewards and liquidity mining incentives is to have POP tokens.
                   The POP tokenomic model specifies that the greatest amount of
                   staking rewards emitted will be during the first several weeks
-                  of the liquidity mining incentives program.
-                </p>
-                <p className="text-md mx-auto mt-2">
-                  Additionally, participating in yield farming requires time,
-                  capital, and an APY that economically justifies the amount of
-                  gas you will spend in farming and harvesting your POP rewards.
-                  The LBP comparatively provides a quick and easy way to acquire
-                  POP and immediately become a member of the PopcornDAO.
+                  of the liquidity mining incentives program, therefore the earliest users will have the greatest possible opportunity to earn more POP tokens.
                 </p>
               </div>
 
