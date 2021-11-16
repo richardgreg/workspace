@@ -30,8 +30,8 @@ const TEAM: TeamMember[] = [
     name: 'Anthony Martin',
     position: 'Founder & CTO',
     img: 'anthony',
-    linkedIn: '',
-    twitter: '',
+    linkedIn: 'https://linkedin.com/in/admartin',
+    twitter: 'https://twitter.com/amart_tech',
   },
   {
     name: 'Michael Kisselgof',
