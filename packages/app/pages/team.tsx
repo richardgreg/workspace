@@ -1,6 +1,4 @@
 import { Dialog, Transition } from '@headlessui/react';
-
-import { XIcon } from '@heroicons/react/solid';
 import FacebookPixel from 'components/FacebookPixel';
 import { MobileExpandableMenu } from 'components/MobileExpandableMenu';
 import Link from 'next/link';
@@ -202,7 +200,7 @@ const TeamMemberCard = ({ name, position, image, linkedIn, twitter }) => {
       <h3 className="font-normal text-2xl pt-3 pb-6">{position}</h3>
       <div className="w-10/12 flex flex-row justify-center mt-4">
         {linkedIn && (
-          <a href={linkedIn}>
+          <a href={linkedIn} target="_blank">
             <h3
               className="inline-flex px-8 py-2 rounded-full text-xl font-light hover:bg-primaryLight border-gray-700"
               style={{ border: 'solid', borderWidth: 1, marginRight: 16 }}
@@ -213,7 +211,7 @@ const TeamMemberCard = ({ name, position, image, linkedIn, twitter }) => {
         )}
 
         {twitter && (
-          <a href={twitter}>
+          <a href={twitter} target="_blank">
             <h3
               className="inline-flex px-8 py-2 rounded-full text-xl font-light hover:bg-primaryLight border-gray-700"
               style={{ border: 'solid', borderWidth: 1, marginLeft: 16 }}
@@ -262,7 +260,7 @@ const ContributorCard = ({
       <h3 className="font-normal text-2xl pt-3">{position}</h3>
       <div className="w-10/12 flex flex-row justify-center mt-4">
         {linkedIn && (
-          <a href={linkedIn}>
+          <a href={linkedIn} target="_blank">
             <h3
               className="inline-flex px-8 py-2 rounded-full text-xl font-light hover:bg-primaryLight border-gray-700"
               style={{ border: 'solid', borderWidth: 1, marginRight: 16 }}
@@ -273,7 +271,7 @@ const ContributorCard = ({
         )}
 
         {twitter && (
-          <a href={twitter}>
+          <a href={twitter} target="_blank">
             <h3
               className="inline-flex px-8 py-2 rounded-full text-xl font-light hover:bg-primaryLight border-gray-700"
               style={{ border: 'solid', borderWidth: 1, marginLeft: 16 }}
@@ -283,7 +281,7 @@ const ContributorCard = ({
           </a>
         )}
         {github && (
-          <a href={github}>
+          <a href={github} target="_blank">
             <h3
               className="inline-flex px-8 py-2 rounded-full text-xl font-light hover:bg-primaryLight border-gray-700 mr-4"
               style={{ border: 'solid', borderWidth: 1, marginLeft: 16 }}
@@ -446,14 +444,9 @@ const TeamPage = () => {
               </Link>
             </div>
             <div className="space-x-8">
-              <Link href="/about" passHref>
+              <Link href="https://launch.popcorn.network/" passHref>
                 <a className="font-normal text-base hover:text-blue-600">
-                  About Us
-                </a>
-              </Link>
-              <Link href="/products" passHref>
-                <a className="font-normal text-base hover:text-blue-600">
-                  Products
+                  Token Launch Auction
                 </a>
               </Link>
               <Link href="/docs/Popcorn_whitepaper_v1.pdf" passHref>
@@ -464,14 +457,9 @@ const TeamPage = () => {
                   Whitepaper
                 </a>
               </Link>
-              <Link href="/" passHref>
-                <a className="font-normal text-base hover:text-blue-600">
-                  PopcornDAO
-                </a>
-              </Link>
               <Link href="/team" passHref>
                 <a className="font-medium text-base hover:text-blue-600">
-                  Team
+                  Team & Contributors
                 </a>
               </Link>
               <a
@@ -529,6 +517,7 @@ const TeamPage = () => {
             {TEAM.map((teamMember) => {
               return (
                 <TeamMemberCard
+                  key={teamMember.name}
                   name={teamMember.name}
                   position={teamMember.position}
                   image={teamMember.img}
@@ -566,6 +555,7 @@ const TeamPage = () => {
             {CONTRIBUTORS.map((contributor) => {
               return (
                 <ContributorCard
+                  key={contributor.name}
                   name={contributor.name}
                   position={contributor.position}
                   image={contributor.img}
@@ -591,7 +581,7 @@ const TeamPage = () => {
             <div className="pt-32">
               <div className="w-10/12 mx-auto rounded-xl shadow-xl bg-white">
                 <h3 className="font-medium text-4xl pt-20 pb-12 text-center">
-                  Don’t miss the liquidity event!
+                  Don’t miss the token launch event!
                 </h3>
                 <div className="w-9/12 mx-auto flex flex-row justify-between pb-20">
                   <div className="text-center">
@@ -717,7 +707,7 @@ const TeamPage = () => {
               </Link>
 
               <Link href="https://medium.com/popcorndao" passHref>
-                <a className="hover:text-blue-600" target="_window">
+                <a className="hover:text-blue-600" target="_blank">
                   Blog
                 </a>
               </Link>
@@ -725,7 +715,7 @@ const TeamPage = () => {
                 href="https://etherscan.io/token/0xd0cd466b34a24fcb2f87676278af2005ca8a78c4"
                 passHref
               >
-                <a className="hover:text-blue-600" target="_window">
+                <a className="hover:text-blue-600" target="_blank">
                   Popcorn (POP) Token
                 </a>
               </Link>
@@ -733,17 +723,17 @@ const TeamPage = () => {
             <div className="flex flex-col space-y-3">
               <p className="font-medium text-base uppercase">Connect</p>
               <Link href="https://twitter.com/Popcorn_DAO" passHref>
-                <a className="hover:text-blue-600" target="_window">
+                <a className="hover:text-blue-600" target="_blank">
                   Twitter
                 </a>
               </Link>
               <Link href="https://discord.gg/w9zeRTSZsq" passHref>
-                <a className="hover:text-blue-600" target="_window">
+                <a className="hover:text-blue-600" target="_blank">
                   Discord
                 </a>
               </Link>
               <Link href="https://github.com/popcorndao" passHref>
-                <a className="hover:text-blue-600" target="_window">
+                <a className="hover:text-blue-600" target="_blank">
                   Github
                 </a>
               </Link>
@@ -838,6 +828,7 @@ const TeamPage = () => {
                 {TEAM.map((teamMember) => {
                   return (
                     <TeamMemberCard
+                      key={teamMember.name}
                       name={teamMember.name}
                       position={teamMember.position}
                       image={teamMember.img}
@@ -857,6 +848,7 @@ const TeamPage = () => {
                 {CONTRIBUTORS.map((contributor) => {
                   return (
                     <ContributorCard
+                      key={contributor.name}
                       name={contributor.name}
                       position={contributor.position}
                       image={contributor.img}
@@ -881,8 +873,8 @@ const TeamPage = () => {
               >
                 <div className="w-full pt-32">
                   <div className="w-10/12 mx-auto rounded-xl shadow-xl bg-white">
-                    <h3 className="font-medium text-4xl pt-20 pb-12 text-center">
-                      Don’t miss the liquidity event!
+                    <h3 className="font-medium text-5xl pt-20 pb-12 text-center">
+                      Don’t miss the token launch event!
                     </h3>
                     <div className="w-9/12 mx-auto pb-20">
                       <div className="flex flex-row justify-between mb-8">
@@ -1025,7 +1017,7 @@ const TeamPage = () => {
                   <a className="hover:text-blue-600">About us</a>
                 </Link>*/}
                     <Link href="https://medium.com/popcorndao" passHref>
-                      <a className="hover:text-blue-600" target="_window">
+                      <a className="hover:text-blue-600" target="_blank">
                         Blog
                       </a>
                     </Link>
@@ -1033,7 +1025,7 @@ const TeamPage = () => {
                       href="https://etherscan.io/token/0xd0cd466b34a24fcb2f87676278af2005ca8a78c4"
                       passHref
                     >
-                      <a className="hover:text-blue-600" target="_window">
+                      <a className="hover:text-blue-600" target="_blank">
                         <span translate="no">Popcorn</span> (POP) Token
                       </a>
                     </Link>
@@ -1041,17 +1033,17 @@ const TeamPage = () => {
                   <div className="flex flex-col space-y-3 w-1/2">
                     <p className="font-medium text-base uppercase">Connect</p>
                     <Link href="https://twitter.com/Popcorn_DAO" passHref>
-                      <a className="hover:text-blue-600" target="_window">
+                      <a className="hover:text-blue-600" target="_blank">
                         Twitter
                       </a>
                     </Link>
                     <Link href="https://discord.gg/w9zeRTSZsq" passHref>
-                      <a className="hover:text-blue-600" target="_window">
+                      <a className="hover:text-blue-600" target="_blank">
                         Discord
                       </a>
                     </Link>
                     <Link href="https://github.com/popcorndao" passHref>
-                      <a className="hover:text-blue-600" target="_window">
+                      <a className="hover:text-blue-600" target="_blank">
                         Github
                       </a>
                     </Link>

@@ -1,4 +1,3 @@
-
 import { XIcon } from '@heroicons/react/solid';
 
 import Link from 'next/link';
@@ -10,7 +9,9 @@ interface MobileExpandableMenuProps {
   toggleMenuVisible: (boolean) => void;
 }
 
-export const MobileExpandableMenu: React.FC<MobileExpandableMenuProps> = ({ toggleMenuVisible }) => {
+export const MobileExpandableMenu: React.FC<MobileExpandableMenuProps> = ({
+  toggleMenuVisible,
+}) => {
   return (
     <div className="absolute z-10 w-full overflow-y-auto ">
       <div className="relative w-full h-full mobile-menu-bg transition-opacity duration-1000 ease-in-out">
@@ -23,13 +24,13 @@ export const MobileExpandableMenu: React.FC<MobileExpandableMenuProps> = ({ togg
             />
           </div>
           <div className="w-full bg-white " style={{ height: 0.32 }}></div>
-          <Link href="/about" passHref>
+          <Link href="https://launch.popcorn.network/" passHref>
             <a>
               <h1
                 className="ml-3 text-4xl font-bold text-white hover:text-gray-700 font-landing"
                 style={{ marginTop: 18, marginBottom: 18 }}
               >
-                About Us
+                Token Launch Auction
               </h1>
             </a>
           </Link>
@@ -37,27 +38,13 @@ export const MobileExpandableMenu: React.FC<MobileExpandableMenuProps> = ({ togg
             className="w-full bg-white opacity-50"
             style={{ height: 0.72 }}
           ></div>
-          <Link href="/products" passHref>
+          <Link href="/docs/Popcorn_whitepaper_v1.pdf" passHref>
             <a>
               <h1
                 className="ml-3 text-4xl font-bold text-white hover:text-gray-700 font-landing"
                 style={{ marginTop: 18, marginBottom: 18 }}
               >
-                Products
-              </h1>
-            </a>
-          </Link>
-          <div
-            className="w-full bg-white opacity-50"
-            style={{ height: 0.72 }}
-          ></div>
-          <Link href="/" passHref>
-            <a>
-              <h1
-                className="ml-3 text-4xl font-bold text-white hover:text-gray-700 font-landing"
-                style={{ marginTop: 18, marginBottom: 18 }}
-              >
-                PopcornDAO
+                Whitepaper
               </h1>
             </a>
           </Link>
@@ -71,7 +58,7 @@ export const MobileExpandableMenu: React.FC<MobileExpandableMenuProps> = ({ togg
                 className="ml-3 text-4xl font-bold text-white hover:text-gray-700 font-landing"
                 style={{ marginTop: 18, marginBottom: 18 }}
               >
-                Team
+                Team & Contributors
               </h1>
             </a>
           </Link>
