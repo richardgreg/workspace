@@ -1,4 +1,4 @@
-
+const { url } = require('inspector');
 const colors = require('tailwindcss/colors')
 
 module.exports = {
@@ -9,6 +9,26 @@ module.exports = {
   ],
   darkMode: false, // or 'media' or 'class'
   theme: {
+
+    screens: {
+      'sm': '640px',
+      // => @media (min-width: 640px) { ... }
+
+      'md': '768px',
+      // => @media (min-width: 768px) { ... }
+
+      'lg': '1024px',
+      // => @media (min-width: 1024px) { ... }
+
+      'laptop' : '1440px',
+      // => @media (min-width: 1440px) { ... }
+
+      'xl': '1920px',
+      // => @media (min-width: 1920px) { ... }
+
+      '2xl': '2560px',
+      // => @media (min-width: 2560px) { ... }
+    },
     colors:{
       gray: colors.coolGray,
       red: colors.red,
@@ -54,12 +74,20 @@ module.exports = {
 
         secondary: '#73B7EA',
         secondaryLight: '#DBEAFE',
-        secondaryDark: "#25283D",
+        secondaryDark: '#25283D',
+
+        inactiveYellow: '#FFF5CF',
+        activeYellow: '#FFDC38',
 
         ctaYellow: '#F6CB22',
         ctaYellowLight: '#FFD324',
+
+        startPopupGradient: '#F9A058',
+        endPopupGradient: '#FDEAA7',
       },
       backgroundImage: (theme) => ({
+        'bg-gradient': "url('/images/bgGradient.svg')",
+        'header-team': "url('/images/bgHeaderTeam.svg')",
         'hero-pattern': "url('/images/bgHero.svg')",
         'impact-pattern': "url('/images/bgImpact.svg')",
         'countdown-pattern': "url('/images/bgCountdown.svg')",

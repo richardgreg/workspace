@@ -15,10 +15,7 @@ import SwapChainModal from 'app/SwapChainModal';
 import ElectionsProvider from '../app/elections';
 import { SingleActionModalContainer } from 'components/Modal/SingleActionModalContainer';
 import { DualActionModalContainer } from 'components/Modal/DualActionModalContainer';
-import TagManager from 'react-gtm-module'
-
-
-
+import TagManager from 'react-gtm-module';
 
 function getLibrary(provider: any): Web3Provider {
   const library = new Web3Provider(provider);
@@ -33,7 +30,7 @@ export default function MyApp(props) {
   useEffect(() => {
     if (process.env.NEXT_PUBLIC_GTM_ID) {
       TagManager.initialize({
-        gtmId: process.env.NEXT_PUBLIC_GTM_ID
+        gtmId: process.env.NEXT_PUBLIC_GTM_ID,
       });
     }
   }, []);
@@ -61,29 +58,43 @@ export default function MyApp(props) {
   return (
     <React.Fragment>
       <Head>
-
         <title>Popcorn - DeFi for the People</title>
         <meta
           name="viewport"
           content="minimum-scale=1, initial-scale=1, width=device-width"
         />
 
-        <meta name="description" content="Earn high yield on your cryptoassets while creating real world impact. Our fees go directly towards non-profits" />
+        <meta
+          name="description"
+          content="Earn high yield on your cryptoassets while creating real world impact. Our fees go directly towards non-profits"
+        />
 
         {/*  Facebook Meta Tags */}
         <meta property="og:url" content="https://popcorn.network/" />
         <meta property="og:type" content="website" />
         <meta property="og:title" content="Popcorn - DeFi for the People" />
-        <meta property="og:description" content="Earn high yield on your cryptoassets while creating real world impact. Our fees go directly towards non-profits of your choosing." />
-        <meta property="og:image" content="https://popcorn.network/images/popcorn_network_rocket_2.png" />
+        <meta
+          property="og:description"
+          content="Earn high yield on your cryptoassets while creating real world impact. Our fees go directly towards non-profits of your choosing."
+        />
+        <meta
+          property="og:image"
+          content="https://popcorn.network/images/popcorn_network_rocket_2.png"
+        />
 
         {/* Twitter Meta Tags */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta property="twitter:domain" content="popcorn.network" />
         <meta property="twitter:url" content="https://popcorn.network/" />
         <meta name="twitter:title" content="Popcorn - DeFi for the People" />
-        <meta name="twitter:description" content="Earn high yield on your cryptoassets while creating real world impact. Our fees go directly towards non-profits of your choosing." />
-        <meta name="twitter:image" content="https://popcorn.network/images/popcorn_network_rocket_2.png" />
+        <meta
+          name="twitter:description"
+          content="Earn high yield on your cryptoassets while creating real world impact. Our fees go directly towards non-profits of your choosing."
+        />
+        <meta
+          name="twitter:image"
+          content="https://popcorn.network/images/popcorn_network_rocket_2.png"
+        />
 
         <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="preconnect" href="https://fonts.gstatic.com" />
@@ -98,18 +109,11 @@ export default function MyApp(props) {
           <ThemeProvider theme={theme}>
             <CssBaseline />
             <GlobalLinearProgress visible={loading} />
-            <Web3ReactProvider getLibrary={getLibrary}>
-              <ContractsWrapper>
-                <ElectionsProvider>
-                  <StateProvider>
-                    <SwapChainModal />
-                    <SingleActionModalContainer />
-                    <DualActionModalContainer />
-                    <Component {...pageProps} />
-                  </StateProvider>
-                </ElectionsProvider>
-              </ContractsWrapper>
-            </Web3ReactProvider>
+              <StateProvider>
+                <SingleActionModalContainer />
+                <DualActionModalContainer />
+                <Component {...pageProps} />
+              </StateProvider>
           </ThemeProvider>
         </MuiThemeProvider>
       </StylesProvider>
