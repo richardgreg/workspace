@@ -757,8 +757,15 @@ const TeamPage = () => {
         >
           <MobileExpandableMenu toggleMenuVisible={toggleMenuVisible} />
         </Transition>
-
-        {!menuVisible && (
+        <Transition
+          show={!menuVisible}
+          enter="transition-opacity duration-150"
+          enterFrom="opacity-0"
+          enterTo="opacity-100"
+          leave="transition-opacity duration-150"
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
+        >
           <div>
             <header className="w-full bg-primary">
               <nav className="w-10/12 mx-auto pt-4 pb-3 border-b border-primaryLight flex flex-row items-center justify-between">
@@ -1064,7 +1071,7 @@ const TeamPage = () => {
               </div>
             </section>
           </div>
-        )}
+        </Transition>
       </div>
     </div>
   );

@@ -97,7 +97,7 @@ export const MobileExpandableMenu: React.FC<MobileExpandableMenuProps> = ({
             <div>
               <Link href="https://discord.gg/w9zeRTSZsq" passHref>
                 <img
-                  src="/images/discord-white.svg"
+                  src="/images/discord-white-thick.svg"
                   alt="discord"
                   className=" text-white cursor-pointer discord"
                   style={{ width: 33, height: 33 }}
@@ -161,7 +161,7 @@ export const MobileExpandableMenu: React.FC<MobileExpandableMenuProps> = ({
               </Link>
             </div>
           </div>
-          <div className="flex flex-col space-y-3 mt-10">
+          <div className="flex flex-col space-y-3 mt-10" style={{paddingBottom: 100}}>
             <p className="font-bold uppercase text-base font-landing text-white">
               Documentation
             </p>

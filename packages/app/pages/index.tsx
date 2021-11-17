@@ -155,29 +155,24 @@ const IndexPage = () => {
               </Link>
             </div>
             <div className="space-x-8">
-              {/*<Link href="/" passHref>
-              <a className="font-medium text-base hover:text-blue-600">
-                About us
-              </a>
-            </Link>*/}
-              {/*<Link href="/" passHref>
-              <a className="font-medium text-base hover:text-blue-600">
-                Products
-              </a>
-            </Link>*/}
+              <Link href="https://launch.popcorn.network/" passHref>
+                <a className="font-normal text-base hover:text-blue-600">
+                  Token Launch Auction
+                </a>
+              </Link>
               <Link href="/docs/Popcorn_whitepaper_v1.pdf" passHref>
                 <a
-                  className="font-medium text-base hover:text-blue-600"
+                  className="font-normal text-base hover:text-blue-600"
                   target="_window"
                 >
                   Whitepaper
                 </a>
               </Link>
-              {/*<Link href="/" passHref>
-              <a className="font-medium text-base hover:text-blue-600">
-                PopcornDAO
-              </a>
-            </Link>*/}
+              <Link href="/team" passHref>
+                <a className="font-normal text-base hover:text-blue-600">
+                  Team & Contributors
+                </a>
+              </Link>
               <a
                 className="font-medium text-base bg-blue-600 hover:bg-blue-500 text-white rounded-xl p-4 cursor-pointer"
                 onClick={(e) => toggleCtaModal(true)}
