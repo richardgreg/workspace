@@ -26,57 +26,49 @@ interface Contributor {
 const TEAM: TeamMember[] = [
   {
     name: 'Anthony Martin',
-    position: 'Founder & CTO',
+    position: 'Founder & Director, Technology',
     img: 'anthony',
     linkedIn: 'https://linkedin.com/in/admartin',
     twitter: 'https://twitter.com/amart_tech',
   },
   {
     name: 'Michael Kisselgof',
-    position: 'Co-founder',
+    position: 'Co-founder & Director, Operations',
     img: 'michael',
     linkedIn: 'https://www.linkedin.com/in/michael-kisselgof-8932a38/',
     twitter: 'https://twitter.com/SerKisselgof',
   },
   {
+    name: 'Melody Song',
+    position: 'Director, Global Impact',
+    img: 'melody',
+    linkedIn:
+      'https://www.linkedin.com/in/melody-song-%E5%AE%8B%E5%80%A9-ma-cfre-83016714/',
+    twitter: 'https://twitter.com/FundraisingInn1',
+  },
+  {
     name: 'Mehul Mandania',
-    position: 'Developer',
+    position: 'Software Developer',
     img: 'mehul',
     linkedIn: 'https://www.linkedin.com/in/mandania',
     twitter: 'https://www.twitter.com/mandameh',
   },
-
   {
-    name: 'Connor Mendenhall',
-    position: 'Developer',
+    name: '@horsefacts',
+    position: 'Software Developer',
     img: 'connor',
     linkedIn: '',
-    twitter: '',
-  },
-  {
-    name: 'Melody Song',
-    position: 'Director of Global Impact',
-    img: 'melody',
-    linkedIn:
-      'https://www.linkedin.com/in/melody-song-%E5%AE%8B%E5%80%A9-ma-cfre-83016714/',
-    twitter: '',
+    twitter: 'https://twitter.com/eth_call',
   },
   {
     name: 'Leon Adler',
-    position: 'Developer',
+    position: 'Software Developer',
     img: 'leon',
     linkedIn: 'https://www.linkedin.com/in/leon-niesler-903720150/',
     twitter: 'https://twitter.com/Leon_Niesler',
   },
   {
-    name: 'Olga Semklo',
-    position: 'Illustrator',
-    img: 'olga',
-    linkedIn: '',
-    twitter: '',
-  },
-  {
-    name: 'Annisha',
+    name: 'Annisha Firdausy',
     position: 'Product Designer',
     img: 'annisha',
     linkedIn: 'https://www.linkedin.com/in/annishafirdausy/',
@@ -89,28 +81,27 @@ const TEAM: TeamMember[] = [
     linkedIn: 'https://www.linkedin.com/in/oscar-jacobsen-b03b1a213',
     twitter: 'https://twitter.com/OscarTapio',
   },
+//  {
+//    name: 'Olga S.',
+//    position: 'Illustrator',
+//    img: 'olga',
+//    linkedIn: '',
+//    twitter: '',
+//  },
 ];
 
 const CONTRIBUTORS: Contributor[] = [
   {
-    name: 'Amir',
-    position: 'Developer',
+    name: '@Amirjab21',
+    position: 'Software Developer',
     img: 'Amirjab21.jpg',
     linkedIn: '',
     twitter: '',
     github: 'https://github.com/Amirjab21',
   },
   {
-    name: 'Codacy Badger',
-    position: 'Developer',
-    img: 'codacy-badger.png',
-    linkedIn: '',
-    twitter: '',
-    github: 'https://github.com/codacy-badger',
-  },
-  {
-    name: 'Izayl',
-    position: 'Developer',
+    name: '@izayl',
+    position: 'Software Developer',
     img: 'izayl.jpg',
     linkedIn: '',
     twitter: '',
@@ -118,7 +109,7 @@ const CONTRIBUTORS: Contributor[] = [
   },
   {
     name: 'Rene Aavik',
-    position: 'Developer',
+    position: 'Software Developer',
     img: 'leetdev.jpg',
     linkedIn: '',
     twitter: '',
@@ -126,31 +117,31 @@ const CONTRIBUTORS: Contributor[] = [
   },
   {
     name: 'Emilio Tagua',
-    position: 'Developer',
+    position: 'Software Developer',
     img: 'miloops.jpg',
     linkedIn: '',
     twitter: '',
     github: 'https://github.com/miloops',
   },
   {
-    name: 'Partywave',
-    position: 'Developer',
+    name: '@partywave',
+    position: 'Software Developer',
     img: 'partywave.png',
     linkedIn: '',
     twitter: '',
     github: 'https://github.com/partywave',
   },
   {
-    name: 'Sahar',
-    position: 'Developer',
+    name: '@saharAP',
+    position: 'Software Developer',
     img: 'saharAP.jpg',
     linkedIn: '',
     twitter: '',
     github: 'https://github.com/saharAP',
   },
   {
-    name: 'Soptq',
-    position: 'Developer',
+    name: '@soptq',
+    position: 'Software Developer',
     img: 'Soptq.jpg',
     linkedIn: '',
     twitter: '',
@@ -158,15 +149,15 @@ const CONTRIBUTORS: Contributor[] = [
   },
   {
     name: 'Stanlee Okwii',
-    position: 'Developer',
+    position: 'Software Developer',
     img: 'stanley.jpg',
     linkedIn: '',
     twitter: '',
     github: 'https://github.com/Stanley-Okwii',
   },
   {
-    name: 'The Emerald',
-    position: 'Developer',
+    name: '@the-emerald',
+    position: 'Software Developer',
     img: 'the-emerald.png',
     linkedIn: '',
     twitter: '',
@@ -174,7 +165,7 @@ const CONTRIBUTORS: Contributor[] = [
   },
   {
     name: 'Andrew Yao',
-    position: 'Developer',
+    position: 'Software Developer',
     img: 'yaoandrew.jpg',
     linkedIn: '',
     twitter: '',
@@ -197,7 +188,7 @@ const TeamMemberCard = ({ name, position, image, linkedIn, twitter }) => {
         ></img>
       </div>
       <h3 className="font-semibold text-3xl pt-8">{name}</h3>
-      <h3 className="font-normal text-2xl pt-3 pb-6">{position}</h3>
+      <h3 className="font-normal text-xl pt-3 pb-6">{position}</h3>
       <div className="w-10/12 flex flex-row justify-center mt-4">
         {linkedIn && (
           <a href={linkedIn} target="_blank">
