@@ -1,4 +1,5 @@
 const { url } = require('inspector');
+const colors = require('tailwindcss/colors')
 
 module.exports = {
   purge: [
@@ -8,6 +9,7 @@ module.exports = {
   ],
   darkMode: false, // or 'media' or 'class'
   theme: {
+
     screens: {
       'sm': '640px',
       // => @media (min-width: 640px) { ... }
@@ -27,6 +29,20 @@ module.exports = {
       '2xl': '2560px',
       // => @media (min-width: 2560px) { ... }
     },
+    colors:{
+      gray: colors.coolGray,
+      red: colors.red,
+      yellow: colors.amber,
+      green:colors.emerald,
+      blue:colors.blue,
+      indigo:colors.indigo,
+      purple:colors.purple,
+      pink:colors.pink,
+      orange:colors.orange,
+      transparent:colors.transparent,
+      white:colors.white,
+      black:colors.black
+    },
     extend: {
       spacing: {
         18: '4.5rem',
@@ -41,6 +57,9 @@ module.exports = {
       },
       lineHeight: {
         button: '32px',
+      },
+      width: {
+        'fit-content': 'fit-content'
       },
       scale: {
         101: '1.01',
