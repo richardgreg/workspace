@@ -276,7 +276,7 @@ const IndexPage = () => {
                   <div className="w-fit-content mt-4">
                     <div className="w-fit-content mx-auto py-2">
                       <h3 className="font-landing text-xl text-left w-fit-content">
-                        Don’t miss the Token Launch Auction!
+                        Don’t miss the token launch auction!
                       </h3>
                       <div className="mx-auto flex flex-row justify-between pb-20 mt-3 w-full">
                         <div className="text-center">
@@ -470,17 +470,17 @@ const IndexPage = () => {
         <section>
           <div
             className="bg-countdown-pattern flex-shrink-0 flex-grow-0 w-full
-          h-full pt-60"
+          h-full pt-60 xl:pt-72 2xl:pt-104"
             style={{
               backgroundRepeat: 'no-repeat',
-              backgroundSize: 'auto',
+              backgroundSize: 'cover',
               backgroundPosition: 'center',
             }}
           >
-            <div className="w-full pt-32">
+            <div className="pt-32">
               <div className="w-10/12 mx-auto rounded-xl shadow-xl bg-white">
                 <h3 className="font-medium text-4xl pt-20 pb-12 text-center">
-                  Don’t miss the Token Launch Auction!
+                  Don’t miss the token launch auction!
                 </h3>
                 <div className="w-9/12 mx-auto flex flex-row justify-between pb-20">
                   <div className="text-center">
@@ -573,14 +573,12 @@ const IndexPage = () => {
             <div className="w-6/12">
               <Link href="/" passHref>
                 <a>
-                  {/*TODO The logo is slightly blurred even though its copied strcmdaight from figma*/}
                   <img src="/images/logo.png" alt="Logo" className="h-10"></img>
                 </a>
               </Link>
               <p className="font-medium text-base w-7/12 py-4">
-                Popcorn is a new eco-friendly paradigm for DeFi, where users can
-                earn high yield on their crypto assets while creating real world
-                impact.
+                Popcorn is a carbon-neutral crypto savings account where fees
+                fund educational, environmental and open source initiatives
               </p>
               <div className="flex flex-row space-x-4 items-center">
                 <Link href="https://github.com/popcorndao" passHref>
@@ -606,6 +604,7 @@ const IndexPage = () => {
               <Link href="/" passHref>
                 <a className="hover:text-blue-600">Home</a>
               </Link>
+
               <Link href="https://medium.com/popcorndao" passHref>
                 <a className="hover:text-blue-600" target="_window">
                   Blog
@@ -617,11 +616,6 @@ const IndexPage = () => {
               >
                 <a className="hover:text-blue-600" target="_window">
                   Popcorn (POP) Token
-                </a>
-              </Link>
-              <Link href="https://launch.popcorn.network/" passHref>
-                <a className="hover:text-blue-600" target="_window">
-                  Token Launch Auction
                 </a>
               </Link>
             </div>
@@ -643,12 +637,6 @@ const IndexPage = () => {
                 </a>
               </Link>
             </div>
-            {/*<div className="flex flex-col space-y-3">
-            <p className="font-medium text-base uppercase">Documentation</p>
-            <Link href="/" passHref>
-              <a className="hover:text-blue-600">Gitbook</a>
-            </Link>
-          </div>*/}
           </div>
           <p className="font-base text-center py-4">
             ©2021, Popcorn Network. All Rights Reserved
@@ -810,7 +798,7 @@ const IndexPage = () => {
               <div className="w-full">
                 <div className="w-10/12 mx-auto">
                   <h3 className="font-medium text-2xl pt-16 pb-12 text-center leading-8">
-                    Don’t miss the Token Launch Auction!
+                    Don’t miss the token launch auction!
                   </h3>
                   <div className="w-9/12 mx-auto">
                     <div className="flex flex-row justify-between mb-8">
@@ -954,6 +942,7 @@ const IndexPage = () => {
             partnering with carbon sequestration and negative emission projects.
           </p>
         </section>
+
         <section>
           <div
             className="bg-countdown-pattern flex-shrink-0 flex-grow-0 w-full
@@ -967,7 +956,7 @@ const IndexPage = () => {
             <div className="w-full pt-32">
               <div className="w-10/12 mx-auto rounded-xl shadow-xl bg-white">
                 <h3 className="font-medium text-4xl pt-20 pb-12 text-center">
-                  Don’t miss the Token Launch Auction!
+                  Don’t miss the token launch auction!
                 </h3>
                 <div className="w-9/12 mx-auto pb-20">
                   <div className="flex flex-row justify-between mb-8">
