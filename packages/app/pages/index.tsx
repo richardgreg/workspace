@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import React, { Fragment, useEffect, useState } from 'react';
 import { Facebook, GitHub, Menu, Twitter, X } from 'react-feather';
 import * as Icon from 'react-feather';
+import { MobileExpandableMenu } from 'components/MobileExpandableMenu';
 
 const IndexPage = () => {
   const router = useRouter();
@@ -636,505 +637,476 @@ const IndexPage = () => {
       </div>
       {/* MOBILE VERSION */}
       <div className="w-full h-full lg:hidden">
-        {menuVisible && (
-          <div className="absolute z-10 w-screen">
-            <div className="relative mx-auto mt-4 w-11/12 rounded-lg shadow-md bg-white px-4 pt-4 pb-6">
-              <div className="flex flex-row justify-between items-center">
+        <Transition
+          show={menuVisible}
+          enter="transition-opacity duration-150"
+          enterFrom="opacity-0"
+          enterTo="opacity-100"
+          leave="transition-opacity duration-150"
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
+        >
+          <MobileExpandableMenu toggleMenuVisible={toggleMenu} />
+        </Transition>
+
+        <Transition
+          show={!menuVisible}
+          enter="transition-opacity duration-150"
+          enterFrom="opacity-0"
+          enterTo="opacity-100"
+          leave="transition-opacity duration-150"
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
+        >
+          <div>
+            <header className="w-full bg-primary">
+              <Link href="https://launch.popcorn.network/" passHref>
+                <a target="_window">
+                  <div className="w-full h-14 bg-yellow-500 shadow-md flex justify-center cursor-pointer hover:bg-yellow-400">
+                    <div className="flex flex-row items-center mx-auto">
+                      <p className="text-white text-2xl font-bold">
+                        Token Launch Auction
+                      </p>
+                      <Icon.ArrowRightCircle className="ml-2 w-7 h-7 text-white" />
+                    </div>
+                  </div>
+                </a>
+              </Link>
+              <nav className="w-10/12 mx-auto pt-12 pb-3 border-b border-primaryLight flex flex-row items-center justify-between">
+                <div>
+                  <Link href="/" passHref>
+                    <a>
+                      {/*TODO The logo is slightly blurred even though its copied straight from figma*/}
+                      <img
+                        src="/images/logo.png"
+                        alt="Logo"
+                        className="h-14 flex-grow-0 flex-shrink-0"
+                      ></img>
+                    </a>
+                  </Link>
+                </div>
+                <Menu onClick={(e) => toggleMenu(true)} />
+              </nav>
+            </header>
+            <section className="min-h-full">
+              <div className="bg-primary w-full h-12"></div>
+              <div
+                className="bg-hero-pattern flex-shrink-0 flex-grow-0 w-full h-full pt-6 md:pt-10"
+                style={{
+                  backgroundRepeat: 'no-repeat',
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                }}
+              >
+                <div className="w-10/12 mx-auto flex flex-col lg:flex-row justify-between pb-16 items-center text-center">
+                  <CatPool />
+                  <h1 className="font-bold text-4xl leading-snug mb-8">
+                    Start doing good with DeFi
+                  </h1>
+                  <p className="text-lg font-landing">
+                    Earn high yield on your cryptoassets while creating real
+                    world impact. Our earnings fund social impact organizations.
+                  </p>
+                  <form
+                    action="https://network.us1.list-manage.com/subscribe/post?u=5ce5e82d673fd2cfaf12849a5&amp;id=e85a091ed3"
+                    method="post"
+                    id="mc-embedded-subscribe-form"
+                    name="mc-embedded-subscribe-form"
+                    className="validate"
+                    target="_blank"
+                    noValidate
+                  >
+                    <div
+                      id="mc_embed_signup_scroll"
+                      className="shadow-xl bg-white rounded-xl py-2 px-2 mt-8 w-full flex flex-row items-center justify-between"
+                    >
+                      <input
+                        type="email"
+                        name="EMAIL"
+                        className="w-10/12 p-2 text-base mx-4 text-gray-900"
+                        id="mce-EMAIL"
+                        placeholder="Email Address"
+                        required
+                      />
+                      <div
+                        style={{ position: 'absolute', left: '-5000px' }}
+                        aria-hidden="true"
+                      >
+                        <input
+                          type="text"
+                          name="b_5ce5e82d673fd2cfaf12849a5_e85a091ed3"
+                          tabIndex={-1}
+                        />
+                      </div>
+                      <div className="clear">
+                        <input
+                          type="submit"
+                          value="Join Waitlist"
+                          name="subscribe"
+                          id="mc-embedded-subscribe"
+                          className="font-medium text-base bg-blue-600 hover:bg-blue-500 text-white rounded-xl px-4 py-2 cursor-pointer"
+                          readOnly
+                        />
+                      </div>
+                    </div>
+                  </form>
+                  <div className="w-full">
+                    <div className="w-10/12 mx-auto">
+                      <h3 className="font-medium text-2xl pt-16 pb-12 text-center leading-8">
+                        Don’t miss the token launch auction!
+                      </h3>
+                      <div className="w-9/12 mx-auto">
+                        <div className="flex flex-row justify-between mb-8">
+                          <div className="w-5/12 text-center">
+                            <h1 className="font-bold text-4xl leading-snug">
+                              {countdown[0]}
+                            </h1>
+                            <p className="text-1.5xl font-landing text-gray-500">
+                              Days
+                            </p>
+                          </div>
+                          <div className="w-5/12 text-center">
+                            <h1 className="font-bold text-4xl leading-snug">
+                              {countdown[1]}
+                            </h1>
+                            <p className="text-lg font-landing text-gray-500">
+                              Hours
+                            </p>
+                          </div>
+                        </div>
+                        <div className="flex flex-row justify-between">
+                          <div className="w-5/12 text-center">
+                            <h1 className="font-bold text-4xl leading-snug">
+                              {countdown[2]}
+                            </h1>
+                            <p className="text-1xl font-landing text-gray-500">
+                              Minutes
+                            </p>
+                          </div>
+                          <div className="w-5/12 text-center">
+                            <h1 className="font-bold text-4xl leading-snug">
+                              {countdown[3]}
+                            </h1>
+                            <p className="text-1.5xl font-landing text-gray-500">
+                              Seconds
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+            <section className="w-10/12 mx-auto mb-24">
+              <h2 className="font-bold text-3xl mb-4 text-center">
+                How it works
+              </h2>
+              <p className="text-lg font-landing text-gray-500 text-center">
+                Put your cryptoassets to work
+              </p>
+              <div className="w-11/12 mx-auto justify-between flex flex-col space-y-12 mt-12">
+                <div className="flex-grow-0 flex-shrink-0 md:h-96 rounded-xl shadow-2xl flex flex-col items-center">
+                  <div className="w-36 h-36 rounded-full bg-primary mt-12 flex items-center">
+                    <img
+                      src="/images/metamaskCat.svg"
+                      alt="metamaskCat"
+                      className="mx-auto mb-1"
+                    ></img>
+                  </div>
+                  <h3 className="font-medium text-2xl pt-8 py-4">Connect</h3>
+                  <p className="w-3/4 text-center text-lg text-gray-500 mb-16">
+                    Connect your Metamask wallet with Popcorn
+                  </p>
+                </div>
+
+                <div className="flex-grow-0 flex-shrink-0 md:h-96 rounded-xl shadow-2xl flex flex-col items-center">
+                  <div className="w-36 h-36 rounded-full bg-primary mt-12 flex items-center">
+                    <img
+                      src="/images/vault.svg"
+                      alt="vault"
+                      className="mx-auto mb-2"
+                    ></img>
+                  </div>
+                  <h3 className="font-medium text-2xl pt-8 py-4">Deposit</h3>
+                  <p className="w-3/4 text-center text-lg text-gray-500 mb-16">
+                    Deposit your crypto and choose a product or strategy
+                  </p>
+                </div>
+                <div className="flex-grow-0 flex-shrink-0 md:h-96 rounded-xl shadow-2xl flex flex-col items-center">
+                  <div className="w-36 h-36 rounded-full bg-primary mt-12 flex items-center">
+                    <img
+                      src="/images/popcornVault.svg"
+                      alt="popcornVault"
+                      className="mx-auto mt-2"
+                    ></img>
+                  </div>
+                  <h3 className="font-medium text-2xl pt-8 py-4">Do well</h3>
+                  <p className="w-3/4 text-center text-lg text-gray-500 mb-16">
+                    Earn competitive returns on your crypto assets
+                  </p>
+                </div>
+
+                <div className="flex-grow-0 flex-shrink-0 md:h-96 rounded-xl shadow-2xl flex flex-col items-center">
+                  <div className="w-36 h-36 rounded-full bg-primary mt-12 flex items-center">
+                    <img
+                      src="/images/catMail.svg"
+                      alt="catMail"
+                      className="mx-auto mb-1"
+                    ></img>
+                  </div>
+                  <h3 className="font-medium text-2xl pt-8 py-4">Do good</h3>
+                  <p className="w-3/4 text-center text-lg text-gray-500 mb-16">
+                    Choose which social impact organization you’d like to help
+                  </p>
+                </div>
+              </div>
+            </section>
+            <section className="w-10/12 h-full mx-auto">
+              <Rocket />
+              <h2 className="font-bold text-3xl leading-snug mb-4 mt-12 text-center">
+                Maximize your Crypto Portfolio
+              </h2>
+              <p className="text-lg font-landing text-gray-500 text-center">
+                Popcorn offers a suite of DeFi products and hedge fund
+                strategies for you to generate competitive returns on your
+                crypto assets.
+              </p>
+            </section>
+            <section className="w-10/12 h-full mx-auto mt-24">
+              <img src="/images/impact.svg" alt="impact" className=""></img>
+              <h2 className="font-bold text-3xl leading-snug mb-4 mt-8 text-center w-10/12 mx-auto">
+                Create Real World Impact
+              </h2>
+              <p className="text-lg font-landing text-gray-500 text-center">
+                Our profits fund social impact organizations. Choose which
+                initiatives you support:
+              </p>
+              <div className="w-1/2 mx-auto">
+                <ul className="list-inside list-disc mt-8 space-y-2">
+                  <li className="text-lg font-medium">Environment</li>
+                  <li className="text-lg font-medium">Open Source</li>
+                  <li className="text-lg font-medium">Education</li>
+                </ul>
+              </div>
+            </section>
+            <section className="w-10/12 h-full mx-auto mt-24">
+              <img src="/images/tree.svg" alt="tree" className=""></img>
+              <h2 className="font-bold text-3xl leading-snug mb-4 mt-8 text-center w-10/12 mx-auto">
+                While Remaining Carbon Neutral
+              </h2>
+              <p className="text-lg font-landing text-gray-500 text-center">
+                Popcorn calculates and neutralizes blockchain carbon emissions
+                by partnering with carbon sequestration and negative emission
+                projects.
+              </p>
+            </section>
+
+            <section>
+              <div
+                className="bg-countdown-pattern flex-shrink-0 flex-grow-0 w-full
+          h-full pt-60"
+                style={{
+                  backgroundRepeat: 'no-repeat',
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                }}
+              >
+                <div className="w-full pt-32">
+                  <div className="w-10/12 mx-auto rounded-xl shadow-xl bg-white">
+                    <h3 className="font-medium text-4xl pt-20 pb-12 text-center">
+                      Don’t miss the token launch auction!
+                    </h3>
+                    <div className="w-9/12 mx-auto pb-20">
+                      <div className="flex flex-row justify-between mb-8">
+                        <div className="w-5/12 text-center">
+                          <h1 className="font-bold text-7xl leading-snug">
+                            {countdown[0]}
+                          </h1>
+                          <p className="text-3xl font-landing text-gray-500">
+                            Days
+                          </p>
+                        </div>
+                        <div className="w-5/12 text-center">
+                          <h1 className="font-bold text-7xl leading-snug">
+                            {countdown[1]}
+                          </h1>
+                          <p className="text-3xl font-landing text-gray-500">
+                            Hours
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex flex-row justify-between">
+                        <div className="w-5/12 text-center">
+                          <h1 className="font-bold text-7xl leading-snug">
+                            {countdown[2]}
+                          </h1>
+                          <p className="text-3xl font-landing text-gray-500">
+                            Minutes
+                          </p>
+                        </div>
+                        <div className="w-5/12 text-center">
+                          <h1 className="font-bold text-7xl leading-snug">
+                            {countdown[3]}
+                          </h1>
+                          <p className="text-3xl font-landing text-gray-500">
+                            Seconds
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+            <section className="w-full bg-secondary py-24">
+              <div className="w-10/12 mx-auto text-center">
+                <h2 className="font-bold text-2xl leading-snug mb-4">
+                  Notify Me
+                </h2>
+                <p className="text-lg">
+                  Can’t wait to see you when we are launching. Get earlier
+                  notification to be part of our journey
+                </p>
+                <form
+                  action="https://network.us1.list-manage.com/subscribe/post?u=5ce5e82d673fd2cfaf12849a5&amp;id=e85a091ed3"
+                  method="post"
+                  id="mc-embedded-subscribe-form"
+                  name="mc-embedded-subscribe-form"
+                  className="validate"
+                  target="_blank"
+                  noValidate
+                >
+                  <div
+                    id="mc_embed_signup_scroll"
+                    className="shadow-xl bg-white rounded-xl py-2 px-2 mt-8 w-full mx-auto flex flex-row items-center justify-between"
+                  >
+                    <input
+                      type="email"
+                      name="EMAIL"
+                      className="w-10/12 p-2 text-base mx-4 text-gray-900"
+                      id="mce-EMAIL"
+                      placeholder="Email Address"
+                      required
+                    />
+                    <div
+                      style={{ position: 'absolute', left: '-5000px' }}
+                      aria-hidden="true"
+                    >
+                      <input
+                        type="text"
+                        name="b_5ce5e82d673fd2cfaf12849a5_e85a091ed3"
+                        tabIndex={-1}
+                      />
+                    </div>
+                    <div className="clear">
+                      <input
+                        type="submit"
+                        value="Join Waitlist"
+                        name="subscribe"
+                        id="mc-embedded-subscribe"
+                        className="font-medium text-base bg-blue-600 hover:bg-blue-500 text-white rounded-xl px-4 py-2 cursor-pointer"
+                        readOnly
+                      />
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </section>
+            <section className="w-full bg-secondary">
+              <div className="w-10/12 mx-auto">
                 <Link href="/" passHref>
                   <a>
                     {/*TODO The logo is slightly blurred even though its copied straight from figma*/}
                     <img
                       src="/images/logo.png"
                       alt="Logo"
-                      className="h-14 flex-grow-0 flex-shrink-0"
+                      className="h-10 flex-shrink-0 flex-grow-0"
                     ></img>
                   </a>
                 </Link>
-                <X
-                  className="text-gray-500"
-                  onClick={(e) => toggleMenu(false)}
-                />
-              </div>
-              <div className="flex flex-col space-y-4 mt-4">
-                {/*<Link href="/" passHref>
-              <a className="font-medium text-base hover:text-blue-600">
-                About us
-              </a>
-            </Link>*/}
-                {/* <Link href="https://launch.popcorn.network/" passHref>
-                  <a
-                    className="font-normal text-base hover:text-blue-600"
-                    target="_window"
-                  >
-                    Token Launch Auction
-                  </a>
-                </Link> */}
-                <Link href="/docs/Popcorn_whitepaper_v1.pdf" passHref>
-                  <a
-                    className="font-normal text-base hover:text-blue-600"
-                    target="_window"
-                  >
-                    Whitepaper
-                  </a>
-                </Link>
-                {/*<Link href="/" passHref>
-              <a className="font-medium text-base hover:text-blue-600">
-                PopcornDAO
-              </a>
-            </Link>*/}
-                <a
-                  className="font-medium text-base bg-blue-600 hover:bg-blue-500 text-white rounded-xl p-4"
-                  onClick={(e) => {
-                    toggleCtaModal(true);
-                    toggleMenu(false);
-                  }}
-                >
-                  Early Access
-                </a>
-              </div>
-            </div>
-          </div>
-        )}
-        <header className="w-full bg-primary">
-          <Link href="https://launch.popcorn.network/" passHref>
-            <a target="_window">
-              <div className="w-full h-14 bg-yellow-500 shadow-md flex justify-center cursor-pointer hover:bg-yellow-400">
-                <div className="flex flex-row items-center mx-auto">
-                  <p className="text-white text-2xl font-bold">
-                    Token Launch Auction
-                  </p>
-                  <Icon.ArrowRightCircle className="ml-2 w-7 h-7 text-white" />
+                <p className="font-medium text-base py-4">
+                  Popcorn is a new eco-friendly paradigm for DeFi, where users
+                  can earn high yield on their crypto assets while creating real
+                  world impact.
+                </p>
+                <div className="flex flex-row space-x-4 items-center">
+                  <Link href="https://github.com/popcorndao" passHref>
+                    <GitHub className="hover:text-blue-600 cursor-pointer" />
+                  </Link>
+                  <Link href="https://www.facebook.com/PopcornDAO" passHref>
+                    <Facebook className="hover:text-blue-600 cursor-pointer" />
+                  </Link>
+                  <Link href="https://twitter.com/Popcorn_DAO" passHref>
+                    <Twitter className="hover:text-blue-600 cursor-pointer" />
+                  </Link>
+                  <Link href="https://discord.gg/w9zeRTSZsq" passHref>
+                    <img
+                      src="/images/discord.svg"
+                      alt="discord"
+                      className="w-8 h-8 cursor-pointer discord"
+                    ></img>
+                  </Link>
                 </div>
-              </div>
-            </a>
-          </Link>
-          <nav className="w-10/12 mx-auto pt-12 pb-3 border-b border-primaryLight flex flex-row items-center justify-between">
-            <div>
-              <Link href="/" passHref>
-                <a>
-                  {/*TODO The logo is slightly blurred even though its copied straight from figma*/}
-                  <img
-                    src="/images/logo.png"
-                    alt="Logo"
-                    className="h-14 flex-grow-0 flex-shrink-0"
-                  ></img>
-                </a>
-              </Link>
-            </div>
-            <Menu onClick={(e) => toggleMenu(true)} />
-          </nav>
-        </header>
-        <section className="min-h-full">
-          <div className="bg-primary w-full h-12"></div>
-          <div
-            className="bg-hero-pattern flex-shrink-0 flex-grow-0 w-full h-full pt-6 md:pt-10"
-            style={{
-              backgroundRepeat: 'no-repeat',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-            }}
-          >
-            <div className="w-10/12 mx-auto flex flex-col lg:flex-row justify-between pb-16 items-center text-center">
-              <CatPool />
-              <h1 className="font-bold text-4xl leading-snug mb-8">
-                Start doing good with DeFi
-              </h1>
-              <p className="text-lg font-landing">
-                Earn high yield on your cryptoassets while creating real world
-                impact. Our earnings fund social impact organizations.
-              </p>
-              <form
-                action="https://network.us1.list-manage.com/subscribe/post?u=5ce5e82d673fd2cfaf12849a5&amp;id=e85a091ed3"
-                method="post"
-                id="mc-embedded-subscribe-form"
-                name="mc-embedded-subscribe-form"
-                className="validate"
-                target="_blank"
-                noValidate
-              >
-                <div
-                  id="mc_embed_signup_scroll"
-                  className="shadow-xl bg-white rounded-xl py-2 px-2 mt-8 w-full flex flex-row items-center justify-between"
-                >
-                  <input
-                    type="email"
-                    name="EMAIL"
-                    className="w-10/12 p-2 text-base mx-4 text-gray-900"
-                    id="mce-EMAIL"
-                    placeholder="Email Address"
-                    required
-                  />
-                  <div
-                    style={{ position: 'absolute', left: '-5000px' }}
-                    aria-hidden="true"
-                  >
-                    <input
-                      type="text"
-                      name="b_5ce5e82d673fd2cfaf12849a5_e85a091ed3"
-                      tabIndex={-1}
-                    />
+                <div className="flex flex-row justify-evenly py-6">
+                  <div className="flex flex-col space-y-3 w-1/2">
+                    <p className="font-medium text-base uppercase">Site</p>
+                    <Link href="/" passHref>
+                      <a className="hover:text-blue-600">Home</a>
+                    </Link>
+                    <Link href="https://medium.com/popcorndao" passHref>
+                      <a className="hover:text-blue-600" target="_window">
+                        Blog
+                      </a>
+                    </Link>
+                    <Link
+                      href="https://etherscan.io/token/0xd0cd466b34a24fcb2f87676278af2005ca8a78c4"
+                      passHref
+                    >
+                      <a className="hover:text-blue-600" target="_window">
+                        Popcorn (POP) Token
+                      </a>
+                    </Link>
+                    <Link href="https://launch.popcorn.network/" passHref>
+                      <a className="hover:text-blue-600" target="_window">
+                        Token Launch Auction
+                      </a>
+                    </Link>
                   </div>
-                  <div className="clear">
-                    <input
-                      type="submit"
-                      value="Join Waitlist"
-                      name="subscribe"
-                      id="mc-embedded-subscribe"
-                      className="font-medium text-base bg-blue-600 hover:bg-blue-500 text-white rounded-xl px-4 py-2 cursor-pointer"
-                      readOnly
-                    />
+                  <div className="flex flex-col space-y-3 w-1/2">
+                    <p className="font-medium text-base uppercase">Connect</p>
+                    <Link href="https://twitter.com/Popcorn_DAO" passHref>
+                      <a className="hover:text-blue-600" target="_window">
+                        Twitter
+                      </a>
+                    </Link>
+                    <Link href="https://discord.gg/w9zeRTSZsq" passHref>
+                      <a className="hover:text-blue-600" target="_window">
+                        Discord
+                      </a>
+                    </Link>
+                    <Link href="https://github.com/popcorndao" passHref>
+                      <a className="hover:text-blue-600" target="_window">
+                        Github
+                      </a>
+                    </Link>
                   </div>
                 </div>
-              </form>
-              <div className="w-full">
-                <div className="w-10/12 mx-auto">
-                  <h3 className="font-medium text-2xl pt-16 pb-12 text-center leading-8">
-                    Don’t miss the token launch auction!
-                  </h3>
-                  <div className="w-9/12 mx-auto">
-                    <div className="flex flex-row justify-between mb-8">
-                      <div className="w-5/12 text-center">
-                        <h1 className="font-bold text-4xl leading-snug">
-                          {countdown[0]}
-                        </h1>
-                        <p className="text-1.5xl font-landing text-gray-500">
-                          Days
-                        </p>
-                      </div>
-                      <div className="w-5/12 text-center">
-                        <h1 className="font-bold text-4xl leading-snug">
-                          {countdown[1]}
-                        </h1>
-                        <p className="text-lg font-landing text-gray-500">
-                          Hours
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex flex-row justify-between">
-                      <div className="w-5/12 text-center">
-                        <h1 className="font-bold text-4xl leading-snug">
-                          {countdown[2]}
-                        </h1>
-                        <p className="text-1xl font-landing text-gray-500">
-                          Minutes
-                        </p>
-                      </div>
-                      <div className="w-5/12 text-center">
-                        <h1 className="font-bold text-4xl leading-snug">
-                          {countdown[3]}
-                        </h1>
-                        <p className="text-1.5xl font-landing text-gray-500">
-                          Seconds
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-        <section className="w-10/12 mx-auto mb-24">
-          <h2 className="font-bold text-3xl mb-4 text-center">How it works</h2>
-          <p className="text-lg font-landing text-gray-500 text-center">
-            Put your cryptoassets to work
-          </p>
-          <div className="w-11/12 mx-auto justify-between flex flex-col space-y-12 mt-12">
-            <div className="flex-grow-0 flex-shrink-0 md:h-96 rounded-xl shadow-2xl flex flex-col items-center">
-              <div className="w-36 h-36 rounded-full bg-primary mt-12 flex items-center">
-                <img
-                  src="/images/metamaskCat.svg"
-                  alt="metamaskCat"
-                  className="mx-auto mb-1"
-                ></img>
-              </div>
-              <h3 className="font-medium text-2xl pt-8 py-4">Connect</h3>
-              <p className="w-3/4 text-center text-lg text-gray-500 mb-16">
-                Connect your Metamask wallet with Popcorn
-              </p>
-            </div>
-
-            <div className="flex-grow-0 flex-shrink-0 md:h-96 rounded-xl shadow-2xl flex flex-col items-center">
-              <div className="w-36 h-36 rounded-full bg-primary mt-12 flex items-center">
-                <img
-                  src="/images/vault.svg"
-                  alt="vault"
-                  className="mx-auto mb-2"
-                ></img>
-              </div>
-              <h3 className="font-medium text-2xl pt-8 py-4">Deposit</h3>
-              <p className="w-3/4 text-center text-lg text-gray-500 mb-16">
-                Deposit your crypto and choose a product or strategy
-              </p>
-            </div>
-            <div className="flex-grow-0 flex-shrink-0 md:h-96 rounded-xl shadow-2xl flex flex-col items-center">
-              <div className="w-36 h-36 rounded-full bg-primary mt-12 flex items-center">
-                <img
-                  src="/images/popcornVault.svg"
-                  alt="popcornVault"
-                  className="mx-auto mt-2"
-                ></img>
-              </div>
-              <h3 className="font-medium text-2xl pt-8 py-4">Do well</h3>
-              <p className="w-3/4 text-center text-lg text-gray-500 mb-16">
-                Earn competitive returns on your crypto assets
-              </p>
-            </div>
-
-            <div className="flex-grow-0 flex-shrink-0 md:h-96 rounded-xl shadow-2xl flex flex-col items-center">
-              <div className="w-36 h-36 rounded-full bg-primary mt-12 flex items-center">
-                <img
-                  src="/images/catMail.svg"
-                  alt="catMail"
-                  className="mx-auto mb-1"
-                ></img>
-              </div>
-              <h3 className="font-medium text-2xl pt-8 py-4">Do good</h3>
-              <p className="w-3/4 text-center text-lg text-gray-500 mb-16">
-                Choose which social impact organization you’d like to help
-              </p>
-            </div>
-          </div>
-        </section>
-        <section className="w-10/12 h-full mx-auto">
-          <Rocket />
-          <h2 className="font-bold text-3xl leading-snug mb-4 mt-12 text-center">
-            Maximize your Crypto Portfolio
-          </h2>
-          <p className="text-lg font-landing text-gray-500 text-center">
-            Popcorn offers a suite of DeFi products and hedge fund strategies
-            for you to generate competitive returns on your crypto assets.
-          </p>
-        </section>
-        <section className="w-10/12 h-full mx-auto mt-24">
-          <img src="/images/impact.svg" alt="impact" className=""></img>
-          <h2 className="font-bold text-3xl leading-snug mb-4 mt-8 text-center w-10/12 mx-auto">
-            Create Real World Impact
-          </h2>
-          <p className="text-lg font-landing text-gray-500 text-center">
-            Our profits fund social impact organizations. Choose which
-            initiatives you support:
-          </p>
-          <div className="w-1/2 mx-auto">
-            <ul className="list-inside list-disc mt-8 space-y-2">
-              <li className="text-lg font-medium">Environment</li>
-              <li className="text-lg font-medium">Open Source</li>
-              <li className="text-lg font-medium">Education</li>
-            </ul>
-          </div>
-        </section>
-        <section className="w-10/12 h-full mx-auto mt-24">
-          <img src="/images/tree.svg" alt="tree" className=""></img>
-          <h2 className="font-bold text-3xl leading-snug mb-4 mt-8 text-center w-10/12 mx-auto">
-            While Remaining Carbon Neutral
-          </h2>
-          <p className="text-lg font-landing text-gray-500 text-center">
-            Popcorn calculates and neutralizes blockchain carbon emissions by
-            partnering with carbon sequestration and negative emission projects.
-          </p>
-        </section>
-
-        <section>
-          <div
-            className="bg-countdown-pattern flex-shrink-0 flex-grow-0 w-full
-          h-full pt-60"
-            style={{
-              backgroundRepeat: 'no-repeat',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-            }}
-          >
-            <div className="w-full pt-32">
-              <div className="w-10/12 mx-auto rounded-xl shadow-xl bg-white">
-                <h3 className="font-medium text-4xl pt-20 pb-12 text-center">
-                  Don’t miss the token launch auction!
-                </h3>
-                <div className="w-9/12 mx-auto pb-20">
-                  <div className="flex flex-row justify-between mb-8">
-                    <div className="w-5/12 text-center">
-                      <h1 className="font-bold text-7xl leading-snug">
-                        {countdown[0]}
-                      </h1>
-                      <p className="text-3xl font-landing text-gray-500">
-                        Days
-                      </p>
-                    </div>
-                    <div className="w-5/12 text-center">
-                      <h1 className="font-bold text-7xl leading-snug">
-                        {countdown[1]}
-                      </h1>
-                      <p className="text-3xl font-landing text-gray-500">
-                        Hours
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex flex-row justify-between">
-                    <div className="w-5/12 text-center">
-                      <h1 className="font-bold text-7xl leading-snug">
-                        {countdown[2]}
-                      </h1>
-                      <p className="text-3xl font-landing text-gray-500">
-                        Minutes
-                      </p>
-                    </div>
-                    <div className="w-5/12 text-center">
-                      <h1 className="font-bold text-7xl leading-snug">
-                        {countdown[3]}
-                      </h1>
-                      <p className="text-3xl font-landing text-gray-500">
-                        Seconds
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-        <section className="w-full bg-secondary py-24">
-          <div className="w-10/12 mx-auto text-center">
-            <h2 className="font-bold text-2xl leading-snug mb-4">Notify Me</h2>
-            <p className="text-lg">
-              Can’t wait to see you when we are launching. Get earlier
-              notification to be part of our journey
-            </p>
-            <form
-              action="https://network.us1.list-manage.com/subscribe/post?u=5ce5e82d673fd2cfaf12849a5&amp;id=e85a091ed3"
-              method="post"
-              id="mc-embedded-subscribe-form"
-              name="mc-embedded-subscribe-form"
-              className="validate"
-              target="_blank"
-              noValidate
-            >
-              <div
-                id="mc_embed_signup_scroll"
-                className="shadow-xl bg-white rounded-xl py-2 px-2 mt-8 w-full mx-auto flex flex-row items-center justify-between"
-              >
-                <input
-                  type="email"
-                  name="EMAIL"
-                  className="w-10/12 p-2 text-base mx-4 text-gray-900"
-                  id="mce-EMAIL"
-                  placeholder="Email Address"
-                  required
-                />
-                <div
-                  style={{ position: 'absolute', left: '-5000px' }}
-                  aria-hidden="true"
-                >
-                  <input
-                    type="text"
-                    name="b_5ce5e82d673fd2cfaf12849a5_e85a091ed3"
-                    tabIndex={-1}
-                  />
-                </div>
-                <div className="clear">
-                  <input
-                    type="submit"
-                    value="Join Waitlist"
-                    name="subscribe"
-                    id="mc-embedded-subscribe"
-                    className="font-medium text-base bg-blue-600 hover:bg-blue-500 text-white rounded-xl px-4 py-2 cursor-pointer"
-                    readOnly
-                  />
-                </div>
-              </div>
-            </form>
-          </div>
-        </section>
-        <section className="w-full bg-secondary">
-          <div className="w-10/12 mx-auto">
-            <Link href="/" passHref>
-              <a>
-                {/*TODO The logo is slightly blurred even though its copied straight from figma*/}
-                <img
-                  src="/images/logo.png"
-                  alt="Logo"
-                  className="h-10 flex-shrink-0 flex-grow-0"
-                ></img>
-              </a>
-            </Link>
-            <p className="font-medium text-base py-4">
-              Popcorn is a new eco-friendly paradigm for DeFi, where users can
-              earn high yield on their crypto assets while creating real world
-              impact.
-            </p>
-            <div className="flex flex-row space-x-4 items-center">
-              <Link href="https://github.com/popcorndao" passHref>
-                <GitHub className="hover:text-blue-600 cursor-pointer" />
-              </Link>
-              <Link href="https://www.facebook.com/PopcornDAO" passHref>
-                <Facebook className="hover:text-blue-600 cursor-pointer" />
-              </Link>
-              <Link href="https://twitter.com/Popcorn_DAO" passHref>
-                <Twitter className="hover:text-blue-600 cursor-pointer" />
-              </Link>
-              <Link href="https://discord.gg/w9zeRTSZsq" passHref>
-                <img
-                  src="/images/discord.svg"
-                  alt="discord"
-                  className="w-8 h-8 cursor-pointer discord"
-                ></img>
-              </Link>
-            </div>
-            <div className="flex flex-row justify-evenly py-6">
-              <div className="flex flex-col space-y-3 w-1/2">
-                <p className="font-medium text-base uppercase">Site</p>
-                <Link href="/" passHref>
-                  <a className="hover:text-blue-600">Home</a>
-                </Link>
-                <Link href="https://medium.com/popcorndao" passHref>
-                  <a className="hover:text-blue-600" target="_window">
-                    Blog
-                  </a>
-                </Link>
-                <Link
-                  href="https://etherscan.io/token/0xd0cd466b34a24fcb2f87676278af2005ca8a78c4"
-                  passHref
-                >
-                  <a className="hover:text-blue-600" target="_window">
-                    Popcorn (POP) Token
-                  </a>
-                </Link>
-                <Link href="https://launch.popcorn.network/" passHref>
-                  <a className="hover:text-blue-600" target="_window">
-                    Token Launch Auction
-                  </a>
-                </Link>
-              </div>
-              <div className="flex flex-col space-y-3 w-1/2">
-                <p className="font-medium text-base uppercase">Connect</p>
-                <Link href="https://twitter.com/Popcorn_DAO" passHref>
-                  <a className="hover:text-blue-600" target="_window">
-                    Twitter
-                  </a>
-                </Link>
-                <Link href="https://discord.gg/w9zeRTSZsq" passHref>
-                  <a className="hover:text-blue-600" target="_window">
-                    Discord
-                  </a>
-                </Link>
-                <Link href="https://github.com/popcorndao" passHref>
-                  <a className="hover:text-blue-600" target="_window">
-                    Github
-                  </a>
-                </Link>
-              </div>
-            </div>
-            {/*<div className="flex flex-col space-y-3">
+                {/*<div className="flex flex-col space-y-3">
             <p className="font-medium text-base uppercase">Documentation</p>
             <Link href="/" passHref>
               <a className="hover:text-blue-600">Gitbook</a>
             </Link>
           </div>*/}
+              </div>
+              <div className="w-10/12 border-t border-gray-700 mt-12 mx-auto ">
+                <p className="font-base text-center py-4">
+                  ©2021, Popcorn Network. All Rights Reserved
+                </p>
+              </div>
+            </section>
           </div>
-          <div className="w-10/12 border-t border-gray-700 mt-12 mx-auto ">
-            <p className="font-base text-center py-4">
-              ©2021, Popcorn Network. All Rights Reserved
-            </p>
-          </div>
-        </section>
+        </Transition>
       </div>
     </div>
   );
