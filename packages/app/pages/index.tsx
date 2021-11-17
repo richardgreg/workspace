@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { Fragment, useEffect, useState } from 'react';
 import { Facebook, GitHub, Menu, Twitter, X } from 'react-feather';
+import * as Icon from 'react-feather';
 
 const IndexPage = () => {
   const router = useRouter();
@@ -146,6 +147,18 @@ const IndexPage = () => {
       {/* DESKTOP + TABLET VERSION */}
       <div className="hidden lg:flex flex-col w-full h-full">
         <header className="w-full bg-primary">
+          <Link href="https://launch.popcorn.network/" passHref>
+            <a target="_window">
+              <div className="w-full h-14 bg-yellow-500 shadow-md flex justify-center cursor-pointer hover:bg-yellow-400">
+                <div className="flex flex-row items-center mx-auto">
+                  <p className="text-white text-2xl font-bold">
+                    Token Launch Auction
+                  </p>
+                  <Icon.ArrowRightCircle className="ml-2 w-7 h-7 text-white" />
+                </div>
+              </div>
+            </a>
+          </Link>
           <nav className="w-10/12 mx-auto pt-12 pb-4 border-b border-primaryLight flex flex-row items-center justify-between">
             <div>
               <Link href="/" passHref>
@@ -165,14 +178,7 @@ const IndexPage = () => {
                 About us
               </a>
             </Link>*/}
-              <Link href="https://launch.popcorn.network/" passHref>
-                <a
-                  className="font-normal text-base hover:text-blue-600"
-                  target="_window"
-                >
-                  Token Launch Auction
-                </a>
-              </Link>
+
               <Link href="/docs/Popcorn_whitepaper_v1.pdf" passHref>
                 <a
                   className="font-normal text-base hover:text-blue-600"
@@ -181,6 +187,14 @@ const IndexPage = () => {
                   Whitepaper
                 </a>
               </Link>
+              {/* <Link href="https://launch.popcorn.network/" passHref>
+                <a
+                  className="font-medium text-base bg-yellow-600 hover:bg-orange-300 text-white rounded-xl p-4 cursor-pointer"
+                  target="_window"
+                >
+                  Token Launch Auction
+                </a>
+              </Link> */}
               {/*<Link href="/" passHref>
               <a className="font-medium text-base hover:text-blue-600">
                 PopcornDAO
@@ -262,7 +276,7 @@ const IndexPage = () => {
                   <div className="w-fit-content mt-4">
                     <div className="w-fit-content mx-auto py-2">
                       <h3 className="font-landing text-xl text-left w-fit-content">
-                        Don’t miss the liquidity bootstrapping event!
+                        Don’t miss the Token Launch Auction!
                       </h3>
                       <div className="mx-auto flex flex-row justify-between pb-20 mt-3 w-full">
                         <div className="text-center">
@@ -466,7 +480,7 @@ const IndexPage = () => {
             <div className="w-full pt-32">
               <div className="w-10/12 mx-auto rounded-xl shadow-xl bg-white">
                 <h3 className="font-medium text-4xl pt-20 pb-12 text-center">
-                  Don’t miss the liquidity bootstrapping event!
+                  Don’t miss the Token Launch Auction!
                 </h3>
                 <div className="w-9/12 mx-auto flex flex-row justify-between pb-20">
                   <div className="text-center">
@@ -668,14 +682,14 @@ const IndexPage = () => {
                 About us
               </a>
             </Link>*/}
-                <Link href="https://launch.popcorn.network/" passHref>
+                {/* <Link href="https://launch.popcorn.network/" passHref>
                   <a
                     className="font-normal text-base hover:text-blue-600"
                     target="_window"
                   >
                     Token Launch Auction
                   </a>
-                </Link>
+                </Link> */}
                 <Link href="/docs/Popcorn_whitepaper_v1.pdf" passHref>
                   <a
                     className="font-normal text-base hover:text-blue-600"
@@ -703,6 +717,18 @@ const IndexPage = () => {
           </div>
         )}
         <header className="w-full bg-primary">
+          <Link href="https://launch.popcorn.network/" passHref>
+            <a target="_window">
+              <div className="w-full h-14 bg-yellow-500 shadow-md flex justify-center cursor-pointer hover:bg-yellow-400">
+                <div className="flex flex-row items-center mx-auto">
+                  <p className="text-white text-2xl font-bold">
+                    Token Launch Auction
+                  </p>
+                  <Icon.ArrowRightCircle className="ml-2 w-7 h-7 text-white" />
+                </div>
+              </div>
+            </a>
+          </Link>
           <nav className="w-10/12 mx-auto pt-12 pb-3 border-b border-primaryLight flex flex-row items-center justify-between">
             <div>
               <Link href="/" passHref>
@@ -784,7 +810,7 @@ const IndexPage = () => {
               <div className="w-full">
                 <div className="w-10/12 mx-auto">
                   <h3 className="font-medium text-2xl pt-16 pb-12 text-center leading-8">
-                    Don’t miss the liquidity bootstrapping event!
+                    Don’t miss the Token Launch Auction!
                   </h3>
                   <div className="w-9/12 mx-auto">
                     <div className="flex flex-row justify-between mb-8">
@@ -941,7 +967,7 @@ const IndexPage = () => {
             <div className="w-full pt-32">
               <div className="w-10/12 mx-auto rounded-xl shadow-xl bg-white">
                 <h3 className="font-medium text-4xl pt-20 pb-12 text-center">
-                  Don’t miss the liquidity bootstrapping event!
+                  Don’t miss the Token Launch Auction!
                 </h3>
                 <div className="w-9/12 mx-auto pb-20">
                   <div className="flex flex-row justify-between mb-8">
@@ -1092,7 +1118,9 @@ const IndexPage = () => {
                   </a>
                 </Link>
                 <Link href="https://launch.popcorn.network/" passHref>
-                  <a className="hover:text-blue-600" target="_window">Token Launch Auction</a>
+                  <a className="hover:text-blue-600" target="_window">
+                    Token Launch Auction
+                  </a>
                 </Link>
               </div>
               <div className="flex flex-col space-y-3 w-1/2">
