@@ -97,7 +97,7 @@ export default function Tablet(): JSX.Element {
                   </Link>{' '}
                   will tweet the contract address. You can track the status of
                   the TLA event on{' '}
-                  <Link href="/faq" passHref>
+                  <Link href="/" passHref>
                     <a className="text-blue-600 hover:text-blue-700 underline">
                       launch.popcorn.network
                     </a>
