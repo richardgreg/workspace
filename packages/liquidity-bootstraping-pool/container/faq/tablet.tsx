@@ -548,7 +548,7 @@ export default function Tablet(): JSX.Element {
                   What is the token allocation and release schedule for
                   supporters and team?
                 </p>
-                <img src="https://miro.medium.com/max/4800/1*BVV33YEx7R6M-1K38FvgGw.png" />
+                <img src="images/Token_Allocation.png" />
                 <img src="images/releaseschedule.png" />
               </div>
 

@@ -579,7 +579,7 @@ export default function LargeDesktop(): JSX.Element {
                   supporters and team?
                 </p>
 
-                <img src="https://miro.medium.com/max/4800/1*BVV33YEx7R6M-1K38FvgGw.png" />
+                <img src="images/Token_Allocation.png" />
                 <ul className="list-inside list-disc z-10">
                   <img
                     src="images/releaseschedule.png"

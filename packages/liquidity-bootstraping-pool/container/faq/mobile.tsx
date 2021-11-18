@@ -546,7 +546,7 @@ export default function Mobile({
                 A fixed supply of 100M POP tokens have been minted at genesis
                 and will be vested over 5 years.
               </p>
-              <img src="https://miro.medium.com/max/4800/1*BVV33YEx7R6M-1K38FvgGw.png" className="mt-2"/>
+              <img src="images/Token_Allocation.png" className="mt-2"/>
               <img src="images/releaseschedule.png" />
             </div>
 
