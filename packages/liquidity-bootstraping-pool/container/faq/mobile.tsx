@@ -522,7 +522,7 @@ export default function Mobile({
 
             <div className="w-10/12 mx-auto my-12">
               <p className="font-bold text-xl mx-auto mb-1">How is POP allocated?</p>
-              <img src="images/popallocation.png" />
+              <img src="images/Token_Allocation_Pie_Chart.png" />
             </div>
 
             <div className="w-10/12 mx-auto my-12">

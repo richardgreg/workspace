@@ -528,7 +528,7 @@ export default function Tablet(): JSX.Element {
                 <p className="font-bold text-3xl mb-5 mx-auto ">
                   How is POP allocated?
                 </p>
-                <img src="images/popallocation.png" />
+                <img src="images/Token_Allocation_Pie_Chart.png" />
               </div>
 
               <div className="w-full mx-auto my-14">
