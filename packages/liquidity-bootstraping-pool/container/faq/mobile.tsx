@@ -404,10 +404,20 @@ export default function Mobile({
               </p>
 
               <p className="text-base mx-auto ">
-                You can use the simulation we created with token amounts and
-                weights to predict the price as it is difficult to determine the
-                last price precisely. Thank you to the Perpetual Protocol team
-                for putting together this model!
+              You can use the                 <Link
+                    href="https://docs.google.com/spreadsheets/d/1aPNwndAhuID4d131U4ppJ7g9LkeHmv8i1Wt0pOD16ig"
+                    passHref
+                  >
+                    <a
+                      target="_blank"
+                      className="text-blue-600 hover:text-blue-700 underline"
+                    >
+                      simulation
+                    </a>
+                  </Link>{' '} we created with token amounts and
+                  weights to predict the price as it is difficult to determine
+                  the last price precisely. Thank you to the Perpetual Protocol
+                  team for putting together this model!
               </p>
             </div>
 
