@@ -148,7 +148,7 @@ export default function Tablet(): JSX.Element {
                 </p>
                 <p className="text-lg leading-2 mt-4 font-light">
                   In the next months, the roadmap offers multi-chain curated
-                  pools of strategies and DeFi products (on Ethereum, Arbitrum,
+                  pools of strategies and DeFi products (on Ethereum,
                   Polygon, Fantom, Avalanche, Solana). These products generate
                   high yield while also funding community selected social impact
                   and non-profit organizations without any extra costs to the
@@ -219,7 +219,7 @@ export default function Tablet(): JSX.Element {
                   </p>
                   <p className="text-md ">
                     <span className="font-bold">Networks supported?</span>{' '}
-                    Ethereum, Polygon &amp; Arbitrum
+                    Ethereum and Polygon
                   </p>
                   <p className="text-md ">
                   For more information please{' '}
@@ -227,22 +227,13 @@ export default function Tablet(): JSX.Element {
                       <a className="text-blue-600 hover:text-blue-700 underline">
                         see the FAQ
                       </a>
-                    </Link>.{' '}
-                  
-                    {/*
-                    For more information please{' '}
-                    <Link href="/faq" passHref>
-                      <a className="text-blue-600 hover:text-blue-700 underline">
-                        see the FAQ
-                      </a>
                     </Link>{' '}
                     and the{' '}
-                    <Link href="#" passHref>
-                      <a className="text-blue-600 hover:text-blue-700 underline">
+                    <Link href="https://medium.com/popcorndao/preparing-for-popcorns-token-launch-on-copper-a-beginner-s-guide-ed1921760ae2" passHref>
+                      <a className="text-blue-600 hover:text-blue-700 underline" target="_blank">
                         Step-by-Step Guide
                       </a>
                     </Link>{' '}
-                    */}
                   </p>
                 </div>
               </div>

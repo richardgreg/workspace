@@ -51,7 +51,7 @@ export default function Mobile({
                     </p>
                     <p className="mx-auto text-center text-base font-landing">
                       <span className="font-bold">Networks</span>: Ethereum,
-                      Polygon &amp; Arbitrum
+                      Polygon 
                     </p>
                     <p className="mx-auto text-center text-base font-landing mt-2 mb-10">
                       {startDate} ~{startTime} UTC until {endDate} ~{endTime}{' '}
@@ -203,7 +203,7 @@ export default function Mobile({
                 Which networks will be supported?
               </p>
               <p className="text-base mx-auto ">
-                The Token Launch Auction will be deployed on Ethereum, Arbitrum
+                The Token Launch Auction will be deployed on Ethereum
                 and Polygon. To participate you will need to acquire the native
                 token of the chain you wish to participate on (ETH, AETH, and
                 MATIC respectively) and USDC to purchase POP.
@@ -229,7 +229,7 @@ export default function Mobile({
               </p>
               <p className="text-base mx-auto ">
                 Balancer is a decentralized exchange platform with deployments
-                on Ethereum, Polygon and Arbitrum. It is designed to provide an
+                on Ethereum and Polygon. It is designed to provide an
                 open alternative to swap tokens in a permissionless environment.
               </p>
               <p className="text-base mx-auto mt-4">
@@ -312,7 +312,7 @@ export default function Mobile({
                 why should I buy a token now?
               </p>
               <p className="text-base mx-auto ">
-              Staking rewards (on Ethereum, Polygon &amp; Arbitrum) will
+              Staking rewards (on Ethereum and Polygon) will
                   immediately follow the end of the Token Launch Auction in
                   December. The only way to take advantage of the staking
                   rewards and liquidity mining incentives is to have POP tokens.

@@ -6,8 +6,7 @@ export function MobileNavigation({showMenu, setMenu}) {
   return showMenu && (
     <div className="fixed bg-primaryLight border-b border-gray-500 z-10 mx-auto w-full flex flex-row justify-between px-8 py-8">
       <div className="flex flex-col space-y-4">
-        {/*
-      <Link href="/guide" passHref>
+      <Link href="https://medium.com/popcorndao/preparing-for-popcorns-token-launch-on-copper-a-beginner-s-guide-ed1921760ae2" passHref>
             <a
               className="font-light text-normal cursor-pointer hover:text-blue-600"
               target="_window"
@@ -15,7 +14,6 @@ export function MobileNavigation({showMenu, setMenu}) {
               Step-by-Step Guide
             </a>
           </Link>
-        */}
         <Link href="/#" passHref>
             <a
               className="font-light text-normal cursor-pointer hover:text-blue-600"

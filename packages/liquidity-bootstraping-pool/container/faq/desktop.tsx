@@ -49,8 +49,8 @@ export default function Desktop(): JSX.Element {
                 <span className="font-bold">POP Tokens Offered</span>: 3,750,000
               </p>
               <p className="text-center text-xl font-landing">
-                <span className="font-bold">Networks</span>: Ethereum, Polygon
-                &amp; Arbitrum
+                <span className="font-bold">Networks</span>: Ethereum and Polygon
+                
               </p>
               <p className="text-center text-xl  font-landing">
                 {startDate} ~{startTime} UTC until {endDate} ~{endTime} UTC
@@ -209,7 +209,7 @@ export default function Desktop(): JSX.Element {
                   Which networks will be supported?
                 </p>
                 <p className="text-xl mx-auto font-light">
-                  The Token Launch Auction will be deployed on Ethereum, Arbitrum
+                  The Token Launch Auction will be deployed on Ethereum
                   and Polygon. To participate you will need to acquire the
                   native token of the chain you wish to participate on (ETH,
                   AETH, and MATIC respectively) and USDC to purchase POP.
@@ -235,7 +235,7 @@ export default function Desktop(): JSX.Element {
                 </p>
                 <p className="text-xl mx-auto font-light ">
                   Balancer is a decentralized exchange platform with deployments
-                  on Ethereum, Polygon and Arbitrum. It is designed to provide
+                  on Ethereum and Polygon. It is designed to provide
                   an open alternative to swap tokens in a permissionless
                   environment.
                 </p>
@@ -322,7 +322,7 @@ export default function Desktop(): JSX.Element {
                   why should I buy a token now?
                 </p>
                 <p className="text-xl mx-auto font-light">
-                  Staking rewards (on Ethereum, Polygon &amp; Arbitrum) will
+                  Staking rewards (on Ethereum and Polygon) will
                   immediately follow the end of the Token Launch Auction in
                   December. The only way to take advantage of the staking
                   rewards and liquidity mining incentives is to have POP tokens.

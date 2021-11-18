@@ -51,8 +51,8 @@ export default function LargeDesktop(): JSX.Element {
               </p>
 
               <p className="text-center text-xl font-landing leading-10  font-light">
-                <span className="font-bold">Networks</span>: Ethereum, Polygon
-                &amp; Arbitrum
+                <span className="font-bold">Networks</span>: Ethereum and Polygon
+                
               </p>
               <p className="text-center text-xl leading-10 font-landing">
                 {startDate} ~{startTime} UTC until {endDate} ~{endTime} UTC
@@ -244,7 +244,7 @@ export default function LargeDesktop(): JSX.Element {
                 </p>
                 <p className="text-xl mx-auto font-light leading-10 mt-5 ">
                   Balancer is a decentralized exchange platform with deployments
-                  on Ethereum, Polygon and Arbitrum. It is designed to provide
+                  on Ethereum and Polygon. It is designed to provide
                   an open alternative to swap tokens in a permissionless
                   environment.
                 </p>
@@ -334,7 +334,7 @@ export default function LargeDesktop(): JSX.Element {
                   why should I buy a token now?
                 </p>
                 <p className="text-xl mx-auto font-light leading-10 ">
-                  Staking rewards (on Ethereum, Polygon &amp; Arbitrum) will
+                  Staking rewards (on Ethereum and Polygon) will
                   immediately follow the end of the Token Launch Auction in
                   December. The only way to take advantage of the staking
                   rewards and liquidity mining incentives is to have POP tokens.

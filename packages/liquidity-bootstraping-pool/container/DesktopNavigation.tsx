@@ -13,16 +13,14 @@ export default function DesktopNavigation({textSize}) {
         </Link>
       </div>
       <div className="space-x-8  relative z-20">
-        {/*
-    <Link href="/guide" passHref>
+    <Link href="https://medium.com/popcorndao/preparing-for-popcorns-token-launch-on-copper-a-beginner-s-guide-ed1921760ae2" passHref>
       <a
-        className="font-light text-xl cursor-pointer hover:text-blue-600"
+        className={`font-light text-${textSize} cursor-pointer hover:text-blue-600`}
         target="_window"
       >
         Step-by-Step Guide
       </a>
     </Link>
-    */}
         <Link href="/faq" passHref>
           <a className={`font-light text-${textSize} cursor-pointer hover:text-blue-600`}>
             Token Launch FAQ
