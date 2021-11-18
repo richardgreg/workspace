@@ -396,13 +396,13 @@ const getMinAmountOf3CrvToReceive = async (
   );
 
   const componentValuesInUSD = componentVirtualPrices.reduce(
-    (sum, componentPrice, i) => {
+    (sum: BigNumber, componentPrice: BigNumber, i) => {
       return sum.add(
         componentPrice.mul(componentAmounts[i]).div(parseEther("1"))
       );
     },
     parseEther("0")
-  );
+  ) as BigNumber;
 
   // 50 bps slippage tolerance
   const slippageTolerance = 1 - Number(slippage);

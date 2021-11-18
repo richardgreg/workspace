@@ -1,12 +1,11 @@
-import {
-  BasicIssuanceModule,
-  SetToken,
-} from "@setprotocol/set-protocol-v2/dist/typechain";
-import { HysiBatchInteraction } from "../../typechain/HysiBatchInteraction";
 import { BigNumber } from "@ethersproject/bignumber";
 import { Contract } from "@ethersproject/contracts";
 import { Web3Provider } from "@ethersproject/providers";
 import { parseEther } from "@ethersproject/units";
+import {
+  BasicIssuanceModule,
+  SetToken,
+} from "@setprotocol/set-protocol-v2/dist/typechain";
 
 export enum BatchType {
   Mint,
@@ -81,7 +80,7 @@ class HysiBatchInteractionAdapter {
   static async getMinAmountOf3CrvToReceiveForBatchRedeem(
     slippage: number = 0.005,
     contracts: {
-      hysiBatchInteraction: HysiBatchInteraction;
+      hysiBatchInteraction: Contract;
       basicIssuanceModule: BasicIssuanceModule;
       setToken: SetToken;
     },
@@ -93,10 +92,11 @@ class HysiBatchInteractionAdapter {
     const HYSIInBatch = (await contracts.hysiBatchInteraction.batches(batchId))
       .suppliedTokenBalance;
 
-    const components = await contracts.basicIssuanceModule.getRequiredComponentUnitsForIssue(
-      contracts.setToken.address,
-      HYSIInBatch
-    );
+    const components =
+      await contracts.basicIssuanceModule.getRequiredComponentUnitsForIssue(
+        contracts.setToken.address,
+        HYSIInBatch
+      );
     const componentAddresses = components[0];
     const componentAmounts = components[1];
 
