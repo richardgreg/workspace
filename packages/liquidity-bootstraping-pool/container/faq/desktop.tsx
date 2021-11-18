@@ -539,10 +539,7 @@ export default function Desktop(): JSX.Element {
                   <span translate="no">Popcorn</span>?{' '}
                 </p>
                 <p className="text-xl mx-auto font-light ">
-                  New Form Capital, Kenetic Capital, The LAO, Impossible
-                  Finance, The Crypto Founders Network, Big Brain Holdings, Hestia Holdings and
-                  angels from MakerDAO, IBM, NASA, Google and Deloitte to name a
-                  few.
+                  Jump Capital, New Form Capital, Kenetic Capital, Cakebox Capital, The LAO, Impossible Finance, The Crypto Founders Network, Big Brain Holdings, Hestia Holdings, Amino Capital and angels from MakerDAO, IBM, NASA, Google and Deloitte to name a few.
                 </p>
               </div>
 
@@ -560,8 +557,8 @@ export default function Desktop(): JSX.Element {
                 </p>
                 <p className="text-xl mx-auto font-light ">
                   To date, <span translate="no">Popcorn</span> has raised
-                  $3,556,234.44 to support the development of the project, at an
-                  average of $0.27 per POP.
+                  $4,556,234.44 to support the development of the project, at an
+                  average of $0.314 per POP.
                 </p>
               </div>
 

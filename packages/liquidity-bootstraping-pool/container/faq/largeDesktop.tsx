@@ -437,7 +437,17 @@ export default function LargeDesktop(): JSX.Element {
                 </p>
 
                 <p className="text-xl mx-auto font-light leading-10 ">
-                  You can use the simulation we created with token amounts and
+                  You can use the                 <Link
+                    href="https://docs.google.com/spreadsheets/d/1aPNwndAhuID4d131U4ppJ7g9LkeHmv8i1Wt0pOD16ig"
+                    passHref
+                  >
+                    <a
+                      target="_blank"
+                      className="text-blue-600 hover:text-blue-700 underline"
+                    >
+                      simulation
+                    </a>
+                  </Link>{' '} we created with token amounts and
                   weights to predict the price as it is difficult to determine
                   the last price precisely. Thank you to the Perpetual Protocol
                   team for putting together this model!
@@ -540,10 +550,7 @@ export default function LargeDesktop(): JSX.Element {
                   <span translate="no">Popcorn</span>?{' '}
                 </p>
                 <p className="text-xl mx-auto font-light leading-10 ">
-                  New Form Capital, Kenetic Capital, The LAO, Impossible
-                  Finance, The Crypto Founders Network, Big Brain Holdings,
-                  Hestia Holdings and angels from MakerDAO, IBM, NASA, Google
-                  and Deloitte to name a few.
+                Jump Capital, New Form Capital, Kenetic Capital, Cakebox Capital, The LAO, Impossible Finance, The Crypto Founders Network, Big Brain Holdings, Hestia Holdings, Amino Capital and angels from MakerDAO, IBM, NASA, Google and Deloitte to name a few.
                 </p>
               </div>
 
@@ -561,8 +568,8 @@ export default function LargeDesktop(): JSX.Element {
                 </p>
                 <p className="text-xl mx-auto font-light leading-10 ">
                   To date, <span translate="no">Popcorn</span> has raised
-                  $3,556,234.44 to support the development of the project, at an
-                  average of $0.27 per POP.
+                  $4,556,234.44 to support the development of the project, at an
+                  average of $0.314 per POP.
                 </p>
               </div>
 
