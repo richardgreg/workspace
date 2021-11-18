@@ -219,7 +219,7 @@ export default function LargeDesktop(): JSX.Element {
                 </p>
                 <p className="text-xl mx-auto font-light leading-10 ">
                   The Token Launch Auction will be deployed on Ethereum,
-                  Arbitrum and Polygon. To participate you will need to acquire
+                   and Polygon. To participate you will need to acquire
                   the native token of the chain you wish to participate on (ETH,
                   AETH, and MATIC respectively) and USDC to purchase POP.
                 </p>
