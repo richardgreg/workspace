@@ -156,7 +156,9 @@ export default function Mobile({
                   </li>
                 </ol>
               </p>
+              <div>
               <p className="text-base font-bold mt-5">Key Features:</p>
+              </div>
               <div>
                 <ul className="list-inside list-disc text-base mt-1 space-y-2">
                   <li>

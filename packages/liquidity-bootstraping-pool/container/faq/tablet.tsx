@@ -161,7 +161,9 @@ export default function Tablet(): JSX.Element {
                     </li>
                   </ol>
                 </p>
+                <div>
                 <p className="text-md font-bold mx-auto mt-5">Key Features:</p>
+                </div>
 
                 <div>
                   <ul className="list-inside list-disc text-md space-y-2 mt-1">

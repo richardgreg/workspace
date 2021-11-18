@@ -159,7 +159,9 @@ export default function Desktop(): JSX.Element {
                     </li>
                   </ol>
                 </p>
+                <div>
                 <p className="text-2xl font-bold mt-5">Key Features:</p>
+                </div>
                 <div>
                   <ul className="list-inside list-disc text-xl space-y-3 mt-2">
                     <li>
