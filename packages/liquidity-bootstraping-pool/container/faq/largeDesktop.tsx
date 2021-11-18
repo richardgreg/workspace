@@ -51,8 +51,8 @@ export default function LargeDesktop(): JSX.Element {
               </p>
 
               <p className="text-center text-xl font-landing leading-10  font-light">
-                <span className="font-bold">Networks</span>: Ethereum and Polygon
-                
+                <span className="font-bold">Networks</span>: Ethereum and
+                Polygon
               </p>
               <p className="text-center text-xl leading-10 font-landing">
                 {startDate} ~{startTime} UTC until {endDate} ~{endTime} UTC
@@ -80,9 +80,12 @@ export default function LargeDesktop(): JSX.Element {
             <div className="col-span-2 z-20">
               <div className="w-full mx-auto my-20">
                 <p className="w-full mx-auto text-center text-xl font-landing leading-10  font-light mt-18">
-                The auction will take place on{' '}
+                  The auction will take place on{' '}
                   <Link href="https://copperlaunch.com" passHref>
-                    <a className="text-blue-600 hover:text-blue-700 underline" target="_blank">
+                    <a
+                      className="text-blue-600 hover:text-blue-700 underline"
+                      target="_blank"
+                    >
                       Copperlaunch.com
                     </a>
                   </Link>
@@ -168,9 +171,9 @@ export default function LargeDesktop(): JSX.Element {
                     </li>
                   </ol>
                 </p>
-                <p className="text-2xl font-bold leading-10 mt-5 mb-5 ">
-                  Key Features:
-                </p>
+
+                <p className="text-2xl font-bold leading-10 mt-5">Key Features:</p>
+
 
                 <div>
                   <ul className="list-inside list-disc text-xl leading-10 ">
@@ -218,10 +221,10 @@ export default function LargeDesktop(): JSX.Element {
                   Which networks will be supported?
                 </p>
                 <p className="text-xl mx-auto font-light leading-10 ">
-                  The Token Launch Auction will be deployed on Ethereum,
-                   and Polygon. To participate you will need to acquire
-                  the native token of the chain you wish to participate on (ETH,
-                  AETH, and MATIC respectively) and USDC to purchase POP.
+                  The Token Launch Auction will be deployed on Ethereum, and
+                  Polygon. To participate you will need to acquire the native
+                  token of the chain you wish to participate on (ETH, AETH, and
+                  MATIC respectively) and USDC to purchase POP.
                 </p>
               </div>
 
@@ -244,9 +247,8 @@ export default function LargeDesktop(): JSX.Element {
                 </p>
                 <p className="text-xl mx-auto font-light leading-10 mt-5 ">
                   Balancer is a decentralized exchange platform with deployments
-                  on Ethereum and Polygon. It is designed to provide
-                  an open alternative to swap tokens in a permissionless
-                  environment.
+                  on Ethereum and Polygon. It is designed to provide an open
+                  alternative to swap tokens in a permissionless environment.
                 </p>
                 <p className="text-xl mx-auto font-light leading-10  mt-5">
                   Balancer’s Liquidity Bootstrapping Pool (LBP) is used for
@@ -266,8 +268,19 @@ export default function LargeDesktop(): JSX.Element {
                   them.
                 </p>
                 <p className="text-xl mx-auto font-light leading-10  mt-5">
-                  See Balancer’s Liquidity Bootstrapping Pool FAQ for more
-                  information.
+                  See{' '}
+                  <Link
+                    href="https://docs.balancer.fi/products/balancer-pools/liquidity-bootstrapping-pools-lbps"
+                    passHref
+                  >
+                    <a
+                      className="text-blue-600 hover:text-blue-700 underline"
+                      target="_blank"
+                    >
+                      Balancer’s Liquidity Bootstrapping Pool FAQ
+                    </a>
+                  </Link>{' '}
+                  for more information.
                 </p>
               </div>
 
@@ -334,15 +347,15 @@ export default function LargeDesktop(): JSX.Element {
                   why should I buy a token now?
                 </p>
                 <p className="text-xl mx-auto font-light leading-10 ">
-                  Staking rewards (on Ethereum and Polygon) will
-                  immediately follow the end of the Token Launch Auction in
-                  December. The only way to take advantage of the staking
-                  rewards and liquidity mining incentives is to have POP tokens.
-                  The POP tokenomic model specifies that the greatest amount of
-                  staking rewards emitted will be during the first several weeks
-                  of the liquidity mining incentives program, therefore the
-                  earliest users will have the greatest possible opportunity to
-                  earn more POP tokens.
+                  Staking rewards (on Ethereum and Polygon) will immediately
+                  follow the end of the Token Launch Auction in December. The
+                  only way to take advantage of the staking rewards and
+                  liquidity mining incentives is to have POP tokens. The POP
+                  tokenomic model specifies that the greatest amount of staking
+                  rewards emitted will be during the first several weeks of the
+                  liquidity mining incentives program, therefore the earliest
+                  users will have the greatest possible opportunity to earn more
+                  POP tokens.
                 </p>
               </div>
 
@@ -437,7 +450,8 @@ export default function LargeDesktop(): JSX.Element {
                 </p>
 
                 <p className="text-xl mx-auto font-light leading-10 ">
-                  You can use the                 <Link
+                  You can use the{' '}
+                  <Link
                     href="https://docs.google.com/spreadsheets/d/1aPNwndAhuID4d131U4ppJ7g9LkeHmv8i1Wt0pOD16ig"
                     passHref
                   >
@@ -447,10 +461,11 @@ export default function LargeDesktop(): JSX.Element {
                     >
                       simulation
                     </a>
-                  </Link>{' '} we created with token amounts and
-                  weights to predict the price as it is difficult to determine
-                  the last price precisely. Thank you to the Perpetual Protocol
-                  team for putting together this model!
+                  </Link>{' '}
+                  we created with token amounts and weights to predict the price
+                  as it is difficult to determine the last price precisely.
+                  Thank you to the Perpetual Protocol team for putting together
+                  this model!
                 </p>
               </div>
 
@@ -539,7 +554,7 @@ export default function LargeDesktop(): JSX.Element {
                 </p>
                 <p className="text-xl mx-auto font-light leading-10 mt-5 ">
                   Michael Kisselgof is a crypto veteran. His previous project
-                  tokenized IP on Ethereum to fund biotech R&D with IKU and
+                  tokenized IP on Ethereum to fund biotech R&amp;D with IKU and
                   worked on the first iterations of erc-1155.
                 </p>
               </div>
@@ -550,7 +565,10 @@ export default function LargeDesktop(): JSX.Element {
                   <span translate="no">Popcorn</span>?{' '}
                 </p>
                 <p className="text-xl mx-auto font-light leading-10 ">
-                New Form Capital, Kenetic Capital, Cakebox Capital, The LAO, Impossible Finance, The Crypto Founders Network, Big Brain Holdings, Hestia Holdings, Amino Capital and angels from MakerDAO, IBM, NASA, Google and Deloitte to name a few.
+                  New Form Capital, Kenetic Capital, Cakebox Capital, The LAO,
+                  Impossible Finance, The Crypto Founders Network, Big Brain
+                  Holdings, Hestia Holdings, Amino Capital and angels from
+                  MakerDAO, IBM, NASA, Google and Deloitte to name a few.
                 </p>
               </div>
 

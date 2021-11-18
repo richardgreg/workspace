@@ -248,7 +248,8 @@ export default function Mobile({
                 the LBP if you are familiar with the risks associated with them.
               </p>
               <p className="text-base mx-auto mt-4">
-                See Balancer’s Liquidity Bootstrapping Pool FAQ for more
+                See   <Link href="https://docs.balancer.fi/products/balancer-pools/liquidity-bootstrapping-pools-lbps" passHref>
+                    <a className="text-blue-600 hover:text-blue-700 underline" target="_blank">Balancer’s Liquidity Bootstrapping Pool FAQ</a></Link> for more
                 information.
               </p>
             </div>

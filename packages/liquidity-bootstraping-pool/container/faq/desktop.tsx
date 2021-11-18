@@ -159,10 +159,7 @@ export default function Desktop(): JSX.Element {
                     </li>
                   </ol>
                 </p>
-                <p className="text-2xl font-bold mt-5">
-                  Key Features:
-                </p>
-
+                <p className="text-2xl font-bold mt-5">Key Features:</p>
                 <div>
                   <ul className="list-inside list-disc text-xl space-y-3 mt-2">
                     <li>
@@ -257,7 +254,8 @@ export default function Desktop(): JSX.Element {
                   them.
                 </p>
                 <p className="text-xl mx-auto font-light mt-4">
-                  See Balancer’s Liquidity Bootstrapping Pool FAQ for more
+                  See   <Link href="https://docs.balancer.fi/products/balancer-pools/liquidity-bootstrapping-pools-lbps" passHref>
+                    <a className="text-blue-600 hover:text-blue-700 underline" target="_blank">Balancer’s Liquidity Bootstrapping Pool FAQ</a></Link> for more
                   information.
                 </p>
               </div>

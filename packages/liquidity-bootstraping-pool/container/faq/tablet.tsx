@@ -257,7 +257,8 @@ export default function Tablet(): JSX.Element {
                   them.
                 </p>
                 <p className="text-md mx-auto mt-2">
-                  See Balancer’s Liquidity Bootstrapping Pool FAQ for more
+                  See   <Link href="https://docs.balancer.fi/products/balancer-pools/liquidity-bootstrapping-pools-lbps" passHref>
+                    <a className="text-blue-600 hover:text-blue-700 underline" target="_blank">Balancer’s Liquidity Bootstrapping Pool FAQ</a></Link> for more
                   information.
                 </p>
               </div>
