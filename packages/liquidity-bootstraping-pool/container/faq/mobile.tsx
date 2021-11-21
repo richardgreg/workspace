@@ -207,7 +207,7 @@ export default function Mobile({
               <p className="text-base mx-auto ">
                 The Token Launch Auction will be deployed on Ethereum
                 and Polygon. To participate you will need to acquire the native
-                token of the chain you wish to participate on (ETH, AETH, and
+                token of the chain you wish to participate on (ETH and
                 MATIC respectively) and USDC to purchase POP.
               </p>
             </div>
