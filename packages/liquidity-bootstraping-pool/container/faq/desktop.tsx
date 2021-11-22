@@ -210,6 +210,64 @@ export default function Desktop(): JSX.Element {
               </div>
 
               <div className="w-full mx-auto my-14">
+                <p className="font-medium text-4xl mb-4 mx-auto ">
+                  What tokens do I need to have in order to participate in
+                  the Token Launch Auction?
+                </p>
+                <p className="text-xl mx-auto font-light ">
+                  You may participate in the Token Launch Auction using Ethereum
+                  and/or Polygon. Here's what you need for both:
+                </p>
+                <p className="text-xl mx-auto font-bold mt-3 mb-1">Ethereum:</p>
+                <ul className="list-disc list-inside">
+                  <li className="text-xl mx-auto font-bold">Metamask Wallet</li>
+                  <li className="text-xl mx-auto">
+                    <span className="font-bold">ETH</span> - this is used to pay
+                    for transaction fees
+                  </li>
+                  <li className="text-xl mx-auto">
+                    <span className="font-bold">USDC</span> - this is used to
+                    pay for the token
+                  </li>
+                </ul>
+                <p className="text-xl mx-auto font-light mt-3">
+                  If you are participating on Ethereum, you will need to have a
+                  wallet with ETH (to pay for gas fees) and USDC to purchase POP
+                  token.{' '}
+                  <a
+                    className="text-xl text-blue-600 hover:text-blue-700 underline cursor-pointer"
+                    href="https://medium.com/popcorndao/preparing-for-popcorns-token-launch-on-copper-a-beginner-s-guide-ed1921760ae2'"
+                  >
+                    See this guide for more info
+                  </a>
+                </p>
+
+                <p className="text-xl mx-auto font-bold mt-3 mb-1">Polygon:</p>
+                <ul className="list-disc list-inside">
+                  <li className="text-xl mx-auto font-bold">Metamask Wallet</li>
+                  <li className="text-xl mx-auto">
+                    <span className="font-bold">MATIC</span> - this is used to
+                    pay for transaction fees
+                  </li>
+                  <li className="text-xl mx-auto">
+                    <span className="font-bold">USDC</span> - this is used to
+                    pay for the token
+                  </li>
+                </ul>
+                <p className="text-xl mx-auto font-light mt-3">
+                  If you are participating on Polygon, you will need to have a
+                  wallet with MATIC (to pay for gas fees) and USDC to purchase
+                  POP token.{' '}
+                  <a
+                    className="text-xl text-blue-600 hover:text-blue-700 underline cursor-pointer"
+                    href="https://medium.com/popcorndao/preparing-for-popcorns-token-launch-on-copper-a-beginner-s-guide-ed1921760ae2'"
+                  >
+                    See this guide for more info
+                  </a>
+                </p>
+              </div>
+
+              <div className="w-full mx-auto my-14">
                 <p className="font-medium text-4xl mb-2 mx-auto">
                   Which networks will be supported?
                 </p>
@@ -644,72 +702,6 @@ export default function Desktop(): JSX.Element {
                     </a>
                   </p>
                 </div>
-              </div>
-
-              <div className="w-full mx-auto my-20">
-                <p className="font-bold text-3xl mb-4 mx-auto ">
-                  What do tokens do I need to have in order to participate in
-                  the Token Launch Auction?
-                </p>
-                <p className="text-xl mx-auto font-light ">
-                  You may participate in the Token Launch Auction using Ethereum
-                  and/or Polygon. Here's what you need for both:
-                </p>
-                <p className="text-xl mx-auto font-bold mt-3 mb-1">
-                  Ethereum:
-                </p>
-                <ul className="list-disc list-inside">
-                  <li className="text-xl mx-auto font-bold">
-                    Metamask Wallet
-                  </li>
-                  <li className="text-xl mx-auto">
-                    <span className="font-bold">ETH</span> - this is used to pay
-                    for transaction fees
-                  </li>
-                  <li className="text-xl mx-auto">
-                    <span className="font-bold">USDC</span> - this is used to
-                    pay for the token
-                  </li>
-                </ul>
-                <p className="text-xl mx-auto font-light mt-3">
-                  If you are participating on Ethereum, you will need to have a
-                  wallet with ETH (to pay for gas fees) and USDC to purchase POP
-                  token.{' '}
-                  <a
-                    className="text-xl text-blue-600 hover:text-blue-700 underline cursor-pointer"
-                    href="https://medium.com/popcorndao/preparing-for-popcorns-token-launch-on-copper-a-beginner-s-guide-ed1921760ae2'"
-                  >
-                    See this guide for more info
-                  </a>
-                </p>
-
-                <p className="text-xl mx-auto font-bold mt-3 mb-1">
-                  Polygon:
-                </p>
-                <ul className="list-disc list-inside">
-                  <li className="text-xl mx-auto font-bold">
-                    Metamask Wallet
-                  </li>
-                  <li className="text-xl mx-auto">
-                    <span className="font-bold">MATIC</span> - this is used to
-                    pay for transaction fees
-                  </li>
-                  <li className="text-xl mx-auto">
-                    <span className="font-bold">USDC</span> - this is used to
-                    pay for the token
-                  </li>
-                </ul>
-                <p className="text-xl mx-auto font-light mt-3">
-                  If you are participating on Polygon, you will need to have a
-                  wallet with MATIC (to pay for gas fees) and USDC to purchase
-                  POP token.{' '}
-                  <a
-                    className="text-xl text-blue-600 hover:text-blue-700 underline cursor-pointer"
-                    href="https://medium.com/popcorndao/preparing-for-popcorns-token-launch-on-copper-a-beginner-s-guide-ed1921760ae2'"
-                  >
-                    See this guide for more info
-                  </a>
-                </p>
               </div>
             </div>
             <div className="flex flex-col justify-between">
