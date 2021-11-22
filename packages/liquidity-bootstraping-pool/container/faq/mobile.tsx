@@ -51,32 +51,38 @@ export default function Mobile({
                     </p>
                     <p className="mx-auto text-center text-base font-landing">
                       <span className="font-bold">Networks</span>: Ethereum,
-                      Polygon 
+                      Polygon
                     </p>
                     <p className="mx-auto text-center text-base font-landing mt-2 mb-10">
                       {startDate} ~{startTime} UTC until {endDate} ~{endTime}{' '}
                       UTC
                     </p>
                     <p className="mx-auto text-base font-landing mb-5">
-                    The auction will take place on{' '}
-                  <Link href="https://copperlaunch.com" passHref>
-                    <a className="text-blue-600 hover:text-blue-700 underline" target="_blank">
-                      Copperlaunch.com
-                    </a>
-                  </Link>
-                      , a site for Token Launch Auctions. All proceeds will go to
-                      the <span translate="no">Popcorn</span> Treasury, a smart
-                      contract entirely controlled by{' '}
+                      The auction will take place on{' '}
+                      <Link href="https://copperlaunch.com" passHref>
+                        <a
+                          className="text-blue-600 hover:text-blue-700 underline"
+                          target="_blank"
+                        >
+                          Copperlaunch.com
+                        </a>
+                      </Link>
+                      , a site for Token Launch Auctions. All proceeds will go
+                      to the <span translate="no">Popcorn</span> Treasury, a
+                      smart contract entirely controlled by{' '}
                       <span translate="no">Popcorn</span> token holders.
                     </p>
 
                     <p className="mx-auto text-base font-landing mb-10">
-                    The official{' '}
-                  <Link href="https://twitter.com/popcorn_dao" passHref>
-                    <a className="text-blue-600 hover:text-blue-700 underline" target="_blank">
-                      <span translate="no">Popcorn</span> Twitter account
-                    </a>
-                  </Link>{' '}
+                      The official{' '}
+                      <Link href="https://twitter.com/popcorn_dao" passHref>
+                        <a
+                          className="text-blue-600 hover:text-blue-700 underline"
+                          target="_blank"
+                        >
+                          <span translate="no">Popcorn</span> Twitter account
+                        </a>
+                      </Link>{' '}
                       will tweet the contract address. You can track the status
                       of the TLA event on{' '}
                       <Link href="/" passHref>
@@ -157,7 +163,7 @@ export default function Mobile({
                 </ol>
               </p>
               <div>
-              <p className="text-base font-bold mt-5">Key Features:</p>
+                <p className="text-base font-bold mt-5">Key Features:</p>
               </div>
               <div>
                 <ul className="list-inside list-disc text-base mt-1 space-y-2">
@@ -205,10 +211,10 @@ export default function Mobile({
                 Which networks will be supported?
               </p>
               <p className="text-base mx-auto ">
-                The Token Launch Auction will be deployed on Ethereum
-                and Polygon. To participate you will need to acquire the native
-                token of the chain you wish to participate on (ETH and
-                MATIC respectively) and USDC to purchase POP.
+                The Token Launch Auction will be deployed on Ethereum and
+                Polygon. To participate you will need to acquire the native
+                token of the chain you wish to participate on (ETH and MATIC
+                respectively) and USDC to purchase POP.
               </p>
             </div>
 
@@ -217,11 +223,11 @@ export default function Mobile({
                 What is a Liquidity Bootstrapping Pool?
               </p>
               <p className="text-base mx-auto ">
-                A liquidity bootstrapping pool (used by the Token Launch Auction)
-                allows projects to create meaningful liquidity and distribution
-                at launch, resulting in a fully customizable token distribution
-                mechanic that gives teams and governance token holders control
-                and flexibility for the long term.
+                A liquidity bootstrapping pool (used by the Token Launch
+                Auction) allows projects to create meaningful liquidity and
+                distribution at launch, resulting in a fully customizable token
+                distribution mechanic that gives teams and governance token
+                holders control and flexibility for the long term.
               </p>
             </div>
 
@@ -231,8 +237,8 @@ export default function Mobile({
               </p>
               <p className="text-base mx-auto ">
                 Balancer is a decentralized exchange platform with deployments
-                on Ethereum and Polygon. It is designed to provide an
-                open alternative to swap tokens in a permissionless environment.
+                on Ethereum and Polygon. It is designed to provide an open
+                alternative to swap tokens in a permissionless environment.
               </p>
               <p className="text-base mx-auto mt-4">
                 Balancer’s Liquidity Bootstrapping Pool (LBP) is used for
@@ -250,9 +256,19 @@ export default function Mobile({
                 the LBP if you are familiar with the risks associated with them.
               </p>
               <p className="text-base mx-auto mt-4">
-                See   <Link href="https://docs.balancer.fi/products/balancer-pools/liquidity-bootstrapping-pools-lbps" passHref>
-                    <a className="text-blue-600 hover:text-blue-700 underline" target="_blank">Balancer’s Liquidity Bootstrapping Pool FAQ</a></Link> for more
-                information.
+                See{' '}
+                <Link
+                  href="https://docs.balancer.fi/products/balancer-pools/liquidity-bootstrapping-pools-lbps"
+                  passHref
+                >
+                  <a
+                    className="text-blue-600 hover:text-blue-700 underline"
+                    target="_blank"
+                  >
+                    Balancer’s Liquidity Bootstrapping Pool FAQ
+                  </a>
+                </Link>{' '}
+                for more information.
               </p>
             </div>
 
@@ -315,15 +331,15 @@ export default function Mobile({
                 why should I buy a token now?
               </p>
               <p className="text-base mx-auto ">
-              Staking rewards (on Ethereum and Polygon) will
-                  immediately follow the end of the Token Launch Auction in
-                  December. The only way to take advantage of the staking
-                  rewards and liquidity mining incentives is to have POP tokens.
-                  The POP tokenomic model specifies that the greatest amount of
-                  staking rewards emitted will be during the first several weeks
-                  of the liquidity mining incentives program, therefore the earliest users will have the greatest possible opportunity to earn more POP tokens.
+                Staking rewards (on Ethereum and Polygon) will immediately
+                follow the end of the Token Launch Auction in December. The only
+                way to take advantage of the staking rewards and liquidity
+                mining incentives is to have POP tokens. The POP tokenomic model
+                specifies that the greatest amount of staking rewards emitted
+                will be during the first several weeks of the liquidity mining
+                incentives program, therefore the earliest users will have the
+                greatest possible opportunity to earn more POP tokens.
               </p>
-       
             </div>
 
             <div className="w-10/12 mx-auto my-12">
@@ -407,20 +423,22 @@ export default function Mobile({
               </p>
 
               <p className="text-base mx-auto ">
-              You can use the                 <Link
-                    href="https://docs.google.com/spreadsheets/d/1aPNwndAhuID4d131U4ppJ7g9LkeHmv8i1Wt0pOD16ig"
-                    passHref
+                You can use the{' '}
+                <Link
+                  href="https://docs.google.com/spreadsheets/d/1aPNwndAhuID4d131U4ppJ7g9LkeHmv8i1Wt0pOD16ig"
+                  passHref
+                >
+                  <a
+                    target="_blank"
+                    className="text-blue-600 hover:text-blue-700 underline"
                   >
-                    <a
-                      target="_blank"
-                      className="text-blue-600 hover:text-blue-700 underline"
-                    >
-                      simulation
-                    </a>
-                  </Link>{' '} we created with token amounts and
-                  weights to predict the price as it is difficult to determine
-                  the last price precisely. Thank you to the Perpetual Protocol
-                  team for putting together this model!
+                    simulation
+                  </a>
+                </Link>{' '}
+                we created with token amounts and weights to predict the price
+                as it is difficult to determine the last price precisely. Thank
+                you to the Perpetual Protocol team for putting together this
+                model!
               </p>
             </div>
 
@@ -519,12 +537,17 @@ export default function Mobile({
                 <span translate="no">Popcorn</span>?{' '}
               </p>
               <p className="text-base mx-auto ">
-              New Form Capital, Kenetic Capital, Cakebox Capital, The LAO, Impossible Finance, The Crypto Founders Network, Big Brain Holdings, Hestia Holdings, Amino Capital and angels from MakerDAO, IBM, NASA, Google and Deloitte to name a few.
+                New Form Capital, Kenetic Capital, Cakebox Capital, The LAO,
+                Impossible Finance, The Crypto Founders Network, Big Brain
+                Holdings, Hestia Holdings, Amino Capital and angels from
+                MakerDAO, IBM, NASA, Google and Deloitte to name a few.
               </p>
             </div>
 
             <div className="w-10/12 mx-auto my-12">
-              <p className="font-bold text-xl mx-auto mb-1">How is POP allocated?</p>
+              <p className="font-bold text-xl mx-auto mb-1">
+                How is POP allocated?
+              </p>
               <img src="images/Token_Allocation_Pie_Chart.png" />
             </div>
 
@@ -534,9 +557,9 @@ export default function Mobile({
                 previous rounds?
               </p>
               <p className="text-base mx-auto ">
-              To date, <span translate="no">Popcorn</span> has raised
-              $4,556,234.44 to support the development of the project, at an
-                  average of $0.314 per POP.
+                To date, <span translate="no">Popcorn</span> has raised
+                $4,556,234.44 to support the development of the project, at an
+                average of $0.314 per POP.
               </p>
             </div>
 
@@ -549,7 +572,7 @@ export default function Mobile({
                 A fixed supply of 100M POP tokens have been minted at genesis
                 and will be vested over 5 years.
               </p>
-              <img src="images/Token_Allocation.png" className="mt-2"/>
+              <img src="images/Token_Allocation.png" className="mt-2" />
               <img src="images/releaseschedule.png" />
             </div>
 
@@ -599,6 +622,64 @@ export default function Mobile({
                 </a>
               </p>
             </div>
+          </div>
+
+          <div className="w-10/12 mx-auto my-14">
+            <p className="font-bold text-xl mb-5 mx-auto ">
+              What do tokens do I need to have in order to participate in the
+              Token Launch Auction?
+            </p>
+            <p className="text-base mx-auto font-light ">
+              You may participate in the Token Launch Auction using Ethereum
+              and/or Polygon. Here's what you need for both:
+            </p>
+            <p className="text-base mx-auto font-bold mt-3 mb-1">Ethereum:</p>
+            <ul className="list-disc list-inside">
+              <li className="text-base mx-auto font-bold">Metamask Wallet</li>
+              <li className="text-base mx-auto">
+                <span className="font-bold">ETH</span> - this is used to pay for
+                transaction fees
+              </li>
+              <li className="text-base mx-auto">
+                <span className="font-bold">USDC</span> - this is used to pay
+                for the token
+              </li>
+            </ul>
+            <p className="text-base mx-auto font-light mt-3">
+              If you are participating on Ethereum, you will need to have a
+              wallet with ETH (to pay for gas fees) and USDC to purchase POP
+              token.{' '}
+              <a
+                className="text-base text-blue-600 hover:text-blue-700 underline cursor-pointer"
+                href="https://medium.com/popcorndao/preparing-for-popcorns-token-launch-on-copper-a-beginner-s-guide-ed1921760ae2'"
+              >
+                See this guide for more info
+              </a>
+            </p>
+
+            <p className="text-base mx-auto font-bold mt-3 mb-1">Polygon:</p>
+            <ul className="list-disc list-inside">
+              <li className="text-base mx-auto font-bold">Metamask Wallet</li>
+              <li className="text-base mx-auto">
+                <span className="font-bold">MATIC</span> - this is used to pay
+                for transaction fees
+              </li>
+              <li className="text-base mx-auto">
+                <span className="font-bold">USDC</span> - this is used to pay
+                for the token
+              </li>
+            </ul>
+            <p className="text-base mx-auto font-light mt-3">
+              If you are participating on Polygon, you will need to have a
+              wallet with MATIC (to pay for gas fees) and USDC to purchase POP
+              token.{' '}
+              <a
+                className="text-base text-blue-600 hover:text-blue-700 underline cursor-pointer"
+                href="https://medium.com/popcorndao/preparing-for-popcorns-token-launch-on-copper-a-beginner-s-guide-ed1921760ae2'"
+              >
+                See this guide for more info
+              </a>
+            </p>
           </div>
         </div>
       </section>
