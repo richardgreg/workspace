@@ -233,7 +233,8 @@ export default function Mobile({
                 token.{' '}
                 <a
                   className="text-base text-blue-600 hover:text-blue-700 underline cursor-pointer"
-                  href="https://medium.com/popcorndao/preparing-for-popcorns-token-launch-on-copper-a-beginner-s-guide-ed1921760ae2'"
+                  target="_blank"
+                  href="https://medium.com/popcorndao/preparing-for-popcorns-token-launch-on-copper-a-beginner-s-guide-ed1921760ae2"
                 >
                   See this guide for more info
                 </a>
@@ -257,7 +258,8 @@ export default function Mobile({
                 token.{' '}
                 <a
                   className="text-base text-blue-600 hover:text-blue-700 underline cursor-pointer"
-                  href="https://medium.com/popcorndao/preparing-for-popcorns-token-launch-on-copper-a-beginner-s-guide-ed1921760ae2'"
+                  target="_blank"
+                  href="https://medium.com/popcorndao/preparing-for-popcorns-token-launch-on-copper-a-beginner-s-guide-ed1921760ae2"
                 >
                   See this guide for more info
                 </a>
