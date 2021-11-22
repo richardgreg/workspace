@@ -99,8 +99,8 @@ const TEAM: TeamMember[] = [
     name: 'Will Nicoll',
     position: 'Community Lead',
     img: 'will',
-    linkedIn: 'https://www.linkedin.com/in/will-nicoll-5357b4b4/',
-    twitter: 'https://twitter.com/illhelm1',
+    linkedIn: '',
+    twitter: '',
   },
   {
     name: 'Fernando0x		',
@@ -122,6 +122,13 @@ const TEAM: TeamMember[] = [
     img: 'leo',
     linkedIn: 'https://at.linkedin.com/in/leonhard-horstmeyer				',
     twitter: 'https://twitter.com/Leo_Marlo				',
+  },
+  {
+    name: 'Josh Jack',
+    position: 'Developer',
+    img: 'josh',
+    linkedIn: '',
+    twitter: '',
   },
   {
     name: 'Ashish Mishra',
