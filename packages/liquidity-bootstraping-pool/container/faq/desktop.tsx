@@ -626,7 +626,7 @@ export default function Desktop(): JSX.Element {
                 <p className="font-medium text-4xl mb-2 mx-auto ">
                   How is POP allocated?
                 </p>
-                <img src="images/Token_Allocation_Pie_Chart.png" />
+                <img src="images/Popcorn_Token_Allocation_Pie_Chart.png" />
               </div>
 
               <div className="w-full mx-auto my-14">
@@ -647,7 +647,7 @@ export default function Desktop(): JSX.Element {
                   supporters and team?
                 </p>
                 <img
-                  src="images/Token_Allocation.png"
+                  src="images/Popcorn_Token_Allocation_Chart.jpg"
                   className="relative z-10 mt-4"
                 />
                 <img

@@ -608,7 +608,7 @@ export default function Mobile({
               <p className="font-bold text-xl mx-auto mb-1">
                 How is POP allocated?
               </p>
-              <img src="images/Token_Allocation_Pie_Chart.png" />
+              <img src="images/Popcorn_Token_Allocation_Pie_Chart.png" />
             </div>
 
             <div className="w-10/12 mx-auto my-12">
@@ -632,7 +632,7 @@ export default function Mobile({
                 A fixed supply of 100M POP tokens have been minted at genesis
                 and will be vested over 5 years.
               </p>
-              <img src="images/Token_Allocation.png" className="mt-2" />
+              <img src="images/Popcorn_Token_Allocation_Chart.jpg" className="mt-2" />
               <img src="images/releaseschedule.png" />
             </div>
 

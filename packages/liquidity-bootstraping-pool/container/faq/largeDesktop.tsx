@@ -646,7 +646,7 @@ export default function LargeDesktop(): JSX.Element {
                 <p className="font-bold text-3xl mb-4 mx-auto ">
                   How is POP allocated?
                 </p>
-                <img src="images/Token_Allocation_Pie_Chart.png" />
+                <img src="images/Popcorn_Token_Allocation_Pie_Chart.png" />
               </div>
 
               <div className="w-full mx-auto my-20">
@@ -667,7 +667,7 @@ export default function LargeDesktop(): JSX.Element {
                   supporters and team?
                 </p>
 
-                <img src="images/Token_Allocation.png" />
+                <img src="images/Popcorn_Token_Allocation_Chart.jpg" />
                 <ul className="list-inside list-disc z-10">
                   <img
                     src="images/releaseschedule.png"

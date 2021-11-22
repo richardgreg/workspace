@@ -619,7 +619,7 @@ export default function Tablet(): JSX.Element {
                 <p className="font-bold text-3xl mb-5 mx-auto ">
                   How is POP allocated?
                 </p>
-                <img src="images/Token_Allocation_Pie_Chart.png" />
+                <img src="images/Popcorn_Token_Allocation_Pie_Chart.png" />
               </div>
 
               <div className="w-full mx-auto my-14">
@@ -639,7 +639,7 @@ export default function Tablet(): JSX.Element {
                   What is the token allocation and release schedule for
                   supporters and team?
                 </p>
-                <img src="images/Token_Allocation.png" />
+                <img src="images/Popcorn_Token_Allocation_Chart.jpg" />
                 <img src="images/releaseschedule.png" />
               </div>
 
