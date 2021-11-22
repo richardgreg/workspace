@@ -14,7 +14,7 @@ export const MobileExpandableMenu: React.FC<MobileExpandableMenuProps> = ({
 }) => {
   return (
     <div className="absolute z-10 w-full overflow-y-auto ">
-      <div className="relative w-full h-full mobile-menu-bg transition-opacity duration-1000 ease-in-out">
+      <div className="relative w-full h-screen mobile-menu-bg transition-opacity duration-1000 ease-in-out">
         <div className="w-10/12 mx-auto ">
           <div className="grid justify-items-stretch">
             <XIcon
@@ -114,14 +114,6 @@ export const MobileExpandableMenu: React.FC<MobileExpandableMenuProps> = ({
               <Link href="/" passHref>
                 <a className="text-xl text-white text-semibold">Home</a>
               </Link>
-              <Link href="/about" passHref>
-                <a
-                  className="text-xl text-white text-semibold"
-                  target="_window"
-                >
-                  About us
-                </a>
-              </Link>
               <Link href="https://medium.com/popcorndao" passHref>
                 <a
                   className="text-xl text-white text-semibold"
@@ -162,12 +154,12 @@ export const MobileExpandableMenu: React.FC<MobileExpandableMenuProps> = ({
             </div>
           </div>
           <div className="flex flex-col space-y-3 mt-10" style={{paddingBottom: 100}}>
-            <p className="font-bold uppercase text-base font-landing text-white">
+            {/* <p className="font-bold uppercase text-base font-landing text-white">
               Documentation
             </p>
             <Link href="/" passHref>
               <a className="text-xl text-white text-semibold">Gitbook</a>
-            </Link>
+            </Link> */}
           </div>
         </div>
       </div>
