@@ -49,21 +49,21 @@ const TEAM: TeamMember[] = [
   },
   {
     name: 'Mehul Mandania',
-    position: 'Software Developer',
+    position: 'Developer',
     img: 'mehul',
     linkedIn: 'https://www.linkedin.com/in/mandania',
     twitter: 'https://www.twitter.com/mandameh',
   },
   {
     name: '@horsefacts',
-    position: 'Software Developer',
+    position: 'Developer',
     img: 'connor',
     linkedIn: '',
     twitter: 'https://twitter.com/eth_call',
   },
   {
     name: 'Leon Adler',
-    position: 'Software Developer',
+    position: 'Developer',
     img: 'leon',
     linkedIn: 'https://www.linkedin.com/in/leon-niesler-903720150/',
     twitter: 'https://twitter.com/Leon_Niesler',
@@ -143,7 +143,7 @@ const TEAM: TeamMember[] = [
 const CONTRIBUTORS: Contributor[] = [
   {
     name: '@Amirjab21',
-    position: 'Software Developer',
+    position: 'Developer',
     img: 'Amirjab21.jpg',
     linkedIn: '',
     twitter: '',
@@ -151,7 +151,7 @@ const CONTRIBUTORS: Contributor[] = [
   },
   {
     name: '@izayl',
-    position: 'Software Developer',
+    position: 'Developer',
     img: 'izayl.jpg',
     linkedIn: '',
     twitter: '',
@@ -159,7 +159,7 @@ const CONTRIBUTORS: Contributor[] = [
   },
   {
     name: 'Rene Aavik',
-    position: 'Software Developer',
+    position: 'Developer',
     img: 'leetdev.jpg',
     linkedIn: '',
     twitter: '',
@@ -167,7 +167,7 @@ const CONTRIBUTORS: Contributor[] = [
   },
   {
     name: 'Emilio Tagua',
-    position: 'Software Developer',
+    position: 'Developer',
     img: 'miloops.jpg',
     linkedIn: '',
     twitter: '',
@@ -175,7 +175,7 @@ const CONTRIBUTORS: Contributor[] = [
   },
   {
     name: '@partywave',
-    position: 'Software Developer',
+    position: 'Developer',
     img: 'partywave.png',
     linkedIn: '',
     twitter: '',
@@ -183,7 +183,7 @@ const CONTRIBUTORS: Contributor[] = [
   },
   {
     name: '@saharAP',
-    position: 'Software Developer',
+    position: 'Developer',
     img: 'saharAP.jpg',
     linkedIn: '',
     twitter: '',
@@ -191,7 +191,7 @@ const CONTRIBUTORS: Contributor[] = [
   },
   {
     name: '@soptq',
-    position: 'Software Developer',
+    position: 'Developer',
     img: 'Soptq.jpg',
     linkedIn: '',
     twitter: '',
@@ -199,7 +199,7 @@ const CONTRIBUTORS: Contributor[] = [
   },
   {
     name: 'Stanlee Okwii',
-    position: 'Software Developer',
+    position: 'Developer',
     img: 'stanley.jpg',
     linkedIn: '',
     twitter: '',
@@ -207,7 +207,7 @@ const CONTRIBUTORS: Contributor[] = [
   },
   {
     name: '@the-emerald',
-    position: 'Software Developer',
+    position: 'Developer',
     img: 'the-emerald.png',
     linkedIn: '',
     twitter: '',
@@ -215,7 +215,7 @@ const CONTRIBUTORS: Contributor[] = [
   },
   {
     name: 'Andrew Yao',
-    position: 'Software Developer',
+    position: 'Developer',
     img: 'yaoandrew.jpg',
     linkedIn: '',
     twitter: '',
