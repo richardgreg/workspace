@@ -1,3 +1,6 @@
+const { url } = require('inspector');
+const colors = require('tailwindcss/colors')
+
 module.exports = {
   purge: [
     './pages/**/*.{js,ts,jsx,tsx}',
@@ -6,6 +9,40 @@ module.exports = {
   ],
   darkMode: false, // or 'media' or 'class'
   theme: {
+
+    screens: {
+      'sm': '640px',
+      // => @media (min-width: 640px) { ... }
+
+      'md': '768px',
+      // => @media (min-width: 768px) { ... }
+
+      'lg': '1024px',
+      // => @media (min-width: 1024px) { ... }
+
+      'laptop' : '1440px',
+      // => @media (min-width: 1440px) { ... }
+
+      'xl': '1920px',
+      // => @media (min-width: 1920px) { ... }
+
+      '2xl': '2560px',
+      // => @media (min-width: 2560px) { ... }
+    },
+    colors:{
+      gray: colors.coolGray,
+      red: colors.red,
+      yellow: colors.amber,
+      green:colors.emerald,
+      blue:colors.blue,
+      indigo:colors.indigo,
+      purple:colors.purple,
+      pink:colors.pink,
+      orange:colors.orange,
+      transparent:colors.transparent,
+      white:colors.white,
+      black:colors.black
+    },
     extend: {
       spacing: {
         18: '4.5rem',
@@ -21,6 +58,9 @@ module.exports = {
       lineHeight: {
         button: '32px',
       },
+      width: {
+        'fit-content': 'fit-content'
+      },
       scale: {
         101: '1.01',
         102: '1.02',
@@ -34,12 +74,20 @@ module.exports = {
 
         secondary: '#73B7EA',
         secondaryLight: '#DBEAFE',
-        secondaryDark: "#25283D",
+        secondaryDark: '#25283D',
+
+        inactiveYellow: '#FFF5CF',
+        activeYellow: '#FFDC38',
 
         ctaYellow: '#F6CB22',
         ctaYellowLight: '#FFD324',
+
+        startPopupGradient: '#F9A058',
+        endPopupGradient: '#FDEAA7',
       },
       backgroundImage: (theme) => ({
+        'bg-gradient': "url('/images/bgGradient.svg')",
+        'header-team': "url('/images/bgHeaderTeam.svg')",
         'hero-pattern': "url('/images/bgHero.svg')",
         'impact-pattern': "url('/images/bgImpact.svg')",
         'countdown-pattern': "url('/images/bgCountdown.svg')",

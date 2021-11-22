@@ -22,6 +22,10 @@ p {
   font-size: 0.95rem;
 }
 
+.mobile-menu-bg {
+  background: linear-gradient(175.4deg, #f9a058 66.15%, #fdeaa7 128.46%);
+}
+
 @layer base {
   @font-face {
     font-family: 'Avenir Next LT Pro';
@@ -51,7 +55,7 @@ p {
 
 @layer components {
   .button {
-    @apply flex-shrink-0 block px-4 py-2 text-base font-medium rounded-md border border-transparent text-base align-middle text-center leading-button shadow-sm;
+    @apply flex-shrink-0 block px-4 py-2 font-medium rounded-md border border-transparent text-base align-middle text-center leading-button shadow-sm;
   }
 
   .button:disabled {
