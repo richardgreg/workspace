@@ -597,7 +597,7 @@ export default function Mobile({
                 <span translate="no">Popcorn</span>?{' '}
               </p>
               <p className="text-base mx-auto ">
-                New Form Capital, Kenetic Capital, Cakebox Capital, The LAO,
+                Jump Capital, New Form Capital, Kenetic Capital, Cakebox Capital, The LAO,
                 Impossible Finance, The Crypto Founders Network, Big Brain
                 Holdings, Hestia Holdings, Amino Capital and angels from
                 MakerDAO, IBM, NASA, Google and Deloitte to name a few.
