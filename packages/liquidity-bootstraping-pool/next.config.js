@@ -5,6 +5,8 @@ const workspace = join(__dirname, '..');
 
 module.exports = {
   env: {
+    RPC_URL: process.env.RPC_URL,
+    CHAIN_ID: process.env.CHAIN_ID,
   },
   poweredByHeader: false,
   webpack: (config, options) => {
