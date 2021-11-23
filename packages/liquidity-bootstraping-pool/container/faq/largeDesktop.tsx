@@ -637,7 +637,7 @@ export default function LargeDesktop(): JSX.Element {
                 <p className="text-xl mx-auto font-light leading-10 ">
                   Jump Capital, New Form Capital, Kenetic Capital, Cakebox Capital, The LAO,
                   Impossible Finance, The Crypto Founders Network, Big Brain
-                  Holdings, Hestia Holdings, Amino Capital and angels from
+                  Holdings, Hestia Holdings, Amino Capital, Drop Ventures and angels from
                   MakerDAO, IBM, NASA, Google and Deloitte to name a few.
                 </p>
               </div>
