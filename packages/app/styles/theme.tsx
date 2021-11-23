@@ -4,6 +4,10 @@ import palette from "./palette";
 
 // Create a theme instance.
 export const theme = createTheme({
+  primaryDark: '#0D0C1D',
+  primaryLight: '#EFFFFA',
+  primaryHover: '#343078',
+  mobile: '576px',
   typography:{ fontFamily: [
     'Inter',
     'Roboto',

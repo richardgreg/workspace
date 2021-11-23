@@ -38,5 +38,8 @@
     120
   ],
   "cSpell.words": [
-  ]
+  ],
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  }
 }
