@@ -318,85 +318,86 @@ const IndexPage = () => {
         </section>
 
         <section className="flex flex-row w-10/12 mx-auto mb-24">
-          <div className="w-1/3">
-            <h2 className="font-bold text-5xl xl:text-6xl mb-4">
+          <div className="relative w-1/3">
+            {/* <img
+              className="absolute z-20 -top-18 -left-10"
+              src="/images/ourpartnersbg.svg"
+              style={{zIndex: 20}}
+            /> */}
+            <h2 className="z-10 font-bold text-5xl xl:text-6xl mb-4 ">
               Our Partners
             </h2>
-            <p className="text-xl font-landing text-gray-500">
+            <p className="z-20 text-xl font-landing text-gray-500 ">
               Meet our dedicated partners.
             </p>
           </div>
           <div className="w-2/3 flex flex-wrap ml-10">
-            {/* <img
+            <img
               src="images/investor-partners/jump.png"
-              className="mx-4 mb-5"
-            /> */}
+              className="mx-6 mb-14"
+            />
             <img
               src="images/investor-partners/newform.png"
-              className="mx-4 mb-5"
+              className="mx-6 mb-14"
             />
             <img
               src="images/investor-partners/kenetic.png"
-              className="mx-4 mb-5"
+              className="mx-6 mb-14"
             />
-            <img src="images/investor-partners/bb.png" className="mx-4 mb-5" />
+            <img src="images/investor-partners/bb.png" className="mx-6 mb-14" />
             <img
               src="images/investor-partners/impossible.png"
-              className="mx-4 mb-5"
+              className="mx-6 mb-14"
             />
             <img
               src="images/investor-partners/cryptofounders.png"
-              className="mx-4 mb-5"
+              className="mx-6 mb-14"
             />
             <img
               src="images/investor-partners/hestia.png"
-              className="mx-4 mb-5"
+              className="mx-6 mb-14"
             />
             <img
               src="images/investor-partners/amino.png"
-              className="mx-4 mb-5"
+              className="mx-6 mb-14"
+            />
+            <img
+              src="images/investor-partners/cakebox.png"
+              className="mx-6 mb-14"
+            />
+            <img
+              src="images/investor-partners/lao.png"
+              className="mx-6 mb-14"
             />
           </div>
         </section>
 
         <section className="flex flex-row w-10/12 mx-auto mb-24">
           <div className="w-2/3 flex flex-wrap">
-            {/* <img
-              src="images/investor-partners/jump.png"
-              className="mx-4 mb-5"
-            /> */}
+            <img src="images/asseenin/uot.png" className="mx-6 mb-14" />
+            <img src="images/asseenin/sarson.png" className="mr-4 mb-5" />
+            <img src="images/asseenin/newsbtc.png" className="mx-6 mb-14" />
             <img
-              src="images/investor-partners/newform.png"
-              className="mr-4 mb-5"
+              src="images/asseenin/entrepreneur.png"
+              className="mx-6 mb-14"
             />
+            <img src="images/asseenin/techtimes.png" className="mx-6 mb-14" />
+            <img src="images/asseenin/bitcoinist.png" className="mx-6 mb-14" />
+            <img src="images/asseenin/potato.png" className="mx-6 mb-14" />
             <img
-              src="images/investor-partners/kenetic.png"
-              className="mx-4 mb-5"
+              src="images/asseenin/digitalwealth.png"
+              className="mx-6 mb-14"
             />
-            <img src="images/investor-partners/bb.png" className="mx-4 mb-5" />
-            <img
-              src="images/investor-partners/impossible.png"
-              className="mx-4 mb-5"
-            />
-            <img
-              src="images/investor-partners/cryptofounders.png"
-              className="mx-4 mb-5"
-            />
-            <img
-              src="images/investor-partners/hestia.png"
-              className="mx-4 mb-5"
-            />
-            <img
-              src="images/investor-partners/amino.png"
-              className="mx-4 mb-5"
-            />
+            <img src="images/asseenin/finance.png" className="mx-6 mb-14" />
           </div>
-          <div className="w-1/3 ml-10">
-            <h2 className="font-bold text-5xl xl:text-6xl mb-4">
-              As Seen In
-            </h2>
+          <div className="relative w-1/3 ml-24">
+            {/* <img
+              className="absolute z-20 -top-3 right-42"
+              src="/images/asseeninbg.svg"
+            /> */}
+            <h2 className="font-bold text-5xl xl:text-6xl mb-4">As Seen In</h2>
             <p className="text-xl font-landing text-gray-500">
-              Find us on some media
+            Our media appearances
             </p>
           </div>
         </section>
@@ -904,6 +905,81 @@ const IndexPage = () => {
                   </div>
                 </div>
               </div>
+            </section>
+            
+            
+            <section className="w-10/12 mx-auto my-24">
+              <h2 className="text-center font-landing  font-semibold text-3xl xl:text-6xl">
+                As Seen In
+              </h2>
+              <p className="text-center text-md font-landing text-gray-500 mb-12">
+                Our media appearances
+              </p>
+              <img
+                src="images/investor-partners/jump.png"
+                className="mb-14 mx-auto"
+              />
+              <img
+                src="images/investor-partners/newform.png"
+                className=" mx-auto mb-14"
+              />
+              <img
+                src="images/investor-partners/kenetic.png"
+                className=" mx-auto mb-14"
+              />
+              <img
+                src="images/investor-partners/bb.png"
+                className=" mx-auto mb-14"
+              />
+              <img
+                src="images/investor-partners/impossible.png"
+                className=" mx-auto mb-14"
+              />
+              <img
+                src="images/investor-partners/cryptofounders.png"
+                className=" mx-auto mb-14"
+              />
+              <img
+                src="images/investor-partners/hestia.png"
+                className=" mx-auto mb-14"
+              />
+              <img
+                src="images/investor-partners/amino.png"
+                className=" mx-auto mb-14"
+              />
+              <img
+                src="images/investor-partners/cakebox.png"
+                className=" mx-auto mb-14"
+              />
+              <img
+                src="images/investor-partners/lao.png"
+                className=" mx-auto mb-14"
+              />
+            </section>
+
+            
+            <section className="w-10/12 mx-auto my-24">
+              <h2 className="text-center font-landing  font-semibold text-3xl xl:text-6xl">
+                As Seen In
+              </h2>
+              <p className="text-center text-md font-landing text-gray-500 mb-12">
+                Our media appearances
+              </p>
+              <img src="images/asseenin/uot.png" className="mx-auto mb-14" />
+            <img src="images/asseenin/sarson.png" className="mx-auto mb-5" />
+            <img src="images/asseenin/newsbtc.png" className="mx-auto mb-14" />
+            <img
+              src="images/asseenin/entrepreneur.png"
+              className="mx-auto mb-14"
+            />
+            <img src="images/asseenin/techtimes.png" className="mx-auto mb-14" />
+            <img src="images/asseenin/bitcoinist.png" className="mx-auto mb-14" />
+            <img src="images/asseenin/potato.png" className="mx-auto mb-14" />
+            <img
+              src="images/asseenin/digitalwealth.png"
+              className="mx-auto mb-14"
+            />
+            <img src="images/asseenin/finance.png" className="mx-auto mb-14" />
             </section>
             <section className="w-10/12 mx-auto mb-24">
               <h2 className="font-bold text-3xl mb-4 text-center">
