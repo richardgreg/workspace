@@ -375,7 +375,6 @@ const IndexPage = () => {
         <section className="flex flex-row w-10/12 mx-auto mb-24">
           <div className="w-2/3 flex flex-wrap">
             <img src="images/asseenin/uot.png" className="mx-6 mb-14" />
-            <img src="images/asseenin/sarson.png" className="mr-4 mb-5" />
             <img src="images/asseenin/newsbtc.png" className="mx-6 mb-14" />
             <img
               src="images/asseenin/entrepreneur.png"
@@ -964,7 +963,6 @@ const IndexPage = () => {
                 Our media appearances
               </p>
               <img src="images/asseenin/uot.png" className="mx-auto mb-14" />
-              <img src="images/asseenin/sarson.png" className="mx-auto mb-5" />
               <img
                 src="images/asseenin/newsbtc.png"
                 className="mx-auto mb-14"
