@@ -323,15 +323,14 @@ const IndexPage = () => {
               Our Partners
             </h2>
             <p className="text-xl font-landing text-gray-500">
-              Meet our dedicated partner. Wanna be a part of us?{' '}
-              <span className="text-blue-600">Join Now</span>
+              Meet our dedicated partners.
             </p>
           </div>
           <div className="w-2/3 flex flex-wrap ml-10">
-            <img
+            {/* <img
               src="images/investor-partners/jump.png"
               className="mx-4 mb-5"
-            />
+            /> */}
             <img
               src="images/investor-partners/newform.png"
               className="mx-4 mb-5"
@@ -359,6 +358,49 @@ const IndexPage = () => {
             />
           </div>
         </section>
+
+        <section className="flex flex-row w-10/12 mx-auto mb-24">
+          <div className="w-2/3 flex flex-wrap">
+            {/* <img
+              src="images/investor-partners/jump.png"
+              className="mx-4 mb-5"
+            /> */}
+            <img
+              src="images/investor-partners/newform.png"
+              className="mr-4 mb-5"
+            />
+            <img
+              src="images/investor-partners/kenetic.png"
+              className="mx-4 mb-5"
+            />
+            <img src="images/investor-partners/bb.png" className="mx-4 mb-5" />
+            <img
+              src="images/investor-partners/impossible.png"
+              className="mx-4 mb-5"
+            />
+            <img
+              src="images/investor-partners/cryptofounders.png"
+              className="mx-4 mb-5"
+            />
+            <img
+              src="images/investor-partners/hestia.png"
+              className="mx-4 mb-5"
+            />
+            <img
+              src="images/investor-partners/amino.png"
+              className="mx-4 mb-5"
+            />
+          </div>
+          <div className="w-1/3 ml-10">
+            <h2 className="font-bold text-5xl xl:text-6xl mb-4">
+              As Seen In
+            </h2>
+            <p className="text-xl font-landing text-gray-500">
+              Find us on some media
+            </p>
+          </div>
+        </section>
+
         <section className="w-10/12 mx-auto mb-24">
           <h2 className="font-bold text-5xl xl:text-6xl mb-4">How it works</h2>
           <p className="text-xl font-landing text-gray-500">
@@ -503,7 +545,7 @@ const IndexPage = () => {
             </div>
           </div>
         </section>
-        <section
+        {/* <section
           className=" flex-shrink-0 flex-grow-0 w-full h-full mb-24"
           
         >
@@ -523,7 +565,7 @@ const IndexPage = () => {
             </div>
             <AsSeenInCard image={''} title={'Popcorn: Makes Blockchain & The Environment Thrive ...'} content={'The environment was never a basic design parameter for Bitcoin. Today, cryptos have established themselves as a parallel global financial system, and Popcorn is working to make the new,  read more...'} url={''} bgImage={''} />
           </div>
-        </section>
+        </section> */}
         <section>
           <div
             className="bg-countdown-pattern flex-shrink-0 flex-grow-0 w-full
