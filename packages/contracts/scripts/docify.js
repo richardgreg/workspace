@@ -6,6 +6,7 @@
  * 3. insert `// Docgen-SOLC: x.x.x` to the contract source code. See contracts/core/defi/Pool.sol for a example.
  */
 
+
 const fs = require("fs");
 const path = require("path");
 const spawnSync = require("child_process").spawnSync;
