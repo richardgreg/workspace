@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
 
+// Docgen-SOLC: 0.8.0
 pragma solidity ^0.8.0;
 pragma experimental ABIEncoderV2;
 
@@ -7,13 +8,13 @@ import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/utils/math/Math.sol";
-import "../../interfaces/interfaces/IACLRegistry.sol";
+import "../../interfaces/IACLRegistry.sol";
 import "../../../externals/interfaces/YearnVault.sol";
 import "../../../externals/interfaces/BasicIssuanceModule.sol";
 import "../../../externals/interfaces/ISetToken.sol";
 import "../../../externals/interfaces/CurveContracts.sol";
-import "../../interfaces/interfaces/IContractRegistry.sol";
-import "../../utils/utils/KeeperIncentive.sol";
+import "../../interfaces/IContractRegistry.sol";
+import "../../utils/KeeperIncentive.sol";
 
 /*
 This Contract allows smaller depositors to mint and redeem HYSI without needing to through all the steps necessary on their own...

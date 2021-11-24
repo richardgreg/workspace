@@ -1,12 +1,13 @@
 // SPDX-License-Identifier: MIT
 
+// Docgen-SOLC: 0.8.0
 pragma solidity ^0.8.0;
 pragma experimental ABIEncoderV2;
 
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
-import {BatchType, Batch, IHysiBatchInteraction} from "../../interfaces/interfaces/IHysiBatchInteraction.sol";
+import {BatchType, Batch, IHysiBatchInteraction} from "../../interfaces/IHysiBatchInteraction.sol";
 import "../../../externals/interfaces/Curve3Pool.sol";
-import "../../interfaces/interfaces/IContractRegistry.sol";
+import "../../interfaces/IContractRegistry.sol";
 
 /*
 This Contract allows user to use and receive stablecoins directly when interacting with HysiBatchInteraction.

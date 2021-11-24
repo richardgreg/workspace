@@ -1,15 +1,16 @@
 // SPDX-License-Identifier: MIT
 
+// Docgen-SOLC: 0.8.0
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-import "../../interfaces/interfaces/IPool.sol";
-import "../../../externals/interfaces/CurveAddressProvider.sol";
-import "../../../externals/interfaces/CurveRegistry.sol";
-import "../../../externals/interfaces/CurveMetapool.sol";
-import "../../../externals/interfaces/Curve3Pool.sol";
+import "../interfaces/IPool.sol";
+import "../../externals/interfaces/CurveAddressProvider.sol";
+import "../../externals/interfaces/CurveRegistry.sol";
+import "../../externals/interfaces/CurveMetapool.sol";
+import "../../externals/interfaces/Curve3Pool.sol";
 
 contract Zapper {
   using SafeERC20 for IERC20;

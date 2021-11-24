@@ -1,6 +1,7 @@
+// Docgen-SOLC: 0.8.0
 pragma solidity ^0.8.0;
 
-import "../core/interfaces/interfaces/IACLRegistry.sol";
+import "../core/interfaces/IACLRegistry.sol";
 
 contract ACLRegistryHelper {
   IACLRegistry public aclRegistry;

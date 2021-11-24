@@ -1,11 +1,12 @@
 // SPDX-License-Identifier: MIT
 
+// Docgen-SOLC: 0.8.0
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "../interfaces/interfaces/IBeneficiaryRegistry.sol";
-import "../interfaces/interfaces/IACLRegistry.sol";
-import "../interfaces/interfaces/IContractRegistry.sol";
+import "../interfaces/IBeneficiaryRegistry.sol";
+import "../interfaces/IACLRegistry.sol";
+import "../interfaces/IContractRegistry.sol";
 
 contract BeneficiaryRegistry is IBeneficiaryRegistry {
   struct Beneficiary {

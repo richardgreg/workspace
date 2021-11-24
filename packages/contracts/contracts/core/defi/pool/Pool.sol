@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-
+// Docgen-SOLC: 0.8.0
 pragma solidity >=0.6.12;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
@@ -7,9 +7,9 @@ import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
 import "./AffiliateToken.sol";
-import "../../interfaces/erc20_metadata/IERC20Metadata.sol";
-import "../../interfaces/interfaces/IACLRegistry.sol";
-import "../../interfaces/interfaces/IContractRegistry.sol";
+import "../../interfaces/IERC20Metadata.sol";
+import "../../interfaces/IACLRegistry.sol";
+import "../../interfaces/IContractRegistry.sol";
 
 contract Pool is AffiliateToken, ReentrancyGuard, Pausable {
   using SafeMath for uint256;

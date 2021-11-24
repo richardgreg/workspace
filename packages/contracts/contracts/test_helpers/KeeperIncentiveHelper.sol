@@ -1,9 +1,10 @@
+// Docgen-SOLC: 0.8.0
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
-import "../core/utils/utils/KeeperIncentive.sol";
+import "../core/utils/KeeperIncentive.sol";
 
 contract KeeperIncentiveHelper {
   using SafeERC20 for IERC20;

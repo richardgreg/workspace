@@ -1,7 +1,7 @@
 pragma solidity ^0.7.0;
 
 import "@chainlink/contracts/src/v0.7/dev/VRFConsumerBase.sol";
-import "../core/interfaces/random_number_consumer/IRandomNumberConsumer.sol";
+import "../core/interfaces/IRandomNumberConsumer.sol";
 
 contract RandomNumberHelper is IRandomNumberConsumer, VRFConsumerBase {
   address public VRFCoordinator;

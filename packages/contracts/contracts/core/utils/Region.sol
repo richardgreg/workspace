@@ -1,8 +1,9 @@
+// Docgen-SOLC: 0.8.0
 pragma solidity ^0.8.0;
 
-import "../../interfaces/interfaces/IRegion.sol";
-import "../../interfaces/interfaces/IACLRegistry.sol";
-import "../../interfaces/interfaces/IContractRegistry.sol";
+import "../interfaces/IRegion.sol";
+import "../interfaces/IACLRegistry.sol";
+import "../interfaces/IContractRegistry.sol";
 
 contract Region is IRegion {
   IContractRegistry public contractRegistry;
