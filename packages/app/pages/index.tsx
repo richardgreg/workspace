@@ -2,7 +2,7 @@ import { Dialog, Transition } from '@headlessui/react';
 import { CatPool } from '@popcorn/ui/components/CatPool';
 import { Rocket } from '@popcorn/ui/components/Rocket';
 import FacebookPixel from 'components/FacebookPixel';
-import LinkedInPixel from 'components/LinkedInPixel';
+import LinkedInPagePixel, { LinkedInButtonPixel } from 'components/LinkedInPagePixel';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { Fragment, useEffect, useState } from 'react';
@@ -58,7 +58,8 @@ const IndexPage = () => {
   return (
     <div className="font-landing">
       <FacebookPixel />
-      {linkedInConversion && <LinkedInPixel conversionId="5594906"/>}
+      <LinkedInPagePixel />
+      {linkedInConversion && <LinkedInButtonPixel conversionId="5594906"/>}
       {/* Modal to display signup form*/}
       <Transition.Root show={ctaModalVisible} as={Fragment}>
         <Dialog
