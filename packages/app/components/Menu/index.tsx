@@ -3,7 +3,11 @@ import { bool } from 'prop-types';
 import styled from 'styled-components';
 import { MobileExpandableMenu } from 'components/MobileExpandableMenu';
 
-export const StyledMenu = styled.nav`
+
+interface StyledMenuProps{
+  open:boolean;
+}
+export const StyledMenu = styled.nav<StyledMenuProps>`
   display: ${({ open }) => (open ? 'flex' : 'none')};
   flex-direction: column;
   justify-content: center;

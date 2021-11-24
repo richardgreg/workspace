@@ -2,7 +2,7 @@ import React from 'react';
 import { bool, func } from 'prop-types';
 import styled from 'styled-components';
 
-interface OpenStatus {
+interface StyledBurgerProps {
   open: boolean;
 }
 
@@ -30,7 +30,7 @@ Burger.propTypes = {
 
 export default Burger;
 
-export const StyledBurger = styled.button`
+export const StyledBurger = styled.button<StyledBurgerProps>`
   position: absolute;
   top: ${({ open }) => (open ? '3%' : '15%')};
   right: ${({ open }) => (open ? '3%' : '15%')};
