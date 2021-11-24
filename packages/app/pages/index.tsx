@@ -375,7 +375,7 @@ const IndexPage = () => {
           <div className="w-2/3 flex flex-wrap">
             <img
               src="images/asseenin/coindesk.png"
-              className="mx-6 mb-14 opacity-50 hover:opacity-100"
+              className="mx-6 mb-14 opacity-50"
             />
             <img
               src="images/asseenin/investing.com.png"
@@ -1020,7 +1020,7 @@ const IndexPage = () => {
               </p>
               <img
                 src="images/asseenin/coindesk.png"
-                className="mx-auto mb-14 opacity-50 hover:opacity-100"
+                className="mx-auto mb-14 opacity-50"
               />
               <img
                 src="images/asseenin/investing.com.png"
