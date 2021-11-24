@@ -94,6 +94,8 @@ module.exports = {
         'popcorn1-pattern': "url('/images/bgPopcorn1.svg')",
         'popcorn2-pattern': "url('/images/bgPopcorn2.svg')",
         'popcorn3-pattern': "url('/images/bgPopcorn3.svg')",
+        'our-partners': "url('/images/ourpartnersbg.svg')",
+        'as-seen-in': "url('/images/asseeninbg.svg')",
       }),
       fontFamily: {
         landing: ['Avenir Next LT Pro', 'sans-serif'],
