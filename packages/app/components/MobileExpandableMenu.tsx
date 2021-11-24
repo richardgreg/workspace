@@ -13,7 +13,7 @@ export const MobileExpandableMenu: React.FC<MobileExpandableMenuProps> = ({
   toggleMenuVisible,
 }) => {
   return (
-    <div className="z-10 w-full overflow-y-auto ">
+    <div className="z-10 nav-width">
       <div className="relative w-full h-full transition-opacity duration-1000 ease-in-out mobile-menu-bg">
         <div className="w-10/12 mx-auto ">
           <div className="grid justify-items-stretch">

@@ -4,17 +4,32 @@ import styled from 'styled-components';
 import { MobileExpandableMenu } from 'components/MobileExpandableMenu';
 
 export const StyledMenu = styled.nav`
-  display: ${({ open }) => open ? 'flex' : 'none'};
+  display: ${({ open }) => (open ? 'flex' : 'none')};
   flex-direction: column;
   justify-content: center;
   background: ${({ theme }) => theme.primaryLight};
-  transform: ${({ open }) => open ? 'translateX(0)' : 'translateX(200%)'};
+  /* transform: ${({ open }) =>
+    open ? 'translateX(0)' : 'translateX(200%)'}; */
   text-align: left;
   position: absolute;
   top: 0;
   left: 0;
-  transition: transform 0.9s;
+  /* transition: transform 0.9s; */
   z-index: 1;
+
+  animation: fade_in_show 0.3s;
+
+  @keyframes fade_in_show {
+    0% {
+      opacity: 0;
+      transform: translateX(100%);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
   @media (max-width: ${({ theme }) => theme.mobile}) {
     width: 100%;
   }

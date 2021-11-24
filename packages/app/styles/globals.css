@@ -55,7 +55,7 @@ p {
 
 @layer components {
   .button {
-    @apply flex-shrink-0 block px-4 py-2 font-medium rounded-md border border-transparent text-base align-middle text-center leading-button shadow-sm;
+    @apply flex-shrink-0 block px-4 py-2 text-base font-medium text-center align-middle border border-transparent rounded-md shadow-sm leading-button;
   }
 
   .button:disabled {
@@ -67,11 +67,11 @@ p {
   }
 
   .button-primary {
-    @apply bg-indigo-600 text-white transition duration-150 ease-in-out;
+    @apply text-white transition duration-150 ease-in-out bg-indigo-600;
   }
 
   .button-seconday {
-    @apply bg-indigo-200 text-indigo-700  transition duration-150 ease-in-out;
+    @apply text-indigo-700 transition duration-150 ease-in-out bg-indigo-200;
   }
 
   .button-primary:focus {
@@ -79,11 +79,11 @@ p {
   }
 
   .button-primary:hover {
-    @apply bg-indigo-700 font-bold shadow-md transform scale-101;
+    @apply font-bold transform bg-indigo-700 shadow-md scale-101;
   }
 
   .button-secondary {
-    @apply bg-indigo-200 text-indigo-700  transition duration-150 ease-in-out;
+    @apply text-indigo-700 transition duration-150 ease-in-out bg-indigo-200;
   }
 
   .button-secondary:focus {
@@ -91,7 +91,7 @@ p {
   }
 
   .button-secondary:hover {
-    @apply bg-indigo-300 font-bold shadow-md transform scale-101;
+    @apply font-bold transform bg-indigo-300 shadow-md scale-101;
   }
 }
 
@@ -115,6 +115,10 @@ p {
   /* background-color: #e5e7eb; */
   border-color: #636363;
   color: #636363;
+}
+
+.nav-width{
+  width: calc(100vw - 1.05rem);
 }
 
 .discord:hover {
