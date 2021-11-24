@@ -333,7 +333,7 @@ const IndexPage = () => {
           <div className="w-2/3 flex flex-wrap ml-10">
             <img
               src="images/investor-partners/jump.png"
-              className="mx-6 mb-14"
+              className="mx-6 mb-14 opacity-50"
             />
             <img
               src="images/investor-partners/newform.png"
@@ -991,7 +991,7 @@ const IndexPage = () => {
               </p>
               <img
                 src="images/investor-partners/jump.png"
-                className="mb-14 mx-auto"
+                className="mb-14 mx-auto opacity-50"
               />
               <img
                 src="images/investor-partners/newform.png"
