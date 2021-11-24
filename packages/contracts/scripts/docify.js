@@ -4,6 +4,7 @@
  * 1. add the specified version of solc to package.json. For example: "solc-0.7.6": "npm:solc@0.7.6",
  * 2. run npm install / yarn install,
  * 3. insert `// Docgen-SOLC: x.x.x` to the contract source code. See contracts/core/defi/Pool.sol for a example.
+ * 
  */
 
 const fs = require("fs");
