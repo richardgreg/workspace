@@ -403,7 +403,7 @@ const IndexPage = () => {
         <section>
           <div
             className="bg-countdown-pattern flex-shrink-0 flex-grow-0 w-full
-          h-full pt-60 xl:pt-72 2xl:pt-104"
+          lg:h-112 laptop:h-128 xl:h-129 pt-60 xl:pt-72 2xl:pt-104"
             style={{
               backgroundRepeat: 'no-repeat',
               backgroundSize: 'cover',
@@ -412,10 +412,10 @@ const IndexPage = () => {
           >
           </div>
         </section>
-        <section className="w-full bg-secondary py-52">
-          <div className="w-8/12 mx-auto text-center">
-            <h2 className="font-bold text-4xl leading-snug mb-4">Notify Me</h2>
-            <p className="text-2xl font-medium">
+        <section className="w-full bg-secondary py-12">
+          <div className="w-8/12 mx-auto text-center -mt-72 xl:-mt-104 2xl:-mt-112">
+            <h2 className="font-medium text-5xl leading-snug mb-4">Notify Me</h2>
+            <p className="text-xl font-normal">
               Can’t wait to see you when we are launching. Get earlier
               notification to be part of our journey
             </p>
@@ -754,7 +754,7 @@ const IndexPage = () => {
             <section>
               <div
                 className="bg-countdown-pattern flex-shrink-0 flex-grow-0 w-full
-          h-full pt-60"
+          sm:h-104 h-14rem pt-60"
                 style={{
                   backgroundRepeat: 'no-repeat',
                   backgroundSize: 'cover',
@@ -763,8 +763,8 @@ const IndexPage = () => {
               >
               </div>
             </section>
-            <section className="w-full bg-secondary py-24">
-              <div className="w-10/12 mx-auto text-center">
+            <section className="w-full bg-secondary pt-12 pb-24">
+              <div className="w-10/12 mx-auto text-center md:-mt-72 sm:-mt-72 -mt-18">
                 <h2 className="font-bold text-2xl leading-snug mb-4">
                   Notify Me
                 </h2>
