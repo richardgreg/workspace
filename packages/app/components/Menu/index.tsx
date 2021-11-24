@@ -4,17 +4,17 @@ import styled from 'styled-components';
 import { MobileExpandableMenu } from 'components/MobileExpandableMenu';
 
 export const StyledMenu = styled.nav`
-  display: ${({ open }) => (open ? 'flex' : 'none')};
+  display: flex;
   flex-direction: column;
   justify-content: center;
   background: ${({ theme }) => theme.primaryLight};
   /* transform: ${({ open }) =>
-    open ? 'translateX(0)' : 'translateX(200%)'}; */
+  open ? 'translateX(0)' : 'translateX(200%)'}; */
+  /* transition: transform 0.9s; */
   text-align: left;
   position: absolute;
   top: 0;
   left: 0;
-  /* transition: transform 0.9s; */
   z-index: 1;
 
   animation: fade_in_show 0.3s;

@@ -2,6 +2,10 @@ import React from 'react';
 import { bool, func } from 'prop-types';
 import styled from 'styled-components';
 
+interface OpenStatus {
+  open: boolean;
+}
+
 const Burger = ({ open, setOpen, ...props }) => {
   const isExpanded = open ? true : false;
   return (
@@ -29,7 +33,7 @@ export default Burger;
 export const StyledBurger = styled.button`
   position: absolute;
   top: ${({ open }) => (open ? '3%' : '15%')};
-  right: ${({ open }) => (open ? '5%' : '2rem')};
+  right: ${({ open }) => (open ? '3%' : '15%')};
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -45,7 +49,7 @@ export const StyledBurger = styled.button`
   }
 
   @media (max-width: 480px) {
-    right: ${({ open }) => (open ? '3%' : '2rem')};
+    right: ${({ open }) => (open ? '4%' : '2rem')};
   }
 
   &:focus {
@@ -53,8 +57,8 @@ export const StyledBurger = styled.button`
   }
 
   div {
-    width: ${({ open }) => (open ? '1.2rem' : '2rem')};
-    height: ${({ open }) => (open ? '0.15rem' : '0.25rem')};
+    width: ${({ open }) => (open ? '2rem' : '2rem')};
+    height: ${({ open }) => (open ? '0.25rem' : '0.25rem')};
     background: ${({ theme, open }) =>
       open ? theme.primaryDark : theme.primaryLight};
     border-radius: 10px;
@@ -63,19 +67,18 @@ export const StyledBurger = styled.button`
     transform-origin: 1px;
 
     :first-child {
-      background: ${({ open }) => (open ? '#000' : '#000')};
+      background: ${({ open }) => (open ? '#fff' : '#000')};
       transform: ${({ open }) => (open ? 'rotate(45deg)' : 'rotate(0)')};
-      top: ${({ open }) => (open ? '9px' : '0')};
     }
 
     :nth-child(2) {
-      background: #000;
+      background: ${({ open }) => (open ? '#fff' : '#000')};
       opacity: ${({ open }) => (open ? '0' : '1')};
       transform: ${({ open }) => (open ? 'translateX(20px)' : 'translateX(0)')};
     }
 
     :nth-child(3) {
-      background: ${({ open }) => (open ? '#000' : '#000')};
+      background: ${({ open }) => (open ? '#fff' : '#000')};
       transform: ${({ open }) => (open ? 'rotate(-45deg)' : 'rotate(0)')};
     }
   }
