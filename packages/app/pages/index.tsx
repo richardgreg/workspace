@@ -319,17 +319,17 @@ const IndexPage = () => {
 
         <section className="flex flex-row w-10/12 mx-auto mb-24">
           <div className="relative w-1/3">
-            {/* <img
-              className="absolute z-20 -top-18 -left-10"
-              src="/images/ourpartnersbg.svg"
-              style={{zIndex: 20}}
-            /> */}
-            <h2 className="z-10 font-bold text-5xl xl:text-6xl mb-4 ">
-              Our Partners
-            </h2>
-            <p className="z-20 text-xl font-landing text-gray-500 ">
-              Meet our dedicated partners.
-            </p>
+            <div className="absolute z-0 -top-18 -left-10">
+              <img src="/images/ourpartnersbg.svg" style={{ zIndex: 20 }} />
+            </div>
+            <div className="absolute z-10">
+              <h2 className=" font-bold text-5xl xl:text-6xl mb-4 ">
+                Our Partners
+              </h2>
+              <p className="text-xl font-landing text-gray-500 ">
+                Meet our dedicated partners.
+              </p>
+            </div>
           </div>
           <div className="w-2/3 flex flex-wrap ml-10">
             <img
@@ -372,7 +372,7 @@ const IndexPage = () => {
           </div>
         </section>
 
-        <section className="flex flex-row w-10/12 mx-auto mb-24">
+        <section className="flex flex-row w-10/12 mx-auto mt-12 mb-24">
           <div className="w-2/3 flex flex-wrap">
             <img src="images/asseenin/uot.png" className="mx-6 mb-14" />
             <img src="images/asseenin/newsbtc.png" className="mx-6 mb-14" />
@@ -390,14 +390,17 @@ const IndexPage = () => {
             <img src="images/asseenin/finance.png" className="mx-6 mb-14" />
           </div>
           <div className="relative w-1/3 ml-24">
-            {/* <img
-              className="absolute z-20 -top-3 right-42"
-              src="/images/asseeninbg.svg"
-            /> */}
-            <h2 className="font-bold text-5xl xl:text-6xl mb-4">As Seen In</h2>
-            <p className="text-xl font-landing text-gray-500">
-              Our media appearances
-            </p>
+            <div className="absolute z-10">
+              <h2 className="font-bold text-5xl xl:text-6xl mb-4">
+                As Seen In
+              </h2>
+              <p className="text-xl font-landing text-gray-500">
+                Our media appearances
+              </p>
+            </div>
+            <div className="absolute z-0 -top-8 right-42">
+              <img src="/images/asseeninbg.svg" />
+            </div>
           </div>
         </section>
 
@@ -545,27 +548,7 @@ const IndexPage = () => {
             </div>
           </div>
         </section>
-        {/* <section
-          className=" flex-shrink-0 flex-grow-0 w-full h-full mb-24"
-          
-        >
-          <div className="flex flex-col w-10/12 mx-auto pt-20  justify-between items-center">
-            <div className="w-full flex flex-row justify-between">
-              <h2 className="w-1/4 font-bold text-5xl xl:text-6xl leading-snug mb-4">
-                As seen in
-              </h2>
-              <div className="w-1/4 flex flex-row justify-end">
-                <div className="group rounded-full h-12 w-12 flex items-center justify-center bg-white border-blue-600 hover:bg-blue-600" style={{ borderWidth: 1 }}>
-                  <Icon.ChevronLeft className="text-blue-600 group-hover:text-white"/>
-                </div>
-                <div className="group rounded-full h-12 w-12 flex items-center justify-center bg-white border-blue-600 hover:bg-blue-600 ml-6" style={{borderWidth: 1}}>
-                  <Icon.ChevronRight className="text-blue-600  group-hover:text-white" />
-                </div>
-              </div>
-            </div>
-            <AsSeenInCard image={''} title={'Popcorn: Makes Blockchain & The Environment Thrive ...'} content={'The environment was never a basic design parameter for Bitcoin. Today, cryptos have established themselves as a parallel global financial system, and Popcorn is working to make the new,  read more...'} url={''} bgImage={''} />
-          </div>
-        </section> */}
+
         <section>
           <div
             className="bg-countdown-pattern flex-shrink-0 flex-grow-0 w-full
