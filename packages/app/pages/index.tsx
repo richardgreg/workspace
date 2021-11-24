@@ -380,18 +380,61 @@ const IndexPage = () => {
               className="mx-6 mb-14"
             />
             <img src="images/asseenin/yahoo.png" className="mx-6 mb-14" />
-            <img src="images/asseenin/bitcoinist.png" className="mx-6 mb-14" />
-            <img src="images/asseenin/newsbtc.png" className="mx-6 mb-14" />
-            <img src="images/asseenin/potato.png" className="mx-6 mb-14" />
-            <img
-              src="images/asseenin/entrepreneur.png"
-              className="mx-6 mb-14"
-            />
+            <a
+              href="https://bitcoinist.com/blockchain-and-the-environment-can-they-live-in-harmony/"
+              target="_blank"
+            >
+              <img
+                src="images/asseenin/bitcoinist.png"
+                className="mx-6 mb-14"
+              />
+            </a>
+            <a
+              href="https://www.newsbtc.com/news/company/three-defi-platforms-changing-the-game-in-unexpected-ways/"
+              target="_blank"
+            >
+              <img src="images/asseenin/newsbtc.png" className="mx-6 mb-14" />
+            </a>
+            <a
+              href="https://cryptopotato.com/popcorn-network-chooses-patch-to-execute-carbon-neutral-defi/"
+              target="_blank"
+            >
+              <img src="images/asseenin/potato.png" className="mx-6 mb-14" />
+            </a>
+            <a
+              href="https://www.entrepreneur.com/article/394694"
+              target="_blank"
+            >
+              <img
+                src="images/asseenin/entrepreneur.png"
+                className="mx-6 mb-14"
+              />
+            </a>
             <img src="images/asseenin/it.png" className="mx-6 mb-14" />
-            <img src="images/asseenin/dwn.png" className="mx-6 mb-14" />
-            <img src="images/asseenin/magnates.png" className="mx-6 mb-14" />
-            <img src="images/asseenin/techtimes.png" className="mx-6 mb-14" />
-            <img src="images/asseenin/utoday.png" className="mx-6 mb-14" />
+            <a
+              href="https://dwealth.news/2021/11/real-clear-crypto-defi-popcorn-enables-digital-assets-to-work-for-the-common-good-and-the-yield-is-like-butter/"
+              target="_blank"
+            >
+              <img src="images/asseenin/dwn.png" className="mx-6 mb-14" />
+            </a>
+            <a
+              href="https://www.financemagnates.com/thought-leadership/why-is-defi-taking-over-the-banking-world/"
+              target="_blank"
+            >
+              <img src="images/asseenin/magnates.png" className="mx-6 mb-14" />
+            </a>
+            <a
+              href="https://www.techtimes.com/articles/266356/20211007/popcorn-and-patch-want-to-make-crypto-carbon-neutral.htm"
+              target="_blank"
+            >
+              <img src="images/asseenin/techtimes.png" className="mx-6 mb-14" />
+            </a>
+            <a
+              href="https://u.today/popcorn-network-pop-partners-with-patch-to-build-carbon-neutral-defi-product"
+              target="_blank"
+            >
+              <img src="images/asseenin/utoday.png" className="mx-6 mb-14" />
+            </a>
           </div>
           <div className="relative w-1/3 ml-24">
             <div className="absolute z-10">
@@ -949,24 +992,85 @@ const IndexPage = () => {
               <p className="text-center text-md font-landing text-gray-500 mb-12">
                 Our media appearances
               </p>
-              <img src="images/asseenin/coindesk.png" className="mx-auto mb-14" />
-            <img
-              src="images/asseenin/investing.com.png"
-              className="mx-auto mb-14"
-            />
-            <img src="images/asseenin/yahoo.png" className="mx-auto mb-14" />
-            <img src="images/asseenin/bitcoinist.png" className="mx-auto mb-14" />
-            <img src="images/asseenin/newsbtc.png" className="mx-auto mb-14" />
-            <img src="images/asseenin/potato.png" className="mx-auto mb-14" />
-            <img
-              src="images/asseenin/entrepreneur.png"
-              className="mx-auto mb-14"
-            />
-            <img src="images/asseenin/it.png" className="mx-auto mb-14" />
-            <img src="images/asseenin/dwn.png" className="mx-auto mb-14" />
-            <img src="images/asseenin/magnates.png" className="mx-auto mb-14" />
-            <img src="images/asseenin/techtimes.png" className="mx-auto mb-14" />
-            <img src="images/asseenin/utoday.png" className="mx-auto mb-14" />
+              <img
+                src="images/asseenin/coindesk.png"
+                className="mx-auto mb-14"
+              />
+              <img
+                src="images/asseenin/investing.com.png"
+                className="mx-auto mb-14"
+              />
+              <img src="images/asseenin/yahoo.png" className="mx-auto mb-14" />
+              <a
+                href="https://bitcoinist.com/blockchain-and-the-environment-can-they-live-in-harmony/"
+                target="_blank"
+              >
+                <img
+                  src="images/asseenin/bitcoinist.png"
+                  className="mx-auto mb-14"
+                />
+              </a>
+              <a
+                href="https://www.newsbtc.com/news/company/three-defi-platforms-changing-the-game-in-unexpected-ways/"
+                target="_blank"
+              >
+                <img
+                  src="images/asseenin/newsbtc.png"
+                  className="mx-auto mb-14"
+                />
+              </a>
+              <a
+                href="https://cryptopotato.com/popcorn-network-chooses-patch-to-execute-carbon-neutral-defi/"
+                target="_blank"
+              >
+                <img
+                  src="images/asseenin/potato.png"
+                  className="mx-auto mb-14"
+                />
+              </a>
+              <a
+                href="https://www.entrepreneur.com/article/394694"
+                target="_blank"
+              >
+                <img
+                  src="images/asseenin/entrepreneur.png"
+                  className="mx-auto mb-14"
+                />
+              </a>
+              <img src="images/asseenin/it.png" className="mx-auto mb-14" />
+              <a
+                href="https://dwealth.news/2021/11/real-clear-crypto-defi-popcorn-enables-digital-assets-to-work-for-the-common-good-and-the-yield-is-like-butter/"
+                target="_blank"
+              >
+                <img src="images/asseenin/dwn.png" className="mx-auto mb-14" />
+              </a>
+              <a
+                href="https://www.financemagnates.com/thought-leadership/why-is-defi-taking-over-the-banking-world/"
+                target="_blank"
+              >
+                <img
+                  src="images/asseenin/magnates.png"
+                  className="mx-auto mb-14"
+                />
+              </a>
+              <a
+                href="https://www.techtimes.com/articles/266356/20211007/popcorn-and-patch-want-to-make-crypto-carbon-neutral.htm"
+                target="_blank"
+              >
+                <img
+                  src="images/asseenin/techtimes.png"
+                  className="mx-auto mb-14"
+                />
+              </a>
+              <a
+                href="https://u.today/popcorn-network-pop-partners-with-patch-to-build-carbon-neutral-defi-product"
+                target="_blank"
+              >
+                <img
+                  src="images/asseenin/utoday.png"
+                  className="mx-auto mb-14"
+                />
+              </a>
             </section>
             <section className="w-10/12 mx-auto mb-24">
               <h2 className="font-bold text-3xl mb-4 text-center">
