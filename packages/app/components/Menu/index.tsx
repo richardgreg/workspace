@@ -4,11 +4,11 @@ import styled from 'styled-components';
 import { MobileExpandableMenu } from 'components/MobileExpandableMenu';
 
 export const StyledMenu = styled.nav`
-  display: ${({ open }) => open ? 'flex' : 'none'};
+  display: ${({ open }) => (open ? 'flex' : 'none')};
   flex-direction: column;
   justify-content: center;
   background: ${({ theme }) => theme.primaryLight};
-  transform: ${({ open }) => open ? 'translateX(0)' : 'translateX(200%)'};
+  transform: ${({ open }) => (open ? 'translateX(0)' : 'translateX(200%)')};
   text-align: left;
   position: absolute;
   top: 0;
