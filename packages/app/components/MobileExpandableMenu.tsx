@@ -114,14 +114,6 @@ export const MobileExpandableMenu: React.FC<MobileExpandableMenuProps> = ({
               <Link href="/" passHref>
                 <a className="text-xl text-white text-semibold">Home</a>
               </Link>
-              <Link href="/about" passHref>
-                <a
-                  className="text-xl text-white text-semibold"
-                  target="_window"
-                >
-                  About us
-                </a>
-              </Link>
               <Link href="https://medium.com/popcorndao" passHref>
                 <a
                   className="text-xl text-white text-semibold"
@@ -167,7 +159,7 @@ export const MobileExpandableMenu: React.FC<MobileExpandableMenuProps> = ({
             </p>
             <Link href="/" passHref>
               <a className="text-xl text-white text-semibold">Gitbook</a>
-            </Link>
+            </Link> */}
           </div>
         </div>
       </div>

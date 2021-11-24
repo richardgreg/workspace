@@ -1,3 +1,4 @@
+import * as Icon from 'react-feather';
 import { Dialog, Transition } from '@headlessui/react';
 import FacebookPixel from 'components/FacebookPixel';
 import { MobileExpandableMenu } from 'components/MobileExpandableMenu';
@@ -81,13 +82,62 @@ const TEAM: TeamMember[] = [
     linkedIn: 'https://www.linkedin.com/in/oscar-jacobsen-b03b1a213',
     twitter: 'https://twitter.com/OscarTapio',
   },
-//  {
-//    name: 'Olga S.',
-//    position: 'Illustrator',
-//    img: 'olga',
-//    linkedIn: '',
-//    twitter: '',
-//  },
+  {
+    name: 'Fan Wu',
+    position: 'Product Manager',
+    img: 'fan',
+    linkedIn: 'https://www.linkedin.com/in/fan-wu-3093039/',
+    twitter: 'https://twitter.com/fanwu___',
+  },
+  {
+    name: 'Anna-Marie Swan',
+    position: 'Project Manager',
+    img: 'annamarie',
+    linkedIn: 'https://www.linkedin.com/in/anna-marieswan17dm0001/',
+    twitter: 'https://twitter.com/MrsBadgerface',
+  },
+  {
+    name: 'Will Nicoll',
+    position: 'Community Lead',
+    img: 'will',
+    linkedIn: 'https://www.linkedin.com/in/will-nicoll-5357b4b4/',
+    twitter: 'https://twitter.com/illhelm1',
+  },
+  {
+    name: 'Fernando0x		',
+    position: 'Developer',
+    img: 'fernando',
+    linkedIn: 'https://www.linkedin.com/in/fernandotorres2/				',
+    twitter: '',
+  },
+  {
+    name: 'Bhanu Sanghi',
+    position: 'Developer',
+    img: 'bhanu',
+    linkedIn: 'https://www.linkedin.com/in/bhanu-sanghi-943204126/							',
+    twitter: 'https://twitter.com/bhanusanghi				',
+  },
+  {
+    name: 'Leo Marlo',
+    position: 'Developer',
+    img: 'leo',
+    linkedIn: 'https://at.linkedin.com/in/leonhard-horstmeyer				',
+    twitter: 'https://twitter.com/Leo_Marlo				',
+  },
+  {
+    name: 'Ashish Mishra',
+    position: 'Developer',
+    img: 'ashish',
+    linkedIn: 'https://www.linkedin.com/in/ashish-mishra-b31226b1/				',
+    twitter: 'https://twitter.com/mishraashish006				',
+  },
+  //  {
+  //    name: 'Olga S.',
+  //    position: 'Illustrator',
+  //    img: 'olga',
+  //    linkedIn: '',
+  //    twitter: '',
+  //  },
 ];
 
 const CONTRIBUTORS: Contributor[] = [
@@ -421,6 +471,18 @@ const TeamPage = () => {
       {/* DESKTOP + TABLET VERSION */}
       <div className="hidden lg:flex flex-col w-full h-full">
         <header className=" bg-primary">
+          <Link href="https://launch.popcorn.network/" passHref>
+            <a target="_window">
+              <div className="w-full h-14 bg-yellow-500 shadow-md flex justify-center cursor-pointer hover:bg-yellow-400">
+                <div className="flex flex-row items-center mx-auto">
+                  <p className="text-white text-2xl font-bold">
+                    Token Launch Auction
+                  </p>
+                  <Icon.ArrowRightCircle className="ml-2 w-7 h-7 text-white" />
+                </div>
+              </div>
+            </a>
+          </Link>
           <nav className="w-10/12 mx-auto pt-12 pb-4 border-b border-primaryLight flex flex-row items-center justify-between">
             <div>
               <Link href="/" passHref>
