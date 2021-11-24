@@ -221,6 +221,78 @@ const CONTRIBUTORS: Contributor[] = [
     twitter: '',
     github: 'https://github.com/yaoandrew',
   },
+  {
+    name: 'Tobias',
+    position: 'PopStar',
+    img: 'tobias.png',
+    linkedIn: 'https://www.linkedin.com/in/toboehm',
+    twitter: 'https://twitter.com/ToBoehm',
+    github: '',
+  },
+  {
+    name: 'Justin',
+    position: 'PopStar',
+    img: 'justin.png',
+    linkedIn: '',
+    twitter: 'https://twitter.com/condrenjustin',
+    github: '',
+  },
+  {
+    name: 'Mark Wieder',
+    position: 'PopStar',
+    img: 'mark.png',
+    linkedIn: 'https://linkedin.com/in/mrwieder',
+    twitter: 'https://twitter.com/mark_wieder',
+    github: '',
+  },
+  {
+    name: 'Kenkong',
+    position: 'PopStar',
+    img: '',
+    linkedIn: '',
+    twitter: 'https://mobile.twitter.com/kenkong69328121',
+    github: '',
+  },
+  {
+    name: 'Angel Gonzalez',
+    position: 'PopStar',
+    img: '',
+    linkedIn: 'https://www.linkedin.com/in/angel-gonzalez-b156a3223',
+    twitter: 'https://twitter.com/EmptyDebitCard',
+    github: '',
+  },
+  {
+    name: 'Ujjwal',
+    position: 'PopStar',
+    img: 'ujjwal.png',
+    linkedIn: 'https://www.linkedin.com/in/ujjwal-sharma-5b3252210',
+    twitter: 'https://twitter.com/nftsvc?t=WgVFbde-SKrAtR8aln7wuw&s=09',
+    github: '',
+  },
+  {
+    name: 'Valentin Prossliner',
+    position: 'PopStar',
+    img: 'valentin.png',
+    linkedIn: 'https://www.linkedin.com/in/valentin-prossliner-b58088155/',
+    twitter: '',
+    github: '',
+  },
+  {
+    name: 'Gabriel Mazzone',
+    position: 'PopStar',
+    img: 'gabriel.png',
+    linkedIn: 'https://www.linkedin.com/in/gabrielmazzone/',
+    twitter: '',
+    github: '',
+  },
+  {
+    name: 'Shubham Chauhan',
+    position: 'PopStar',
+    img: 'shubham.png',
+    linkedIn: 'https://www.linkedin.com/in/shubhamchauhan08/',
+    twitter: '',
+    github: '',
+  },
 ];
 
 const TeamMemberCard = ({ name, position, image, linkedIn, twitter }) => {
@@ -291,14 +363,16 @@ const ContributorCard = ({
           className="mx-auto mb-1 rounded-full absolute top-0 left-0 z-10"
           style={{ width: 241, height: 223 }}
         ></img>
-        <img
-          src={`/images/contributors/${image}`}
-          alt="Black and white contributor headshot with overlayed cartoon popcorn"
-          className="filter grayscale mx-auto mb-1 rounded-full absolute top-5 right-4 z-20"
-        ></img>
+        {image && (
+          <img
+            src={`/images/contributors/${image}`}
+            alt="Black and white contributor headshot with overlayed cartoon popcorn"
+            className="filter grayscale mx-auto mb-1 rounded-full absolute top-5 right-4 z-20"
+          ></img>
+        )}
       </div>
       <h3 className="font-semibold text-3xl pt-16">{name}</h3>
-      <h3 className="font-normal text-2xl pt-3">{position}</h3>
+      {/* <h3 className="font-normal text-2xl pt-3">{position}</h3> */}
       <div className="w-10/12 flex flex-row justify-center mt-4">
         {linkedIn && (
           <a href={linkedIn} target="_blank">
