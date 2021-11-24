@@ -374,41 +374,24 @@ const IndexPage = () => {
 
         <section className="flex flex-row w-10/12 mx-auto mt-12 xl:mt-24 mb-24">
           <div className="w-2/3 flex flex-wrap">
-           <img
-                src="images/asseenin/entrepreneur.png"
-                className="mx-6 mb-14"
-              />
-              <img src="images/asseenin/techtimes.png" className="mx-6 mb-14" />
-              <img src="images/asseenin/bitcoinist.png" className="mx-6 mb-14" />
-              <img src="images/asseenin/utoday.png" className="mx-6 mb-14" />
-              <img src="images/asseenin/coindesk.png" className="mx-6 mb-14" />
-              <img src="images/asseenin/yahoo.png" className="mx-6 mb-14" />
-              <img src="images/asseenin/potato.png" className="mx-6 mb-14" />
-              <img
-                src="images/asseenin/dwn.png"
-                className="mx-6 mb-14"
-              />
-              <img
-                src="images/asseenin/magnates.png"
-                className="mx-6 mb-14"
-              />
-              <img
-                src="images/asseenin/investing.com.png"
-                className="mx-6 mb-14"
-              />
-              <img
-                src="images/asseenin/it.png"
-                className="mx-6 mb-14"
-              />
-              
-              <img
-                src="images/asseenin/sarson.png"
-                className="mx-6 mb-14"
-              />
-              <img
-                src="images/asseenin/newsbtc.png"
-                className="mx-6 mb-14"
-              />
+            <img src="images/asseenin/coindesk.png" className="mx-6 mb-14" />
+            <img
+              src="images/asseenin/investing.com.png"
+              className="mx-6 mb-14"
+            />
+            <img src="images/asseenin/yahoo.png" className="mx-6 mb-14" />
+            <img src="images/asseenin/bitcoinist.png" className="mx-6 mb-14" />
+            <img src="images/asseenin/newsbtc.png" className="mx-6 mb-14" />
+            <img src="images/asseenin/potato.png" className="mx-6 mb-14" />
+            <img
+              src="images/asseenin/entrepreneur.png"
+              className="mx-6 mb-14"
+            />
+            <img src="images/asseenin/it.png" className="mx-6 mb-14" />
+            <img src="images/asseenin/dwn.png" className="mx-6 mb-14" />
+            <img src="images/asseenin/magnates.png" className="mx-6 mb-14" />
+            <img src="images/asseenin/techtimes.png" className="mx-6 mb-14" />
+            <img src="images/asseenin/utoday.png" className="mx-6 mb-14" />
           </div>
           <div className="relative w-1/3 ml-24">
             <div className="absolute z-10">
@@ -966,41 +949,24 @@ const IndexPage = () => {
               <p className="text-center text-md font-landing text-gray-500 mb-12">
                 Our media appearances
               </p>
-              <img
-                src="images/asseenin/entrepreneur.png"
-                className="mx-auto mb-14"
-              />
-              <img src="images/asseenin/techtimes.png" className="mx-auto mb-14" />
-              <img src="images/asseenin/bitcoinist.png" className="mx-auto mb-14" />
-              <img src="images/asseenin/utoday.png" className="mx-auto mb-14" />
               <img src="images/asseenin/coindesk.png" className="mx-auto mb-14" />
-              <img src="images/asseenin/yahoo.png" className="mx-auto mb-14" />
-              <img src="images/asseenin/potato.png" className="mx-auto mb-14" />
-              <img
-                src="images/asseenin/dwn.png"
-                className="mx-auto mb-14"
-              />
-              <img
-                src="images/asseenin/magnates.png"
-                className="mx-auto mb-14"
-              />
-              <img
-                src="images/asseenin/investing.com.png"
-                className="mx-auto mb-14"
-              />
-              <img
-                src="images/asseenin/it.png"
-                className="mx-auto mb-14"
-              />
-              
-              <img
-                src="images/asseenin/sarson.png"
-                className="mx-auto mb-14"
-              />
-              <img
-                src="images/asseenin/newsbtc.png"
-                className="mx-auto mb-14"
-              />
+            <img
+              src="images/asseenin/investing.com.png"
+              className="mx-auto mb-14"
+            />
+            <img src="images/asseenin/yahoo.png" className="mx-auto mb-14" />
+            <img src="images/asseenin/bitcoinist.png" className="mx-auto mb-14" />
+            <img src="images/asseenin/newsbtc.png" className="mx-auto mb-14" />
+            <img src="images/asseenin/potato.png" className="mx-auto mb-14" />
+            <img
+              src="images/asseenin/entrepreneur.png"
+              className="mx-auto mb-14"
+            />
+            <img src="images/asseenin/it.png" className="mx-auto mb-14" />
+            <img src="images/asseenin/dwn.png" className="mx-auto mb-14" />
+            <img src="images/asseenin/magnates.png" className="mx-auto mb-14" />
+            <img src="images/asseenin/techtimes.png" className="mx-auto mb-14" />
+            <img src="images/asseenin/utoday.png" className="mx-auto mb-14" />
             </section>
             <section className="w-10/12 mx-auto mb-24">
               <h2 className="font-bold text-3xl mb-4 text-center">
