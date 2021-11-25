@@ -58,7 +58,6 @@ const IndexPage = () => {
     <div className="font-landing">
       <FacebookPixel />
       <LinkedInPagePixel />
-      {/* {linkedInConversion && <LinkedInButtonPixel conversionId="5594906"/>} */}
       {/* Modal to display signup form*/}
       <Transition.Root show={ctaModalVisible} as={Fragment}>
         <Dialog
