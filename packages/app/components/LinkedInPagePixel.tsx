@@ -28,3 +28,19 @@ export default function LinkedInPagePixel(): JSX.Element {
     </>
   );
 }
+
+export function LinkedInConversion({ conversionId } : { conversionId: string}) {
+  return (
+    <>
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `(function() {
+            if (window.lintrk) {
+              window.lintrk('track', { conversion_id: ${conversionId} });
+            }
+          })`
+        }}
+      />
+    </>
+  )
+}
