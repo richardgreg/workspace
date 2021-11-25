@@ -38,7 +38,7 @@ export function LinkedInConversion({ conversionId } : { conversionId: string}) {
             if (window.lintrk) {
               window.lintrk('track', { conversion_id: ${conversionId} });
             }
-          })`
+          })();`
         }}
       />
     </>
