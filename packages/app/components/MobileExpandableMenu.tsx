@@ -153,14 +153,14 @@ export const MobileExpandableMenu: React.FC<MobileExpandableMenuProps> = ({
               </Link>
             </div>
           </div>
-          <div className="flex flex-col mt-10 space-y-3" style={{paddingBottom: 100}}>
+          {/* <div className="flex flex-col mt-10 space-y-3" style={{paddingBottom: 100}}>
             <p className="text-base font-bold text-white uppercase font-landing">
               Documentation
             </p>
             <Link href="/" passHref>
               <a className="text-xl text-white text-semibold">Gitbook</a>
-            </Link> */}
-          </div>
+            </Link> 
+          </div> */}
         </div>
       </div>
     </div>
