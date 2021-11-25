@@ -130,6 +130,22 @@ p {
   width: 100vw;
 }
 
+.nav-animation {
+  animation: fade_in_show_content 1.25s cubic-bezier(0,.77,.56,.4);
+}
+
+@keyframes fade_in_show_content {
+  0% {
+    opacity: 0;
+    transform: translateX(50%);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
 .discord:hover {
   filter: invert(30%) sepia(34%) saturate(5612%) hue-rotate(215deg) brightness(95%) contrast(93%);
 }

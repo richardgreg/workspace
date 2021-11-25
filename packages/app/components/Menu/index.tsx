@@ -21,7 +21,7 @@ export const StyledMenu = styled.nav<StyledMenuProps>`
   left: 0;
   z-index: 1;
 
-  animation: fade_in_show 0.3s;
+  animation: fade_in_show 1s;
 
   @keyframes fade_in_show {
     0% {
