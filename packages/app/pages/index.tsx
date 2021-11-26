@@ -10,7 +10,6 @@ import { Facebook, GitHub, Menu, Twitter, X } from 'react-feather';
 import * as Icon from 'react-feather';
 import { MobileExpandableMenu } from 'components/MobileExpandableMenu';
 
-declare const window: any;
 
 const IndexPage = () => {
   const router = useRouter();
@@ -142,7 +141,7 @@ const IndexPage = () => {
                         readOnly
                         onClick={(e) => {
                           toggleCtaModal(false);
-                          window.lintrk('track', { conversionId: '5594906'});
+                          (window as unknown as any).lintrk('track', { conversionId: '5594906'});
                           }
                         }
                       />
@@ -269,7 +268,7 @@ const IndexPage = () => {
                           id="mc-embedded-subscribe"
                           className="font-medium text-base bg-blue-600 hover:bg-blue-500 text-white rounded-xl px-4 py-2 cursor-pointer"
                           readOnly
-                          onClick={() => window.lintrk('track', { conversionId: '5594906'})}
+                          onClick={() => (window as unknown as any).lintrk('track', { conversionId: '5594906'})}
                         />
                       </div>
                     </div>
@@ -747,7 +746,7 @@ const IndexPage = () => {
                     id="mc-embedded-subscribe"
                     className="font-medium text-base bg-blue-600 hover:bg-blue-500 text-white rounded-xl px-4 py-2 cursor-pointer"
                     readOnly
-                    onClick={() => window.lintrk('track', { conversionId: '5594906'})}
+                    onClick={() => (window as unknown as any).lintrk('track', { conversionId: '5594906'})}
                   />
                 </div>
               </div>
@@ -940,7 +939,7 @@ const IndexPage = () => {
                           id="mc-embedded-subscribe"
                           className="font-medium text-base bg-blue-600 hover:bg-blue-500 text-white rounded-xl px-4 py-2 cursor-pointer"
                           readOnly
-                          onClick={() => window.lintrk('track', { conversionId: '5594906'})}
+                          onClick={() => (window as unknown as any).lintrk('track', { conversionId: '5594906'})}
                         />
                       </div>
                     </div>
@@ -1368,7 +1367,7 @@ const IndexPage = () => {
                         id="mc-embedded-subscribe"
                         className="font-medium text-base bg-blue-600 hover:bg-blue-500 text-white rounded-xl px-4 py-2 cursor-pointer"
                         readOnly
-                        onClick={() => window.lintrk('track', { conversionId: '5594906'})}
+                        onClick={() => (window as unknown as any).lintrk('track', { conversionId: '5594906'})}
                       />
                     </div>
                   </div>
