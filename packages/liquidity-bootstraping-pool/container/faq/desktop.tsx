@@ -22,7 +22,7 @@ export default function Desktop(): JSX.Element {
     <div className="hidden lg:flex 2xl:hidden flex-col w-full h-full font-landing">
       {/* NavBar*/}
       <div className="flex flex-col w-full h-full">
-        <header className="absolute w-full bg-none top-20 z-10">
+        <header className="absolute w-full bg-none top-10 pt-1 z-10">
           <nav className="w-9/12 mx-auto pb-4 flex flex-row items-center justify-between">
             <DesktopNavigation textSize="xl" />
           </nav>

@@ -70,7 +70,7 @@ module.exports = {
     },
   },
   variants: {
-    extend: { opacity: ['disabled'] },
+    extend: { opacity: ['disabled'], fontWeight: ['hover',] },
   },
   plugins: [],
 };
