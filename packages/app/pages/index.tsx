@@ -2,13 +2,15 @@ import { Dialog, Transition } from '@headlessui/react';
 import { CatPool } from '@popcorn/ui/components/CatPool';
 import { Rocket } from '@popcorn/ui/components/Rocket';
 import FacebookPixel from 'components/FacebookPixel';
-import LinkedInPagePixel, { LinkedInConversion } from 'components/LinkedInPagePixel';
+import LinkedInPagePixel from 'components/LinkedInPagePixel';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { Fragment, useEffect, useState } from 'react';
 import { Facebook, GitHub, Menu, Twitter, X } from 'react-feather';
 import * as Icon from 'react-feather';
 import { MobileExpandableMenu } from 'components/MobileExpandableMenu';
+
+declare const window: any;
 
 const IndexPage = () => {
   const router = useRouter();
@@ -17,7 +19,6 @@ const IndexPage = () => {
   const [countdownActive, disableCountdown] = useState<boolean>(true);
   const [menuVisible, toggleMenu] = useState<boolean>(false);
   const [ctaModalVisible, toggleCtaModal] = useState<boolean>(false);
-  const [conversionLinkedIn, setConversionLinkedIn] = useState(false);
 
   useEffect(() => {
     if (typeof window !== 'undefined' && window.location.pathname !== '/') {
@@ -59,7 +60,6 @@ const IndexPage = () => {
     <div className="font-landing">
       <FacebookPixel />
       <LinkedInPagePixel />
-      {conversionLinkedIn && <LinkedInConversion conversionId="5594906"/>}
       {/* Modal to display signup form*/}
       <Transition.Root show={ctaModalVisible} as={Fragment}>
         <Dialog
@@ -142,7 +142,7 @@ const IndexPage = () => {
                         readOnly
                         onClick={(e) => {
                           toggleCtaModal(false);
-                          setConversionLinkedIn(true);
+                          window.lintrk('track', { conversionId: '5594906'});
                           }
                         }
                       />
@@ -269,7 +269,7 @@ const IndexPage = () => {
                           id="mc-embedded-subscribe"
                           className="font-medium text-base bg-blue-600 hover:bg-blue-500 text-white rounded-xl px-4 py-2 cursor-pointer"
                           readOnly
-                          onClick={() => setConversionLinkedIn(true)}
+                          onClick={() => window.lintrk('track', { conversionId: '5594906'})}
                         />
                       </div>
                     </div>
@@ -747,7 +747,7 @@ const IndexPage = () => {
                     id="mc-embedded-subscribe"
                     className="font-medium text-base bg-blue-600 hover:bg-blue-500 text-white rounded-xl px-4 py-2 cursor-pointer"
                     readOnly
-                    onClick={() => setConversionLinkedIn(true)}
+                    onClick={() => window.lintrk('track', { conversionId: '5594906'})}
                   />
                 </div>
               </div>
@@ -940,7 +940,7 @@ const IndexPage = () => {
                           id="mc-embedded-subscribe"
                           className="font-medium text-base bg-blue-600 hover:bg-blue-500 text-white rounded-xl px-4 py-2 cursor-pointer"
                           readOnly
-                          onClick={() => setConversionLinkedIn(true)}
+                          onClick={() => window.lintrk('track', { conversionId: '5594906'})}
                         />
                       </div>
                     </div>
@@ -1368,7 +1368,7 @@ const IndexPage = () => {
                         id="mc-embedded-subscribe"
                         className="font-medium text-base bg-blue-600 hover:bg-blue-500 text-white rounded-xl px-4 py-2 cursor-pointer"
                         readOnly
-                        onClick={() => setConversionLinkedIn(true)}
+                        onClick={() => window.lintrk('track', { conversionId: '5594906'})}
                       />
                     </div>
                   </div>
