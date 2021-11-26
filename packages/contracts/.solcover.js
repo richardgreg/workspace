@@ -7,7 +7,7 @@ module.exports = {
     "core/defi/pool/AffiliateToken.sol",
     "test_helpers/Faucet.sol",
     "mocks/",
-    "externals/",
+    "external/",
     "core/interfaces/",
     "core/utils/RandomNumberConsumer.sol",
   ],

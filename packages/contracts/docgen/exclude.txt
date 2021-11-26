@@ -1,4 +1,4 @@
 mocks
-externals
+external
 test_helpers
 core/interfaces

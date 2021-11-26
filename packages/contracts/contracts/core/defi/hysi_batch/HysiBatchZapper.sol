@@ -6,7 +6,7 @@ pragma experimental ABIEncoderV2;
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 import {BatchType, Batch, IHysiBatchInteraction} from "../../interfaces/IHysiBatchInteraction.sol";
-import "../../../externals/interfaces/Curve3Pool.sol";
+import "../../../external/interfaces/Curve3Pool.sol";
 import "../../interfaces/IContractRegistry.sol";
 
 /*
@@ -207,7 +207,7 @@ contract HysiBatchZapper {
     If a user sends Stables to this contract by accident (Which cant be retrieved anyway) they will be used aswell.
     */
     uint256 stableBalance = IERC20(curve3Pool.coins(_stableCoinIndex))
-    .balanceOf(address(this));
+      .balanceOf(address(this));
 
     //Transfer stables to user
     IERC20(curve3Pool.coins(_stableCoinIndex)).safeTransfer(
