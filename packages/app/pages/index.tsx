@@ -2,7 +2,7 @@ import { Dialog, Transition } from '@headlessui/react';
 import { CatPool } from '@popcorn/ui/components/CatPool';
 import { Rocket } from '@popcorn/ui/components/Rocket';
 import FacebookPixel from 'components/FacebookPixel';
-import LinkedInPixel from 'components/LinkedInPixel';
+import LinkedInPagePixel from 'components/LinkedInPagePixel';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { Fragment, useEffect, useState, useRef } from 'react';
@@ -21,7 +21,6 @@ const IndexPage = () => {
   const [countdown, setCountdown] = useState<number[]>([]);
   const [countdownActive, disableCountdown] = useState<boolean>(true);
   const [menuVisible, toggleMenu] = useState<boolean>(false);
-  const [linkedInConversion, setLinkedInConversion] = useState<boolean>(false);
   const [ctaModalVisible, toggleCtaModal] = useState<boolean>(false);
 
 
@@ -71,7 +70,7 @@ const IndexPage = () => {
   return (
     <div className="font-landing">
       <FacebookPixel />
-      {linkedInConversion && <LinkedInPixel conversionId="5594906"/>}
+      <LinkedInPagePixel />
       {/* Modal to display signup form*/}
       <Transition.Root show={ctaModalVisible} as={Fragment}>
         <Dialog
@@ -153,8 +152,9 @@ const IndexPage = () => {
                         readOnly
                         onClick={(e) => {
                           toggleCtaModal(false);
-                          setLinkedInConversion(true)
-                        }}
+                          (window as unknown as any).lintrk('track', { conversionId: '5594906'});
+                          }
+                        }
                       />
                     </div>
                   </div>
@@ -279,7 +279,7 @@ const IndexPage = () => {
                           id="mc-embedded-subscribe"
                           className="px-4 py-2 text-base font-medium text-white bg-blue-600 cursor-pointer hover:bg-blue-500 rounded-xl"
                           readOnly
-                          onClick={() => setLinkedInConversion(true)}
+                          onClick={() => (window as unknown as any).lintrk('track', { conversionId: '5594906'})}
                         />
                       </div>
                     </div>
@@ -756,7 +756,7 @@ const IndexPage = () => {
                     id="mc-embedded-subscribe"
                     className="px-4 py-2 text-base font-medium text-white bg-blue-600 cursor-pointer hover:bg-blue-500 rounded-xl"
                     readOnly
-                    onClick={() => setLinkedInConversion(true)}
+                    onClick={() => (window as unknown as any).lintrk('track', { conversionId: '5594906'})}
                   />
                 </div>
               </div>
@@ -954,7 +954,7 @@ const IndexPage = () => {
                           id="mc-embedded-subscribe"
                           className="px-4 py-2 text-base font-medium text-white bg-blue-600 cursor-pointer hover:bg-blue-500 rounded-xl"
                           readOnly
-                          onClick={() => setLinkedInConversion(true)}
+                          onClick={() => (window as unknown as any).lintrk('track', { conversionId: '5594906'})}
                         />
                       </div>
                     </div>
@@ -1381,7 +1381,7 @@ const IndexPage = () => {
                         id="mc-embedded-subscribe"
                         className="px-4 py-2 text-base font-medium text-white bg-blue-600 cursor-pointer hover:bg-blue-500 rounded-xl"
                         readOnly
-                        onClick={() => setLinkedInConversion(true)}
+                        onClick={() => (window as unknown as any).lintrk('track', { conversionId: '5594906'})}
                       />
                     </div>
                   </div>
