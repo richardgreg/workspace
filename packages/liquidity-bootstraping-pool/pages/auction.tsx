@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { connectors } from 'context/Web3/connectors';
 import Link from 'next/link';
 import { createClient } from '@supabase/supabase-js';
+import { ethers } from 'ethers';
 
 enum Step {
   Wallet,
@@ -44,16 +45,20 @@ const IndexPage = () => {
   }, [account]);
 
   async function acceptConditions() {
+    const timestamp = Date.now() 
     const message = await library
       .getSigner()
-      .signMessage('By signing this message, I agree to the conditions');
+      .signMessage(
+        `By signing this message, I agree to the conditions. Time: ${timestamp}`,
+      );
     if (message) {
       setStep(Step.Network);
       try {
         await supabase.from('signedTerms').insert([
           {
             address: account,
-            message: message,
+            signature: message,
+            timestamp:timestamp
           },
         ]);
         return true;
