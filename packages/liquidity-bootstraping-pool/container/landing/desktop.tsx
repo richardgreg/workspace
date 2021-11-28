@@ -2,6 +2,7 @@ import DesktopFooterNavigation from 'container/DesktopFooterNavigation';
 import DesktopNavigation from 'container/DesktopNavigation';
 import Link from 'next/link';
 import React from 'react';
+import * as Icon from 'react-feather';
 
 export default function Desktop(): JSX.Element {
   const startDate = new Date(1638172800000).toLocaleDateString(undefined, {
@@ -25,16 +26,31 @@ export default function Desktop(): JSX.Element {
           <div className="w-full">
             <div className="">
               <div className="relative">
-                <header className="w-full bg-primary pt-12">
-                  <nav className="relative w-9/12 mx-auto pb-4 flex flex-row items-center justify-between">
+                <header className="w-full bg-primary">
+                  <Link href="/auction" passHref>
+                    <a>
+                      <div className="w-full h-14 bg-yellow-500 shadow-md flex justify-center cursor-pointer hover:bg-yellow-400">
+                        <div className="flex flex-row items-center mx-auto">
+                          <p className="text-white text-2xl font-bold">
+                            Token Launch Auction
+                          </p>
+                          <Icon.ArrowRightCircle className="ml-2 w-7 h-7 text-white" />
+                        </div>
+                      </div>
+                    </a>
+                  </Link>
+                  <nav className="relative w-9/12 mx-auto pt-12 pb-4 flex flex-row items-center justify-between">
                     <DesktopNavigation textSize="xl" />
-                    <div className="absolute px-8 py-6 bg-white rounded-2xl right-0 top-14 z-20 flex flex-col items-center">
+                    <div className="absolute px-8 py-6 bg-white rounded-2xl shadow-xl right-0 top-28 z-20 flex flex-col items-center">
                       <h2 className="text-lg font-medium text-center">
                         Token Launch Auction is now live!
                       </h2>
-                      <button className="bg-blue-600 rounded-xl text-white font-medium mt-2 py-2 w-full hover:bg-blue-500">
+                      <a
+                        className="bg-blue-600 rounded-xl text-white font-medium mt-2 py-2 text-center w-full hover:bg-blue-500"
+                        href="/auction"
+                      >
                         Participate Now
-                      </button>
+                      </a>
                     </div>
                   </nav>
                 </header>
