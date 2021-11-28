@@ -10,7 +10,6 @@ import { Facebook, GitHub, Menu, Twitter, X } from 'react-feather';
 import * as Icon from 'react-feather';
 import { MobileExpandableMenu } from 'components/MobileExpandableMenu';
 
-
 const IndexPage = () => {
   const router = useRouter();
   const endDate = 1638172800000; //Nov 29, 08.00.00 UTC
@@ -141,9 +140,10 @@ const IndexPage = () => {
                         readOnly
                         onClick={(e) => {
                           toggleCtaModal(false);
-                          (window as unknown as any).lintrk('track', { conversionId: '5594906'});
-                          }
-                        }
+                          (window as unknown as any).lintrk('track', {
+                            conversionId: '5594906',
+                          });
+                        }}
                       />
                     </div>
                   </div>
@@ -156,18 +156,34 @@ const IndexPage = () => {
       {/* DESKTOP + TABLET VERSION */}
       <div className="hidden lg:flex flex-col w-full h-full">
         <header className="w-full bg-primary">
-          <Link href="https://launch.popcorn.network/" passHref>
-            <a target="_window">
-              <div className="w-full h-14 bg-yellow-500 shadow-md flex justify-center cursor-pointer hover:bg-yellow-400">
-                <div className="flex flex-row items-center mx-auto">
-                  <p className="text-white text-2xl font-bold">
-                    Token Launch Auction
-                  </p>
-                  <Icon.ArrowRightCircle className="ml-2 w-7 h-7 text-white" />
+          {!countdownActive && (
+            <Link href="https://launch.popcorn.network/auction" passHref>
+              <a target="_window">
+                <div className="w-full h-14 bg-yellow-500 shadow-md flex justify-center cursor-pointer hover:bg-yellow-400">
+                  <div className="flex flex-row items-center mx-auto">
+                    <p className="text-white text-2xl font-bold">
+                      Token Launch Auction Now Live!
+                    </p>
+                    <Icon.ArrowRightCircle className="ml-2 w-7 h-7 text-white" />
+                  </div>
                 </div>
-              </div>
-            </a>
-          </Link>
+              </a>
+            </Link>
+          )}
+          {countdownActive && (
+            <Link href="https://launch.popcorn.network/" passHref>
+              <a target="_window">
+                <div className="w-full h-14 bg-yellow-500 shadow-md flex justify-center cursor-pointer hover:bg-yellow-400">
+                  <div className="flex flex-row items-center mx-auto">
+                    <p className="text-white text-2xl font-bold">
+                      Token Launch Auction
+                    </p>
+                    <Icon.ArrowRightCircle className="ml-2 w-7 h-7 text-white" />
+                  </div>
+                </div>
+              </a>
+            </Link>
+          )}
           <nav className="w-10/12 mx-auto pt-12 pb-4 border-b border-primaryLight flex flex-row items-center justify-between">
             <div>
               <Link href="/" passHref>
@@ -268,53 +284,59 @@ const IndexPage = () => {
                           id="mc-embedded-subscribe"
                           className="font-medium text-base bg-blue-600 hover:bg-blue-500 text-white rounded-xl px-4 py-2 cursor-pointer"
                           readOnly
-                          onClick={() => (window as unknown as any).lintrk('track', { conversionId: '5594906'})}
+                          onClick={() =>
+                            (window as unknown as any).lintrk('track', {
+                              conversionId: '5594906',
+                            })
+                          }
                         />
                       </div>
                     </div>
                   </form>
 
-                  <div className="w-fit-content mt-4">
-                    <div className="w-fit-content mx-auto py-2">
-                      <h3 className="font-landing text-xl text-left w-fit-content">
-                        Don’t miss the token launch auction!
-                      </h3>
-                      <div className="mx-auto flex flex-row justify-between pb-20 mt-3 w-full">
-                        <div className="text-center">
-                          <h1 className="font-medium text-4xl leading-snug">
-                            {countdown[0]}
-                          </h1>
-                          <p className="text-5/12xl font-landing text-gray-500">
-                            Days
-                          </p>
-                        </div>
-                        <div className="text-center">
-                          <h1 className="font-medium text-4xl leading-snug">
-                            {countdown[1]}
-                          </h1>
-                          <p className="text-5/12xl font-landing text-gray-500">
-                            Hours
-                          </p>
-                        </div>
-                        <div className="text-center">
-                          <h1 className="font-medium text-4xl leading-snug">
-                            {countdown[2]}
-                          </h1>
-                          <p className="text-5/12xl font-landing text-gray-500">
-                            Minutes
-                          </p>
-                        </div>
-                        <div className="text-center">
-                          <h1 className="font-medium text-4xl leading-snug">
-                            {countdown[3]}
-                          </h1>
-                          <p className="text-5/12xl font-landing text-gray-500">
-                            Seconds
-                          </p>
+                  {countdownActive && (
+                    <div className="w-fit-content mt-4">
+                      <div className="w-fit-content mx-auto py-2">
+                        <h3 className="font-landing text-xl text-left w-fit-content">
+                          Don’t miss the token launch auction!
+                        </h3>
+                        <div className="mx-auto flex flex-row justify-between pb-20 mt-3 w-full">
+                          <div className="text-center">
+                            <h1 className="font-medium text-4xl leading-snug">
+                              {countdown[0]}
+                            </h1>
+                            <p className="text-5/12xl font-landing text-gray-500">
+                              Days
+                            </p>
+                          </div>
+                          <div className="text-center">
+                            <h1 className="font-medium text-4xl leading-snug">
+                              {countdown[1]}
+                            </h1>
+                            <p className="text-5/12xl font-landing text-gray-500">
+                              Hours
+                            </p>
+                          </div>
+                          <div className="text-center">
+                            <h1 className="font-medium text-4xl leading-snug">
+                              {countdown[2]}
+                            </h1>
+                            <p className="text-5/12xl font-landing text-gray-500">
+                              Minutes
+                            </p>
+                          </div>
+                          <div className="text-center">
+                            <h1 className="font-medium text-4xl leading-snug">
+                              {countdown[3]}
+                            </h1>
+                            <p className="text-5/12xl font-landing text-gray-500">
+                              Seconds
+                            </p>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
+                  )}
                 </div>
               </div>
               <div className="w-full lg:w-6/12 xl:w-7/12 order-1 lg:order-2 mb-8 lg:mb-0">
@@ -449,10 +471,10 @@ const IndexPage = () => {
               href="https://www.ibtimes.com/can-these-blockchain-solutions-replace-traditional-banking-system-3259844"
               target="_blank"
             >
-            <img
-              src="images/asseenin/it.png"
-              className="mx-6 mb-14 opacity-50 hover:opacity-100"
-            />
+              <img
+                src="images/asseenin/it.png"
+                className="mx-6 mb-14 opacity-50 hover:opacity-100"
+              />
             </a>
             <a
               href="https://dwealth.news/2021/11/real-clear-crypto-defi-popcorn-enables-digital-assets-to-work-for-the-common-good-and-the-yield-is-like-butter/"
@@ -588,8 +610,7 @@ const IndexPage = () => {
                 Maximize your Crypto Portfolio
               </h2>
               <p className="text-2xl font-landing text-gray-500">
-                Popcorn offers a suite of DeFi products and hedge fund
-                strategies for you to generate competitive returns on your
+                Popcorn offers a suite of DeFi products for you to generate competitive returns on your
                 crypto assets.
               </p>
               <img
@@ -651,60 +672,66 @@ const IndexPage = () => {
           </div>
         </section>
 
-        <section>
-          <div
-            className="bg-countdown-pattern flex-shrink-0 flex-grow-0 w-full
+        {countdownActive && (
+          <section>
+            <div
+              className="bg-countdown-pattern flex-shrink-0 flex-grow-0 w-full
           h-full pt-60 xl:pt-72 2xl:pt-104"
-            style={{
-              backgroundRepeat: 'no-repeat',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-            }}
-          >
-            <div className="pt-32">
-              <div className="w-10/12 mx-auto rounded-xl shadow-xl bg-white">
-                <h3 className="font-medium text-4xl pt-20 pb-12 text-center">
-                  Don’t miss the token launch auction!
-                </h3>
-                <div className="w-9/12 mx-auto flex flex-row justify-between pb-20">
-                  <div className="text-center">
-                    <h1 className="font-bold text-7xl leading-snug">
-                      {countdown[0]}
-                    </h1>
-                    <p className="text-3xl font-landing text-gray-500">Days</p>
-                  </div>
-                  <div className="text-center">
-                    <h1 className="font-bold text-7xl leading-snug">
-                      {countdown[1]}
-                    </h1>
-                    <p className="text-3xl font-landing text-gray-500">Hours</p>
-                  </div>
-                  <div className="text-center">
-                    <h1 className="font-bold text-7xl leading-snug">
-                      {countdown[2]}
-                    </h1>
-                    <p className="text-3xl font-landing text-gray-500">
-                      Minutes
-                    </p>
-                  </div>
-                  <div className="text-center">
-                    <h1 className="font-bold text-7xl leading-snug">
-                      {countdown[3]}
-                    </h1>
-                    <p className="text-3xl font-landing text-gray-500">
-                      Seconds
-                    </p>
+              style={{
+                backgroundRepeat: 'no-repeat',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+              }}
+            >
+              <div className="pt-32">
+                <div className="w-10/12 mx-auto rounded-xl shadow-xl bg-white">
+                  <h3 className="font-medium text-4xl pt-20 pb-12 text-center">
+                    Don’t miss the token launch auction!
+                  </h3>
+                  <div className="w-9/12 mx-auto flex flex-row justify-between pb-20">
+                    <div className="text-center">
+                      <h1 className="font-bold text-7xl leading-snug">
+                        {countdown[0]}
+                      </h1>
+                      <p className="text-3xl font-landing text-gray-500">
+                        Days
+                      </p>
+                    </div>
+                    <div className="text-center">
+                      <h1 className="font-bold text-7xl leading-snug">
+                        {countdown[1]}
+                      </h1>
+                      <p className="text-3xl font-landing text-gray-500">
+                        Hours
+                      </p>
+                    </div>
+                    <div className="text-center">
+                      <h1 className="font-bold text-7xl leading-snug">
+                        {countdown[2]}
+                      </h1>
+                      <p className="text-3xl font-landing text-gray-500">
+                        Minutes
+                      </p>
+                    </div>
+                    <div className="text-center">
+                      <h1 className="font-bold text-7xl leading-snug">
+                        {countdown[3]}
+                      </h1>
+                      <p className="text-3xl font-landing text-gray-500">
+                        Seconds
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
         <section className="w-full bg-secondary py-52">
           <div className="w-8/12 mx-auto text-center">
             <h2 className="font-bold text-4xl leading-snug mb-4">Notify Me</h2>
             <p className="text-2xl font-medium">
-              Can’t wait to see you when we are launching. Get earlier
+             Get early
               notification to be part of our journey
             </p>
             <form
@@ -746,7 +773,11 @@ const IndexPage = () => {
                     id="mc-embedded-subscribe"
                     className="font-medium text-base bg-blue-600 hover:bg-blue-500 text-white rounded-xl px-4 py-2 cursor-pointer"
                     readOnly
-                    onClick={() => (window as unknown as any).lintrk('track', { conversionId: '5594906'})}
+                    onClick={() =>
+                      (window as unknown as any).lintrk('track', {
+                        conversionId: '5594906',
+                      })
+                    }
                   />
                 </div>
               </div>
@@ -762,7 +793,7 @@ const IndexPage = () => {
                 </a>
               </Link>
               <p className="font-medium text-base w-7/12 py-4">
-                Popcorn is a carbon-neutral crypto savings account where fees
+                Earn high yield on your cryptoassets while helping
                 fund educational, environmental and open source initiatives
               </p>
               <div className="flex flex-row space-x-4 items-center">
@@ -824,7 +855,11 @@ const IndexPage = () => {
             </div>
           </div>
           <p className="font-base text-center py-4">
-            ©2021, Popcorn Network. All Rights Reserved
+          ©2021, Popcorn Ltd All Rights Reserved{" "}
+                  <span className="text-xs block ">Winterbotham Place
+Marlborough &amp; Queen Streets
+P.O. Box SP 62556
+Nassau, BS</span>
           </p>
         </section>
       </div>
@@ -853,18 +888,41 @@ const IndexPage = () => {
         >
           <div>
             <header className="w-full bg-primary">
-              <Link href="https://launch.popcorn.network/" passHref>
-                <a target="_window">
-                  <div className="w-full h-14 bg-yellow-500 shadow-md flex justify-center cursor-pointer hover:bg-yellow-400">
-                    <div className="flex flex-row items-center mx-auto">
-                      <p className="text-white text-2xl font-bold">
-                        Token Launch Auction
-                      </p>
-                      <Icon.ArrowRightCircle className="ml-2 w-7 h-7 text-white" />
-                    </div>
+
+
+              {!countdownActive && (
+            <Link href="https://launch.popcorn.network/auction" passHref>
+              <a target="_window">
+                <div className="w-full h-14 bg-yellow-500 shadow-md flex justify-center cursor-pointer hover:bg-yellow-400">
+                  <div className="flex flex-row items-center mx-auto">
+                    <p className="text-white text-2xl font-bold">
+                      Token Launch Auction Now Live!
+                    </p>
+                    <Icon.ArrowRightCircle className="ml-2 w-7 h-7 text-white" />
                   </div>
-                </a>
-              </Link>
+                </div>
+              </a>
+            </Link>
+          )}
+          {countdownActive && (
+            <Link href="https://launch.popcorn.network/" passHref>
+              <a target="_window">
+                <div className="w-full h-14 bg-yellow-500 shadow-md flex justify-center cursor-pointer hover:bg-yellow-400">
+                  <div className="flex flex-row items-center mx-auto">
+                    <p className="text-white text-2xl font-bold">
+                      Token Launch Auction
+                    </p>
+                    <Icon.ArrowRightCircle className="ml-2 w-7 h-7 text-white" />
+                  </div>
+                </div>
+              </a>
+            </Link>
+          )}
+
+
+
+
+
               <nav className="w-10/12 mx-auto pt-12 pb-3 border-b border-primaryLight flex flex-row items-center justify-between">
                 <div>
                   <Link href="/" passHref>
@@ -939,56 +997,62 @@ const IndexPage = () => {
                           id="mc-embedded-subscribe"
                           className="font-medium text-base bg-blue-600 hover:bg-blue-500 text-white rounded-xl px-4 py-2 cursor-pointer"
                           readOnly
-                          onClick={() => (window as unknown as any).lintrk('track', { conversionId: '5594906'})}
+                          onClick={() =>
+                            (window as unknown as any).lintrk('track', {
+                              conversionId: '5594906',
+                            })
+                          }
                         />
                       </div>
                     </div>
                   </form>
-                  <div className="w-full">
-                    <div className="w-10/12 mx-auto">
-                      <h3 className="font-medium text-2xl pt-16 pb-12 text-center leading-8">
-                        Don’t miss the token launch auction!
-                      </h3>
-                      <div className="w-9/12 mx-auto">
-                        <div className="flex flex-row justify-between mb-8">
-                          <div className="w-5/12 text-center">
-                            <h1 className="font-bold text-4xl leading-snug">
-                              {countdown[0]}
-                            </h1>
-                            <p className="text-1.5xl font-landing text-gray-500">
-                              Days
-                            </p>
+                  {countdownActive && (
+                    <div className="w-full">
+                      <div className="w-10/12 mx-auto">
+                        <h3 className="font-medium text-2xl pt-16 pb-12 text-center leading-8">
+                          Don’t miss the token launch auction!
+                        </h3>
+                        <div className="w-9/12 mx-auto">
+                          <div className="flex flex-row justify-between mb-8">
+                            <div className="w-5/12 text-center">
+                              <h1 className="font-bold text-4xl leading-snug">
+                                {countdown[0]}
+                              </h1>
+                              <p className="text-1.5xl font-landing text-gray-500">
+                                Days
+                              </p>
+                            </div>
+                            <div className="w-5/12 text-center">
+                              <h1 className="font-bold text-4xl leading-snug">
+                                {countdown[1]}
+                              </h1>
+                              <p className="text-lg font-landing text-gray-500">
+                                Hours
+                              </p>
+                            </div>
                           </div>
-                          <div className="w-5/12 text-center">
-                            <h1 className="font-bold text-4xl leading-snug">
-                              {countdown[1]}
-                            </h1>
-                            <p className="text-lg font-landing text-gray-500">
-                              Hours
-                            </p>
-                          </div>
-                        </div>
-                        <div className="flex flex-row justify-between">
-                          <div className="w-5/12 text-center">
-                            <h1 className="font-bold text-4xl leading-snug">
-                              {countdown[2]}
-                            </h1>
-                            <p className="text-1xl font-landing text-gray-500">
-                              Minutes
-                            </p>
-                          </div>
-                          <div className="w-5/12 text-center">
-                            <h1 className="font-bold text-4xl leading-snug">
-                              {countdown[3]}
-                            </h1>
-                            <p className="text-1.5xl font-landing text-gray-500">
-                              Seconds
-                            </p>
+                          <div className="flex flex-row justify-between">
+                            <div className="w-5/12 text-center">
+                              <h1 className="font-bold text-4xl leading-snug">
+                                {countdown[2]}
+                              </h1>
+                              <p className="text-1xl font-landing text-gray-500">
+                                Minutes
+                              </p>
+                            </div>
+                            <div className="w-5/12 text-center">
+                              <h1 className="font-bold text-4xl leading-snug">
+                                {countdown[3]}
+                              </h1>
+                              <p className="text-1.5xl font-landing text-gray-500">
+                                Seconds
+                              </p>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
+                  )}
                 </div>
               </div>
             </section>
@@ -1050,113 +1114,113 @@ const IndexPage = () => {
                 Our media appearances
               </p>
               <a
-              href="https://www.coindesk.com/tech/2021/11/18/how-daos-can-empower-advisors-and-investors/"
-              target="_blank"
-            >
-              <img
-                src="images/asseenin/coindesk.png"
-                className="mx-auto mb-14 opacity-50 hover:opacity-100"
-              />
-            </a>
-            <a
-              href="https://www.investing.com/news/cryptocurrency-news/popcorn-network-integrates-with-patch-for-carbonneutral-execution-2635142"
-              target="_blank"
-            >
-              <img
-                src="images/asseenin/investing.com.png"
-                className="mx-auto mb-14 opacity-50 hover:opacity-100"
-              />
-            </a>
-            <a
-              href="https://finance.yahoo.com/news/popcorn-network-chooses-patch-execute-140000745.html"
-              target="_blank"
-            >
-              <img
-                src="images/asseenin/yahoo.png"
-                className="mx-auto mb-14 opacity-50 hover:opacity-100"
-              />
-            </a>
-            <a
-              href="https://bitcoinist.com/blockchain-and-the-environment-can-they-live-in-harmony/"
-              target="_blank"
-            >
-              <img
-                src="images/asseenin/bitcoinist.png"
-                className="mx-auto mb-14 opacity-50 hover:opacity-100"
-              />
-            </a>
-            <a
-              href="https://www.newsbtc.com/news/company/three-defi-platforms-changing-the-game-in-unexpected-ways/"
-              target="_blank"
-            >
-              <img
-                src="images/asseenin/newsbtc.png"
-                className="mx-auto mb-14 opacity-50 hover:opacity-100"
-              />
-            </a>
-            <a
-              href="https://cryptopotato.com/popcorn-network-chooses-patch-to-execute-carbon-neutral-defi/"
-              target="_blank"
-            >
-              <img
-                src="images/asseenin/potato.png"
-                className="mx-auto mb-14 opacity-50 hover:opacity-100"
-              />
-            </a>
-            <a
-              href="https://www.entrepreneur.com/article/394694"
-              target="_blank"
-            >
-              <img
-                src="images/asseenin/entrepreneur.png"
-                className="mx-auto mb-14 opacity-50 hover:opacity-100"
-              />
-            </a>
-            <a
-              href="https://www.ibtimes.com/can-these-blockchain-solutions-replace-traditional-banking-system-3259844"
-              target="_blank"
-            >
-            <img
-              src="images/asseenin/it.png"
-              className="mx-auto mb-14 opacity-50 hover:opacity-100"
-            />
-            </a>
-            <a
-              href="https://dwealth.news/2021/11/real-clear-crypto-defi-popcorn-enables-digital-assets-to-work-for-the-common-good-and-the-yield-is-like-butter/"
-              target="_blank"
-            >
-              <img
-                src="images/asseenin/dwn.png"
-                className="mx-auto mb-14 opacity-50 hover:opacity-100"
-              />
-            </a>
-            <a
-              href="https://www.financemagnates.com/thought-leadership/why-is-defi-taking-over-the-banking-world/"
-              target="_blank"
-            >
-              <img
-                src="images/asseenin/magnates.png"
-                className="mx-auto mb-14 opacity-50 hover:opacity-100"
-              />
-            </a>
-            <a
-              href="https://www.techtimes.com/articles/266356/20211007/popcorn-and-patch-want-to-make-crypto-carbon-neutral.htm"
-              target="_blank"
-            >
-              <img
-                src="images/asseenin/techtimes.png"
-                className="mx-auto mb-14 opacity-50 hover:opacity-100"
-              />
-            </a>
-            <a
-              href="https://u.today/popcorn-network-pop-partners-with-patch-to-build-carbon-neutral-defi-product"
-              target="_blank"
-            >
-              <img
-                src="images/asseenin/utoday.png"
-                className="mx-auto mb-14 opacity-50 hover:opacity-100"
-              />
-            </a>
+                href="https://www.coindesk.com/tech/2021/11/18/how-daos-can-empower-advisors-and-investors/"
+                target="_blank"
+              >
+                <img
+                  src="images/asseenin/coindesk.png"
+                  className="mx-auto mb-14 opacity-50 hover:opacity-100"
+                />
+              </a>
+              <a
+                href="https://www.investing.com/news/cryptocurrency-news/popcorn-network-integrates-with-patch-for-carbonneutral-execution-2635142"
+                target="_blank"
+              >
+                <img
+                  src="images/asseenin/investing.com.png"
+                  className="mx-auto mb-14 opacity-50 hover:opacity-100"
+                />
+              </a>
+              <a
+                href="https://finance.yahoo.com/news/popcorn-network-chooses-patch-execute-140000745.html"
+                target="_blank"
+              >
+                <img
+                  src="images/asseenin/yahoo.png"
+                  className="mx-auto mb-14 opacity-50 hover:opacity-100"
+                />
+              </a>
+              <a
+                href="https://bitcoinist.com/blockchain-and-the-environment-can-they-live-in-harmony/"
+                target="_blank"
+              >
+                <img
+                  src="images/asseenin/bitcoinist.png"
+                  className="mx-auto mb-14 opacity-50 hover:opacity-100"
+                />
+              </a>
+              <a
+                href="https://www.newsbtc.com/news/company/three-defi-platforms-changing-the-game-in-unexpected-ways/"
+                target="_blank"
+              >
+                <img
+                  src="images/asseenin/newsbtc.png"
+                  className="mx-auto mb-14 opacity-50 hover:opacity-100"
+                />
+              </a>
+              <a
+                href="https://cryptopotato.com/popcorn-network-chooses-patch-to-execute-carbon-neutral-defi/"
+                target="_blank"
+              >
+                <img
+                  src="images/asseenin/potato.png"
+                  className="mx-auto mb-14 opacity-50 hover:opacity-100"
+                />
+              </a>
+              <a
+                href="https://www.entrepreneur.com/article/394694"
+                target="_blank"
+              >
+                <img
+                  src="images/asseenin/entrepreneur.png"
+                  className="mx-auto mb-14 opacity-50 hover:opacity-100"
+                />
+              </a>
+              <a
+                href="https://www.ibtimes.com/can-these-blockchain-solutions-replace-traditional-banking-system-3259844"
+                target="_blank"
+              >
+                <img
+                  src="images/asseenin/it.png"
+                  className="mx-auto mb-14 opacity-50 hover:opacity-100"
+                />
+              </a>
+              <a
+                href="https://dwealth.news/2021/11/real-clear-crypto-defi-popcorn-enables-digital-assets-to-work-for-the-common-good-and-the-yield-is-like-butter/"
+                target="_blank"
+              >
+                <img
+                  src="images/asseenin/dwn.png"
+                  className="mx-auto mb-14 opacity-50 hover:opacity-100"
+                />
+              </a>
+              <a
+                href="https://www.financemagnates.com/thought-leadership/why-is-defi-taking-over-the-banking-world/"
+                target="_blank"
+              >
+                <img
+                  src="images/asseenin/magnates.png"
+                  className="mx-auto mb-14 opacity-50 hover:opacity-100"
+                />
+              </a>
+              <a
+                href="https://www.techtimes.com/articles/266356/20211007/popcorn-and-patch-want-to-make-crypto-carbon-neutral.htm"
+                target="_blank"
+              >
+                <img
+                  src="images/asseenin/techtimes.png"
+                  className="mx-auto mb-14 opacity-50 hover:opacity-100"
+                />
+              </a>
+              <a
+                href="https://u.today/popcorn-network-pop-partners-with-patch-to-build-carbon-neutral-defi-product"
+                target="_blank"
+              >
+                <img
+                  src="images/asseenin/utoday.png"
+                  className="mx-auto mb-14 opacity-50 hover:opacity-100"
+                />
+              </a>
             </section>
             <section className="w-10/12 mx-auto mb-24">
               <h2 className="font-bold text-3xl mb-4 text-center">
@@ -1228,8 +1292,7 @@ const IndexPage = () => {
                 Maximize your Crypto Portfolio
               </h2>
               <p className="text-lg font-landing text-gray-500 text-center">
-                Popcorn offers a suite of DeFi products and hedge fund
-                strategies for you to generate competitive returns on your
+                Popcorn offers a suite of DeFi products for you to generate competitive returns on your
                 crypto assets.
               </p>
             </section>
@@ -1262,71 +1325,73 @@ const IndexPage = () => {
               </p>
             </section>
 
-            <section>
-              <div
-                className="bg-countdown-pattern flex-shrink-0 flex-grow-0 w-full
+            {countdownActive && (
+              <section>
+                <div
+                  className="bg-countdown-pattern flex-shrink-0 flex-grow-0 w-full
           h-full pt-60"
-                style={{
-                  backgroundRepeat: 'no-repeat',
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center',
-                }}
-              >
-                <div className="w-full pt-32">
-                  <div className="w-10/12 mx-auto rounded-xl shadow-xl bg-white">
-                    <h3 className="font-medium text-4xl pt-20 pb-12 text-center">
-                      Don’t miss the token launch auction!
-                    </h3>
-                    <div className="w-9/12 mx-auto pb-20">
-                      <div className="flex flex-row justify-between mb-8">
-                        <div className="w-5/12 text-center">
-                          <h1 className="font-bold text-7xl leading-snug">
-                            {countdown[0]}
-                          </h1>
-                          <p className="text-3xl font-landing text-gray-500">
-                            Days
-                          </p>
+                  style={{
+                    backgroundRepeat: 'no-repeat',
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                  }}
+                >
+                  <div className="w-full pt-32">
+                    <div className="w-10/12 mx-auto rounded-xl shadow-xl bg-white">
+                      <h3 className="font-medium text-4xl pt-20 pb-12 text-center">
+                        Don’t miss the token launch auction!
+                      </h3>
+                      <div className="w-9/12 mx-auto pb-20">
+                        <div className="flex flex-row justify-between mb-8">
+                          <div className="w-5/12 text-center">
+                            <h1 className="font-bold text-7xl leading-snug">
+                              {countdown[0]}
+                            </h1>
+                            <p className="text-3xl font-landing text-gray-500">
+                              Days
+                            </p>
+                          </div>
+                          <div className="w-5/12 text-center">
+                            <h1 className="font-bold text-7xl leading-snug">
+                              {countdown[1]}
+                            </h1>
+                            <p className="text-3xl font-landing text-gray-500">
+                              Hours
+                            </p>
+                          </div>
                         </div>
-                        <div className="w-5/12 text-center">
-                          <h1 className="font-bold text-7xl leading-snug">
-                            {countdown[1]}
-                          </h1>
-                          <p className="text-3xl font-landing text-gray-500">
-                            Hours
-                          </p>
-                        </div>
-                      </div>
-                      <div className="flex flex-row justify-between">
-                        <div className="w-5/12 text-center">
-                          <h1 className="font-bold text-7xl leading-snug">
-                            {countdown[2]}
-                          </h1>
-                          <p className="text-3xl font-landing text-gray-500">
-                            Minutes
-                          </p>
-                        </div>
-                        <div className="w-5/12 text-center">
-                          <h1 className="font-bold text-7xl leading-snug">
-                            {countdown[3]}
-                          </h1>
-                          <p className="text-3xl font-landing text-gray-500">
-                            Seconds
-                          </p>
+                        <div className="flex flex-row justify-between">
+                          <div className="w-5/12 text-center">
+                            <h1 className="font-bold text-7xl leading-snug">
+                              {countdown[2]}
+                            </h1>
+                            <p className="text-3xl font-landing text-gray-500">
+                              Minutes
+                            </p>
+                          </div>
+                          <div className="w-5/12 text-center">
+                            <h1 className="font-bold text-7xl leading-snug">
+                              {countdown[3]}
+                            </h1>
+                            <p className="text-3xl font-landing text-gray-500">
+                              Seconds
+                            </p>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </section>
+              </section>
+            )}
             <section className="w-full bg-secondary py-24">
               <div className="w-10/12 mx-auto text-center">
                 <h2 className="font-bold text-2xl leading-snug mb-4">
                   Notify Me
                 </h2>
                 <p className="text-lg">
-                  Can’t wait to see you when we are launching. Get earlier
-                  notification to be part of our journey
+                Get early
+              notification to be part of our journey
                 </p>
                 <form
                   action="https://network.us1.list-manage.com/subscribe/post?u=5ce5e82d673fd2cfaf12849a5&amp;id=e85a091ed3"
@@ -1367,7 +1432,11 @@ const IndexPage = () => {
                         id="mc-embedded-subscribe"
                         className="font-medium text-base bg-blue-600 hover:bg-blue-500 text-white rounded-xl px-4 py-2 cursor-pointer"
                         readOnly
-                        onClick={() => (window as unknown as any).lintrk('track', { conversionId: '5594906'})}
+                        onClick={() =>
+                          (window as unknown as any).lintrk('track', {
+                            conversionId: '5594906',
+                          })
+                        }
                       />
                     </div>
                   </div>
@@ -1462,8 +1531,11 @@ const IndexPage = () => {
               </div>
               <div className="w-10/12 border-t border-gray-700 mt-12 mx-auto ">
                 <p className="font-base text-center py-4">
-                  ©2021, Popcorn Network. All Rights Reserved
-                </p>
+                ©2021, Popcorn Ltd All Rights Reserved{" "}
+                  <span className="text-xs block ">Winterbotham Place
+Marlborough &amp; Queen Streets
+P.O. Box SP 62556
+Nassau, BS</span>                </p>
               </div>
             </section>
           </div>
