@@ -28,7 +28,7 @@ export default function LargeDesktop(): JSX.Element {
               <div className="w-full h-14 bg-yellow-500 shadow-md flex justify-center cursor-pointer hover:bg-yellow-400">
                 <div className="flex flex-row items-center mx-auto">
                   <p className="text-white text-2xl font-bold">
-                    Token Launch Auction is now live!
+                    Token Launch Auction Now Live!
                   </p>
                   <Icon.ArrowRightCircle className="ml-2 w-7 h-7 text-white" />
                 </div>
@@ -39,7 +39,7 @@ export default function LargeDesktop(): JSX.Element {
             <DesktopNavigation textSize="xl" />
             <div className="absolute px-8 py-6 bg-white rounded-2xl shadow-xl right-0 top-36 z-20 flex flex-col items-center">
               <h2 className="text-lg font-medium text-center">
-                Token Launch Auction is now live!
+                Token Launch Auction Now Live!
               </h2>
               <a
                 className="bg-blue-600 rounded-xl text-white font-medium mt-2 py-2 text-center w-full hover:bg-blue-500"
