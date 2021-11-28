@@ -8,11 +8,13 @@ import * as Icon from 'react-feather';
 interface MobileProps {
   showMenu: boolean;
   setMenu: Function;
+  auctionLive: boolean;
 }
 
 export default function Mobile({
   showMenu,
   setMenu,
+  auctionLive,
 }: MobileProps): JSX.Element {
   const startDate = new Date(1638172800000).toLocaleDateString(undefined, {
     timeZone: 'UTC',
@@ -31,16 +33,18 @@ export default function Mobile({
   return (
     <div className="w-full h-full md:hidden lg:hidden xl:hidden 2xl:hidden">
       <div className="flex flex-col w-full h-full">
-        <Link href="/auction">
-          <div className="w-full h-14 bg-yellow-500 shadow-md flex justify-center cursor-pointer hover:bg-yellow-400">
-            <div className="flex flex-row items-center mx-auto">
-              <p className="text-white text-2xl font-bold">
-                Token Launch Auction Now Live!
-              </p>
-              <Icon.ArrowRightCircle className="ml-2 w-7 h-7 text-white" />
+        {auctionLive && (
+          <Link href="/auction">
+            <div className="w-full h-14 bg-yellow-500 shadow-md flex justify-center cursor-pointer hover:bg-yellow-400">
+              <div className="flex flex-row items-center mx-auto">
+                <p className="text-white text-2xl font-bold">
+                  Token Launch Auction Now Live!
+                </p>
+                <Icon.ArrowRightCircle className="ml-2 w-7 h-7 text-white" />
+              </div>
             </div>
-          </div>
-        </Link>
+          </Link>
+        )}
         <MobileHeader showMenu={showMenu} setMenu={setMenu} />
 
         <section className="-mt-1">
