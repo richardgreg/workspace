@@ -28,7 +28,7 @@ export default function LargeDesktop(): JSX.Element {
               <div className="w-full h-14 bg-yellow-500 shadow-md flex justify-center cursor-pointer hover:bg-yellow-400">
                 <div className="flex flex-row items-center mx-auto">
                   <p className="text-white text-2xl font-bold">
-                    Token Launch Auction
+                    Token Launch Auction is now live!
                   </p>
                   <Icon.ArrowRightCircle className="ml-2 w-7 h-7 text-white" />
                 </div>
