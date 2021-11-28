@@ -165,7 +165,7 @@ const getTerms =(timestamp) => {
   return `
   Popcorn Token Launch Auction Terms and Conditions
 
-  By accessing the Popcorn Token Launch Auction ("Popcorn Token Launch Auction"), you represent and warrant to Popcorn Limited. ("Popcorn Ltd") as follows:
+  By signing this message related to the Popcorn Token Launch Auction ("Popcorn Token Launch Auction"), you represent and warrant to Popcorn Limited ("Popcorn Ltd") that you have read and agreed to the terms and conditions as follows:
   
   1. you are not a citizen or resident of a country the laws of which prohibit or conflict with the holding, sale, or trading of tokens; such countries to include (without limitation) THE UNITED STATES OF AMERICA, ITS TERRITORIES AND POSSESSIONS, ANY STATE OF THE UNITED STATES, AND THE DISTRICT OF COLUMBIA ("U.S."), CANADA, PEOPLE'S REPUBLIC OF CHINA, DEMOCRATIC PEOPLE'S REPUBLIC OF KOREA, CUBA, SYRIA, IRAN, SUDAN, PEOPLE'S REPUBLIC OF CRIMEA;
   2. you agree and acknowledge that nothing in the Popcorn Token Launch Auction constitutes a prospectus or offer document of any sort nor is intended to constitute an offer of securities of any form, units in a business trust, units in a collective investment scheme, or any other form of capital markets product or investment in any jurisdiction, nor a solicitation for any form of investment;
@@ -182,8 +182,8 @@ const getTerms =(timestamp) => {
   9. you are acquiring POP tokens as principal and for your own benefit and you are not acting on the instructions of, or as nominee or agent for or on behalf of, any other person;
   10. the POP tokens to be delivered to and received by you will not be used for any purpose in connection with money laundering, terrorism financing, or any other acts in breach or contravention of any applicable law, regulation, or rule;
   11. you bear the sole responsibility to determine what tax implications your use of the Popcorn Token Launch Auction may have for you; and
-  12. all of the above representations and warranties are and will continue to be, true, complete, accurate, and non-misleading from the time of your acceptance of this attestation and notwithstanding the receipt by you of any POP tokens.
-  13. you understand the POP governance token is currently used to create and vote on proposals which affect the parameters of smart contracts on multiple public blockchains. The user interfaces to participate in the governance processes can be found at https://client.aragon.org/#/popcorn and https://snapshot.org/#/popcorn-snapshot.eth. Additionally, more user interfaces and smart contracts which depend on the POP token can be found at https://github.com/popcorndao/workspace along with instructions on how to deploy such user interfaces and application programming interfaces.
+  12. you understand the POP governance token is currently used to create and vote on proposals which affect the parameters of smart contracts on multiple public blockchains. The user interfaces to participate in the governance processes can be found at https://client.aragon.org/#/popcorn and https://snapshot.org/#/popcorn-snapshot.eth. Additionally, more user interfaces and smart contracts which depend on the POP token can be found at https://github.com/popcorndao/workspace along with instructions on how to deploy such user interfaces and application programming interfaces; and
+  13. all of the above representations and warranties are and will continue to be, true, complete, accurate, and non-misleading from the time of your acceptance of this attestation and notwithstanding the receipt by you of any POP tokens.
   
   Accepted: ${timestamp}
   `;
