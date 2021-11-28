@@ -156,7 +156,7 @@ const IndexPage = () => {
       {/* DESKTOP + TABLET VERSION */}
       <div className="hidden lg:flex flex-col w-full h-full">
         <header className="w-full bg-primary">
-          <Link href="https://launch.popcorn.network/" passHref>
+          <Link href="https://launch.popcorn.network/auction" passHref>
             <a target="_window">
               <div className="w-full h-14 bg-yellow-500 shadow-md flex justify-center cursor-pointer hover:bg-yellow-400">
                 <div className="flex flex-row items-center mx-auto">
@@ -853,7 +853,7 @@ const IndexPage = () => {
         >
           <div>
             <header className="w-full bg-primary">
-              <Link href="https://launch.popcorn.network/" passHref>
+              <Link href="https://launch.popcorn.network/auction" passHref>
                 <a target="_window">
                   <div className="w-full h-14 bg-yellow-500 shadow-md flex justify-center cursor-pointer hover:bg-yellow-400">
                     <div className="flex flex-row items-center mx-auto">
