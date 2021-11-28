@@ -1,6 +1,7 @@
 import DesktopNavigation from 'container/DesktopNavigation';
 import Link from 'next/link';
 import DesktopFooterNavigation from '../DesktopFooterNavigation';
+import * as Icon from 'react-feather';
 
 export default function Tablet(): JSX.Element {
   const startDate = new Date(1638172800000).toLocaleDateString(undefined, {
@@ -24,9 +25,30 @@ export default function Tablet(): JSX.Element {
           <div className="w-full">
             <div className="">
               <div className="relative">
+                <Link href="/auction" passHref>
+                  <div className="w-full h-14 bg-yellow-500 shadow-md flex justify-center cursor-pointer hover:bg-yellow-400">
+                    <div className="flex flex-row items-center mx-auto">
+                      <p className="text-white text-2xl font-bold">
+                        Token Launch Auction
+                      </p>
+                      <Icon.ArrowRightCircle className="ml-2 w-7 h-7 text-white" />
+                    </div>
+                  </div>
+                </Link>
                 <header className="w-full bg-primary pt-12">
-                  <nav className="w-9/12 mx-auto pb-4 flex flex-row items-center justify-between">
+                  <nav className="relative w-9/12 mx-auto pb-4 flex flex-row items-center justify-between">
                     <DesktopNavigation textSize="normal"></DesktopNavigation>
+                    <div className="absolute px-8 py-6 bg-white rounded-2xl shadow-xl right-0 top-14 z-20 flex flex-col items-center">
+                      <h2 className="text-lg font-medium text-center">
+                        Token Launch Auction is now live!
+                      </h2>
+                      <a
+                        className="bg-blue-600 rounded-xl text-white font-medium mt-2 py-2 text-center w-full hover:bg-blue-500"
+                        href="/auction"
+                      >
+                        Participate Now
+                      </a>
+                    </div>
                   </nav>
                 </header>
                 <img
@@ -35,7 +57,7 @@ export default function Tablet(): JSX.Element {
                   alt="Upper background"
                 />
                 <img
-                  className="absolute top-8 -left-8 w-3/4 z-10"
+                  className="absolute top-18 -left-8 w-3/4 z-10"
                   src="images/rocket.svg"
                   alt="Cat riding a rocket with orange shooting stars"
                 />
@@ -45,20 +67,20 @@ export default function Tablet(): JSX.Element {
                       <span translate="no">Popcorn's</span> Token Launch Auction
                     </h1>
                     <p className="w-1/2 mx-auto text-center text-normal font-landing font-light mt-6">
-                    The <span translate="no">Popcorn</span>{" "} Token Launch Auction (TLA) will be the first opportunity for the
-                    general public to join the PopcornDAO by acquiring the POP
-                    token. This is a 2.5 day, multi-chain event for the Popcorn
-                    community where all proceeds raised will go to the Popcorn
-                    Treasury, a smart contract entirely controlled by POP token
-                    holders.{ " "}
-                    <Link href="/faq">
-                      <a className="text-blue-600 hover:text-blue-700 underline">
-                        Check out the FAQ
-                      </a>
-                    </Link>{' '}
-                    for more on how the auction works.
-
-                    {/*
+                      The <span translate="no">Popcorn</span> Token Launch
+                      Auction (TLA) will be the first opportunity for the
+                      general public to join the PopcornDAO by acquiring the POP
+                      token. This is a 2.5 day, multi-chain event for the
+                      Popcorn community where all proceeds raised will go to the
+                      Popcorn Treasury, a smart contract entirely controlled by
+                      POP token holders.{' '}
+                      <Link href="/faq">
+                        <a className="text-blue-600 hover:text-blue-700 underline">
+                          Check out the FAQ
+                        </a>
+                      </Link>{' '}
+                      for more on how the auction works.
+                      {/*
                     The <span translate="no">Popcorn</span>{" "} Token Launch Auction (TLA) will be the first opportunity for the
                     general public to join the PopcornDAO by acquiring the POP
                     token. This is a 2.5 day, multi-chain event for the Popcorn
@@ -148,11 +170,11 @@ export default function Tablet(): JSX.Element {
                 </p>
                 <p className="text-lg leading-2 mt-4 font-light">
                   In the next months, the roadmap offers multi-chain curated
-                  pools of strategies and DeFi products (on Ethereum,
-                  Polygon, Fantom, Avalanche, Solana). These products generate
-                  high yield while also funding community selected social impact
-                  and non-profit organizations without any extra costs to the
-                  end user.
+                  pools of strategies and DeFi products (on Ethereum, Polygon,
+                  Fantom, Avalanche, Solana). These products generate high yield
+                  while also funding community selected social impact and
+                  non-profit organizations without any extra costs to the end
+                  user.
                 </p>
                 <p className="text-lg leading-2 mt-4 font-light">
                   In 2022, the roadmap includes launching DeFi primitives such
@@ -222,15 +244,21 @@ export default function Tablet(): JSX.Element {
                     Ethereum and Polygon
                   </p>
                   <p className="text-md ">
-                  For more information please{' '}
+                    For more information please{' '}
                     <Link href="/faq" passHref>
                       <a className="text-blue-600 hover:text-blue-700 underline">
                         see the FAQ
                       </a>
                     </Link>{' '}
                     and the{' '}
-                    <Link href="https://medium.com/popcorndao/preparing-for-popcorns-token-launch-on-copper-a-beginner-s-guide-ed1921760ae2" passHref>
-                      <a className="text-blue-600 hover:text-blue-700 underline" target="_blank">
+                    <Link
+                      href="https://medium.com/popcorndao/preparing-for-popcorns-token-launch-on-copper-a-beginner-s-guide-ed1921760ae2"
+                      passHref
+                    >
+                      <a
+                        className="text-blue-600 hover:text-blue-700 underline"
+                        target="_blank"
+                      >
                         Step-by-Step Guide
                       </a>
                     </Link>{' '}
