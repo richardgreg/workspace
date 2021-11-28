@@ -27,14 +27,19 @@ const IndexPage = () => {
     error,
   } = context;
   const [step, setStep] = useState<Step>(Step.Wallet);
-  const supabase = createClient(
-    process.env.SUPABASE_URL,
-    process.env.SUPABASE_KEY,
-  );
+  let supabase;
 
   useEffect(() => {
     if (typeof window !== 'undefined' && window.location.pathname !== '/') {
       router.replace(window.location.pathname);
+    }
+    try {
+      supabase = createClient(
+        process.env.SUPABASE_URL,
+        process.env.SUPABASE_KEY,
+      );
+    } catch (error) {
+      console.log(error);
     }
   }, [router.pathname]);
 
@@ -45,7 +50,7 @@ const IndexPage = () => {
   }, [account]);
 
   async function acceptConditions() {
-    const timestamp = Date.now() 
+    const timestamp = Date.now();
     const message = await library
       .getSigner()
       .signMessage(
@@ -58,7 +63,7 @@ const IndexPage = () => {
           {
             address: account,
             signature: message,
-            timestamp:timestamp
+            timestamp: timestamp,
           },
         ]);
         return true;
