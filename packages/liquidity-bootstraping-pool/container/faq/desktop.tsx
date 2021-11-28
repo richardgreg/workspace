@@ -605,7 +605,7 @@ export default function Desktop(): JSX.Element {
                 <p className="text-xl mx-auto font-light mt-5 ">
                   Michael Kisselgof is a crypto veteran. His previous project
                   tokenized IP on Ethereum to fund biotech R&D with IKU and
-                  worked on the first iterations of erc-1155.
+                  worked on the first iterations of ERC-1155.
                 </p>
               </div>
 
