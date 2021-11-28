@@ -8,6 +8,7 @@ import React, { useEffect, useState } from 'react';
 const IndexPage = () => {
   const router = useRouter();
   const [showMenu, setMenu] = useState<boolean>(false);
+  const [auctionLive, setAuctionLive] = useState(false);
 
   useEffect(() => {
     if (typeof window !== 'undefined' && window.location.pathname !== '/') {
@@ -15,16 +16,32 @@ const IndexPage = () => {
     }
   }, [router.pathname]);
 
+  const isAuctionLiveYet = () => {
+    const now = new Date().getTime();
+
+    const distance = 1638172800000 - now;
+    if (distance < 0) {
+     setAuctionLive(true);
+    }
+  }
+
+  useEffect(() => {
+    isAuctionLiveYet();
+    setInterval(() => {
+      isAuctionLiveYet();
+    }, 1000)
+  }, []);
+
   return (
     <div>
       {/* Large desktop */}
-      <LargeDesktop />
+      <LargeDesktop auctionLive={auctionLive} />
       {/* Desktop */}
-      <Desktop />
+      <Desktop auctionLive={auctionLive}  />
       {/* TABLET VERSION */}
-      <Tablet />
+      <Tablet auctionLive={auctionLive}  />
       {/* MOBILE VERSION */}
-      <Mobile showMenu={showMenu} setMenu={setMenu} />
+      <Mobile auctionLive={auctionLive}  showMenu={showMenu} setMenu={setMenu} />
     </div>
   );
 };
