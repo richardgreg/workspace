@@ -4,6 +4,7 @@ import { useWeb3React } from '@web3-react/core';
 import React, { useEffect, useState } from 'react';
 import { connectors } from 'context/Web3/connectors';
 import Link from 'next/link';
+import { createClient } from '@supabase/supabase-js';
 
 enum Step {
   Wallet,
@@ -25,6 +26,10 @@ const IndexPage = () => {
     error,
   } = context;
   const [step, setStep] = useState<Step>(Step.Wallet);
+  const supabase = createClient(
+    process.env.SUPABASE_URL,
+    process.env.SUPABASE_KEY,
+  );
 
   useEffect(() => {
     if (typeof window !== 'undefined' && window.location.pathname !== '/') {
@@ -44,6 +49,18 @@ const IndexPage = () => {
       .signMessage('By signing this message, I agree to the conditions');
     if (message) {
       setStep(Step.Network);
+      try {
+        await supabase.from('signedTerms').insert([
+          {
+            address: account,
+            message: message,
+          },
+        ]);
+        return true;
+      } catch (error) {
+        console.log('error', error);
+        return false;
+      }
     }
   }
 
@@ -125,9 +142,9 @@ const IndexPage = () => {
             )}
             <Link href="https://launch.popcorn.network/" passHref>
               <a target="_blank">
-              <p className="text-sm font-medium text-blue-700 pt-10 text-center cursor-pointer">
-                Learn about our Token Launch Auction
-              </p>
+                <p className="text-sm font-medium text-blue-700 pt-10 text-center cursor-pointer">
+                  Learn about our Token Launch Auction
+                </p>
               </a>
             </Link>
           </div>
