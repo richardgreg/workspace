@@ -6,8 +6,7 @@ import {
   SetToken,
 } from "@setprotocol/set-protocol-v2/dist/typechain";
 import { expect } from "chai";
-import { BigNumber } from "ethers";
-import { utils } from "ethers";
+import { BigNumber, utils } from "ethers";
 import { parseEther } from "ethers/lib/utils";
 import { ethers, network, waffle } from "hardhat";
 import HysiBatchInteractionAdapter, {
@@ -139,35 +138,44 @@ async function deployContracts(): Promise<Contracts> {
       await ethers.getContractFactory("MockERC20")
     ).deploy("POP", "POP", 18)
   ).deployed();
-  const dai = (await ethers.getContractAt("ERC20", DAI_ADDRESS)) as ERC20;
+  const dai = (await ethers.getContractAt(
+    "@openzeppelin/contracts/token/ERC20/ERC20.sol:ERC20",
+    DAI_ADDRESS
+  )) as ERC20;
 
-  const usdc = (await ethers.getContractAt("ERC20", USDC_ADDRESS)) as ERC20;
+  const usdc = (await ethers.getContractAt(
+    "@openzeppelin/contracts/token/ERC20/ERC20.sol:ERC20",
+    USDC_ADDRESS
+  )) as ERC20;
 
-  const usdt = (await ethers.getContractAt("ERC20", USDT_ADDRESS)) as ERC20;
+  const usdt = (await ethers.getContractAt(
+    "@openzeppelin/contracts/token/ERC20/ERC20.sol:ERC20",
+    USDT_ADDRESS
+  )) as ERC20;
 
   //Deploy Curve Token
   const threeCrv = (await ethers.getContractAt(
-    "ERC20",
+    "@openzeppelin/contracts/token/ERC20/ERC20.sol:ERC20",
     THREE_CRV_TOKEN_ADDRESS
   )) as ERC20;
 
   const crvDUSD = (await ethers.getContractAt(
-    "ERC20",
+    "@openzeppelin/contracts/token/ERC20/ERC20.sol:ERC20",
     CRV_DUSD_TOKEN_ADDRESS
   )) as ERC20;
 
   const crvFRAX = (await ethers.getContractAt(
-    "ERC20",
+    "@openzeppelin/contracts/token/ERC20/ERC20.sol:ERC20",
     CRV_FRAX_TOKEN_ADDRESS
   )) as ERC20;
 
   const crvUSDN = (await ethers.getContractAt(
-    "ERC20",
+    "@openzeppelin/contracts/token/ERC20/ERC20.sol:ERC20",
     CRV_USDN_TOKEN_ADDRESS
   )) as ERC20;
 
   const crvUST = (await ethers.getContractAt(
-    "ERC20",
+    "@openzeppelin/contracts/token/ERC20/ERC20.sol:ERC20",
     CRV_UST_TOKEN_ADDRESS
   )) as ERC20;
 
