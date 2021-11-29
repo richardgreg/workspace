@@ -27,12 +27,15 @@ const IndexPage = () => {
     error,
   } = context;
   const [step, setStep] = useState<Step>(Step.Wallet);
-  let supabase;
 
   useEffect(() => {
     if (typeof window !== 'undefined' && window.location.pathname !== '/') {
       router.replace(window.location.pathname);
-    }
+    }  
+  }, [router.pathname]);
+
+  const getSupabase = () => {
+    let supabase;
     try {
       supabase = createClient(
         process.env.SUPABASE_URL,
@@ -41,7 +44,9 @@ const IndexPage = () => {
     } catch (error) {
       console.log(error);
     }
-  }, [router.pathname]);
+    return supabase;
+  }
+
 
   useEffect(() => {
     if (account) {
@@ -57,7 +62,7 @@ const IndexPage = () => {
     if (message) {
       setStep(Step.Network);
       try {
-        await supabase.from('signedTerms').insert([
+        await getSupabase()?.from('signedTerms').insert([
           {
             address: account,
             signature: message,
