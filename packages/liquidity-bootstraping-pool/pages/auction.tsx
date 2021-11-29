@@ -5,17 +5,18 @@ import React, { useEffect, useState } from 'react';
 import { connectors } from 'context/Web3/connectors';
 import Link from 'next/link';
 import { createClient } from '@supabase/supabase-js';
-import { ethers } from 'ethers';
 
 enum Step {
   Wallet,
   Terms,
   Network,
+  NeedsWallet,
 }
 
 const IndexPage = () => {
   const router = useRouter();
   const context = useWeb3React<Web3Provider>();
+
   const {
     connector,
     library,
@@ -33,6 +34,13 @@ const IndexPage = () => {
       router.replace(window.location.pathname);
     }  
   }, [router.pathname]);
+
+
+  useEffect(() => {
+    if (window && !window.ethereum) {
+      setStep(Step.NeedsWallet);
+    }
+  }, []);
 
   const getSupabase = () => {
     let supabase;
@@ -79,6 +87,8 @@ const IndexPage = () => {
 
   const titleText = () => {
     switch (step) {
+      case Step.NeedsWallet:
+        return "Wallet Required!"
       case Step.Wallet:
         return 'Step 1: Connect your Wallet';
       case Step.Terms:
@@ -99,6 +109,13 @@ const IndexPage = () => {
             <h2 className="text-2xl font-medium text-center mx-auto">
               {titleText()}
             </h2>
+            {step === Step.NeedsWallet && (
+                  <div className="flex flex-col items-center">
+                  <p className="mt-8 md:mx-18 text-center">
+                    To view this page, you must have a wallet extension (like Metamask) installed on your browser.
+                  </p>
+                </div>
+            )}
             {step === Step.Wallet && (
               <div className="flex flex-col items-center">
                 <p className="mt-8 md:mx-18 text-center">
