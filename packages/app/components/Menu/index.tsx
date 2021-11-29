@@ -3,20 +3,17 @@ import { bool } from 'prop-types';
 import styled from 'styled-components';
 import { MobileExpandableMenu } from 'components/MobileExpandableMenu';
 
-
-interface StyledMenuProps{
-  open:boolean;
+interface StyledMenuProps {
+  open: boolean;
 }
 export const StyledMenu = styled.nav<StyledMenuProps>`
+  height: 100vh;
   display: ${({ open }) => (open ? 'flex' : 'none')};
   flex-direction: column;
   justify-content: center;
   background: ${({ theme }) => theme.primaryLight};
-  /* transform: ${({ open }) =>
-    open ? 'translateX(0)' : 'translateX(200%)'}; */
-  /* transition: transform 0.9s; */
   text-align: left;
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   z-index: 1;
