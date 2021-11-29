@@ -31,12 +31,11 @@ const IndexPage = () => {
   useEffect(() => {
     if (typeof window !== 'undefined' && window.location.pathname !== '/') {
       router.replace(window.location.pathname);
-    }
-  
+    }  
   }, [router.pathname]);
 
   const getSupabase = () => {
-  let supabase;
+    let supabase;
     try {
       supabase = createClient(
         process.env.SUPABASE_URL,
@@ -47,6 +46,8 @@ const IndexPage = () => {
     }
     return supabase;
   }
+
+
   useEffect(() => {
     if (account) {
       setStep(Step.Terms);

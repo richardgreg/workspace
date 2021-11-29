@@ -625,7 +625,7 @@ export default function LargeDesktop(): JSX.Element {
                 <p className="text-xl mx-auto font-light leading-10 mt-5 ">
                   Michael Kisselgof is a crypto veteran. His previous project
                   tokenized IP on Ethereum to fund biotech R&amp;D with IKU and
-                  worked on the first iterations of erc-1155.
+                  worked on the first iterations of ERC-1155.
                 </p>
               </div>
 
@@ -656,8 +656,8 @@ export default function LargeDesktop(): JSX.Element {
                 </p>
                 <p className="text-xl mx-auto font-light leading-10 ">
                   To date, <span translate="no">Popcorn</span> has raised
-                  $4,556,234.44 to support the development of the project, at an
-                  average of $0.314 per POP.
+                  $5,442,328.44 to support the development of the project, at an
+                  average of $0.35 per POP.
                 </p>
               </div>
 
