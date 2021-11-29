@@ -24,3 +24,4 @@
       * [RewardsEscrow](docs/core/utils/RewardsEscrow.md)
       * [RewardsManager](docs/core/utils/RewardsManager.md)
       * [Zapper](docs/core/utils/Zapper.md)
+      * random_number_consumer
