@@ -472,7 +472,7 @@ const TeamPage = () => {
       <div className="hidden lg:flex flex-col w-full h-full">
         <header className=" bg-primary">
           {!countdownActive && (
-            <Link href="https://launch.popcorn.network/auction" passHref>
+            <Link href="https://launch.popcorn.network" passHref>
               <a target="_window">
                 <div className="w-full h-14 bg-yellow-500 shadow-md flex justify-center cursor-pointer hover:bg-yellow-400">
                   <div className="flex flex-row items-center mx-auto">
