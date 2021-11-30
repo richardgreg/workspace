@@ -9,6 +9,7 @@ module.exports = {
     CHAIN_ID: process.env.CHAIN_ID,
     SUPABASE_URL: process.env.SUPABASE_URL,
     SUPABASE_KEY: process.env.SUPABASE_KEY,
+    INFURA_PROJECT_ID:process.env.INFURA_PROJECT_ID,
   },
   poweredByHeader: false,
   webpack: (config, options) => {
