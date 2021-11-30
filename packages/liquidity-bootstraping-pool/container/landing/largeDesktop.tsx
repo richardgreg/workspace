@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import { BigNumber } from '@ethersproject/bignumber';
 import { parseUnits } from '@ethersproject/units';
 import { utils } from 'ethers';
+import { CircularProgress } from '@material-ui/core';
 
 export default function LargeDesktop({ auctionLive }): JSX.Element {
   const [amountRaised, setAmountRaised] = useState<BigNumber>(
@@ -60,14 +61,20 @@ export default function LargeDesktop({ auctionLive }): JSX.Element {
                 <p className="uppercase text-gray-500 font-light text-lg mt-1">
                   Current Funds Raised
                 </p>
-                <p className="text-gray-800 font-medium text-3xl mt-1">
-                  ${' '}
-                  {Number(
-                    utils.formatEther(amountRaised.mul(parseUnits('1', 12))),
-                  ).toLocaleString(undefined, {
-                    maximumFractionDigits: 0,
-                  })}
-                </p>
+                {amountRaised.eq(BigNumber.from('0')) ? (
+                  <div className="mt-2">
+                    <CircularProgress />
+                  </div>
+                ) : (
+                  <p className="text-gray-800 font-medium text-3xl mt-1">
+                    ${' '}
+                    {Number(
+                      utils.formatEther(amountRaised.mul(parseUnits('1', 12))),
+                    ).toLocaleString(undefined, {
+                      maximumFractionDigits: 0,
+                    })}
+                  </p>
+                )}
                 <a
                   className="bg-blue-600 rounded-xl text-white font-medium mt-5 py-2 text-center w-full hover:bg-blue-500"
                   href="/auction"
