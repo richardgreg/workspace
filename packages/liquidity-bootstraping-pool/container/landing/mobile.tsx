@@ -234,7 +234,7 @@ export default function Mobile({
                 <p className="text-sm leading-10">
                   <span className="font-bold">Where?</span> POP/USDC{' '}
                   <Link
-                    href="https://docs.alchemist.wtf/copper/fair-launch-auctions/what-is-a-fair-launch-auction"
+                    href="https://copperlaunch.com"
                     passHref
                   >
                     <a

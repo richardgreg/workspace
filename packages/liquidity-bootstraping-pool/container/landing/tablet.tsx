@@ -232,7 +232,7 @@ export default function Tablet({ auctionLive }): JSX.Element {
                   <p className="text-md">
                     <span className="font-bold">Where?</span> POP/USDC{' '}
                     <Link
-                      href="https://docs.alchemist.wtf/copper/fair-launch-auctions/what-is-a-fair-launch-auction"
+                      href="https://copperlaunch.com"
                       passHref
                     >
                       <a
