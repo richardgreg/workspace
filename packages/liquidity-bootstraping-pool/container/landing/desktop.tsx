@@ -1,10 +1,23 @@
 import DesktopFooterNavigation from 'container/DesktopFooterNavigation';
 import DesktopNavigation from 'container/DesktopNavigation';
+import { ethers, utils } from 'ethers';
+import { BigNumber } from '@ethersproject/bignumber';
 import Link from 'next/link';
-import React from 'react';
+import { useEffect, useState } from 'react';
 import * as Icon from 'react-feather';
+import getFundsRaised from '../../utils/getFundsRaised';
+import { parseUnits } from '@ethersproject/units';
+import { CircularProgress } from '@material-ui/core';
 
 export default function Desktop({ auctionLive }): JSX.Element {
+  const [amountRaised, setAmountRaised] = useState<BigNumber>(
+    BigNumber.from('0'),
+  );
+
+  useEffect(() => {
+    getFundsRaised().then((res) => setAmountRaised(res));
+  }, []);
+
   const startDate = new Date(1638172800000).toLocaleDateString(undefined, {
     timeZone: 'UTC',
   });
@@ -19,6 +32,7 @@ export default function Desktop({ auctionLive }): JSX.Element {
     undefined,
     { timeZone: 'UTC' },
   );
+
   return (
     <div className="hidden lg:flex 2xl:hidden flex-col w-full h-full font-landing">
       <div className="flex flex-col w-full h-full">
@@ -48,8 +62,25 @@ export default function Desktop({ auctionLive }): JSX.Element {
                         <h2 className="text-lg font-medium text-center">
                           Token Launch Auction Now Live!
                         </h2>
+                        <p className="uppercase text-gray-500 font-light text-lg mt-1">
+                          Current Funds Raised
+                        </p>
+                        {amountRaised.eq(BigNumber.from('0')) ? (
+                          <div className="mt-2"><CircularProgress /></div>
+                        ) : (
+                          <p className="text-gray-800 font-medium text-3xl mt-1">
+                            ${' '}
+                            {Number(
+                              utils.formatEther(
+                                amountRaised.mul(parseUnits('1', 12)),
+                              ),
+                            ).toLocaleString(undefined, {
+                              maximumFractionDigits: 0,
+                            })}
+                          </p>
+                        )}
                         <a
-                          className="bg-blue-600 rounded-xl text-white font-medium mt-2 py-2 text-center w-full hover:bg-blue-500"
+                          className="bg-blue-600 rounded-xl text-white font-medium mt-5 py-2 text-center w-full hover:bg-blue-500"
                           href="/auction"
                         >
                           Participate Now
