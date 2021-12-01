@@ -346,6 +346,74 @@ const IndexPage = () => {
             <div className="w-full h-24"></div>
           </div>
         </section>
+        <section className="w-10/12 mx-auto mb-24">
+          <h2 className="font-bold text-5xl xl:text-6xl mb-4">How it works</h2>
+          <p className="text-xl font-landing text-gray-500">
+            Put your cryptoassets to work
+          </p>
+          <div className="w-full flex flex-wrap flex-row justify-between mt-16">
+            <div className="w-1/2 xl:w-1/4 flex-grow-0 flex-shrink-0 mb-12 xl:mb-0">
+              <div className="w-11/12 h-104 rounded-xl shadow-2xl flex flex-col items-center">
+                <div className="w-36 h-36 rounded-full bg-primary mt-12 flex items-center">
+                  <img
+                    src="/images/metamaskCat.svg"
+                    alt="metamaskCat"
+                    className="mx-auto mb-1"
+                  ></img>
+                </div>
+                <h3 className="font-medium text-4xl py-8">Connect</h3>
+                <p className="w-3/4 text-center text-xl text-gray-500">
+                  Connect your Metamask wallet with Popcorn
+                </p>
+              </div>
+            </div>
+            <div className="w-1/2 xl:w-1/4 flex-grow-0 flex-shrink-0 mb-12 xl:mb-0">
+              <div className="w-11/12 h-104 rounded-xl shadow-2xl flex flex-col items-center">
+                <div className="w-36 h-36 rounded-full bg-primary mt-12 flex items-center">
+                  <img
+                    src="/images/vault.svg"
+                    alt="vault"
+                    className="mx-auto mb-2"
+                  ></img>
+                </div>
+                <h3 className="font-medium text-4xl py-8">Deposit</h3>
+                <p className="w-3/4 text-center text-xl text-gray-500">
+                  Deposit your crypto and choose a product or strategy
+                </p>
+              </div>
+            </div>
+            <div className="w-1/2 xl:w-1/4 flex-grow-0 flex-shrink-0">
+              <div className="w-11/12 h-104 rounded-xl shadow-2xl flex flex-col items-center">
+                <div className="w-36 h-36 rounded-full bg-primary mt-12 flex items-center">
+                  <img
+                    src="/images/popcornVault.svg"
+                    alt="popcornVault"
+                    className="mx-auto mt-2"
+                  ></img>
+                </div>
+                <h3 className="font-medium text-4xl py-8">Do well</h3>
+                <p className="w-3/4 text-center text-xl text-gray-500">
+                  Earn competitive returns on your crypto assets
+                </p>
+              </div>
+            </div>
+            <div className="w-1/2 xl:w-1/4 flex-grow-0 flex-shrink-0">
+              <div className="w-11/12 h-104 rounded-xl shadow-2xl flex flex-col items-center">
+                <div className="w-36 h-36 rounded-full bg-primary mt-12 flex items-center">
+                  <img
+                    src="/images/catMail.svg"
+                    alt="catMail"
+                    className="mx-auto mb-1"
+                  ></img>
+                </div>
+                <h3 className="font-medium text-4xl py-8">Do good</h3>
+                <p className="w-3/4 text-center text-xl text-gray-500">
+                  Choose which social impact organization you’d like to help
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
 
         <section className="flex flex-row w-10/12 mx-auto mb-24 mt-18 xl:mt-24 ">
           <div className="relative w-1/3">
@@ -528,74 +596,6 @@ const IndexPage = () => {
           </div>
         </section>
 
-        <section className="w-10/12 mx-auto mb-24">
-          <h2 className="font-bold text-5xl xl:text-6xl mb-4">How it works</h2>
-          <p className="text-xl font-landing text-gray-500">
-            Put your cryptoassets to work
-          </p>
-          <div className="w-full flex flex-wrap flex-row justify-between mt-16">
-            <div className="w-1/2 xl:w-1/4 flex-grow-0 flex-shrink-0 mb-12 xl:mb-0">
-              <div className="w-11/12 h-104 rounded-xl shadow-2xl flex flex-col items-center">
-                <div className="w-36 h-36 rounded-full bg-primary mt-12 flex items-center">
-                  <img
-                    src="/images/metamaskCat.svg"
-                    alt="metamaskCat"
-                    className="mx-auto mb-1"
-                  ></img>
-                </div>
-                <h3 className="font-medium text-4xl py-8">Connect</h3>
-                <p className="w-3/4 text-center text-xl text-gray-500">
-                  Connect your Metamask wallet with Popcorn
-                </p>
-              </div>
-            </div>
-            <div className="w-1/2 xl:w-1/4 flex-grow-0 flex-shrink-0 mb-12 xl:mb-0">
-              <div className="w-11/12 h-104 rounded-xl shadow-2xl flex flex-col items-center">
-                <div className="w-36 h-36 rounded-full bg-primary mt-12 flex items-center">
-                  <img
-                    src="/images/vault.svg"
-                    alt="vault"
-                    className="mx-auto mb-2"
-                  ></img>
-                </div>
-                <h3 className="font-medium text-4xl py-8">Deposit</h3>
-                <p className="w-3/4 text-center text-xl text-gray-500">
-                  Deposit your crypto and choose a product or strategy
-                </p>
-              </div>
-            </div>
-            <div className="w-1/2 xl:w-1/4 flex-grow-0 flex-shrink-0">
-              <div className="w-11/12 h-104 rounded-xl shadow-2xl flex flex-col items-center">
-                <div className="w-36 h-36 rounded-full bg-primary mt-12 flex items-center">
-                  <img
-                    src="/images/popcornVault.svg"
-                    alt="popcornVault"
-                    className="mx-auto mt-2"
-                  ></img>
-                </div>
-                <h3 className="font-medium text-4xl py-8">Do well</h3>
-                <p className="w-3/4 text-center text-xl text-gray-500">
-                  Earn competitive returns on your crypto assets
-                </p>
-              </div>
-            </div>
-            <div className="w-1/2 xl:w-1/4 flex-grow-0 flex-shrink-0">
-              <div className="w-11/12 h-104 rounded-xl shadow-2xl flex flex-col items-center">
-                <div className="w-36 h-36 rounded-full bg-primary mt-12 flex items-center">
-                  <img
-                    src="/images/catMail.svg"
-                    alt="catMail"
-                    className="mx-auto mb-1"
-                  ></img>
-                </div>
-                <h3 className="font-medium text-4xl py-8">Do good</h3>
-                <p className="w-3/4 text-center text-xl text-gray-500">
-                  Choose which social impact organization you’d like to help
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
         <section
           className="bg-popcorn1-pattern flex-shrink-0 flex-grow-0 w-full h-full xl:mb-24"
           style={{
@@ -1056,6 +1056,70 @@ Nassau, BS</span>
                 </div>
               </div>
             </section>
+            <section className="w-10/12 mx-auto mb-24">
+              <h2 className="font-bold text-3xl mb-4 text-center">
+                How it works
+              </h2>
+              <p className="text-lg font-landing text-gray-500 text-center">
+                Put your cryptoassets to work
+              </p>
+              <div className="w-11/12 mx-auto justify-between flex flex-col space-y-12 mt-12">
+                <div className="flex-grow-0 flex-shrink-0 md:h-96 rounded-xl shadow-2xl flex flex-col items-center">
+                  <div className="w-36 h-36 rounded-full bg-primary mt-12 flex items-center">
+                    <img
+                      src="/images/metamaskCat.svg"
+                      alt="metamaskCat"
+                      className="mx-auto mb-1"
+                    ></img>
+                  </div>
+                  <h3 className="font-medium text-2xl pt-8 py-4">Connect</h3>
+                  <p className="w-3/4 text-center text-lg text-gray-500 mb-16">
+                    Connect your Metamask wallet with Popcorn
+                  </p>
+                </div>
+
+                <div className="flex-grow-0 flex-shrink-0 md:h-96 rounded-xl shadow-2xl flex flex-col items-center">
+                  <div className="w-36 h-36 rounded-full bg-primary mt-12 flex items-center">
+                    <img
+                      src="/images/vault.svg"
+                      alt="vault"
+                      className="mx-auto mb-2"
+                    ></img>
+                  </div>
+                  <h3 className="font-medium text-2xl pt-8 py-4">Deposit</h3>
+                  <p className="w-3/4 text-center text-lg text-gray-500 mb-16">
+                    Deposit your crypto and choose a product or strategy
+                  </p>
+                </div>
+                <div className="flex-grow-0 flex-shrink-0 md:h-96 rounded-xl shadow-2xl flex flex-col items-center">
+                  <div className="w-36 h-36 rounded-full bg-primary mt-12 flex items-center">
+                    <img
+                      src="/images/popcornVault.svg"
+                      alt="popcornVault"
+                      className="mx-auto mt-2"
+                    ></img>
+                  </div>
+                  <h3 className="font-medium text-2xl pt-8 py-4">Do well</h3>
+                  <p className="w-3/4 text-center text-lg text-gray-500 mb-16">
+                    Earn competitive returns on your crypto assets
+                  </p>
+                </div>
+
+                <div className="flex-grow-0 flex-shrink-0 md:h-96 rounded-xl shadow-2xl flex flex-col items-center">
+                  <div className="w-36 h-36 rounded-full bg-primary mt-12 flex items-center">
+                    <img
+                      src="/images/catMail.svg"
+                      alt="catMail"
+                      className="mx-auto mb-1"
+                    ></img>
+                  </div>
+                  <h3 className="font-medium text-2xl pt-8 py-4">Do good</h3>
+                  <p className="w-3/4 text-center text-lg text-gray-500 mb-16">
+                    Choose which social impact organization you’d like to help
+                  </p>
+                </div>
+              </div>
+            </section>
 
             <section className="w-10/12 mx-auto my-24">
               <h2 className="text-center font-landing  font-semibold text-3xl xl:text-6xl">
@@ -1221,70 +1285,6 @@ Nassau, BS</span>
                   className="mx-auto mb-14 opacity-50 hover:opacity-100"
                 />
               </a>
-            </section>
-            <section className="w-10/12 mx-auto mb-24">
-              <h2 className="font-bold text-3xl mb-4 text-center">
-                How it works
-              </h2>
-              <p className="text-lg font-landing text-gray-500 text-center">
-                Put your cryptoassets to work
-              </p>
-              <div className="w-11/12 mx-auto justify-between flex flex-col space-y-12 mt-12">
-                <div className="flex-grow-0 flex-shrink-0 md:h-96 rounded-xl shadow-2xl flex flex-col items-center">
-                  <div className="w-36 h-36 rounded-full bg-primary mt-12 flex items-center">
-                    <img
-                      src="/images/metamaskCat.svg"
-                      alt="metamaskCat"
-                      className="mx-auto mb-1"
-                    ></img>
-                  </div>
-                  <h3 className="font-medium text-2xl pt-8 py-4">Connect</h3>
-                  <p className="w-3/4 text-center text-lg text-gray-500 mb-16">
-                    Connect your Metamask wallet with Popcorn
-                  </p>
-                </div>
-
-                <div className="flex-grow-0 flex-shrink-0 md:h-96 rounded-xl shadow-2xl flex flex-col items-center">
-                  <div className="w-36 h-36 rounded-full bg-primary mt-12 flex items-center">
-                    <img
-                      src="/images/vault.svg"
-                      alt="vault"
-                      className="mx-auto mb-2"
-                    ></img>
-                  </div>
-                  <h3 className="font-medium text-2xl pt-8 py-4">Deposit</h3>
-                  <p className="w-3/4 text-center text-lg text-gray-500 mb-16">
-                    Deposit your crypto and choose a product or strategy
-                  </p>
-                </div>
-                <div className="flex-grow-0 flex-shrink-0 md:h-96 rounded-xl shadow-2xl flex flex-col items-center">
-                  <div className="w-36 h-36 rounded-full bg-primary mt-12 flex items-center">
-                    <img
-                      src="/images/popcornVault.svg"
-                      alt="popcornVault"
-                      className="mx-auto mt-2"
-                    ></img>
-                  </div>
-                  <h3 className="font-medium text-2xl pt-8 py-4">Do well</h3>
-                  <p className="w-3/4 text-center text-lg text-gray-500 mb-16">
-                    Earn competitive returns on your crypto assets
-                  </p>
-                </div>
-
-                <div className="flex-grow-0 flex-shrink-0 md:h-96 rounded-xl shadow-2xl flex flex-col items-center">
-                  <div className="w-36 h-36 rounded-full bg-primary mt-12 flex items-center">
-                    <img
-                      src="/images/catMail.svg"
-                      alt="catMail"
-                      className="mx-auto mb-1"
-                    ></img>
-                  </div>
-                  <h3 className="font-medium text-2xl pt-8 py-4">Do good</h3>
-                  <p className="w-3/4 text-center text-lg text-gray-500 mb-16">
-                    Choose which social impact organization you’d like to help
-                  </p>
-                </div>
-              </div>
             </section>
             <section className="w-10/12 h-full mx-auto">
               <Rocket />
