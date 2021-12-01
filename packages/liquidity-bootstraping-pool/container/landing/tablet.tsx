@@ -2,21 +2,10 @@ import DesktopNavigation from 'container/DesktopNavigation';
 import Link from 'next/link';
 import DesktopFooterNavigation from '../DesktopFooterNavigation';
 import * as Icon from 'react-feather';
-import getFundsRaised from 'utils/getFundsRaised';
-import { useEffect, useState } from 'react';
 import { BigNumber } from '@ethersproject/bignumber';
-import { utils } from 'ethers';
-import { parseUnits } from '@ethersproject/units';
 import { CircularProgress } from '@material-ui/core';
 
-export default function Tablet({ auctionLive }): JSX.Element {
-  const [amountRaised, setAmountRaised] = useState<BigNumber>(
-    BigNumber.from('0'),
-  );
-
-  useEffect(() => {
-    getFundsRaised().then((res) => setAmountRaised(res));
-  }, []);
+export default function Tablet({ auctionLive, auctionEnded }): JSX.Element {
 
   const startDate = new Date(1638172800000).toLocaleDateString(undefined, {
     timeZone: 'UTC',
@@ -54,36 +43,23 @@ export default function Tablet({ auctionLive }): JSX.Element {
                 <header className="w-full bg-primary pt-12">
                   <nav className="relative w-9/12 mx-auto pb-4 flex flex-row items-center justify-between">
                     <DesktopNavigation textSize="normal"></DesktopNavigation>
-                    {auctionLive && (
+                    {auctionEnded && (
                       <div className="absolute px-8 py-6 bg-white rounded-2xl shadow-xl right-0 top-14 z-20 flex flex-col items-center">
                         <h2 className="text-lg font-medium text-center">
-                          Token Launch Auction Now Live!
+                          Token Launch Auction Ended
                         </h2>
-                        <p className="uppercase text-gray-500 font-light text-lg mt-1">
-                          Current Funds Raised
+                        <p className="uppercase text-gray-500 font-light text-sm mt-1">
+                          Funds Raised 🍿
                         </p>
-                        {amountRaised.eq(BigNumber.from('0')) ? (
-                          <div className="mt-2">
-                            <CircularProgress />
-                          </div>
-                        ) : (
+                     
                           <p className="text-gray-800 font-medium text-3xl mt-1">
                             ${' '}
                             {Number(
-                              utils.formatEther(
-                                amountRaised.mul(parseUnits('1', 12)),
-                              ),
+                              5816195
                             ).toLocaleString(undefined, {
                               maximumFractionDigits: 0,
                             })}
                           </p>
-                        )}
-                        <a
-                          className="bg-blue-600 rounded-xl text-white font-medium mt-5 py-2 text-center w-full hover:bg-blue-500"
-                          href="/auction"
-                        >
-                          Participate Now
-                        </a>
                       </div>
                     )}
                   </nav>

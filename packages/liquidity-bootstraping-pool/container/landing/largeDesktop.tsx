@@ -10,14 +10,7 @@ import { parseUnits } from '@ethersproject/units';
 import { utils } from 'ethers';
 import { CircularProgress } from '@material-ui/core';
 
-export default function LargeDesktop({ auctionLive }): JSX.Element {
-  const [amountRaised, setAmountRaised] = useState<BigNumber>(
-    BigNumber.from('0'),
-  );
-
-  useEffect(() => {
-    getFundsRaised().then((res) => setAmountRaised(res));
-  }, []);
+export default function LargeDesktop({ auctionLive, auctionEnded }): JSX.Element {
 
   const startDate = new Date(1638172800000).toLocaleDateString(undefined, {
     timeZone: 'UTC',
@@ -37,52 +30,25 @@ export default function LargeDesktop({ auctionLive }): JSX.Element {
     <div className="hidden 2xl:flex flex-col w-full h-full font-landing">
       <div className="flex flex-col w-full h-full">
         <header className="w-full bg-primary z-20">
-          {auctionLive && (
-            <Link href="/auction" passHref>
-              <a>
-                <div className="w-full h-14 bg-yellow-500 shadow-md flex justify-center cursor-pointer hover:bg-yellow-400">
-                  <div className="flex flex-row items-center mx-auto">
-                    <p className="text-white text-2xl font-bold">
-                      Token Launch Auction Now Live!
-                    </p>
-                    <Icon.ArrowRightCircle className="ml-2 w-7 h-7 text-white" />
-                  </div>
-                </div>
-              </a>
-            </Link>
-          )}
           <nav className="relative w-1/2 mx-auto pt-20 pb-4 flex flex-row items-center justify-between">
             <DesktopNavigation textSize="xl" />
-            {auctionLive && (
+            {auctionEnded && (
               <div className="absolute px-8 py-6 bg-white rounded-2xl shadow-xl right-0 top-36 z-20 flex flex-col items-center">
                 <h2 className="text-lg font-medium text-center">
-                  Token Launch Auction Now Live!
+                  Token Launch Auction Ended
                 </h2>
-                <p className="uppercase text-gray-500 font-light text-lg mt-1">
-                  Current Funds Raised
+                <p className="uppercase text-gray-500 font-light text-sm mt-1">
+                  Funds raised 🍿
                 </p>
-                {amountRaised.eq(BigNumber.from('0')) ? (
-                  <div className="mt-2">
-                    <CircularProgress />
-                  </div>
-                ) : (
                   <p className="text-gray-800 font-medium text-3xl mt-1">
                     ${' '}
                     {Number(
-                      utils.formatEther(amountRaised.mul(parseUnits('1', 12))),
+                      5816195,
                     ).toLocaleString(undefined, {
                       maximumFractionDigits: 0,
                     })}
                   </p>
-                )}
-                <a
-                  className="bg-blue-600 rounded-xl text-white font-medium mt-5 py-2 text-center w-full hover:bg-blue-500"
-                  href="/auction"
-                >
-                  Participate Now
-                </a>
-              </div>
-            )}
+              </div>)}
           </nav>
         </header>
 
