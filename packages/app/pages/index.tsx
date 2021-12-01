@@ -156,34 +156,6 @@ const IndexPage = () => {
       {/* DESKTOP + TABLET VERSION */}
       <div className="hidden lg:flex flex-col w-full h-full">
         <header className="w-full bg-primary">
-          {!countdownActive && (
-            <Link href="https://launch.popcorn.network" passHref>
-              <a target="_window">
-                <div className="w-full h-14 bg-yellow-500 shadow-md flex justify-center cursor-pointer hover:bg-yellow-400">
-                  <div className="flex flex-row items-center mx-auto">
-                    <p className="text-white text-2xl font-bold">
-                      Token Launch Auction Now Live!
-                    </p>
-                    <Icon.ArrowRightCircle className="ml-2 w-7 h-7 text-white" />
-                  </div>
-                </div>
-              </a>
-            </Link>
-          )}
-          {countdownActive && (
-            <Link href="https://launch.popcorn.network/" passHref>
-              <a target="_window">
-                <div className="w-full h-14 bg-yellow-500 shadow-md flex justify-center cursor-pointer hover:bg-yellow-400">
-                  <div className="flex flex-row items-center mx-auto">
-                    <p className="text-white text-2xl font-bold">
-                      Token Launch Auction
-                    </p>
-                    <Icon.ArrowRightCircle className="ml-2 w-7 h-7 text-white" />
-                  </div>
-                </div>
-              </a>
-            </Link>
-          )}
           <nav className="w-10/12 mx-auto pt-12 pb-4 border-b border-primaryLight flex flex-row items-center justify-between">
             <div>
               <Link href="/" passHref>
@@ -672,61 +644,6 @@ const IndexPage = () => {
           </div>
         </section>
 
-        {countdownActive && (
-          <section>
-            <div
-              className="bg-countdown-pattern flex-shrink-0 flex-grow-0 w-full
-          h-full pt-60 xl:pt-72 2xl:pt-104"
-              style={{
-                backgroundRepeat: 'no-repeat',
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-              }}
-            >
-              <div className="pt-32">
-                <div className="w-10/12 mx-auto rounded-xl shadow-xl bg-white">
-                  <h3 className="font-medium text-4xl pt-20 pb-12 text-center">
-                    Don’t miss the token launch auction!
-                  </h3>
-                  <div className="w-9/12 mx-auto flex flex-row justify-between pb-20">
-                    <div className="text-center">
-                      <h1 className="font-bold text-7xl leading-snug">
-                        {countdown[0]}
-                      </h1>
-                      <p className="text-3xl font-landing text-gray-500">
-                        Days
-                      </p>
-                    </div>
-                    <div className="text-center">
-                      <h1 className="font-bold text-7xl leading-snug">
-                        {countdown[1]}
-                      </h1>
-                      <p className="text-3xl font-landing text-gray-500">
-                        Hours
-                      </p>
-                    </div>
-                    <div className="text-center">
-                      <h1 className="font-bold text-7xl leading-snug">
-                        {countdown[2]}
-                      </h1>
-                      <p className="text-3xl font-landing text-gray-500">
-                        Minutes
-                      </p>
-                    </div>
-                    <div className="text-center">
-                      <h1 className="font-bold text-7xl leading-snug">
-                        {countdown[3]}
-                      </h1>
-                      <p className="text-3xl font-landing text-gray-500">
-                        Seconds
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-        )}
         <section className="w-full bg-secondary py-52">
           <div className="w-8/12 mx-auto text-center">
             <h2 className="font-bold text-4xl leading-snug mb-4">Notify Me</h2>
@@ -888,41 +805,6 @@ Nassau, BS</span>
         >
           <div>
             <header className="w-full bg-primary">
-
-
-              {!countdownActive && (
-            <Link href="https://launch.popcorn.network" passHref>
-              <a target="_window">
-                <div className="w-full h-14 bg-yellow-500 shadow-md flex justify-center cursor-pointer hover:bg-yellow-400">
-                  <div className="flex flex-row items-center mx-auto">
-                    <p className="text-white text-xl font-bold">
-                      Token Launch Auction Now Live!
-                    </p>
-                    <Icon.ArrowRightCircle className="ml-2 w-7 h-7 text-white" />
-                  </div>
-                </div>
-              </a>
-            </Link>
-          )}
-          {countdownActive && (
-            <Link href="https://launch.popcorn.network/" passHref>
-              <a target="_window">
-                <div className="w-full h-14 bg-yellow-500 shadow-md flex justify-center cursor-pointer hover:bg-yellow-400">
-                  <div className="flex flex-row items-center mx-auto">
-                    <p className="text-white text-2xl font-bold">
-                      Token Launch Auction
-                    </p>
-                    <Icon.ArrowRightCircle className="ml-2 w-7 h-7 text-white" />
-                  </div>
-                </div>
-              </a>
-            </Link>
-          )}
-
-
-
-
-
               <nav className="w-10/12 mx-auto pt-12 pb-3 border-b border-primaryLight flex flex-row items-center justify-between">
                 <div>
                   <Link href="/" passHref>
@@ -1006,53 +888,6 @@ Nassau, BS</span>
                       </div>
                     </div>
                   </form>
-                  {countdownActive && (
-                    <div className="w-full">
-                      <div className="w-10/12 mx-auto">
-                        <h3 className="font-medium text-2xl pt-16 pb-12 text-center leading-8">
-                          Don’t miss the token launch auction!
-                        </h3>
-                        <div className="w-9/12 mx-auto">
-                          <div className="flex flex-row justify-between mb-8">
-                            <div className="w-5/12 text-center">
-                              <h1 className="font-bold text-4xl leading-snug">
-                                {countdown[0]}
-                              </h1>
-                              <p className="text-1.5xl font-landing text-gray-500">
-                                Days
-                              </p>
-                            </div>
-                            <div className="w-5/12 text-center">
-                              <h1 className="font-bold text-4xl leading-snug">
-                                {countdown[1]}
-                              </h1>
-                              <p className="text-lg font-landing text-gray-500">
-                                Hours
-                              </p>
-                            </div>
-                          </div>
-                          <div className="flex flex-row justify-between">
-                            <div className="w-5/12 text-center">
-                              <h1 className="font-bold text-4xl leading-snug">
-                                {countdown[2]}
-                              </h1>
-                              <p className="text-1xl font-landing text-gray-500">
-                                Minutes
-                              </p>
-                            </div>
-                            <div className="w-5/12 text-center">
-                              <h1 className="font-bold text-4xl leading-snug">
-                                {countdown[3]}
-                              </h1>
-                              <p className="text-1.5xl font-landing text-gray-500">
-                                Seconds
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
                 </div>
               </div>
             </section>
@@ -1325,65 +1160,6 @@ Nassau, BS</span>
               </p>
             </section>
 
-            {countdownActive && (
-              <section>
-                <div
-                  className="bg-countdown-pattern flex-shrink-0 flex-grow-0 w-full
-          h-full pt-60"
-                  style={{
-                    backgroundRepeat: 'no-repeat',
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                  }}
-                >
-                  <div className="w-full pt-32">
-                    <div className="w-10/12 mx-auto rounded-xl shadow-xl bg-white">
-                      <h3 className="font-medium text-4xl pt-20 pb-12 text-center">
-                        Don’t miss the token launch auction!
-                      </h3>
-                      <div className="w-9/12 mx-auto pb-20">
-                        <div className="flex flex-row justify-between mb-8">
-                          <div className="w-5/12 text-center">
-                            <h1 className="font-bold text-7xl leading-snug">
-                              {countdown[0]}
-                            </h1>
-                            <p className="text-3xl font-landing text-gray-500">
-                              Days
-                            </p>
-                          </div>
-                          <div className="w-5/12 text-center">
-                            <h1 className="font-bold text-7xl leading-snug">
-                              {countdown[1]}
-                            </h1>
-                            <p className="text-3xl font-landing text-gray-500">
-                              Hours
-                            </p>
-                          </div>
-                        </div>
-                        <div className="flex flex-row justify-between">
-                          <div className="w-5/12 text-center">
-                            <h1 className="font-bold text-7xl leading-snug">
-                              {countdown[2]}
-                            </h1>
-                            <p className="text-3xl font-landing text-gray-500">
-                              Minutes
-                            </p>
-                          </div>
-                          <div className="w-5/12 text-center">
-                            <h1 className="font-bold text-7xl leading-snug">
-                              {countdown[3]}
-                            </h1>
-                            <p className="text-3xl font-landing text-gray-500">
-                              Seconds
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </section>
-            )}
             <section className="w-full bg-secondary py-24">
               <div className="w-10/12 mx-auto text-center">
                 <h2 className="font-bold text-2xl leading-snug mb-4">
