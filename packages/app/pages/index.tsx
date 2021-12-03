@@ -342,18 +342,18 @@ const IndexPage = () => {
               <img src="/images/ourpartnersbg.svg" style={{ zIndex: 20 }} />
             </div>
             <div className="absolute z-10">
-              <h2 className=" font-bold text-5xl xl:text-6xl mb-4 ">
+              <h2 className="mb-4 text-5xl font-bold xl:text-6xl">
                 Our Partners
               </h2>
-              <p className="text-xl font-landing text-gray-500 ">
+              <p className="text-xl text-gray-500 font-landing ">
                 Meet our dedicated partners.
               </p>
             </div>
           </div>
-          <div className="w-2/3 flex flex-wrap ml-10">
+          <div className="flex flex-wrap w-2/3 ml-10">
             <img
               src="images/investor-partners/jump.png"
-              className="mx-6 mb-14 opacity-50"
+              className="mx-6 opacity-50 mb-14"
             />
             <img
               src="images/investor-partners/newform.png"
@@ -391,15 +391,15 @@ const IndexPage = () => {
           </div>
         </section>
 
-        <section className="flex flex-row w-10/12 mx-auto mt-12 xl:mt-24 mb-24">
-          <div className="w-2/3 flex flex-wrap">
+        <section className="flex flex-row w-10/12 mx-auto mt-12 mb-24 xl:mt-24">
+          <div className="flex flex-wrap w-2/3">
             <a
               href="https://www.coindesk.com/tech/2021/11/18/how-daos-can-empower-advisors-and-investors/"
               target="_blank"
             >
               <img
                 src="images/asseenin/coindesk.png"
-                className="mx-6 mb-14 opacity-50 hover:opacity-100"
+                className="mx-6 opacity-50 mb-14 hover:opacity-100"
               />
             </a>
             <a
@@ -408,7 +408,7 @@ const IndexPage = () => {
             >
               <img
                 src="images/asseenin/investing.com.png"
-                className="mx-6 mb-14 opacity-50 hover:opacity-100"
+                className="mx-6 opacity-50 mb-14 hover:opacity-100"
               />
             </a>
             <a
@@ -417,7 +417,7 @@ const IndexPage = () => {
             >
               <img
                 src="images/asseenin/yahoo.png"
-                className="mx-6 mb-14 opacity-50 hover:opacity-100"
+                className="mx-6 opacity-50 mb-14 hover:opacity-100"
               />
             </a>
             <a
@@ -426,7 +426,7 @@ const IndexPage = () => {
             >
               <img
                 src="images/asseenin/bitcoinist.png"
-                className="mx-6 mb-14 opacity-50 hover:opacity-100"
+                className="mx-6 opacity-50 mb-14 hover:opacity-100"
               />
             </a>
             <a
@@ -435,7 +435,7 @@ const IndexPage = () => {
             >
               <img
                 src="images/asseenin/newsbtc.png"
-                className="mx-6 mb-14 opacity-50 hover:opacity-100"
+                className="mx-6 opacity-50 mb-14 hover:opacity-100"
               />
             </a>
             <a
@@ -444,7 +444,7 @@ const IndexPage = () => {
             >
               <img
                 src="images/asseenin/potato.png"
-                className="mx-6 mb-14 opacity-50 hover:opacity-100"
+                className="mx-6 opacity-50 mb-14 hover:opacity-100"
               />
             </a>
             <a
@@ -453,7 +453,7 @@ const IndexPage = () => {
             >
               <img
                 src="images/asseenin/entrepreneur.png"
-                className="mx-6 mb-14 opacity-50 hover:opacity-100"
+                className="mx-6 opacity-50 mb-14 hover:opacity-100"
               />
             </a>
             <a
@@ -462,7 +462,7 @@ const IndexPage = () => {
             >
             <img
               src="images/asseenin/it.png"
-              className="mx-6 mb-14 opacity-50 hover:opacity-100"
+              className="mx-6 opacity-50 mb-14 hover:opacity-100"
             />
             </a>
             <a
@@ -471,7 +471,7 @@ const IndexPage = () => {
             >
               <img
                 src="images/asseenin/dwn.png"
-                className="mx-6 mb-14 opacity-50 hover:opacity-100"
+                className="mx-6 opacity-50 mb-14 hover:opacity-100"
               />
             </a>
             <a
@@ -480,7 +480,7 @@ const IndexPage = () => {
             >
               <img
                 src="images/asseenin/magnates.png"
-                className="mx-6 mb-14 opacity-50 hover:opacity-100"
+                className="mx-6 opacity-50 mb-14 hover:opacity-100"
               />
             </a>
             <a
@@ -489,7 +489,7 @@ const IndexPage = () => {
             >
               <img
                 src="images/asseenin/techtimes.png"
-                className="mx-6 mb-14 opacity-50 hover:opacity-100"
+                className="mx-6 opacity-50 mb-14 hover:opacity-100"
               />
             </a>
             <a
@@ -498,16 +498,16 @@ const IndexPage = () => {
             >
               <img
                 src="images/asseenin/utoday.png"
-                className="mx-6 mb-14 opacity-50 hover:opacity-100"
+                className="mx-6 opacity-50 mb-14 hover:opacity-100"
               />
             </a>
           </div>
           <div className="relative w-1/3 ml-24">
             <div className="absolute z-10">
-              <h2 className="font-bold text-5xl xl:text-6xl mb-4">
+              <h2 className="mb-4 text-5xl font-bold xl:text-6xl">
                 As Seen In
               </h2>
-              <p className="text-xl font-landing text-gray-500">
+              <p className="text-xl text-gray-500 font-landing">
                 Our media appearances
               </p>
             </div>
@@ -875,7 +875,7 @@ const IndexPage = () => {
                   </div>
                 </a>
               </Link>
-              <nav className="flex flex-row items-center justify-between w-10/12 pt-12 pb-3 mx-auto border-b border-primaryLight">
+              <nav className="flex flex-row items-center justify-between px-6 pt-12 pb-3 border-b border-primaryLight">
                 <div>
                   <Link href="/" passHref>
                     <a>
@@ -1009,59 +1009,59 @@ const IndexPage = () => {
             </section>
 
             <section className="w-10/12 mx-auto my-24">
-              <h2 className="text-center font-landing  font-semibold text-3xl xl:text-6xl">
+              <h2 className="text-3xl font-semibold text-center font-landing xl:text-6xl">
                 Our Partners
               </h2>
-              <p className="text-center text-md font-landing text-gray-500 mb-12">
+              <p className="mb-12 text-center text-gray-500 text-md font-landing">
                 Meet our dedicated partners.
               </p>
               <img
                 src="images/investor-partners/jump.png"
-                className="mb-14 mx-auto opacity-50"
+                className="mx-auto opacity-50 mb-14"
               />
               <img
                 src="images/investor-partners/newform.png"
-                className=" mx-auto mb-14"
+                className="mx-auto mb-14"
               />
               <img
                 src="images/investor-partners/kenetic.png"
-                className=" mx-auto mb-14"
+                className="mx-auto mb-14"
               />
               <img
                 src="images/investor-partners/bb.png"
-                className=" mx-auto mb-14"
+                className="mx-auto mb-14"
               />
               <img
                 src="images/investor-partners/impossible.png"
-                className=" mx-auto mb-14"
+                className="mx-auto mb-14"
               />
               <img
                 src="images/investor-partners/cryptofounders.png"
-                className=" mx-auto mb-14"
+                className="mx-auto mb-14"
               />
               <img
                 src="images/investor-partners/hestia.png"
-                className=" mx-auto mb-14"
+                className="mx-auto mb-14"
               />
               <img
                 src="images/investor-partners/amino.png"
-                className=" mx-auto mb-14"
+                className="mx-auto mb-14"
               />
               <img
                 src="images/investor-partners/cakebox.png"
-                className=" mx-auto mb-14"
+                className="mx-auto mb-14"
               />
               <img
                 src="images/investor-partners/lao.png"
-                className=" mx-auto mb-14"
+                className="mx-auto mb-14"
               />
             </section>
 
             <section className="w-10/12 mx-auto my-24 ">
-              <h2 className="text-center font-landing  font-semibold text-3xl xl:text-6xl">
+              <h2 className="text-3xl font-semibold text-center font-landing xl:text-6xl">
                 As Seen In
               </h2>
-              <p className="text-center text-md font-landing text-gray-500 mb-12">
+              <p className="mb-12 text-center text-gray-500 text-md font-landing">
                 Our media appearances
               </p>
               <a
@@ -1070,7 +1070,7 @@ const IndexPage = () => {
             >
               <img
                 src="images/asseenin/coindesk.png"
-                className="mx-auto mb-14 opacity-50 hover:opacity-100"
+                className="mx-auto opacity-50 mb-14 hover:opacity-100"
               />
             </a>
             <a
@@ -1079,7 +1079,7 @@ const IndexPage = () => {
             >
               <img
                 src="images/asseenin/investing.com.png"
-                className="mx-auto mb-14 opacity-50 hover:opacity-100"
+                className="mx-auto opacity-50 mb-14 hover:opacity-100"
               />
             </a>
             <a
@@ -1088,7 +1088,7 @@ const IndexPage = () => {
             >
               <img
                 src="images/asseenin/yahoo.png"
-                className="mx-auto mb-14 opacity-50 hover:opacity-100"
+                className="mx-auto opacity-50 mb-14 hover:opacity-100"
               />
             </a>
             <a
@@ -1097,7 +1097,7 @@ const IndexPage = () => {
             >
               <img
                 src="images/asseenin/bitcoinist.png"
-                className="mx-auto mb-14 opacity-50 hover:opacity-100"
+                className="mx-auto opacity-50 mb-14 hover:opacity-100"
               />
             </a>
             <a
@@ -1106,7 +1106,7 @@ const IndexPage = () => {
             >
               <img
                 src="images/asseenin/newsbtc.png"
-                className="mx-auto mb-14 opacity-50 hover:opacity-100"
+                className="mx-auto opacity-50 mb-14 hover:opacity-100"
               />
             </a>
             <a
@@ -1115,7 +1115,7 @@ const IndexPage = () => {
             >
               <img
                 src="images/asseenin/potato.png"
-                className="mx-auto mb-14 opacity-50 hover:opacity-100"
+                className="mx-auto opacity-50 mb-14 hover:opacity-100"
               />
             </a>
             <a
@@ -1124,7 +1124,7 @@ const IndexPage = () => {
             >
               <img
                 src="images/asseenin/entrepreneur.png"
-                className="mx-auto mb-14 opacity-50 hover:opacity-100"
+                className="mx-auto opacity-50 mb-14 hover:opacity-100"
               />
             </a>
             <a
@@ -1133,7 +1133,7 @@ const IndexPage = () => {
             >
             <img
               src="images/asseenin/it.png"
-              className="mx-auto mb-14 opacity-50 hover:opacity-100"
+              className="mx-auto opacity-50 mb-14 hover:opacity-100"
             />
             </a>
             <a
@@ -1142,7 +1142,7 @@ const IndexPage = () => {
             >
               <img
                 src="images/asseenin/dwn.png"
-                className="mx-auto mb-14 opacity-50 hover:opacity-100"
+                className="mx-auto opacity-50 mb-14 hover:opacity-100"
               />
             </a>
             <a
@@ -1151,7 +1151,7 @@ const IndexPage = () => {
             >
               <img
                 src="images/asseenin/magnates.png"
-                className="mx-auto mb-14 opacity-50 hover:opacity-100"
+                className="mx-auto opacity-50 mb-14 hover:opacity-100"
               />
             </a>
             <a
@@ -1160,7 +1160,7 @@ const IndexPage = () => {
             >
               <img
                 src="images/asseenin/techtimes.png"
-                className="mx-auto mb-14 opacity-50 hover:opacity-100"
+                className="mx-auto opacity-50 mb-14 hover:opacity-100"
               />
             </a>
             <a
@@ -1169,7 +1169,7 @@ const IndexPage = () => {
             >
               <img
                 src="images/asseenin/utoday.png"
-                className="mx-auto mb-14 opacity-50 hover:opacity-100"
+                className="mx-auto opacity-50 mb-14 hover:opacity-100"
               />
             </a>
             </section>

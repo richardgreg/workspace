@@ -31,9 +31,9 @@ Burger.propTypes = {
 export default Burger;
 
 export const StyledBurger = styled.button<StyledBurgerProps>`
-  position: ${({ open }) => (open ? 'fixed' : 'absolute')};
+  position: ${({ open }) => (open ? 'fixed' : 'static')};
   top: ${({ open }) => (open ? '3%' : '15%')};
-  right: ${({ open }) => (open ? '3%' : '15%')};
+  right: ${({ open }) => (open ? '4%' : '4%')};
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -44,6 +44,9 @@ export const StyledBurger = styled.button<StyledBurgerProps>`
   cursor: pointer;
   padding: 0;
   z-index: 20;
+
+  /* transition: top 1s; */
+
   @media (max-width: 680px) {
     right: ${({ open }) => (open ? '4%' : '2rem')};
   }
@@ -66,6 +69,22 @@ export const StyledBurger = styled.button<StyledBurgerProps>`
     position: relative;
     transform-origin: 1px;
 
+    ${({ open }) =>
+      open &&
+      `
+      animation: hidden 1.5s;
+      `}
+
+    @keyframes hidden {
+      0%,
+      99% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
+
     :first-child {
       background: ${({ open }) => (open ? '#fff' : '#000')};
       transform: ${({ open }) => (open ? 'rotate(45deg)' : 'rotate(0)')};
@@ -73,7 +92,7 @@ export const StyledBurger = styled.button<StyledBurgerProps>`
 
     :nth-child(2) {
       background: ${({ open }) => (open ? '#fff' : '#000')};
-      opacity: ${({ open }) => (open ? '0' : '1')};
+      visibility: ${({ open }) => (open ? 'hidden' : 'visible')};
       transform: ${({ open }) => (open ? 'translateX(20px)' : 'translateX(0)')};
     }
 
