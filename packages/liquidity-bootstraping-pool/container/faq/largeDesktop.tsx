@@ -670,7 +670,7 @@ export default function LargeDesktop(): JSX.Element {
                 <img src="images/Popcorn_Token_Allocation_Chart.jpg" />
                 <ul className="list-inside list-disc z-10">
                   <img
-                    src="images/releaseschedule.png"
+                    src="https://miro.medium.com/max/1400/1*D8HHiXNQgnQhdaLHpPSZXQ.png"
                     className="relative z-10"
                   />
                 </ul>

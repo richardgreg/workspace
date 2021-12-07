@@ -640,7 +640,7 @@ export default function Tablet(): JSX.Element {
                   supporters and team?
                 </p>
                 <img src="images/Popcorn_Token_Allocation_Chart.jpg" />
-                <img src="images/releaseschedule.png" />
+                <img src="https://miro.medium.com/max/1400/1*D8HHiXNQgnQhdaLHpPSZXQ.png" />
               </div>
 
               <div className="w-full mx-auto my-14">

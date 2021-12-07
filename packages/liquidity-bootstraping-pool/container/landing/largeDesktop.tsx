@@ -213,12 +213,11 @@ export default function LargeDesktop({ auctionLive, auctionEnded }): JSX.Element
                   governance token, POP.
                 </p>
                 <p className="text-xl mt-4 font-light">
-                  Tokenholders are eligible to participate in the network by
+                Tokenholders are eligible to participate in the network by
                   running keeper nodes and voting on proposals that influence
                   the parameters of Popcorn’s smart contracts. Tokenholders also
-                  have the ability to vote for non-profits to receive a
-                  percentage of protocol fees. Additionally, yield farming and
-                  staking incentives will also be available for tokenholders.
+                  have the ability to contribute to the ecosystem by voting for non-profits to receive funding. Additionally, yield farming and
+                  staking opportunities will also be available for tokenholders.
                 </p>
               </div>
             </div>

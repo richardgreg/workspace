@@ -651,7 +651,7 @@ export default function Desktop(): JSX.Element {
                   className="relative z-10 mt-4"
                 />
                 <img
-                  src="images/releaseschedule.png"
+                  src="https://miro.medium.com/max/1400/1*D8HHiXNQgnQhdaLHpPSZXQ.png"
                   className="relative z-10"
                 />
               </div>

@@ -633,7 +633,7 @@ export default function Mobile({
                 and will be vested over 5 years.
               </p>
               <img src="images/Popcorn_Token_Allocation_Chart.jpg" className="mt-2" />
-              <img src="images/releaseschedule.png" />
+              <img src="https://miro.medium.com/max/1400/1*D8HHiXNQgnQhdaLHpPSZXQ.png" />
             </div>
 
             <div className="w-10/12 mx-auto mt-14">
