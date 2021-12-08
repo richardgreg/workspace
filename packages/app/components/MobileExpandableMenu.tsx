@@ -27,7 +27,7 @@ export const MobileExpandableMenu: React.FC<MobileExpandableMenuProps> = ({
           <Link href="https://launch.popcorn.network/" passHref>
             <a>
               <h1
-                className="ml-3 text-4xl font-bold text-white hover:text-gray-700 font-landing"
+                className="ml-3 text-4xl font-light text-white hover:text-gray-700 font-landing"
                 style={{ marginTop: 18, marginBottom: 18 }}
               >
                 Token Launch Auction
@@ -41,7 +41,7 @@ export const MobileExpandableMenu: React.FC<MobileExpandableMenuProps> = ({
           <Link href="/docs/Popcorn_whitepaper_v1.pdf" passHref>
             <a>
               <h1
-                className="ml-3 text-4xl font-bold text-white hover:text-gray-700 font-landing"
+                className="ml-3 text-4xl font-light text-white hover:text-gray-700 font-landing"
                 style={{ marginTop: 18, marginBottom: 18 }}
               >
                 Whitepaper
@@ -55,7 +55,7 @@ export const MobileExpandableMenu: React.FC<MobileExpandableMenuProps> = ({
           <Link href="/team" passHref>
             <a>
               <h1
-                className="ml-3 text-4xl font-bold text-white hover:text-gray-700 font-landing"
+                className="ml-3 text-4xl font-light text-white hover:text-gray-700 font-landing"
                 style={{ marginTop: 18, marginBottom: 18 }}
               >
                 Team & Contributors
@@ -106,9 +106,9 @@ export const MobileExpandableMenu: React.FC<MobileExpandableMenuProps> = ({
             </div>
           </div>
           <div className="w-full bg-white" style={{ height: 0.72 }}></div>
-          <div className="flex flex-row py-6 justify-evenly">
+          <div className="flex flex-row py-6 font-light justify-evenly">
             <div className="flex flex-col w-1/2 space-y-3">
-              <p className="text-base font-bold text-white uppercase font-landing">
+              <p className="text-base text-white uppercase font-landing">
                 Site
               </p>
               <Link href="/" passHref>
@@ -124,7 +124,7 @@ export const MobileExpandableMenu: React.FC<MobileExpandableMenuProps> = ({
               </Link>
             </div>
             <div className="flex flex-col w-1/2 ml-20 space-y-3">
-              <p className="text-base font-bold text-white uppercase font-landing">
+              <p className="text-base text-white uppercase font-landing">
                 Connect
               </p>
               <Link href="https://twitter.com/Popcorn_DAO" passHref>

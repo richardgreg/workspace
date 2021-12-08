@@ -131,7 +131,7 @@ p {
 }
 
 .nav-animation {
-  animation: fade_in_show_content 1.25s cubic-bezier(0,.77,.56,.4);
+  animation: fade_in_show_content .5s ease;
 }
 
 @keyframes fade_in_show_content {

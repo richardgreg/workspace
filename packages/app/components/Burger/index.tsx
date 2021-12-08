@@ -65,19 +65,18 @@ export const StyledBurger = styled.button<StyledBurgerProps>`
     background: ${({ theme, open }) =>
       open ? theme.primaryDark : theme.primaryLight};
     border-radius: 10px;
-    transition: transform 0.5s;
+    transition: transform 0.7s;
     position: relative;
     transform-origin: 1px;
 
     ${({ open }) =>
       open &&
       `
-      animation: hidden 1.5s;
+      animation: hidden .5s;
       `}
 
     @keyframes hidden {
-      0%,
-      99% {
+      0% {
         opacity: 0;
       }
       100% {
