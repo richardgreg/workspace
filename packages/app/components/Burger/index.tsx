@@ -32,8 +32,8 @@ export default Burger;
 
 export const StyledBurger = styled.button<StyledBurgerProps>`
   position: ${({ open }) => (open ? 'fixed' : 'static')};
-  top: ${({ open }) => (open ? '3%' : '15%')};
-  right: ${({ open }) => (open ? '4%' : '4%')};
+  top: ${({ open }) => (open ? '5%' : '15%')};
+  right: ${({ open }) => (open ? '1rem' : '4%')};
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -45,7 +45,7 @@ export const StyledBurger = styled.button<StyledBurgerProps>`
   padding: 0;
   z-index: 20;
 
-  /* transition: top 1s; */
+
 
   @media (max-width: 680px) {
     right: ${({ open }) => (open ? '4%' : '2rem')};

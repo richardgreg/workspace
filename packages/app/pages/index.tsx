@@ -817,7 +817,7 @@ Nassau, BS</span>
         >
           <div>
             <header className="w-full bg-primary">
-              <nav className="flex flex-row items-center justify-between px-6 pt-12 pb-3 border-b border-primaryLight">
+              <nav className="flex flex-row items-center justify-between p-6 border-b border-primaryLight">
                 <div>
                   <Link href="/" passHref>
                     <a>
