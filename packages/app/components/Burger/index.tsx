@@ -31,9 +31,9 @@ Burger.propTypes = {
 export default Burger;
 
 export const StyledBurger = styled.button<StyledBurgerProps>`
-  position: ${({ open }) => (open ? 'fixed' : 'static')};
-  top: ${({ open }) => (open ? '32px' : '0px')};
-  right: ${({ open }) => (open ? '16px' : '0px')};
+  position: fixed;
+  top: ${({ open }) => (open ? '32px' : '2rem')};
+  right: ${({ open }) => (open ? '16px' : '1rem')};
   display: flex;
   flex-direction: column;
   justify-content: space-around;
