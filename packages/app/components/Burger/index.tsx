@@ -32,8 +32,8 @@ export default Burger;
 
 export const StyledBurger = styled.button<StyledBurgerProps>`
   position: ${({ open }) => (open ? 'fixed' : 'static')};
-  top: ${({ open }) => (open ? '5%' : '15%')};
-  right: ${({ open }) => (open ? '1rem' : '4%')};
+  top: ${({ open }) => (open ? '32px' : '0px')};
+  right: ${({ open }) => (open ? '16px' : '0px')};
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -44,16 +44,6 @@ export const StyledBurger = styled.button<StyledBurgerProps>`
   cursor: pointer;
   padding: 0;
   z-index: 20;
-
-
-
-  @media (max-width: 680px) {
-    right: ${({ open }) => (open ? '4%' : '2rem')};
-  }
-
-  @media (max-width: 480px) {
-    right: ${({ open }) => (open ? '4%' : '2rem')};
-  }
 
   &:focus {
     outline: none;
