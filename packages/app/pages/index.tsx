@@ -5,10 +5,15 @@ import FacebookPixel from 'components/FacebookPixel';
 import LinkedInPagePixel from 'components/LinkedInPagePixel';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { Fragment, useEffect, useState } from 'react';
-import { Facebook, GitHub, Menu, Twitter, X } from 'react-feather';
+import React, { Fragment, useEffect, useState, useRef } from 'react';
+import { Facebook, GitHub,  Twitter, X } from 'react-feather';
 import * as Icon from 'react-feather';
 import { MobileExpandableMenu } from 'components/MobileExpandableMenu';
+
+import Burger from 'components/Burger'
+import Menu from 'components/Menu'
+import FocusLock from 'react-focus-lock';
+import { useOnClickOutside } from '../hooks';
 
 const IndexPage = () => {
   const router = useRouter();
@@ -17,6 +22,14 @@ const IndexPage = () => {
   const [countdownActive, disableCountdown] = useState<boolean>(true);
   const [menuVisible, toggleMenu] = useState<boolean>(false);
   const [ctaModalVisible, toggleCtaModal] = useState<boolean>(false);
+
+
+  const [open, setOpen] = useState(false);
+  const node = useRef();
+  const menuId = "main-menu";
+
+
+  useOnClickOutside(node, () => setOpen(false));
 
   useEffect(() => {
     if (typeof window !== 'undefined' && window.location.pathname !== '/') {
@@ -63,10 +76,10 @@ const IndexPage = () => {
         <Dialog
           as="div"
           auto-reopen="true"
-          className="fixed z-10 inset-0 overflow-y-auto"
+          className="fixed inset-0 z-10 overflow-y-auto"
           onClose={(e) => toggleCtaModal(false)}
         >
-          <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-60 text-center sm:block sm:p-0">
+          <div className="flex items-end justify-center min-h-screen px-4 pt-4 text-center pb-60 sm:block sm:p-0">
             <Transition.Child
               as={Fragment}
               enter="ease-out duration-300"
@@ -77,7 +90,7 @@ const IndexPage = () => {
               leaveTo="opacity-0"
             >
               <Dialog.Overlay
-                className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+                className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75"
                 style={{ backdropFilter: 'blur(5px)' }}
               />
             </Transition.Child>
@@ -98,7 +111,7 @@ const IndexPage = () => {
               leaveFrom="opacity-100 translate-y-0 sm:scale-100"
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
-              <div className="w-full md:w-1/2 xl:w-1/3 inline-block transform transition-all align-middle">
+              <div className="inline-block w-full align-middle transition-all transform md:w-1/2 xl:w-1/3">
                 <form
                   action="https://network.us1.list-manage.com/subscribe/post?u=5ce5e82d673fd2cfaf12849a5&amp;id=e85a091ed3"
                   method="post"
@@ -107,15 +120,14 @@ const IndexPage = () => {
                   className="validate"
                   target="_blank"
                   noValidate
-                >
-                  <div
+                >                  <div
                     id="mc_embed_signup_scroll"
-                    className="shadow-xl bg-white rounded-xl py-2 px-2 mt-8 w-full flex flex-col md:flex-row items-center justify-between"
+                    className="flex flex-col items-center justify-between w-full px-2 py-2 mt-8 bg-white shadow-xl rounded-xl md:flex-row"
                   >
                     <input
                       type="email"
                       name="EMAIL"
-                      className="w-10/12 p-2 text-base mx-4 text-gray-900"
+                      className="w-10/12 p-2 mx-4 text-base text-gray-900"
                       id="mce-EMAIL"
                       placeholder="Email Address"
                       required
@@ -136,7 +148,7 @@ const IndexPage = () => {
                         value="Join Waitlist"
                         name="subscribe"
                         id="mc-embedded-subscribe"
-                        className="font-medium text-base bg-blue-600 hover:bg-blue-500 text-white rounded-xl px-4 py-2 mt-4 md:mt-0 cursor-pointer"
+                        className="px-4 py-2 mt-4 text-base font-medium text-white bg-blue-600 cursor-pointer hover:bg-blue-500 rounded-xl md:mt-0"
                         readOnly
                         onClick={(e) => {
                           toggleCtaModal(false);
@@ -154,9 +166,9 @@ const IndexPage = () => {
         </Dialog>
       </Transition.Root>
       {/* DESKTOP + TABLET VERSION */}
-      <div className="hidden lg:flex flex-col w-full h-full">
+      <div className="flex-col hidden w-full h-full lg:flex">
         <header className="w-full bg-primary">
-          <nav className="w-10/12 mx-auto pt-12 pb-4 border-b border-primaryLight flex flex-row items-center justify-between">
+          <nav className="flex flex-row items-center justify-between w-10/12 pt-12 pb-4 mx-auto border-b border-primaryLight">
             <div>
               <Link href="/" passHref>
                 <a>
@@ -171,25 +183,25 @@ const IndexPage = () => {
             </div>
             <div className="space-x-8">
               <Link href="https://launch.popcorn.network/" passHref>
-                <a className="font-normal text-base hover:text-blue-600">
+                <a className="text-base font-normal hover:text-blue-600">
                   Token Launch Auction
                 </a>
               </Link>
               <Link href="/docs/Popcorn_whitepaper_v1.pdf" passHref>
                 <a
-                  className="font-normal text-base hover:text-blue-600"
+                  className="text-base font-normal hover:text-blue-600"
                   target="_window"
                 >
                   Whitepaper
                 </a>
               </Link>
               <Link href="/team" passHref>
-                <a className="font-normal text-base hover:text-blue-600">
+                <a className="text-base font-normal hover:text-blue-600">
                   Team & Contributors
                 </a>
               </Link>
               <a
-                className="font-medium text-base bg-blue-600 hover:bg-blue-500 text-white rounded-xl p-4 cursor-pointer"
+                className="p-4 text-base font-medium text-white bg-blue-600 cursor-pointer hover:bg-blue-500 rounded-xl"
                 onClick={(e) => toggleCtaModal(true)}
               >
                 Early Access
@@ -198,19 +210,19 @@ const IndexPage = () => {
           </nav>
         </header>
         <section className="min-h-full">
-          <div className="bg-primary w-full h-8 2xl:h-28"></div>
+          <div className="w-full h-8 bg-primary 2xl:h-28"></div>
           <div
-            className="bg-hero-pattern flex-shrink-0 flex-grow-0 w-full h-full"
+            className="flex-grow-0 flex-shrink-0 w-full h-full bg-hero-pattern"
             style={{
               backgroundRepeat: 'no-repeat',
               backgroundSize: 'cover',
               backgroundPosition: 'center',
             }}
           >
-            <div className="min-w-480 w-10/12 mx-auto flex flex-col lg:flex-row justify-between pb-48 items-center">
-              <div className="w-full lg:w-6/12 xl:w-5/12 order-2 lg:order-1">
-                <div className="w-10/12 text-center mx-auto lg:text-left lg:mx-0">
-                  <h1 className="font-bold lg:text-5xl xl:text-7xl leading-snug mb-3 ">
+            <div className="flex flex-col items-center justify-between w-10/12 pb-48 mx-auto min-w-480 lg:flex-row">
+              <div className="order-2 w-full lg:w-6/12 xl:w-5/12 lg:order-1">
+                <div className="w-10/12 mx-auto text-center lg:text-left lg:mx-0">
+                  <h1 className="mb-3 font-bold leading-snug lg:text-5xl xl:text-7xl ">
                     Start doing good with DeFi
                   </h1>
                   <p className="text-xl font-landing">
@@ -228,12 +240,12 @@ const IndexPage = () => {
                   >
                     <div
                       id="mc_embed_signup_scroll"
-                      className="shadow-xl bg-white rounded-xl py-2 px-2 mt-4 w-full flex flex-row items-center justify-between"
+                      className="flex flex-row items-center justify-between w-full px-2 py-2 mt-4 bg-white shadow-xl rounded-xl"
                     >
                       <input
                         type="email"
                         name="EMAIL"
-                        className="w-10/12 p-2 text-base mx-4 text-gray-900"
+                        className="w-10/12 p-2 mx-4 text-base text-gray-900"
                         id="mce-EMAIL"
                         placeholder="Email Address"
                         required
@@ -254,7 +266,7 @@ const IndexPage = () => {
                           value="Join Waitlist"
                           name="subscribe"
                           id="mc-embedded-subscribe"
-                          className="font-medium text-base bg-blue-600 hover:bg-blue-500 text-white rounded-xl px-4 py-2 cursor-pointer"
+                          className="px-4 py-2 text-base font-medium text-white bg-blue-600 cursor-pointer hover:bg-blue-500 rounded-xl"
                           readOnly
                           onClick={() =>
                             (window as unknown as any).lintrk('track', {
@@ -267,41 +279,41 @@ const IndexPage = () => {
                   </form>
 
                   {countdownActive && (
-                    <div className="w-fit-content mt-4">
-                      <div className="w-fit-content mx-auto py-2">
-                        <h3 className="font-landing text-xl text-left w-fit-content">
+                    <div className="mt-4 w-fit-content">
+                      <div className="py-2 mx-auto w-fit-content">
+                        <h3 className="text-xl text-left font-landing w-fit-content">
                           Don’t miss the token launch auction!
                         </h3>
-                        <div className="mx-auto flex flex-row justify-between pb-20 mt-3 w-full">
+                        <div className="flex flex-row justify-between w-full pb-20 mx-auto mt-3">
                           <div className="text-center">
-                            <h1 className="font-medium text-4xl leading-snug">
+                            <h1 className="text-4xl font-medium leading-snug">
                               {countdown[0]}
                             </h1>
-                            <p className="text-5/12xl font-landing text-gray-500">
+                            <p className="text-gray-500 text-5/12xl font-landing">
                               Days
                             </p>
                           </div>
                           <div className="text-center">
-                            <h1 className="font-medium text-4xl leading-snug">
+                            <h1 className="text-4xl font-medium leading-snug">
                               {countdown[1]}
                             </h1>
-                            <p className="text-5/12xl font-landing text-gray-500">
+                            <p className="text-gray-500 text-5/12xl font-landing">
                               Hours
                             </p>
                           </div>
                           <div className="text-center">
-                            <h1 className="font-medium text-4xl leading-snug">
+                            <h1 className="text-4xl font-medium leading-snug">
                               {countdown[2]}
                             </h1>
-                            <p className="text-5/12xl font-landing text-gray-500">
+                            <p className="text-gray-500 text-5/12xl font-landing">
                               Minutes
                             </p>
                           </div>
                           <div className="text-center">
-                            <h1 className="font-medium text-4xl leading-snug">
+                            <h1 className="text-4xl font-medium leading-snug">
                               {countdown[3]}
                             </h1>
-                            <p className="text-5/12xl font-landing text-gray-500">
+                            <p className="text-gray-500 text-5/12xl font-landing">
                               Seconds
                             </p>
                           </div>
@@ -311,7 +323,7 @@ const IndexPage = () => {
                   )}
                 </div>
               </div>
-              <div className="w-full lg:w-6/12 xl:w-7/12 order-1 lg:order-2 mb-8 lg:mb-0">
+              <div className="order-1 w-full mb-8 lg:w-6/12 xl:w-7/12 lg:order-2 lg:mb-0">
                 <CatPool />
               </div>
             </div>
@@ -319,67 +331,67 @@ const IndexPage = () => {
           </div>
         </section>
         <section className="w-10/12 mx-auto mb-24">
-          <h2 className="font-bold text-5xl xl:text-6xl mb-4">How it works</h2>
-          <p className="text-xl font-landing text-gray-500">
+          <h2 className="mb-4 text-5xl font-bold xl:text-6xl">How it works</h2>
+          <p className="text-xl text-gray-500 font-landing">
             Put your cryptoassets to work
           </p>
-          <div className="w-full flex flex-wrap flex-row justify-between mt-16">
-            <div className="w-1/2 xl:w-1/4 flex-grow-0 flex-shrink-0 mb-12 xl:mb-0">
-              <div className="w-11/12 h-104 rounded-xl shadow-2xl flex flex-col items-center">
-                <div className="w-36 h-36 rounded-full bg-primary mt-12 flex items-center">
+          <div className="flex flex-row flex-wrap justify-between w-full mt-16">
+            <div className="flex-grow-0 flex-shrink-0 w-1/2 mb-12 xl:w-1/4 xl:mb-0">
+              <div className="flex flex-col items-center w-11/12 shadow-2xl h-104 rounded-xl">
+                <div className="flex items-center mt-12 rounded-full w-36 h-36 bg-primary">
                   <img
                     src="/images/metamaskCat.svg"
                     alt="metamaskCat"
                     className="mx-auto mb-1"
                   ></img>
                 </div>
-                <h3 className="font-medium text-4xl py-8">Connect</h3>
-                <p className="w-3/4 text-center text-xl text-gray-500">
+                <h3 className="py-8 text-4xl font-medium">Connect</h3>
+                <p className="w-3/4 text-xl text-center text-gray-500">
                   Connect your Metamask wallet with Popcorn
                 </p>
               </div>
             </div>
-            <div className="w-1/2 xl:w-1/4 flex-grow-0 flex-shrink-0 mb-12 xl:mb-0">
-              <div className="w-11/12 h-104 rounded-xl shadow-2xl flex flex-col items-center">
-                <div className="w-36 h-36 rounded-full bg-primary mt-12 flex items-center">
+            <div className="flex-grow-0 flex-shrink-0 w-1/2 mb-12 xl:w-1/4 xl:mb-0">
+              <div className="flex flex-col items-center w-11/12 shadow-2xl h-104 rounded-xl">
+                <div className="flex items-center mt-12 rounded-full w-36 h-36 bg-primary">
                   <img
                     src="/images/vault.svg"
                     alt="vault"
                     className="mx-auto mb-2"
                   ></img>
                 </div>
-                <h3 className="font-medium text-4xl py-8">Deposit</h3>
-                <p className="w-3/4 text-center text-xl text-gray-500">
+                <h3 className="py-8 text-4xl font-medium">Deposit</h3>
+                <p className="w-3/4 text-xl text-center text-gray-500">
                   Deposit your crypto and choose a product or strategy
                 </p>
               </div>
             </div>
-            <div className="w-1/2 xl:w-1/4 flex-grow-0 flex-shrink-0">
-              <div className="w-11/12 h-104 rounded-xl shadow-2xl flex flex-col items-center">
-                <div className="w-36 h-36 rounded-full bg-primary mt-12 flex items-center">
+            <div className="flex-grow-0 flex-shrink-0 w-1/2 xl:w-1/4">
+              <div className="flex flex-col items-center w-11/12 shadow-2xl h-104 rounded-xl">
+                <div className="flex items-center mt-12 rounded-full w-36 h-36 bg-primary">
                   <img
                     src="/images/popcornVault.svg"
                     alt="popcornVault"
                     className="mx-auto mt-2"
                   ></img>
                 </div>
-                <h3 className="font-medium text-4xl py-8">Do well</h3>
-                <p className="w-3/4 text-center text-xl text-gray-500">
+                <h3 className="py-8 text-4xl font-medium">Do well</h3>
+                <p className="w-3/4 text-xl text-center text-gray-500">
                   Earn competitive returns on your crypto assets
                 </p>
               </div>
             </div>
-            <div className="w-1/2 xl:w-1/4 flex-grow-0 flex-shrink-0">
-              <div className="w-11/12 h-104 rounded-xl shadow-2xl flex flex-col items-center">
-                <div className="w-36 h-36 rounded-full bg-primary mt-12 flex items-center">
+            <div className="flex-grow-0 flex-shrink-0 w-1/2 xl:w-1/4">
+              <div className="flex flex-col items-center w-11/12 shadow-2xl h-104 rounded-xl">
+                <div className="flex items-center mt-12 rounded-full w-36 h-36 bg-primary">
                   <img
                     src="/images/catMail.svg"
                     alt="catMail"
                     className="mx-auto mb-1"
                   ></img>
                 </div>
-                <h3 className="font-medium text-4xl py-8">Do good</h3>
-                <p className="w-3/4 text-center text-xl text-gray-500">
+                <h3 className="py-8 text-4xl font-medium">Do good</h3>
+                <p className="w-3/4 text-xl text-center text-gray-500">
                   Choose which social impact organization you’d like to help
                 </p>
               </div>
@@ -393,18 +405,18 @@ const IndexPage = () => {
               <img src="/images/ourpartnersbg.svg" style={{ zIndex: 20 }} />
             </div>
             <div className="absolute z-10">
-              <h2 className=" font-bold text-5xl xl:text-6xl mb-4 ">
+              <h2 className="mb-4 text-5xl font-bold xl:text-6xl">
                 Our Partners
               </h2>
-              <p className="text-xl font-landing text-gray-500 ">
+              <p className="text-xl text-gray-500 font-landing ">
                 Meet our dedicated partners.
               </p>
             </div>
           </div>
-          <div className="w-2/3 flex flex-wrap ml-10">
+          <div className="flex flex-wrap w-2/3 ml-10">
             <img
               src="images/investor-partners/jump.png"
-              className="mx-6 mb-14 opacity-50"
+              className="mx-6 opacity-50 mb-14"
             />
             <img
               src="images/investor-partners/newform.png"
@@ -442,15 +454,15 @@ const IndexPage = () => {
           </div>
         </section>
 
-        <section className="flex flex-row w-10/12 mx-auto mt-12 xl:mt-24 mb-24">
-          <div className="w-2/3 flex flex-wrap">
+        <section className="flex flex-row w-10/12 mx-auto mt-12 mb-24 xl:mt-24">
+          <div className="flex flex-wrap w-2/3">
             <a
               href="https://www.coindesk.com/tech/2021/11/18/how-daos-can-empower-advisors-and-investors/"
               target="_blank"
             >
               <img
                 src="images/asseenin/coindesk.png"
-                className="mx-6 mb-14 opacity-50 hover:opacity-100"
+                className="mx-6 opacity-50 mb-14 hover:opacity-100"
               />
             </a>
             <a
@@ -459,7 +471,7 @@ const IndexPage = () => {
             >
               <img
                 src="images/asseenin/investing.com.png"
-                className="mx-6 mb-14 opacity-50 hover:opacity-100"
+                className="mx-6 opacity-50 mb-14 hover:opacity-100"
               />
             </a>
             <a
@@ -468,7 +480,7 @@ const IndexPage = () => {
             >
               <img
                 src="images/asseenin/yahoo.png"
-                className="mx-6 mb-14 opacity-50 hover:opacity-100"
+                className="mx-6 opacity-50 mb-14 hover:opacity-100"
               />
             </a>
             <a
@@ -477,7 +489,7 @@ const IndexPage = () => {
             >
               <img
                 src="images/asseenin/bitcoinist.png"
-                className="mx-6 mb-14 opacity-50 hover:opacity-100"
+                className="mx-6 opacity-50 mb-14 hover:opacity-100"
               />
             </a>
             <a
@@ -486,7 +498,7 @@ const IndexPage = () => {
             >
               <img
                 src="images/asseenin/newsbtc.png"
-                className="mx-6 mb-14 opacity-50 hover:opacity-100"
+                className="mx-6 opacity-50 mb-14 hover:opacity-100"
               />
             </a>
             <a
@@ -495,7 +507,7 @@ const IndexPage = () => {
             >
               <img
                 src="images/asseenin/potato.png"
-                className="mx-6 mb-14 opacity-50 hover:opacity-100"
+                className="mx-6 opacity-50 mb-14 hover:opacity-100"
               />
             </a>
             <a
@@ -504,7 +516,7 @@ const IndexPage = () => {
             >
               <img
                 src="images/asseenin/entrepreneur.png"
-                className="mx-6 mb-14 opacity-50 hover:opacity-100"
+                className="mx-6 opacity-50 mb-14 hover:opacity-100"
               />
             </a>
             <a
@@ -513,7 +525,7 @@ const IndexPage = () => {
             >
               <img
                 src="images/asseenin/it.png"
-                className="mx-6 mb-14 opacity-50 hover:opacity-100"
+                className="mx-6 opacity-50 mb-14 hover:opacity-100"
               />
             </a>
             <a
@@ -522,7 +534,7 @@ const IndexPage = () => {
             >
               <img
                 src="images/asseenin/dwn.png"
-                className="mx-6 mb-14 opacity-50 hover:opacity-100"
+                className="mx-6 opacity-50 mb-14 hover:opacity-100"
               />
             </a>
             <a
@@ -531,7 +543,7 @@ const IndexPage = () => {
             >
               <img
                 src="images/asseenin/magnates.png"
-                className="mx-6 mb-14 opacity-50 hover:opacity-100"
+                className="mx-6 opacity-50 mb-14 hover:opacity-100"
               />
             </a>
             <a
@@ -540,7 +552,7 @@ const IndexPage = () => {
             >
               <img
                 src="images/asseenin/techtimes.png"
-                className="mx-6 mb-14 opacity-50 hover:opacity-100"
+                className="mx-6 opacity-50 mb-14 hover:opacity-100"
               />
             </a>
             <a
@@ -549,16 +561,16 @@ const IndexPage = () => {
             >
               <img
                 src="images/asseenin/utoday.png"
-                className="mx-6 mb-14 opacity-50 hover:opacity-100"
+                className="mx-6 opacity-50 mb-14 hover:opacity-100"
               />
             </a>
           </div>
           <div className="relative w-1/3 ml-24">
             <div className="absolute z-10">
-              <h2 className="font-bold text-5xl xl:text-6xl mb-4">
+              <h2 className="mb-4 text-5xl font-bold xl:text-6xl">
                 As Seen In
               </h2>
-              <p className="text-xl font-landing text-gray-500">
+              <p className="text-xl text-gray-500 font-landing">
                 Our media appearances
               </p>
             </div>
@@ -569,19 +581,19 @@ const IndexPage = () => {
         </section>
 
         <section
-          className="bg-popcorn1-pattern flex-shrink-0 flex-grow-0 w-full h-full xl:mb-24"
+          className="flex-grow-0 flex-shrink-0 w-full h-full bg-popcorn1-pattern xl:mb-24"
           style={{
             backgroundRepeat: 'no-repeat',
             backgroundSize: 'auto',
             backgroundPosition: 'left top',
           }}
         >
-          <div className="w-10/12 mx-auto pt-20 flex flex-row justify-between items-center">
+          <div className="flex flex-row items-center justify-between w-10/12 pt-20 mx-auto">
             <div className="w-5/12">
-              <h2 className="w-11/12 font-bold text-5xl xl:text-6xl leading-snug mb-4">
+              <h2 className="w-11/12 mb-4 text-5xl font-bold leading-snug xl:text-6xl">
                 Maximize your Crypto Portfolio
               </h2>
-              <p className="text-2xl font-landing text-gray-500">
+              <p className="text-2xl text-gray-500 font-landing">
                 Popcorn offers a suite of DeFi products for you to generate competitive returns on your
                 crypto assets.
               </p>
@@ -596,18 +608,18 @@ const IndexPage = () => {
             </div>
           </div>
         </section>
-        <section className="bg-impact-pattern flex-shrink-0 flex-grow-0 w-full h-full py-40 xl:py-104 impact-background">
-          <div className="w-10/12 mx-auto flex flex-row justify-between items-center">
+        <section className="flex-grow-0 flex-shrink-0 w-full h-full py-40 bg-impact-pattern xl:py-104 impact-background">
+          <div className="flex flex-row items-center justify-between w-10/12 mx-auto">
             <div className="w-7/12 2xl:w-8/12"></div>
             <div className="w-5/12 2xl:w-4/12">
-              <h2 className="font-bold text-5xl xl:text-6xl leading-snug mb-4 2xl:w-9/12">
+              <h2 className="mb-4 text-5xl font-bold leading-snug xl:text-6xl 2xl:w-9/12">
                 Create Real World Impact
               </h2>
-              <p className="text-2xl font-landing text-gray-500 2xl:w-10/12">
+              <p className="text-2xl text-gray-500 font-landing 2xl:w-10/12">
                 Our profits fund social impact organizations. Choose which
                 initiatives you support:
               </p>
-              <ul className="list-inside list-disc mt-8 space-y-3">
+              <ul className="mt-8 space-y-3 list-disc list-inside">
                 <li className="text-2xl font-medium font-landing">
                   Environment
                 </li>
@@ -620,19 +632,19 @@ const IndexPage = () => {
           </div>
         </section>
         <section
-          className="bg-popcorn3-pattern flex-shrink-0 flex-grow-0 w-full h-full mb-24"
+          className="flex-grow-0 flex-shrink-0 w-full h-full mb-24 bg-popcorn3-pattern"
           style={{
             backgroundRepeat: 'no-repeat',
             backgroundSize: 'auto',
             backgroundPosition: 'left top',
           }}
         >
-          <div className="w-10/12 mx-auto pt-20 flex flex-row justify-between items-center">
+          <div className="flex flex-row items-center justify-between w-10/12 pt-20 mx-auto">
             <div className="w-5/12">
-              <h2 className="w-11/12 font-bold text-5xl xl:text-6xl leading-snug mb-4">
+              <h2 className="w-11/12 mb-4 text-5xl font-bold leading-snug xl:text-6xl">
                 While Remaining Carbon Neutral
               </h2>
-              <p className="text-2xl font-landing text-gray-500">
+              <p className="text-2xl text-gray-500 font-landing">
                 Popcorn calculates and neutralizes blockchain carbon emissions
                 by partnering with carbon sequestration and negative emission
                 projects.
@@ -646,7 +658,7 @@ const IndexPage = () => {
 
         <section className="w-full bg-secondary py-52">
           <div className="w-8/12 mx-auto text-center">
-            <h2 className="font-bold text-4xl leading-snug mb-4">Notify Me</h2>
+            <h2 className="mb-4 text-4xl font-bold leading-snug">Notify Me</h2>
             <p className="text-2xl font-medium">
              Get early
               notification to be part of our journey
@@ -662,12 +674,12 @@ const IndexPage = () => {
             >
               <div
                 id="mc_embed_signup_scroll"
-                className="shadow-xl bg-white rounded-xl py-2 px-2 mt-8 w-8/12 mx-auto flex flex-row items-center justify-between"
+                className="flex flex-row items-center justify-between w-8/12 px-2 py-2 mx-auto mt-8 bg-white shadow-xl rounded-xl"
               >
                 <input
                   type="email"
                   name="EMAIL"
-                  className="w-10/12 p-2 text-base mx-4 text-gray-900"
+                  className="w-10/12 p-2 mx-4 text-base text-gray-900"
                   id="mce-EMAIL"
                   placeholder="Email Address"
                   required
@@ -688,7 +700,7 @@ const IndexPage = () => {
                     value="Join Waitlist"
                     name="subscribe"
                     id="mc-embedded-subscribe"
-                    className="font-medium text-base bg-blue-600 hover:bg-blue-500 text-white rounded-xl px-4 py-2 cursor-pointer"
+                    className="px-4 py-2 text-base font-medium text-white bg-blue-600 cursor-pointer hover:bg-blue-500 rounded-xl"
                     readOnly
                     onClick={() =>
                       (window as unknown as any).lintrk('track', {
@@ -702,26 +714,26 @@ const IndexPage = () => {
           </div>
         </section>
         <section className="w-full bg-secondary">
-          <div className="w-10/12 mx-auto flex flex-row justify-between border-b border-gray-500 pb-12">
+          <div className="flex flex-row justify-between w-10/12 pb-12 mx-auto border-b border-gray-500">
             <div className="w-6/12">
               <Link href="/" passHref>
                 <a>
                   <img src="/images/logo.png" alt="Logo" className="h-10"></img>
                 </a>
               </Link>
-              <p className="font-medium text-base w-7/12 py-4">
+              <p className="w-7/12 py-4 text-base font-medium">
                 Earn high yield on your cryptoassets while helping
                 fund educational, environmental and open source initiatives
               </p>
-              <div className="flex flex-row space-x-4 items-center">
+              <div className="flex flex-row items-center space-x-4">
                 <Link href="https://github.com/popcorndao" passHref>
-                  <GitHub className="hover:text-blue-600 cursor-pointer" />
+                  <GitHub className="cursor-pointer hover:text-blue-600" />
                 </Link>
                 <Link href="https://www.facebook.com/PopcornDAO" passHref>
-                  <Facebook className="hover:text-blue-600 cursor-pointer" />
+                  <Facebook className="cursor-pointer hover:text-blue-600" />
                 </Link>
                 <Link href="https://twitter.com/Popcorn_DAO" passHref>
-                  <Twitter className="hover:text-blue-600 cursor-pointer" />
+                  <Twitter className="cursor-pointer hover:text-blue-600" />
                 </Link>
                 <Link href="https://discord.gg/w9zeRTSZsq" passHref>
                   <img
@@ -733,7 +745,7 @@ const IndexPage = () => {
               </div>
             </div>
             <div className="flex flex-col space-y-3">
-              <p className="font-medium text-base uppercase">Site</p>
+              <p className="text-base font-medium uppercase">Site</p>
               <Link href="/" passHref>
                 <a className="hover:text-blue-600">Home</a>
               </Link>
@@ -753,7 +765,7 @@ const IndexPage = () => {
               </Link>
             </div>
             <div className="flex flex-col space-y-3">
-              <p className="font-medium text-base uppercase">Connect</p>
+              <p className="text-base font-medium uppercase">Connect</p>
               <Link href="https://twitter.com/Popcorn_DAO" passHref>
                 <a className="hover:text-blue-600" target="_window">
                   Twitter
@@ -771,9 +783,9 @@ const IndexPage = () => {
               </Link>
             </div>
           </div>
-          <p className="font-base text-center py-4">
+          <p className="py-4 text-center font-base">
           ©2021, Popcorn Ltd All Rights Reserved{" "}
-                  <span className="text-xs block ">Winterbotham Place
+                  <span className="block text-xs ">Winterbotham Place
 Marlborough &amp; Queen Streets
 P.O. Box SP 62556
 Nassau, BS</span>
@@ -805,7 +817,7 @@ Nassau, BS</span>
         >
           <div>
             <header className="w-full bg-primary">
-              <nav className="w-10/12 mx-auto pt-12 pb-3 border-b border-primaryLight flex flex-row items-center justify-between">
+              <nav className="flex flex-row items-center justify-between p-6 border-b border-primaryLight">
                 <div>
                   <Link href="/" passHref>
                     <a>
@@ -813,27 +825,32 @@ Nassau, BS</span>
                       <img
                         src="/images/logo.png"
                         alt="Logo"
-                        className="h-14 flex-grow-0 flex-shrink-0"
+                        className="flex-grow-0 flex-shrink-0 h-14"
                       ></img>
                     </a>
                   </Link>
                 </div>
-                <Menu onClick={(e) => toggleMenu(true)} />
+                <div ref={node}>
+                  <FocusLock disabled={!open}>
+                    <Burger open={open} setOpen={setOpen} aria-controls={menuId} />
+                    <Menu open={open} setOpen={setOpen} id={menuId} />
+                  </FocusLock>
+                </div>
               </nav>
             </header>
             <section className="min-h-full">
-              <div className="bg-primary w-full h-12"></div>
+              <div className="w-full h-12 bg-primary"></div>
               <div
-                className="bg-hero-pattern flex-shrink-0 flex-grow-0 w-full h-full pt-6 md:pt-10"
+                className="flex-grow-0 flex-shrink-0 w-full h-full pt-6 bg-hero-pattern md:pt-10"
                 style={{
                   backgroundRepeat: 'no-repeat',
                   backgroundSize: 'cover',
                   backgroundPosition: 'center',
                 }}
               >
-                <div className="w-10/12 mx-auto flex flex-col lg:flex-row justify-between pb-16 items-center text-center">
+                <div className="flex flex-col items-center justify-between w-10/12 pb-16 mx-auto text-center lg:flex-row">
                   <CatPool />
-                  <h1 className="font-bold text-4xl leading-snug mb-8">
+                  <h1 className="mb-8 text-4xl font-bold leading-snug">
                     Start doing good with DeFi
                   </h1>
                   <p className="text-lg font-landing">
@@ -851,12 +868,12 @@ Nassau, BS</span>
                   >
                     <div
                       id="mc_embed_signup_scroll"
-                      className="shadow-xl bg-white rounded-xl py-2 px-2 mt-8 w-full flex flex-row items-center justify-between"
+                      className="flex flex-row items-center justify-between w-full px-2 py-2 mt-8 bg-white shadow-xl rounded-xl"
                     >
                       <input
                         type="email"
                         name="EMAIL"
-                        className="w-10/12 p-2 text-base mx-4 text-gray-900"
+                        className="w-10/12 p-2 mx-4 text-base text-gray-900"
                         id="mce-EMAIL"
                         placeholder="Email Address"
                         required
@@ -877,7 +894,7 @@ Nassau, BS</span>
                           value="Join Waitlist"
                           name="subscribe"
                           id="mc-embedded-subscribe"
-                          className="font-medium text-base bg-blue-600 hover:bg-blue-500 text-white rounded-xl px-4 py-2 cursor-pointer"
+                          className="px-4 py-2 text-base font-medium text-white bg-blue-600 cursor-pointer hover:bg-blue-500 rounded-xl"
                           readOnly
                           onClick={() =>
                             (window as unknown as any).lintrk('track', {
@@ -892,64 +909,64 @@ Nassau, BS</span>
               </div>
             </section>
             <section className="w-10/12 mx-auto mb-24">
-              <h2 className="font-bold text-3xl mb-4 text-center">
+              <h2 className="mb-4 text-3xl font-bold text-center">
                 How it works
               </h2>
-              <p className="text-lg font-landing text-gray-500 text-center">
+              <p className="text-lg text-center text-gray-500 font-landing">
                 Put your cryptoassets to work
               </p>
-              <div className="w-11/12 mx-auto justify-between flex flex-col space-y-12 mt-12">
-                <div className="flex-grow-0 flex-shrink-0 md:h-96 rounded-xl shadow-2xl flex flex-col items-center">
-                  <div className="w-36 h-36 rounded-full bg-primary mt-12 flex items-center">
+              <div className="flex flex-col justify-between w-11/12 mx-auto mt-12 space-y-12">
+                <div className="flex flex-col items-center flex-grow-0 flex-shrink-0 shadow-2xl md:h-96 rounded-xl">
+                  <div className="flex items-center mt-12 rounded-full w-36 h-36 bg-primary">
                     <img
                       src="/images/metamaskCat.svg"
                       alt="metamaskCat"
                       className="mx-auto mb-1"
                     ></img>
                   </div>
-                  <h3 className="font-medium text-2xl pt-8 py-4">Connect</h3>
-                  <p className="w-3/4 text-center text-lg text-gray-500 mb-16">
+                  <h3 className="py-4 pt-8 text-2xl font-medium">Connect</h3>
+                  <p className="w-3/4 mb-16 text-lg text-center text-gray-500">
                     Connect your Metamask wallet with Popcorn
                   </p>
                 </div>
 
-                <div className="flex-grow-0 flex-shrink-0 md:h-96 rounded-xl shadow-2xl flex flex-col items-center">
-                  <div className="w-36 h-36 rounded-full bg-primary mt-12 flex items-center">
+                <div className="flex flex-col items-center flex-grow-0 flex-shrink-0 shadow-2xl md:h-96 rounded-xl">
+                  <div className="flex items-center mt-12 rounded-full w-36 h-36 bg-primary">
                     <img
                       src="/images/vault.svg"
                       alt="vault"
                       className="mx-auto mb-2"
                     ></img>
                   </div>
-                  <h3 className="font-medium text-2xl pt-8 py-4">Deposit</h3>
-                  <p className="w-3/4 text-center text-lg text-gray-500 mb-16">
+                  <h3 className="py-4 pt-8 text-2xl font-medium">Deposit</h3>
+                  <p className="w-3/4 mb-16 text-lg text-center text-gray-500">
                     Deposit your crypto and choose a product or strategy
                   </p>
                 </div>
-                <div className="flex-grow-0 flex-shrink-0 md:h-96 rounded-xl shadow-2xl flex flex-col items-center">
-                  <div className="w-36 h-36 rounded-full bg-primary mt-12 flex items-center">
+                <div className="flex flex-col items-center flex-grow-0 flex-shrink-0 shadow-2xl md:h-96 rounded-xl">
+                  <div className="flex items-center mt-12 rounded-full w-36 h-36 bg-primary">
                     <img
                       src="/images/popcornVault.svg"
                       alt="popcornVault"
                       className="mx-auto mt-2"
                     ></img>
                   </div>
-                  <h3 className="font-medium text-2xl pt-8 py-4">Do well</h3>
-                  <p className="w-3/4 text-center text-lg text-gray-500 mb-16">
+                  <h3 className="py-4 pt-8 text-2xl font-medium">Do well</h3>
+                  <p className="w-3/4 mb-16 text-lg text-center text-gray-500">
                     Earn competitive returns on your crypto assets
                   </p>
                 </div>
 
-                <div className="flex-grow-0 flex-shrink-0 md:h-96 rounded-xl shadow-2xl flex flex-col items-center">
-                  <div className="w-36 h-36 rounded-full bg-primary mt-12 flex items-center">
+                <div className="flex flex-col items-center flex-grow-0 flex-shrink-0 shadow-2xl md:h-96 rounded-xl">
+                  <div className="flex items-center mt-12 rounded-full w-36 h-36 bg-primary">
                     <img
                       src="/images/catMail.svg"
                       alt="catMail"
                       className="mx-auto mb-1"
                     ></img>
                   </div>
-                  <h3 className="font-medium text-2xl pt-8 py-4">Do good</h3>
-                  <p className="w-3/4 text-center text-lg text-gray-500 mb-16">
+                  <h3 className="py-4 pt-8 text-2xl font-medium">Do good</h3>
+                  <p className="w-3/4 mb-16 text-lg text-center text-gray-500">
                     Choose which social impact organization you’d like to help
                   </p>
                 </div>
@@ -957,59 +974,59 @@ Nassau, BS</span>
             </section>
 
             <section className="w-10/12 mx-auto my-24">
-              <h2 className="text-center font-landing  font-semibold text-3xl xl:text-6xl">
+              <h2 className="text-3xl font-semibold text-center font-landing xl:text-6xl">
                 Our Partners
               </h2>
-              <p className="text-center text-md font-landing text-gray-500 mb-12">
+              <p className="mb-12 text-center text-gray-500 text-md font-landing">
                 Meet our dedicated partners.
               </p>
               <img
                 src="images/investor-partners/jump.png"
-                className="mb-14 mx-auto opacity-50"
+                className="mx-auto opacity-50 mb-14"
               />
               <img
                 src="images/investor-partners/newform.png"
-                className=" mx-auto mb-14"
+                className="mx-auto mb-14"
               />
               <img
                 src="images/investor-partners/kenetic.png"
-                className=" mx-auto mb-14"
+                className="mx-auto mb-14"
               />
               <img
                 src="images/investor-partners/bb.png"
-                className=" mx-auto mb-14"
+                className="mx-auto mb-14"
               />
               <img
                 src="images/investor-partners/impossible.png"
-                className=" mx-auto mb-14"
+                className="mx-auto mb-14"
               />
               <img
                 src="images/investor-partners/cryptofounders.png"
-                className=" mx-auto mb-14"
+                className="mx-auto mb-14"
               />
               <img
                 src="images/investor-partners/hestia.png"
-                className=" mx-auto mb-14"
+                className="mx-auto mb-14"
               />
               <img
                 src="images/investor-partners/amino.png"
-                className=" mx-auto mb-14"
+                className="mx-auto mb-14"
               />
               <img
                 src="images/investor-partners/cakebox.png"
-                className=" mx-auto mb-14"
+                className="mx-auto mb-14"
               />
               <img
                 src="images/investor-partners/lao.png"
-                className=" mx-auto mb-14"
+                className="mx-auto mb-14"
               />
             </section>
 
             <section className="w-10/12 mx-auto my-24 ">
-              <h2 className="text-center font-landing  font-semibold text-3xl xl:text-6xl">
+              <h2 className="text-3xl font-semibold text-center font-landing xl:text-6xl">
                 As Seen In
               </h2>
-              <p className="text-center text-md font-landing text-gray-500 mb-12">
+              <p className="mb-12 text-center text-gray-500 text-md font-landing">
                 Our media appearances
               </p>
               <a
@@ -1018,7 +1035,7 @@ Nassau, BS</span>
               >
                 <img
                   src="images/asseenin/coindesk.png"
-                  className="mx-auto mb-14 opacity-50 hover:opacity-100"
+                  className="mx-auto opacity-50 mb-14 hover:opacity-100"
                 />
               </a>
               <a
@@ -1027,7 +1044,7 @@ Nassau, BS</span>
               >
                 <img
                   src="images/asseenin/investing.com.png"
-                  className="mx-auto mb-14 opacity-50 hover:opacity-100"
+                  className="mx-auto opacity-50 mb-14 hover:opacity-100"
                 />
               </a>
               <a
@@ -1036,7 +1053,7 @@ Nassau, BS</span>
               >
                 <img
                   src="images/asseenin/yahoo.png"
-                  className="mx-auto mb-14 opacity-50 hover:opacity-100"
+                  className="mx-auto opacity-50 mb-14 hover:opacity-100"
                 />
               </a>
               <a
@@ -1045,7 +1062,7 @@ Nassau, BS</span>
               >
                 <img
                   src="images/asseenin/bitcoinist.png"
-                  className="mx-auto mb-14 opacity-50 hover:opacity-100"
+                  className="mx-auto opacity-50 mb-14 hover:opacity-100"
                 />
               </a>
               <a
@@ -1054,7 +1071,7 @@ Nassau, BS</span>
               >
                 <img
                   src="images/asseenin/newsbtc.png"
-                  className="mx-auto mb-14 opacity-50 hover:opacity-100"
+                  className="mx-auto opacity-50 mb-14 hover:opacity-100"
                 />
               </a>
               <a
@@ -1063,7 +1080,7 @@ Nassau, BS</span>
               >
                 <img
                   src="images/asseenin/potato.png"
-                  className="mx-auto mb-14 opacity-50 hover:opacity-100"
+                  className="mx-auto opacity-50 mb-14 hover:opacity-100"
                 />
               </a>
               <a
@@ -1072,7 +1089,7 @@ Nassau, BS</span>
               >
                 <img
                   src="images/asseenin/entrepreneur.png"
-                  className="mx-auto mb-14 opacity-50 hover:opacity-100"
+                  className="mx-auto opacity-50 mb-14 hover:opacity-100"
                 />
               </a>
               <a
@@ -1081,7 +1098,7 @@ Nassau, BS</span>
               >
                 <img
                   src="images/asseenin/it.png"
-                  className="mx-auto mb-14 opacity-50 hover:opacity-100"
+                  className="mx-auto opacity-50 mb-14 hover:opacity-100"
                 />
               </a>
               <a
@@ -1090,7 +1107,7 @@ Nassau, BS</span>
               >
                 <img
                   src="images/asseenin/dwn.png"
-                  className="mx-auto mb-14 opacity-50 hover:opacity-100"
+                  className="mx-auto opacity-50 mb-14 hover:opacity-100"
                 />
               </a>
               <a
@@ -1099,7 +1116,7 @@ Nassau, BS</span>
               >
                 <img
                   src="images/asseenin/magnates.png"
-                  className="mx-auto mb-14 opacity-50 hover:opacity-100"
+                  className="mx-auto opacity-50 mb-14 hover:opacity-100"
                 />
               </a>
               <a
@@ -1108,7 +1125,7 @@ Nassau, BS</span>
               >
                 <img
                   src="images/asseenin/techtimes.png"
-                  className="mx-auto mb-14 opacity-50 hover:opacity-100"
+                  className="mx-auto opacity-50 mb-14 hover:opacity-100"
                 />
               </a>
               <a
@@ -1117,31 +1134,31 @@ Nassau, BS</span>
               >
                 <img
                   src="images/asseenin/utoday.png"
-                  className="mx-auto mb-14 opacity-50 hover:opacity-100"
+                  className="mx-auto opacity-50 mb-14 hover:opacity-100"
                 />
               </a>
             </section>
             <section className="w-10/12 h-full mx-auto">
               <Rocket />
-              <h2 className="font-bold text-3xl leading-snug mb-4 mt-12 text-center">
+              <h2 className="mt-12 mb-4 text-3xl font-bold leading-snug text-center">
                 Maximize your Crypto Portfolio
               </h2>
-              <p className="text-lg font-landing text-gray-500 text-center">
+              <p className="text-lg text-center text-gray-500 font-landing">
                 Popcorn offers a suite of DeFi products for you to generate competitive returns on your
                 crypto assets.
               </p>
             </section>
             <section className="w-10/12 h-full mx-auto mt-24">
               <img src="/images/impact.svg" alt="impact" className=""></img>
-              <h2 className="font-bold text-3xl leading-snug mb-4 mt-8 text-center w-10/12 mx-auto">
+              <h2 className="w-10/12 mx-auto mt-8 mb-4 text-3xl font-bold leading-snug text-center">
                 Create Real World Impact
               </h2>
-              <p className="text-lg font-landing text-gray-500 text-center">
+              <p className="text-lg text-center text-gray-500 font-landing">
                 Our profits fund social impact organizations. Choose which
                 initiatives you support:
               </p>
               <div className="w-1/2 mx-auto">
-                <ul className="list-inside list-disc mt-8 space-y-2">
+                <ul className="mt-8 space-y-2 list-disc list-inside">
                   <li className="text-lg font-medium">Environment</li>
                   <li className="text-lg font-medium">Open Source</li>
                   <li className="text-lg font-medium">Education</li>
@@ -1150,19 +1167,19 @@ Nassau, BS</span>
             </section>
             <section className="w-10/12 h-full mx-auto mt-24">
               <img src="/images/tree.svg" alt="tree" className=""></img>
-              <h2 className="font-bold text-3xl leading-snug mb-4 mt-8 text-center w-10/12 mx-auto">
+              <h2 className="w-10/12 mx-auto mt-8 mb-4 text-3xl font-bold leading-snug text-center">
                 While Remaining Carbon Neutral
               </h2>
-              <p className="text-lg font-landing text-gray-500 text-center">
+              <p className="text-lg text-center text-gray-500 font-landing">
                 Popcorn calculates and neutralizes blockchain carbon emissions
                 by partnering with carbon sequestration and negative emission
                 projects.
               </p>
             </section>
 
-            <section className="w-full bg-secondary py-24">
+            <section className="w-full py-24 bg-secondary">
               <div className="w-10/12 mx-auto text-center">
-                <h2 className="font-bold text-2xl leading-snug mb-4">
+                <h2 className="mb-4 text-2xl font-bold leading-snug">
                   Notify Me
                 </h2>
                 <p className="text-lg">
@@ -1180,12 +1197,12 @@ Nassau, BS</span>
                 >
                   <div
                     id="mc_embed_signup_scroll"
-                    className="shadow-xl bg-white rounded-xl py-2 px-2 mt-8 w-full mx-auto flex flex-row items-center justify-between"
+                    className="flex flex-row items-center justify-between w-full px-2 py-2 mx-auto mt-8 bg-white shadow-xl rounded-xl"
                   >
                     <input
                       type="email"
                       name="EMAIL"
-                      className="w-10/12 p-2 text-base mx-4 text-gray-900"
+                      className="w-10/12 p-2 mx-4 text-base text-gray-900"
                       id="mce-EMAIL"
                       placeholder="Email Address"
                       required
@@ -1206,7 +1223,7 @@ Nassau, BS</span>
                         value="Join Waitlist"
                         name="subscribe"
                         id="mc-embedded-subscribe"
-                        className="font-medium text-base bg-blue-600 hover:bg-blue-500 text-white rounded-xl px-4 py-2 cursor-pointer"
+                        className="px-4 py-2 text-base font-medium text-white bg-blue-600 cursor-pointer hover:bg-blue-500 rounded-xl"
                         readOnly
                         onClick={() =>
                           (window as unknown as any).lintrk('track', {
@@ -1227,24 +1244,24 @@ Nassau, BS</span>
                     <img
                       src="/images/logo.png"
                       alt="Logo"
-                      className="h-10 flex-shrink-0 flex-grow-0"
+                      className="flex-grow-0 flex-shrink-0 h-10"
                     ></img>
                   </a>
                 </Link>
-                <p className="font-medium text-base py-4">
+                <p className="py-4 text-base font-medium">
                   Popcorn is a new eco-friendly paradigm for DeFi, where users
                   can earn high yield on their crypto assets while creating real
                   world impact.
                 </p>
-                <div className="flex flex-row space-x-4 items-center">
+                <div className="flex flex-row items-center space-x-4">
                   <Link href="https://github.com/popcorndao" passHref>
-                    <GitHub className="hover:text-blue-600 cursor-pointer" />
+                    <GitHub className="cursor-pointer hover:text-blue-600" />
                   </Link>
                   <Link href="https://www.facebook.com/PopcornDAO" passHref>
-                    <Facebook className="hover:text-blue-600 cursor-pointer" />
+                    <Facebook className="cursor-pointer hover:text-blue-600" />
                   </Link>
                   <Link href="https://twitter.com/Popcorn_DAO" passHref>
-                    <Twitter className="hover:text-blue-600 cursor-pointer" />
+                    <Twitter className="cursor-pointer hover:text-blue-600" />
                   </Link>
                   <Link href="https://discord.gg/w9zeRTSZsq" passHref>
                     <img
@@ -1254,9 +1271,9 @@ Nassau, BS</span>
                     ></img>
                   </Link>
                 </div>
-                <div className="flex flex-row justify-evenly py-6">
-                  <div className="flex flex-col space-y-3 w-1/2">
-                    <p className="font-medium text-base uppercase">Site</p>
+                <div className="flex flex-row py-6 justify-evenly">
+                  <div className="flex flex-col w-1/2 space-y-3">
+                    <p className="text-base font-medium uppercase">Site</p>
                     <Link href="/" passHref>
                       <a className="hover:text-blue-600">Home</a>
                     </Link>
@@ -1279,8 +1296,8 @@ Nassau, BS</span>
                       </a>
                     </Link>
                   </div>
-                  <div className="flex flex-col space-y-3 w-1/2">
-                    <p className="font-medium text-base uppercase">Connect</p>
+                  <div className="flex flex-col w-1/2 space-y-3">
+                    <p className="text-base font-medium uppercase">Connect</p>
                     <Link href="https://twitter.com/Popcorn_DAO" passHref>
                       <a className="hover:text-blue-600" target="_window">
                         Twitter
@@ -1299,16 +1316,16 @@ Nassau, BS</span>
                   </div>
                 </div>
                 {/*<div className="flex flex-col space-y-3">
-            <p className="font-medium text-base uppercase">Documentation</p>
+            <p className="text-base font-medium uppercase">Documentation</p>
             <Link href="/" passHref>
               <a className="hover:text-blue-600">Gitbook</a>
             </Link>
           </div>*/}
               </div>
-              <div className="w-10/12 border-t border-gray-700 mt-12 mx-auto ">
-                <p className="font-base text-center py-4">
+              <div className="w-10/12 mx-auto mt-12 border-t border-gray-700 ">
+                <p className="py-4 text-center font-base">
                 ©2021, Popcorn Ltd All Rights Reserved{" "}
-                  <span className="text-xs block ">Winterbotham Place
+                  <span className="block text-xs ">Winterbotham Place
 Marlborough &amp; Queen Streets
 P.O. Box SP 62556
 Nassau, BS</span>                </p>
