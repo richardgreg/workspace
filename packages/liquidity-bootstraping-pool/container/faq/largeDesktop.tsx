@@ -125,7 +125,7 @@ export default function LargeDesktop(): JSX.Element {
                 <ul className="list-inside list-disc">
                   <li className="text-xl mx-auto font-light leading-10 ">
                     Distribute governance power to a broader community outside
-                    of the core team, advisors, and investors.
+                    of the core team, advisors, and early contributors.
                   </li>
                   <li className="text-xl mx-auto font-light leading-10 ">
                     Inject liquidity into the{' '}

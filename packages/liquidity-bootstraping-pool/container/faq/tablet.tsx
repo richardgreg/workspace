@@ -121,7 +121,7 @@ export default function Tablet(): JSX.Element {
                 <ul className="list-inside list-disc mt-1">
                   <li className="text-md mx-auto ">
                     Distribute governance power to a broader community outside
-                    of the core team, advisors, and investors.
+                    of the core team, advisors, and early contributors.
                   </li>
                   <li className="text-md mx-auto ">
                     Inject liquidity into the{' '}

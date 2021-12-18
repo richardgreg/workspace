@@ -9,7 +9,6 @@ const IndexPage = () => {
   const router = useRouter();
   const [showMenu, setMenu] = useState<boolean>(false);
   const [auctionLive] = useState(false);
-  const [auctionEnded] = useState(true);
 
   useEffect(() => {
     if (typeof window !== 'undefined' && window.location.pathname !== '/') {

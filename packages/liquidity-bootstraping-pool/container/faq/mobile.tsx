@@ -116,7 +116,7 @@ export default function Mobile({
               <ul className="list-inside list-disc mt-2 space-y-1">
                 <li className="text-base mx-auto ">
                   Distribute governance power to a broader community outside of
-                  the core team, advisors, and investors
+                  the core team, advisors, and early contributors
                 </li>
                 <li className="text-base mx-auto ">
                   Inject liquidity into the <span translate="no">Popcorn</span>{' '}

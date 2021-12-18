@@ -1,7 +1,6 @@
 import Head from 'next/head';
 import Router from 'next/router';
 import React, { useEffect, useState } from 'react';
-import TagManager from 'react-gtm-module';
 import { ThemeProvider } from 'styled-components';
 import '../styles/globals.css';
 import theme from '../styles/theme';
@@ -18,13 +17,6 @@ export default function MyApp(props) {
   const { Component, pageProps } = props;
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    if (process.env.NEXT_PUBLIC_GTM_ID) {
-      TagManager.initialize({
-        gtmId: process.env.NEXT_PUBLIC_GTM_ID,
-      });
-    }
-  }, []);
 
   useEffect(() => {
     Router.events.on('routeChangeStart', () => {
