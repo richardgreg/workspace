@@ -1,19 +1,18 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { CatPool } from '@popcorn/ui/components/CatPool';
 import { Rocket } from '@popcorn/ui/components/Rocket';
+import Burger from 'components/Burger';
 import FacebookPixel from 'components/FacebookPixel';
 import LinkedInPagePixel from 'components/LinkedInPagePixel';
+import Menu from 'components/Menu';
+import { MobileExpandableMenu } from 'components/MobileExpandableMenu';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { Fragment, useEffect, useState, useRef } from 'react';
-import { Facebook, GitHub,  Twitter, X } from 'react-feather';
-import * as Icon from 'react-feather';
-import { MobileExpandableMenu } from 'components/MobileExpandableMenu';
-
-import Burger from 'components/Burger'
-import Menu from 'components/Menu'
+import React, { Fragment, useEffect, useRef, useState } from 'react';
+import { Facebook, GitHub, Twitter } from 'react-feather';
 import FocusLock from 'react-focus-lock';
 import { useOnClickOutside } from '../hooks';
+
 
 const IndexPage = () => {
   const router = useRouter();
@@ -823,7 +822,7 @@ Nassau, BS</span>
                     <a>
                       {/*TODO The logo is slightly blurred even though its copied straight from figma*/}
                       <img
-                        src="/images/logo.png"
+                        src="/images/full-logo.svg"
                         alt="Logo"
                         className="flex-grow-0 flex-shrink-0 h-14"
                       ></img>

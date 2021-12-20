@@ -1,11 +1,10 @@
-import * as Icon from 'react-feather';
 import { Dialog, Transition } from '@headlessui/react';
 import FacebookPixel from 'components/FacebookPixel';
 import { MobileExpandableMenu } from 'components/MobileExpandableMenu';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { Fragment, useEffect, useState } from 'react';
-import { Facebook, GitHub, Menu, Twitter, X } from 'react-feather';
+import { Facebook, GitHub, Menu, Twitter } from 'react-feather';
 
 interface TeamMember {
   name: string;
@@ -226,10 +225,10 @@ const CONTRIBUTORS: Contributor[] = [
 const TeamMemberCard = ({ name, position, image, linkedIn, twitter }) => {
   return (
     <div
-      className="mx-auto flex flex-col items-center"
+      className="flex flex-col items-center mx-auto"
       style={{ width: 359, height: 441 }}
     >
-      <div className="w-36 h-36 flex items-center">
+      <div className="flex items-center w-36 h-36">
         <img
           src={`/images/team/${image}.svg`}
           alt="Cartoon of team member"
@@ -237,13 +236,13 @@ const TeamMemberCard = ({ name, position, image, linkedIn, twitter }) => {
           style={{ width: 228, height: 225 }}
         ></img>
       </div>
-      <h3 className="font-semibold text-3xl pt-8">{name}</h3>
-      <h3 className="font-normal text-xl pt-3 pb-6">{position}</h3>
-      <div className="w-10/12 flex flex-row justify-center mt-4">
+      <h3 className="pt-8 text-3xl font-semibold">{name}</h3>
+      <h3 className="pt-3 pb-6 text-xl font-normal">{position}</h3>
+      <div className="flex flex-row justify-center w-10/12 mt-4">
         {linkedIn && (
           <a href={linkedIn} target="_blank">
             <h3
-              className="inline-flex px-8 py-2 rounded-full text-xl font-light hover:bg-primaryLight border-gray-700"
+              className="inline-flex px-8 py-2 text-xl font-light border-gray-700 rounded-full hover:bg-primaryLight"
               style={{ border: 'solid', borderWidth: 1, marginRight: 16 }}
             >
               LinkedIn
@@ -254,7 +253,7 @@ const TeamMemberCard = ({ name, position, image, linkedIn, twitter }) => {
         {twitter && (
           <a href={twitter} target="_blank">
             <h3
-              className="inline-flex px-8 py-2 rounded-full text-xl font-light hover:bg-primaryLight border-gray-700"
+              className="inline-flex px-8 py-2 text-xl font-light border-gray-700 rounded-full hover:bg-primaryLight"
               style={{ border: 'solid', borderWidth: 1, marginLeft: 16 }}
             >
               Twitter
@@ -276,34 +275,34 @@ const ContributorCard = ({
 }) => {
   return (
     <div
-      className="mx-auto flex flex-col items-center mb-12"
+      className="flex flex-col items-center mx-auto mb-12"
       style={{ width: 359, height: 330 }}
     >
-      <div className="w-36 h-36  flex items-center relative">
+      <div className="relative flex items-center w-36 h-36">
         {/* TODO: Fix popcorn overlay clipping issues */}
         {/* <img
           src={`/images/contributors/popcorn.svg`}
-          className="mx-auto mb-1 rounded-full absolute -bottom-10 -left-8 z-30"
+          className="absolute z-30 mx-auto mb-1 rounded-full -bottom-10 -left-8"
           style={{ overflow: 'clip' }}
         ></img> */}
         <img
           src={`/images/contributors/bg.svg`}
-          className="mx-auto mb-1 rounded-full absolute top-0 left-0 z-10"
+          className="absolute top-0 left-0 z-10 mx-auto mb-1 rounded-full"
           style={{ width: 241, height: 223 }}
         ></img>
         <img
           src={`/images/contributors/${image}`}
           alt="Black and white contributor headshot with overlayed cartoon popcorn"
-          className="filter grayscale mx-auto mb-1 rounded-full absolute top-5 right-4 z-20"
+          className="absolute z-20 mx-auto mb-1 rounded-full filter grayscale top-5 right-4"
         ></img>
       </div>
-      <h3 className="font-semibold text-3xl pt-16">{name}</h3>
-      <h3 className="font-normal text-2xl pt-3">{position}</h3>
-      <div className="w-10/12 flex flex-row justify-center mt-4">
+      <h3 className="pt-16 text-3xl font-semibold">{name}</h3>
+      <h3 className="pt-3 text-2xl font-normal">{position}</h3>
+      <div className="flex flex-row justify-center w-10/12 mt-4">
         {linkedIn && (
           <a href={linkedIn} target="_blank">
             <h3
-              className="inline-flex px-8 py-2 rounded-full text-xl font-light hover:bg-primaryLight border-gray-700"
+              className="inline-flex px-8 py-2 text-xl font-light border-gray-700 rounded-full hover:bg-primaryLight"
               style={{ border: 'solid', borderWidth: 1, marginRight: 16 }}
             >
               LinkedIn
@@ -314,7 +313,7 @@ const ContributorCard = ({
         {twitter && (
           <a href={twitter} target="_blank">
             <h3
-              className="inline-flex px-8 py-2 rounded-full text-xl font-light hover:bg-primaryLight border-gray-700"
+              className="inline-flex px-8 py-2 text-xl font-light border-gray-700 rounded-full hover:bg-primaryLight"
               style={{ border: 'solid', borderWidth: 1, marginLeft: 16 }}
             >
               Twitter
@@ -324,7 +323,7 @@ const ContributorCard = ({
         {github && (
           <a href={github} target="_blank">
             <h3
-              className="inline-flex px-8 py-2 rounded-full text-xl font-light hover:bg-primaryLight border-gray-700 mr-4"
+              className="inline-flex px-8 py-2 mr-4 text-xl font-light border-gray-700 rounded-full hover:bg-primaryLight"
               style={{ border: 'solid', borderWidth: 1, marginLeft: 16 }}
             >
               GitHub
@@ -383,10 +382,10 @@ const TeamPage = () => {
         <Dialog
           as="div"
           auto-reopen="true"
-          className="fixed z-10 inset-0 overflow-y-auto"
+          className="fixed inset-0 z-10 overflow-y-auto"
           onClose={(e) => toggleCtaModal(false)}
         >
-          <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-60 text-center sm:block sm:p-0">
+          <div className="flex items-end justify-center min-h-screen px-4 pt-4 text-center pb-60 sm:block sm:p-0">
             <Transition.Child
               as={Fragment}
               enter="ease-out duration-300"
@@ -397,7 +396,7 @@ const TeamPage = () => {
               leaveTo="opacity-0"
             >
               <Dialog.Overlay
-                className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+                className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75"
                 style={{ backdropFilter: 'blur(5px)' }}
               />
             </Transition.Child>
@@ -418,7 +417,7 @@ const TeamPage = () => {
               leaveFrom="opacity-100 translate-y-0 sm:scale-100"
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
-              <div className="w-full md:w-1/2 xl:w-1/3 inline-block transform transition-all align-middle">
+              <div className="inline-block w-full align-middle transition-all transform md:w-1/2 xl:w-1/3">
                 <form
                   action="https://network.us1.list-manage.com/subscribe/post?u=5ce5e82d673fd2cfaf12849a5&amp;id=e85a091ed3"
                   method="post"
@@ -430,12 +429,12 @@ const TeamPage = () => {
                 >
                   <div
                     id="mc_embed_signup_scroll"
-                    className="shadow-xl bg-white rounded-xl py-2 px-2 mt-8 w-full flex flex-col md:flex-row items-center justify-between"
+                    className="flex flex-col items-center justify-between w-full px-2 py-2 mt-8 bg-white shadow-xl rounded-xl md:flex-row"
                   >
                     <input
                       type="email"
                       name="EMAIL"
-                      className="w-10/12 p-2 text-base mx-4 text-gray-900"
+                      className="w-10/12 p-2 mx-4 text-base text-gray-900"
                       id="mce-EMAIL"
                       placeholder="Email Address"
                       required
@@ -456,7 +455,7 @@ const TeamPage = () => {
                         value="Join Waitlist"
                         name="subscribe"
                         id="mc-embedded-subscribe"
-                        className="font-medium text-base bg-blue-600 hover:bg-blue-500 text-white rounded-xl px-4 py-2 mt-4 md:mt-0 cursor-pointer"
+                        className="px-4 py-2 mt-4 text-base font-medium text-white bg-blue-600 cursor-pointer hover:bg-blue-500 rounded-xl md:mt-0"
                         readOnly
                         onClick={(e) => toggleCtaModal(false)}
                       />
@@ -469,9 +468,9 @@ const TeamPage = () => {
         </Dialog>
       </Transition.Root>
       {/* DESKTOP + TABLET VERSION */}
-      <div className="hidden lg:flex flex-col w-full h-full">
+      <div className="flex-col hidden w-full h-full lg:flex">
         <header className=" bg-primary">
-          <nav className="w-10/12 mx-auto pt-12 pb-4 border-b border-primaryLight flex flex-row items-center justify-between">
+          <nav className="flex flex-row items-center justify-between w-10/12 pt-12 pb-4 mx-auto border-b border-primaryLight">
             <div>
               <Link href="/" passHref>
                 <a>
@@ -486,25 +485,25 @@ const TeamPage = () => {
             </div>
             <div className="space-x-8">
               <Link href="https://launch.popcorn.network/" passHref>
-                <a className="font-normal text-base hover:text-blue-600">
+                <a className="text-base font-normal hover:text-blue-600">
                   Token Launch Auction
                 </a>
               </Link>
               <Link href="/docs/Popcorn_whitepaper_v1.pdf" passHref>
                 <a
-                  className="font-normal text-base hover:text-blue-600"
+                  className="text-base font-normal hover:text-blue-600"
                   target="_window"
                 >
                   Whitepaper
                 </a>
               </Link>
               <Link href="/team" passHref>
-                <a className="font-medium text-base hover:text-blue-600">
+                <a className="text-base font-medium hover:text-blue-600">
                   Team & Contributors
                 </a>
               </Link>
               <a
-                className="font-medium text-base bg-blue-600 hover:bg-blue-500 text-white rounded-xl p-4 cursor-pointer"
+                className="p-4 text-base font-medium text-white bg-blue-600 cursor-pointer hover:bg-blue-500 rounded-xl"
                 onClick={(e) => toggleCtaModal(true)}
               >
                 Early Access
@@ -515,22 +514,22 @@ const TeamPage = () => {
 
         {/* Hero/Header */}
         <section className="min-h-full">
-          <div className="bg-primary w-full h-8 2xl:h-28 "></div>
+          <div className="w-full h-8 bg-primary 2xl:h-28 "></div>
           <div
-            className="bg-header-team flex-shrink-0 flex-grow-0 w-full h-full"
+            className="flex-grow-0 flex-shrink-0 w-full h-full bg-header-team"
             style={{
               backgroundRepeat: 'no-repeat',
               backgroundSize: 'cover',
               backgroundPosition: 'center',
             }}
           >
-            <div className="w-10/12 mx-auto flex flex-col lg:flex-row justify-between pb-48 items-center ">
-              <div className="w-full lg:w-6/12 xl:w-5/12 order-2 lg:order-1">
-                <div className="w-10/12 text-center mx-auto lg:text-left lg:mx-0">
-                  <h1 className="font-normal font-landing lg:text-5xl xl:text-7xl leading-snug mb-3">
+            <div className="flex flex-col items-center justify-between w-10/12 pb-48 mx-auto lg:flex-row ">
+              <div className="order-2 w-full lg:w-6/12 xl:w-5/12 lg:order-1">
+                <div className="w-10/12 mx-auto text-center lg:text-left lg:mx-0">
+                  <h1 className="mb-3 font-normal leading-snug font-landing lg:text-5xl xl:text-7xl">
                     Our team
                   </h1>
-                  <h1 className="font-normal font-landing lg:text-5xl xl:text-7xl leading-snug mb-8 ">
+                  <h1 className="mb-8 font-normal leading-snug font-landing lg:text-5xl xl:text-7xl ">
                     & Contributors
                   </h1>
                   <p className="text-2xl font-landing">
@@ -541,7 +540,7 @@ const TeamPage = () => {
                   </p>
                 </div>
               </div>
-              <div className="w-full lg:w-6/12 xl:w-7/12 order-1 lg:order-2 mb-8 lg:mb-0">
+              <div className="order-1 w-full mb-8 lg:w-6/12 xl:w-7/12 lg:order-2 lg:mb-0">
                 <img src="images/team.svg" />
               </div>
             </div>
@@ -551,10 +550,10 @@ const TeamPage = () => {
 
         {/* Core team */}
         <section className="w-full mx-auto mb-24 ">
-          <h2 className="w-10/12 font-normal font-landing text-5xl xl:text-6xl mb-4 mx-auto">
+          <h2 className="w-10/12 mx-auto mb-4 text-5xl font-normal font-landing xl:text-6xl">
             Core Team
           </h2>
-          <div className="w-10/12 mx-auto mt-12 grid grid-cols-2 laptop:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+          <div className="grid w-10/12 grid-cols-2 mx-auto mt-12 laptop:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
             {TEAM.map((teamMember) => {
               return (
                 <TeamMemberCard
@@ -580,7 +579,7 @@ const TeamPage = () => {
               <div className="w-full border-t border-gray-300" />
             </div>
             <div className="relative flex justify-center">
-              <span className="bg-white px-2 text-gray-500">
+              <span className="px-2 text-gray-500 bg-white">
                 <img src="images/catsWithSunglasses.svg" />
               </span>
             </div>
@@ -589,10 +588,10 @@ const TeamPage = () => {
 
         {/* Contributors */}
         <section className="w-full mx-auto my-24">
-          <h2 className="w-10/12 font-normal font-landing text-5xl xl:text-6xl mb-4 mx-auto">
+          <h2 className="w-10/12 mx-auto mb-4 text-5xl font-normal font-landing xl:text-6xl">
             Contributors
           </h2>
-          <div className="w-10/12 mx-auto mt-12 grid grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 ">
+          <div className="grid w-10/12 grid-cols-3 mx-auto mt-12 xl:grid-cols-4 2xl:grid-cols-5 ">
             {CONTRIBUTORS.map((contributor) => {
               return (
                 <ContributorCard
@@ -611,7 +610,7 @@ const TeamPage = () => {
 
         <section className="w-full bg-secondary py-52">
           <div className="w-8/12 mx-auto text-center">
-            <h2 className="font-bold text-4xl leading-snug mb-4">Notify Me</h2>
+            <h2 className="mb-4 text-4xl font-bold leading-snug">Notify Me</h2>
             <p className="text-2xl font-medium">
               Get early
               notification to be part of our journey
@@ -627,12 +626,12 @@ const TeamPage = () => {
             >
               <div
                 id="mc_embed_signup_scroll"
-                className="shadow-xl bg-white rounded-xl py-2 px-2 mt-8 w-8/12 mx-auto flex flex-row items-center justify-between"
+                className="flex flex-row items-center justify-between w-8/12 px-2 py-2 mx-auto mt-8 bg-white shadow-xl rounded-xl"
               >
                 <input
                   type="email"
                   name="EMAIL"
-                  className="w-10/12 p-2 text-base mx-4 text-gray-900"
+                  className="w-10/12 p-2 mx-4 text-base text-gray-900"
                   id="mce-EMAIL"
                   placeholder="Email Address"
                   required
@@ -653,7 +652,7 @@ const TeamPage = () => {
                     value="Join Waitlist"
                     name="subscribe"
                     id="mc-embedded-subscribe"
-                    className="font-medium text-base bg-blue-600 hover:bg-blue-500 text-white rounded-xl px-4 py-2 cursor-pointer"
+                    className="px-4 py-2 text-base font-medium text-white bg-blue-600 cursor-pointer hover:bg-blue-500 rounded-xl"
                     readOnly
                   />
                 </div>
@@ -662,26 +661,26 @@ const TeamPage = () => {
           </div>
         </section>
         <section className="w-full bg-secondary">
-          <div className="w-10/12 mx-auto flex flex-row justify-between border-b border-gray-500 pb-12">
+          <div className="flex flex-row justify-between w-10/12 pb-12 mx-auto border-b border-gray-500">
             <div className="w-6/12">
               <Link href="/" passHref>
                 <a>
                   <img src="/images/logo.png" alt="Logo" className="h-10"></img>
                 </a>
               </Link>
-              <p className="font-medium text-base w-7/12 py-4">
+              <p className="w-7/12 py-4 text-base font-medium">
                 Earn high yield on your cryptoassets while helping
                 fund educational, environmental and open source initiatives.
               </p>
-              <div className="flex flex-row space-x-4 items-center">
+              <div className="flex flex-row items-center space-x-4">
                 <Link href="https://github.com/popcorndao" passHref>
-                  <GitHub className="hover:text-blue-600 cursor-pointer" />
+                  <GitHub className="cursor-pointer hover:text-blue-600" />
                 </Link>
                 <Link href="https://www.facebook.com/PopcornDAO" passHref>
-                  <Facebook className="hover:text-blue-600 cursor-pointer" />
+                  <Facebook className="cursor-pointer hover:text-blue-600" />
                 </Link>
                 <Link href="https://twitter.com/Popcorn_DAO" passHref>
-                  <Twitter className="hover:text-blue-600 cursor-pointer" />
+                  <Twitter className="cursor-pointer hover:text-blue-600" />
                 </Link>
                 <Link href="https://discord.gg/w9zeRTSZsq" passHref>
                   <img
@@ -693,7 +692,7 @@ const TeamPage = () => {
               </div>
             </div>
             <div className="flex flex-col space-y-3">
-              <p className="font-medium text-base uppercase">Site</p>
+              <p className="text-base font-medium uppercase">Site</p>
               <Link href="/" passHref>
                 <a className="hover:text-blue-600">Home</a>
               </Link>
@@ -713,7 +712,7 @@ const TeamPage = () => {
               </Link>
             </div>
             <div className="flex flex-col space-y-3">
-              <p className="font-medium text-base uppercase">Connect</p>
+              <p className="text-base font-medium uppercase">Connect</p>
               <Link href="https://twitter.com/Popcorn_DAO" passHref>
                 <a className="hover:text-blue-600" target="_blank">
                   Twitter
@@ -731,9 +730,9 @@ const TeamPage = () => {
               </Link>
             </div>
           </div>
-          <p className="font-base text-center py-4">
+          <p className="py-4 text-center font-base">
             ©2021, Popcorn Ltd All Rights Reserved{' '}
-            <span className="text-xs block ">
+            <span className="block text-xs ">
               Winterbotham Place Marlborough &amp; Queen Streets P.O. Box SP
               62556 Nassau, BS
             </span>{' '}
@@ -764,15 +763,14 @@ const TeamPage = () => {
         >
           <div>
             <header className="w-full bg-primary">
-              <nav className="w-10/12 mx-auto pt-4 pb-3 border-b border-primaryLight flex flex-row items-center justify-between">
+              <nav className="flex flex-row items-center justify-between w-10/12 pt-4 pb-3 mx-auto border-b border-primaryLight">
                 <div>
                   <Link href="/" passHref>
                     <a>
-                      {/*TODO The logo is slightly blurred even though its copied straight from figma*/}
                       <img
-                        src="/images/logo.png"
+                        src="/images/full-logo.svg"
                         alt="Logo"
-                        className="h-14 flex-grow-0 flex-shrink-0"
+                        className="flex-grow-0 flex-shrink-0 h-14"
                       ></img>
                     </a>
                   </Link>
@@ -781,18 +779,18 @@ const TeamPage = () => {
               </nav>
             </header>
             <section className="min-h-full">
-              <div className="bg-primary w-full h-12"></div>
+              <div className="w-full h-12 bg-primary"></div>
               <div
-                className="bg-header-team flex-shrink-0 flex-grow-0 w-full h-full pt-6 md:pt-10"
+                className="flex-grow-0 flex-shrink-0 w-full h-full pt-6 bg-header-team md:pt-10"
                 style={{
                   backgroundRepeat: 'no-repeat',
                   backgroundSize: 'cover',
                   backgroundPosition: 'center',
                 }}
               >
-                <div className="w-10/12 mx-auto flex flex-col lg:flex-row justify-between pb-48 items-center text-center">
+                <div className="flex flex-col items-center justify-between w-10/12 pb-48 mx-auto text-center lg:flex-row">
                   <img className="w-9/12 mb-8" src="images/team.svg" />
-                  <h1 className="font-bold text-4xl leading-snug mb-8">
+                  <h1 className="mb-8 text-4xl font-bold leading-snug">
                     Our team & contributors
                   </h1>
                   <p className="font-landing" style={{ fontSize: 24 }}>
@@ -804,7 +802,7 @@ const TeamPage = () => {
                 </div>
               </div>
             </section>
-            <div className="w-10/12 flex flex-row justify-center mt-4 mx-auto mb-12">
+            <div className="flex flex-row justify-center w-10/12 mx-auto mt-4 mb-12">
               <h3
                 onClick={() => setTeamVisible(!teamVisible)}
                 className={`inline-flex px-8 mr-3 py-2 rounded-full text-xl font-normal ${
@@ -825,7 +823,7 @@ const TeamPage = () => {
 
             {teamVisible && (
               <section className="mx-auto mb-24">
-                <h2 className="font-bold text-3xl mb-8 text-center">
+                <h2 className="mb-8 text-3xl font-bold text-center">
                   Core Team
                 </h2>
                 {TEAM.map((teamMember) => {
@@ -845,7 +843,7 @@ const TeamPage = () => {
 
             {!teamVisible && (
               <section className="w-10/12 mx-auto mb-24">
-                <h2 className="font-bold text-3xl mb-4 text-center">
+                <h2 className="mb-4 text-3xl font-bold text-center">
                   Contributors
                 </h2>
                 {CONTRIBUTORS.map((contributor) => {
@@ -867,8 +865,7 @@ const TeamPage = () => {
             {countdownActive && (
               <section>
                 <div
-                  className="bg-countdown-pattern flex-shrink-0 flex-grow-0 w-full
-          h-full pt-60"
+                  className="flex-grow-0 flex-shrink-0 w-full h-full bg-countdown-pattern pt-60"
                   style={{
                     backgroundRepeat: 'no-repeat',
                     backgroundSize: 'cover',
@@ -876,43 +873,43 @@ const TeamPage = () => {
                   }}
                 >
                   <div className="w-full pt-32">
-                    <div className="w-10/12 mx-auto rounded-xl shadow-xl bg-white">
-                      <h3 className="font-medium text-5xl pt-20 pb-12 text-center">
+                    <div className="w-10/12 mx-auto bg-white shadow-xl rounded-xl">
+                      <h3 className="pt-20 pb-12 text-5xl font-medium text-center">
                         Don’t miss the token launch event!
                       </h3>
-                      <div className="w-9/12 mx-auto pb-20">
+                      <div className="w-9/12 pb-20 mx-auto">
                         <div className="flex flex-row justify-between mb-8">
                           <div className="w-5/12 text-center">
-                            <h1 className="font-bold text-7xl leading-snug">
+                            <h1 className="font-bold leading-snug text-7xl">
                               {countdown[0]}
                             </h1>
-                            <p className="text-3xl font-landing text-gray-500">
+                            <p className="text-3xl text-gray-500 font-landing">
                               Days
                             </p>
                           </div>
                           <div className="w-5/12 text-center">
-                            <h1 className="font-bold text-7xl leading-snug">
+                            <h1 className="font-bold leading-snug text-7xl">
                               {countdown[1]}
                             </h1>
-                            <p className="text-3xl font-landing text-gray-500">
+                            <p className="text-3xl text-gray-500 font-landing">
                               Hours
                             </p>
                           </div>
                         </div>
                         <div className="flex flex-row justify-between">
                           <div className="w-5/12 text-center">
-                            <h1 className="font-bold text-7xl leading-snug">
+                            <h1 className="font-bold leading-snug text-7xl">
                               {countdown[2]}
                             </h1>
-                            <p className="text-3xl font-landing text-gray-500">
+                            <p className="text-3xl text-gray-500 font-landing">
                               Minutes
                             </p>
                           </div>
                           <div className="w-5/12 text-center">
-                            <h1 className="font-bold text-7xl leading-snug">
+                            <h1 className="font-bold leading-snug text-7xl">
                               {countdown[3]}
                             </h1>
-                            <p className="text-3xl font-landing text-gray-500">
+                            <p className="text-3xl text-gray-500 font-landing">
                               Seconds
                             </p>
                           </div>
@@ -923,9 +920,9 @@ const TeamPage = () => {
                 </div>
               </section>
             )}
-            <section className="w-full bg-secondary py-24">
+            <section className="w-full py-24 bg-secondary">
               <div className="w-10/12 mx-auto text-center">
-                <h2 className="font-bold text-2xl leading-snug mb-4">
+                <h2 className="mb-4 text-2xl font-bold leading-snug">
                   Notify Me
                 </h2>
                 <p className="text-lg">
@@ -943,12 +940,12 @@ const TeamPage = () => {
                 >
                   <div
                     id="mc_embed_signup_scroll"
-                    className="shadow-xl bg-white rounded-xl py-2 px-2 mt-8 w-full mx-auto flex flex-row items-center justify-between"
+                    className="flex flex-row items-center justify-between w-full px-2 py-2 mx-auto mt-8 bg-white shadow-xl rounded-xl"
                   >
                     <input
                       type="email"
                       name="EMAIL"
-                      className="w-10/12 p-2 text-base mx-4 text-gray-900"
+                      className="w-10/12 p-2 mx-4 text-base text-gray-900"
                       id="mce-EMAIL"
                       placeholder="Email Address"
                       required
@@ -969,7 +966,7 @@ const TeamPage = () => {
                         value="Join Waitlist"
                         name="subscribe"
                         id="mc-embedded-subscribe"
-                        className="font-medium text-base bg-blue-600 hover:bg-blue-500 text-white rounded-xl px-4 py-2 cursor-pointer"
+                        className="px-4 py-2 text-base font-medium text-white bg-blue-600 cursor-pointer hover:bg-blue-500 rounded-xl"
                         readOnly
                       />
                     </div>
@@ -985,24 +982,24 @@ const TeamPage = () => {
                     <img
                       src="/images/logo.png"
                       alt="Logo"
-                      className="h-10 flex-shrink-0 flex-grow-0"
+                      className="flex-grow-0 flex-shrink-0 h-10"
                     ></img>
                   </a>
                 </Link>
-                <p className="font-medium text-base py-4">
+                <p className="py-4 text-base font-medium">
                   <span translate="no">Popcorn</span> is a new eco-friendly
                   paradigm for DeFi, where users can earn high yield on their
                   crypto assets while creating real world impact.
                 </p>
-                <div className="flex flex-row space-x-4 items-center">
+                <div className="flex flex-row items-center space-x-4">
                   <Link href="https://github.com/popcorndao" passHref>
-                    <GitHub className="hover:text-blue-600 cursor-pointer" />
+                    <GitHub className="cursor-pointer hover:text-blue-600" />
                   </Link>
                   <Link href="https://www.facebook.com/PopcornDAO" passHref>
-                    <Facebook className="hover:text-blue-600 cursor-pointer" />
+                    <Facebook className="cursor-pointer hover:text-blue-600" />
                   </Link>
                   <Link href="https://twitter.com/Popcorn_DAO" passHref>
-                    <Twitter className="hover:text-blue-600 cursor-pointer" />
+                    <Twitter className="cursor-pointer hover:text-blue-600" />
                   </Link>
                   <Link href="https://discord.gg/w9zeRTSZsq" passHref>
                     <img
@@ -1012,9 +1009,9 @@ const TeamPage = () => {
                     ></img>
                   </Link>
                 </div>
-                <div className="flex flex-row justify-evenly py-6">
-                  <div className="flex flex-col space-y-3 w-1/2">
-                    <p className="font-medium text-base uppercase">Site</p>
+                <div className="flex flex-row py-6 justify-evenly">
+                  <div className="flex flex-col w-1/2 space-y-3">
+                    <p className="text-base font-medium uppercase">Site</p>
                     <Link href="/" passHref>
                       <a className="hover:text-blue-600">Home</a>
                     </Link>
@@ -1035,8 +1032,8 @@ const TeamPage = () => {
                       </a>
                     </Link>
                   </div>
-                  <div className="flex flex-col space-y-3 w-1/2">
-                    <p className="font-medium text-base uppercase">Connect</p>
+                  <div className="flex flex-col w-1/2 space-y-3">
+                    <p className="text-base font-medium uppercase">Connect</p>
                     <Link href="https://twitter.com/Popcorn_DAO" passHref>
                       <a className="hover:text-blue-600" target="_blank">
                         Twitter
@@ -1055,16 +1052,16 @@ const TeamPage = () => {
                   </div>
                 </div>
                 {/*<div className="flex flex-col space-y-3">
-            <p className="font-medium text-base uppercase">Documentation</p>
+            <p className="text-base font-medium uppercase">Documentation</p>
             <Link href="/" passHref>
               <a className="hover:text-blue-600">Gitbook</a>
             </Link>
           </div>*/}
               </div>
-              <div className="w-10/12 border-t border-gray-700 mt-12 mx-auto ">
-                <p className="font-base text-center py-4">
+              <div className="w-10/12 mx-auto mt-12 border-t border-gray-700 ">
+                <p className="py-4 text-center font-base">
                   ©2021, Popcorn Ltd All Rights Reserved{' '}
-                  <span className="text-xs block ">
+                  <span className="block text-xs ">
                     Winterbotham Place Marlborough &amp; Queen Streets P.O. Box
                     SP 62556 Nassau, BS
                   </span>
