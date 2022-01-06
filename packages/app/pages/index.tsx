@@ -227,7 +227,7 @@ const IndexPage = () => {
                   </h1>
                   <p className="text-xl font-landing">
                     Earn high yield on your cryptoassets while creating real
-                    world impact. Our earnings fund social impact organizations.
+                    world impact. Popcorn's products fund social impact organizations.
                   </p>
                   <form
                     action="https://network.us1.list-manage.com/subscribe/post?u=5ce5e82d673fd2cfaf12849a5&amp;id=e85a091ed3"
@@ -398,6 +398,81 @@ const IndexPage = () => {
             </div>
           </div>
         </section>
+        <section
+          className="flex-grow-0 flex-shrink-0 w-full h-full bg-popcorn1-pattern xl:mb-24"
+          style={{
+            backgroundRepeat: 'no-repeat',
+            backgroundSize: 'auto',
+            backgroundPosition: 'left top',
+          }}
+        >
+          <div className="flex flex-row items-center justify-between w-10/12 pt-20 mx-auto">
+            <div className="w-5/12">
+              <h2 className="w-11/12 mb-4 text-5xl font-bold leading-snug xl:text-6xl">
+                Maximize your Crypto Portfolio
+              </h2>
+              <p className="text-2xl text-gray-500 font-landing">
+                Popcorn offers a suite of DeFi products for you to generate competitive returns on your
+                crypto assets.
+              </p>
+              <img
+                src="/images/bgPopcorn2.svg"
+                alt="bgPopcorn2"
+                className="mx-auto"
+              ></img>
+            </div>
+            <div className="w-6/12">
+              <Rocket />
+            </div>
+          </div>
+        </section>
+        <section className="flex-grow-0 flex-shrink-0 w-full h-full py-40 bg-impact-pattern xl:py-104 impact-background">
+          <div className="flex flex-row items-center justify-between w-10/12 mx-auto">
+            <div className="w-7/12 2xl:w-8/12"></div>
+            <div className="w-5/12 2xl:w-4/12">
+              <h2 className="mb-4 text-5xl font-bold leading-snug xl:text-6xl 2xl:w-9/12">
+                Create Real World Impact
+              </h2>
+              <p className="text-2xl text-gray-500 font-landing 2xl:w-10/12">
+                Popcorn then funds social impact organizations. Choose which
+                initiatives you support:
+              </p>
+              <ul className="mt-8 space-y-3 list-disc list-inside">
+                <li className="text-2xl font-medium font-landing">
+                  Environment
+                </li>
+                <li className="text-2xl font-medium font-landing">
+                  Open Source
+                </li>
+                <li className="text-2xl font-medium font-landing">Education</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+        <section
+          className="flex-grow-0 flex-shrink-0 w-full h-full mb-24 bg-popcorn3-pattern"
+          style={{
+            backgroundRepeat: 'no-repeat',
+            backgroundSize: 'auto',
+            backgroundPosition: 'left top',
+          }}
+        >
+          <div className="flex flex-row items-center justify-between w-10/12 pt-20 mx-auto">
+            <div className="w-5/12">
+              <h2 className="w-11/12 mb-4 text-5xl font-bold leading-snug xl:text-6xl">
+                While Remaining Carbon Neutral
+              </h2>
+              <p className="text-2xl text-gray-500 font-landing">
+                Popcorn calculates and neutralizes blockchain carbon emissions
+                by partnering with carbon sequestration and negative emission
+                projects.
+              </p>
+            </div>
+            <div className="w-6/12">
+              <img src="/images/tree.svg" alt="tree" className=""></img>
+            </div>
+          </div>
+        </section>
 
         <section className="flex flex-row w-10/12 mx-auto mb-24 mt-18 xl:mt-24 ">
           <div className="relative w-1/3">
@@ -475,15 +550,6 @@ const IndexPage = () => {
               />
             </a>
             <a
-              href="https://finance.yahoo.com/news/popcorn-network-chooses-patch-execute-140000745.html"
-              target="_blank"
-            >
-              <img
-                src="images/asseenin/yahoo.png"
-                className="mx-6 opacity-50 mb-14 hover:opacity-100"
-              />
-            </a>
-            <a
               href="https://bitcoinist.com/blockchain-and-the-environment-can-they-live-in-harmony/"
               target="_blank"
             >
@@ -498,15 +564,6 @@ const IndexPage = () => {
             >
               <img
                 src="images/asseenin/newsbtc.png"
-                className="mx-6 opacity-50 mb-14 hover:opacity-100"
-              />
-            </a>
-            <a
-              href="https://cryptopotato.com/popcorn-network-chooses-patch-to-execute-carbon-neutral-defi/"
-              target="_blank"
-            >
-              <img
-                src="images/asseenin/potato.png"
                 className="mx-6 opacity-50 mb-14 hover:opacity-100"
               />
             </a>
@@ -555,15 +612,6 @@ const IndexPage = () => {
                 className="mx-6 opacity-50 mb-14 hover:opacity-100"
               />
             </a>
-            <a
-              href="https://u.today/popcorn-network-pop-partners-with-patch-to-build-carbon-neutral-defi-product"
-              target="_blank"
-            >
-              <img
-                src="images/asseenin/utoday.png"
-                className="mx-6 opacity-50 mb-14 hover:opacity-100"
-              />
-            </a>
           </div>
           <div className="relative w-1/3 ml-24">
             <div className="absolute z-10">
@@ -580,81 +628,6 @@ const IndexPage = () => {
           </div>
         </section>
 
-        <section
-          className="flex-grow-0 flex-shrink-0 w-full h-full bg-popcorn1-pattern xl:mb-24"
-          style={{
-            backgroundRepeat: 'no-repeat',
-            backgroundSize: 'auto',
-            backgroundPosition: 'left top',
-          }}
-        >
-          <div className="flex flex-row items-center justify-between w-10/12 pt-20 mx-auto">
-            <div className="w-5/12">
-              <h2 className="w-11/12 mb-4 text-5xl font-bold leading-snug xl:text-6xl">
-                Maximize your Crypto Portfolio
-              </h2>
-              <p className="text-2xl text-gray-500 font-landing">
-                Popcorn offers a suite of DeFi products for you to generate competitive returns on your
-                crypto assets.
-              </p>
-              <img
-                src="/images/bgPopcorn2.svg"
-                alt="bgPopcorn2"
-                className="mx-auto"
-              ></img>
-            </div>
-            <div className="w-6/12">
-              <Rocket />
-            </div>
-          </div>
-        </section>
-        <section className="flex-grow-0 flex-shrink-0 w-full h-full py-40 bg-impact-pattern xl:py-104 impact-background">
-          <div className="flex flex-row items-center justify-between w-10/12 mx-auto">
-            <div className="w-7/12 2xl:w-8/12"></div>
-            <div className="w-5/12 2xl:w-4/12">
-              <h2 className="mb-4 text-5xl font-bold leading-snug xl:text-6xl 2xl:w-9/12">
-                Create Real World Impact
-              </h2>
-              <p className="text-2xl text-gray-500 font-landing 2xl:w-10/12">
-                Our profits fund social impact organizations. Choose which
-                initiatives you support:
-              </p>
-              <ul className="mt-8 space-y-3 list-disc list-inside">
-                <li className="text-2xl font-medium font-landing">
-                  Environment
-                </li>
-                <li className="text-2xl font-medium font-landing">
-                  Open Source
-                </li>
-                <li className="text-2xl font-medium font-landing">Education</li>
-              </ul>
-            </div>
-          </div>
-        </section>
-        <section
-          className="flex-grow-0 flex-shrink-0 w-full h-full mb-24 bg-popcorn3-pattern"
-          style={{
-            backgroundRepeat: 'no-repeat',
-            backgroundSize: 'auto',
-            backgroundPosition: 'left top',
-          }}
-        >
-          <div className="flex flex-row items-center justify-between w-10/12 pt-20 mx-auto">
-            <div className="w-5/12">
-              <h2 className="w-11/12 mb-4 text-5xl font-bold leading-snug xl:text-6xl">
-                While Remaining Carbon Neutral
-              </h2>
-              <p className="text-2xl text-gray-500 font-landing">
-                Popcorn calculates and neutralizes blockchain carbon emissions
-                by partnering with carbon sequestration and negative emission
-                projects.
-              </p>
-            </div>
-            <div className="w-6/12">
-              <img src="/images/tree.svg" alt="tree" className=""></img>
-            </div>
-          </div>
-        </section>
 
         <section className="w-full bg-secondary py-52">
           <div className="w-8/12 mx-auto text-center">
@@ -973,6 +946,44 @@ Nassau, BS</span>
               </div>
             </section>
 
+            <section className="w-10/12 h-full mx-auto">
+              <Rocket />
+              <h2 className="mt-12 mb-4 text-3xl font-bold leading-snug text-center">
+                Maximize your Crypto Portfolio
+              </h2>
+              <p className="text-lg text-center text-gray-500 font-landing">
+                Popcorn offers a suite of DeFi products for you to generate competitive returns on your
+                crypto assets.
+              </p>
+            </section>
+            <section className="w-10/12 h-full mx-auto mt-24">
+              <img src="/images/impact.svg" alt="impact" className=""></img>
+              <h2 className="w-10/12 mx-auto mt-8 mb-4 text-3xl font-bold leading-snug text-center">
+                Create Real World Impact
+              </h2>
+              <p className="text-lg text-center text-gray-500 font-landing">
+                Popcorn's products fund social impact organizations. Choose which
+                initiatives you support:
+              </p>
+              <div className="w-1/2 mx-auto">
+                <ul className="mt-8 space-y-2 list-disc list-inside">
+                  <li className="text-lg font-medium">Environment</li>
+                  <li className="text-lg font-medium">Open Source</li>
+                  <li className="text-lg font-medium">Education</li>
+                </ul>
+              </div>
+            </section>
+            <section className="w-10/12 h-full mx-auto mt-24">
+              <img src="/images/tree.svg" alt="tree" className=""></img>
+              <h2 className="w-10/12 mx-auto mt-8 mb-4 text-3xl font-bold leading-snug text-center">
+                While Remaining Carbon Neutral
+              </h2>
+              <p className="text-lg text-center text-gray-500 font-landing">
+                Popcorn calculates and neutralizes blockchain carbon emissions
+                by partnering with carbon sequestration and negative emission
+                projects.
+              </p>
+            </section>
             <section className="w-10/12 mx-auto my-24">
               <h2 className="text-3xl font-semibold text-center font-landing xl:text-6xl">
                 Our Partners
@@ -1048,15 +1059,6 @@ Nassau, BS</span>
                 />
               </a>
               <a
-                href="https://finance.yahoo.com/news/popcorn-network-chooses-patch-execute-140000745.html"
-                target="_blank"
-              >
-                <img
-                  src="images/asseenin/yahoo.png"
-                  className="mx-auto opacity-50 mb-14 hover:opacity-100"
-                />
-              </a>
-              <a
                 href="https://bitcoinist.com/blockchain-and-the-environment-can-they-live-in-harmony/"
                 target="_blank"
               >
@@ -1071,15 +1073,6 @@ Nassau, BS</span>
               >
                 <img
                   src="images/asseenin/newsbtc.png"
-                  className="mx-auto opacity-50 mb-14 hover:opacity-100"
-                />
-              </a>
-              <a
-                href="https://cryptopotato.com/popcorn-network-chooses-patch-to-execute-carbon-neutral-defi/"
-                target="_blank"
-              >
-                <img
-                  src="images/asseenin/potato.png"
                   className="mx-auto opacity-50 mb-14 hover:opacity-100"
                 />
               </a>
@@ -1128,53 +1121,6 @@ Nassau, BS</span>
                   className="mx-auto opacity-50 mb-14 hover:opacity-100"
                 />
               </a>
-              <a
-                href="https://u.today/popcorn-network-pop-partners-with-patch-to-build-carbon-neutral-defi-product"
-                target="_blank"
-              >
-                <img
-                  src="images/asseenin/utoday.png"
-                  className="mx-auto opacity-50 mb-14 hover:opacity-100"
-                />
-              </a>
-            </section>
-            <section className="w-10/12 h-full mx-auto">
-              <Rocket />
-              <h2 className="mt-12 mb-4 text-3xl font-bold leading-snug text-center">
-                Maximize your Crypto Portfolio
-              </h2>
-              <p className="text-lg text-center text-gray-500 font-landing">
-                Popcorn offers a suite of DeFi products for you to generate competitive returns on your
-                crypto assets.
-              </p>
-            </section>
-            <section className="w-10/12 h-full mx-auto mt-24">
-              <img src="/images/impact.svg" alt="impact" className=""></img>
-              <h2 className="w-10/12 mx-auto mt-8 mb-4 text-3xl font-bold leading-snug text-center">
-                Create Real World Impact
-              </h2>
-              <p className="text-lg text-center text-gray-500 font-landing">
-                Our profits fund social impact organizations. Choose which
-                initiatives you support:
-              </p>
-              <div className="w-1/2 mx-auto">
-                <ul className="mt-8 space-y-2 list-disc list-inside">
-                  <li className="text-lg font-medium">Environment</li>
-                  <li className="text-lg font-medium">Open Source</li>
-                  <li className="text-lg font-medium">Education</li>
-                </ul>
-              </div>
-            </section>
-            <section className="w-10/12 h-full mx-auto mt-24">
-              <img src="/images/tree.svg" alt="tree" className=""></img>
-              <h2 className="w-10/12 mx-auto mt-8 mb-4 text-3xl font-bold leading-snug text-center">
-                While Remaining Carbon Neutral
-              </h2>
-              <p className="text-lg text-center text-gray-500 font-landing">
-                Popcorn calculates and neutralizes blockchain carbon emissions
-                by partnering with carbon sequestration and negative emission
-                projects.
-              </p>
             </section>
 
             <section className="w-full py-24 bg-secondary">
