@@ -1,17 +1,18 @@
-import { BigNumber } from "@ethersproject/bignumber";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
+import BasicIssuanceModuleAbi from "@setprotocol/set-protocol-v2/artifacts/contracts/protocol/modules/BasicIssuanceModule.sol/BasicIssuanceModule.json";
+import SetTokenAbi from "@setprotocol/set-protocol-v2/artifacts/contracts/protocol/SetToken.sol/SetToken.json";
+import {
+  BasicIssuanceModule,
+  SetToken,
+} from "@setprotocol/set-protocol-v2/dist/typechain";
 import { expect } from "chai";
-import { utils } from "ethers";
+import { BigNumber, utils } from "ethers";
 import { parseEther } from "ethers/lib/utils";
 import { ethers, network, waffle } from "hardhat";
 import HysiBatchInteractionAdapter, {
   ComponentMap,
 } from "../../adapters/HYSIBatchInteraction/HYSIBatchInteractionAdapter";
 import CurveMetapoolAbi from "../../lib/Curve/CurveMetapoolAbi.json";
-import BasicIssuanceModuleAbi from "../../lib/SetToken/vendor/set-protocol/artifacts/BasicIssuanceModule.json";
-import SetTokenAbi from "../../lib/SetToken/vendor/set-protocol/artifacts/SetToken.json";
-import { BasicIssuanceModule } from "../../lib/SetToken/vendor/set-protocol/types/BasicIssuanceModule";
-import { SetToken } from "../../lib/SetToken/vendor/set-protocol/types/SetToken";
 import {
   ACLRegistry,
   ContractRegistry,
@@ -23,6 +24,7 @@ import {
   HysiBatchZapper,
   KeeperIncentive,
   MockYearnV2Vault,
+  Staking,
 } from "../../typechain";
 
 const provider = waffle.provider;
@@ -50,6 +52,7 @@ interface Contracts {
   setToken: SetToken; // alias for hysi
   basicIssuanceModule: BasicIssuanceModule;
   hysiBatchInteraction: HysiBatchInteraction;
+  staking: Staking;
   keeperIncentive: KeeperIncentive;
   faucet: Faucet;
   aclRegistry: ACLRegistry;
@@ -102,22 +105,18 @@ const CURVE_FACTORY_METAPOOL_DEPOSIT_ZAP_ADDRESS =
 
 const componentMap: ComponentMap = {
   [YDUSD_TOKEN_ADDRESS]: {
-    name: "yDUSD",
     metaPool: undefined,
     yPool: undefined,
   },
   [YFRAX_TOKEN_ADDRESS]: {
-    name: "yFRAX",
     metaPool: undefined,
     yPool: undefined,
   },
   [YUSDN_TOKEN_ADDRESS]: {
-    name: "yUSDN",
     metaPool: undefined,
     yPool: undefined,
   },
   [YUST_TOKEN_ADDRESS]: {
-    name: "yUST",
     metaPool: undefined,
     yPool: undefined,
   },
@@ -139,35 +138,44 @@ async function deployContracts(): Promise<Contracts> {
       await ethers.getContractFactory("MockERC20")
     ).deploy("POP", "POP", 18)
   ).deployed();
-  const dai = (await ethers.getContractAt("ERC20", DAI_ADDRESS)) as ERC20;
+  const dai = (await ethers.getContractAt(
+    "@openzeppelin/contracts/token/ERC20/ERC20.sol:ERC20",
+    DAI_ADDRESS
+  )) as ERC20;
 
-  const usdc = (await ethers.getContractAt("ERC20", USDC_ADDRESS)) as ERC20;
+  const usdc = (await ethers.getContractAt(
+    "@openzeppelin/contracts/token/ERC20/ERC20.sol:ERC20",
+    USDC_ADDRESS
+  )) as ERC20;
 
-  const usdt = (await ethers.getContractAt("ERC20", USDT_ADDRESS)) as ERC20;
+  const usdt = (await ethers.getContractAt(
+    "@openzeppelin/contracts/token/ERC20/ERC20.sol:ERC20",
+    USDT_ADDRESS
+  )) as ERC20;
 
   //Deploy Curve Token
   const threeCrv = (await ethers.getContractAt(
-    "ERC20",
+    "@openzeppelin/contracts/token/ERC20/ERC20.sol:ERC20",
     THREE_CRV_TOKEN_ADDRESS
   )) as ERC20;
 
   const crvDUSD = (await ethers.getContractAt(
-    "ERC20",
+    "@openzeppelin/contracts/token/ERC20/ERC20.sol:ERC20",
     CRV_DUSD_TOKEN_ADDRESS
   )) as ERC20;
 
   const crvFRAX = (await ethers.getContractAt(
-    "ERC20",
+    "@openzeppelin/contracts/token/ERC20/ERC20.sol:ERC20",
     CRV_FRAX_TOKEN_ADDRESS
   )) as ERC20;
 
   const crvUSDN = (await ethers.getContractAt(
-    "ERC20",
+    "@openzeppelin/contracts/token/ERC20/ERC20.sol:ERC20",
     CRV_USDN_TOKEN_ADDRESS
   )) as ERC20;
 
   const crvUST = (await ethers.getContractAt(
-    "ERC20",
+    "@openzeppelin/contracts/token/ERC20/ERC20.sol:ERC20",
     CRV_UST_TOKEN_ADDRESS
   )) as ERC20;
 
@@ -251,6 +259,12 @@ async function deployContracts(): Promise<Contracts> {
   const keeperIncentive = await (
     await (
       await ethers.getContractFactory("KeeperIncentive")
+    ).deploy(contractRegistry.address, 0, 0)
+  ).deployed();
+
+  const staking = await (
+    await (
+      await ethers.getContractFactory("Staking")
     ).deploy(contractRegistry.address)
   ).deployed();
 
@@ -323,6 +337,7 @@ async function deployContracts(): Promise<Contracts> {
     setToken: hysi,
     basicIssuanceModule,
     hysiBatchInteraction,
+    staking,
     keeperIncentive,
     faucet,
     aclRegistry,
@@ -371,6 +386,13 @@ const deployAndAssignContracts = async () => {
       contracts.hysiBatchInteraction.address,
       ethers.utils.id("1")
     );
+  await contracts.contractRegistry
+    .connect(owner)
+    .addContract(
+      ethers.utils.id("Staking"),
+      contracts.staking.address,
+      ethers.utils.id("1")
+    );
 
   await contracts.keeperIncentive
     .connect(owner)
@@ -401,12 +423,27 @@ const deployAndAssignContracts = async () => {
     depositor.address
   );
 
+  await contracts.faucet.sendTokens(
+    contracts.usdc.address,
+    4,
+    depositor.address
+  );
+
+  await contracts.faucet.sendTokens(
+    contracts.usdt.address,
+    4,
+    depositor.address
+  );
+
   DepositorInitial = await contracts.dai.balanceOf(depositor.address);
   await contracts.faucet.sendThreeCrv(100, depositor.address);
   await contracts.dai
     .connect(depositor)
     .approve(contracts.hysiBatchZapper.address, parseEther("100000000"));
   await contracts.usdc
+    .connect(depositor)
+    .approve(contracts.hysiBatchZapper.address, parseEther("100000000"));
+  await contracts.usdt
     .connect(depositor)
     .approve(contracts.hysiBatchZapper.address, parseEther("100000000"));
   await contracts.threeCrv
@@ -452,7 +489,7 @@ describe("HysiBatchZapper Network Test", function () {
     await deployAndAssignContracts();
   });
   describe("zapIntoBatch", function () {
-    it("zaps into a mint queue with one stablecoin", async function () {
+    it("zaps into a mint queue with dai", async function () {
       const result = await contracts.hysiBatchZapper
         .connect(depositor)
         .zapIntoBatch([DepositorInitial, 0, 0], 0);
@@ -467,10 +504,42 @@ describe("HysiBatchZapper Network Test", function () {
 
       expect(await contracts.dai.balanceOf(depositor.address)).to.equal(0);
     });
+    it("zaps into mint queue with usdc", async function () {
+      const result = await contracts.hysiBatchZapper
+        .connect(depositor)
+        .zapIntoBatch([0, BigNumber.from(1e6), 0], 0);
+      expect(result)
+        .to.emit(contracts.hysiBatchZapper, "ZappedIntoBatch")
+        .withArgs(parseEther("0.981292392583226327"), depositor.address);
+
+      expect(result)
+        .to.emit(contracts.hysiBatchInteraction, "Deposit")
+        .withArgs(depositor.address, parseEther("0.981292392583226327"));
+
+      expect(await contracts.usdc.balanceOf(depositor.address)).to.equal(
+        BigNumber.from("26230376808")
+      );
+    });
+    it("zaps into mint queue with usdt", async function () {
+      const result = await contracts.hysiBatchZapper
+        .connect(depositor)
+        .zapIntoBatch([0, 0, BigNumber.from(1e6)], 0);
+      expect(result)
+        .to.emit(contracts.hysiBatchZapper, "ZappedIntoBatch")
+        .withArgs(parseEther("0.981368248319404492"), depositor.address);
+
+      expect(result)
+        .to.emit(contracts.hysiBatchInteraction, "Deposit")
+        .withArgs(depositor.address, parseEther("0.981368248319404492"));
+
+      expect(await contracts.usdt.balanceOf(depositor.address)).to.equal(
+        BigNumber.from("39303654861")
+      );
+    });
   });
   describe("zapOutOfBatch", function () {
     it("zaps out of the queue into a stablecoin", async function () {
-      const expectedStableAmount = parseEther("12871.730619629678368476");
+      const expectedStableAmount = parseEther("37978.521811045440321487");
       //Create Batch
       await contracts.hysiBatchZapper
         .connect(depositor)

@@ -121,7 +121,7 @@ async function deployContracts(): Promise<Contracts> {
   const keeperIncentive = await (
     await (
       await ethers.getContractFactory("KeeperIncentive")
-    ).deploy(contractRegistry.address)
+    ).deploy(contractRegistry.address, 0, 0)
   ).deployed();
 
   const factoryV2 = await deployContract(owner, UniswapV2FactoryJSON, [

@@ -1,21 +1,18 @@
 // SPDX-License-Identifier: MIT
+// Docgen-SOLC: 0.8.0
+pragma solidity >=0.6.12;
 
-pragma solidity ^0.6.12;
-
-import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "@openzeppelin/contracts/math/SafeMath.sol";
-import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
-import "@openzeppelin/contracts/utils/Pausable.sol";
+import "@openzeppelin/contracts/utils/math/SafeMath.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/security/Pausable.sol";
 import "./AffiliateToken.sol";
 import "../../interfaces/IERC20Metadata.sol";
 import "../../interfaces/IACLRegistry.sol";
 import "../../interfaces/IContractRegistry.sol";
-import "../../../externals/interfaces/CurveContracts.sol";
 
 contract Pool is AffiliateToken, ReentrancyGuard, Pausable {
   using SafeMath for uint256;
-  using SafeERC20 for IERC20;
 
   IContractRegistry public contractRegistry;
 
@@ -40,24 +37,24 @@ contract Pool is AffiliateToken, ReentrancyGuard, Pausable {
   event PerformanceFeeChanged(uint256 previousBps, uint256 newBps);
 
   constructor(
-    address token_,
-    address yearnRegistry_,
-    IContractRegistry contractRegistry_
+    address _token,
+    address _yearnRegistry,
+    IContractRegistry _contractRegistry
   )
     public
     AffiliateToken(
-      token_,
-      yearnRegistry_,
+      _token,
+      _yearnRegistry,
       string(
-        abi.encodePacked("Popcorn ", IERC20Metadata(token_).name(), " Pool")
+        abi.encodePacked("Popcorn ", IERC20Metadata(_token).name(), " Pool")
       ),
-      string(abi.encodePacked("pop", IERC20Metadata(token_).symbol()))
+      string(abi.encodePacked("pop", IERC20Metadata(_token).symbol()))
     )
   {
-    require(address(yearnRegistry_) != address(0));
-    require(address(token_) != address(0));
+    require(address(_yearnRegistry) != address(0), "Zero address");
+    require(address(_contractRegistry) != address(0), "Zero address");
 
-    contractRegistry = contractRegistry_;
+    contractRegistry = _contractRegistry;
     feesUpdatedAt = block.timestamp;
   }
 
@@ -66,7 +63,12 @@ contract Pool is AffiliateToken, ReentrancyGuard, Pausable {
     _;
   }
 
-  function deposit(uint256 amount)
+  /**
+   * @notice Deposit `_amount` of tokens, issuing pool tokens to caller.
+   * @param _amount Quantity of tokens to deposit.
+   * @return Quantity of pool tokens issued to caller.
+   */
+  function deposit(uint256 _amount)
     public
     override
     nonReentrant
@@ -76,21 +78,16 @@ contract Pool is AffiliateToken, ReentrancyGuard, Pausable {
   {
     IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
       .requireApprovedContractOrEOA(msg.sender);
-    require(amount <= token.balanceOf(msg.sender), "Insufficient balance");
-    _lockForBlock(msg.sender);
-    _takeFees();
-
-    uint256 sharesBefore = balanceOf(msg.sender);
-    super.deposit(amount);
-    uint256 sharesAfter = balanceOf(msg.sender);
-    uint256 shares = sharesAfter.sub(sharesBefore);
-
-    emit Deposit(msg.sender, amount, shares);
-    _reportPoolTokenHWM();
-    return shares;
+    return _depositFor(_amount, msg.sender);
   }
 
-  function depositFor(uint256 amount, address recipient)
+  /**
+   * @notice Deposit `_amount` of tokens, issuing pool tokens to `_recipient`.
+   * @param _amount Quantity of tokens to deposit.
+   * @param _recipient Recipient of issued pool tokens.
+   * @return Quantity of pool tokens issued to recipient.
+   */
+  function depositFor(uint256 _amount, address _recipient)
     public
     nonReentrant
     whenNotPaused
@@ -99,40 +96,38 @@ contract Pool is AffiliateToken, ReentrancyGuard, Pausable {
   {
     IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
       .requireApprovedContractOrEOA(msg.sender);
-    require(amount <= token.balanceOf(msg.sender), "Insufficient balance");
-    _lockForBlock(msg.sender);
-    _takeFees();
-
-    uint256 deposited = _deposit(msg.sender, address(this), amount, true);
-    uint256 shares = _sharesForValue(deposited);
-    _mint(recipient, shares);
-
-    emit Deposit(recipient, amount, shares);
-    _reportPoolTokenHWM();
-    return shares;
+    return _depositFor(_amount, _recipient);
   }
 
-  function withdraw(uint256 amount)
+  /**
+   * @notice Exchange `_amount` of pool tokens for underlying tokens, sending underlying tokens to caller.
+   * @param _amount Quantity of pool tokens to exchange for underlying tokens.
+   * @return Quantity of underlying tokens sent to caller.
+   */
+  function withdraw(uint256 _amount)
     public
     override
     nonReentrant
     blockLocked
     returns (uint256)
   {
-    require(amount <= balanceOf(msg.sender), "Insufficient pool token balance");
+    require(
+      _amount <= balanceOf(msg.sender),
+      "Insufficient pool token balance"
+    );
 
     _lockForBlock(msg.sender);
     _takeFees();
 
-    uint256 feeShares = _calculateWithdrawalFee(amount);
-    uint256 withdrawalShares = amount.sub(feeShares);
+    uint256 feeShares = _calculateWithdrawalFee(_amount);
+    uint256 withdrawalShares = _amount.sub(feeShares);
     uint256 fee = valueFor(feeShares);
     uint256 withdrawal = valueFor(withdrawalShares);
     address rewardsManager = contractRegistry.getContract(
       keccak256("RewardsManager")
     );
 
-    _burn(msg.sender, amount);
+    _burn(msg.sender, _amount);
     _withdraw(address(this), msg.sender, withdrawal, true);
     _withdraw(address(this), rewardsManager, fee, true);
 
@@ -144,38 +139,89 @@ contract Pool is AffiliateToken, ReentrancyGuard, Pausable {
     return withdrawal;
   }
 
+  /**
+   * @notice Transfer `_amount` of pool tokens from caller's address to `_recipient` address.
+   * @param _recipient Address pool tokens are being transferred to. Must not be this contract's address or 0x0.
+   * @param _amount Quantity of pool tokens to transfer to `_recipient`.
+   * @return True if transfer is sent to an address other than this contract's or 0x0, otherwise the transaction will fail.
+   */
+  function transfer(address _recipient, uint256 _amount)
+    public
+    override
+    blockLocked
+    returns (bool)
+  {
+    return super.transfer(_recipient, _amount);
+  }
+
+  /**
+   * @notice Transfer `_amount` of pool tokens from `_sender` address to `_recipient` address.
+   * @param _sender Address pool tokens are being transferred from.
+   * @param _recipient Address pool tokens are being transferred to. Must not be this contract's address or 0x0.
+   * @param _amount Quantity of pool tokens to transfer.
+   * @return True if transfer is sent to an address other than this contract's or 0x0, otherwise the transaction will fail.
+   */
+  function transferFrom(
+    address _sender,
+    address _recipient,
+    uint256 _amount
+  ) public override blockLocked returns (bool) {
+    return super.transferFrom(_sender, _recipient, _amount);
+  }
+
+  /**
+   * @notice Collect management and performance fees and update pool token high water mark.
+   */
   function takeFees() external nonReentrant {
     _takeFees();
     _reportPoolTokenHWM();
   }
 
-  function setWithdrawalFee(uint256 withdrawalFee_) external {
+  /**
+   * @notice Set `withdrawalFee` in BPS. Caller must be authorized by ACL registry.
+   * @param _withdrawalFee New `withdrawalFee` in BPS.
+   * @dev Value is in basis points, i.e. 100 BPS = 1%
+   */
+  function setWithdrawalFee(uint256 _withdrawalFee) external {
     IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
       .requireRole(keccak256("DAO"), msg.sender);
-    require(withdrawalFee != withdrawalFee_, "Same withdrawalFee");
-    uint256 _previousWithdrawalFee = withdrawalFee;
-    withdrawalFee = withdrawalFee_;
-    emit WithdrawalFeeChanged(_previousWithdrawalFee, withdrawalFee);
+    require(withdrawalFee != _withdrawalFee, "Same withdrawalFee");
+    uint256 previousWithdrawalFee = withdrawalFee;
+    withdrawalFee = _withdrawalFee;
+    emit WithdrawalFeeChanged(previousWithdrawalFee, withdrawalFee);
   }
 
-  function setManagementFee(uint256 managementFee_) external {
+  /**
+   * @notice Set `managementFee` in BPS. Caller must be authorized by ACL registry.
+   * @param _managementFee New `managementFee` in BPS.
+   * @dev Value is in basis points, i.e. 100 BPS = 1%
+   */
+  function setManagementFee(uint256 _managementFee) external {
     IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
       .requireRole(keccak256("DAO"), msg.sender);
-    require(managementFee != managementFee_, "Same managementFee");
-    uint256 _previousManagementFee = managementFee;
-    managementFee = managementFee_;
-    emit ManagementFeeChanged(_previousManagementFee, managementFee);
+    require(managementFee != _managementFee, "Same managementFee");
+    uint256 previousManagementFee = managementFee;
+    managementFee = _managementFee;
+    emit ManagementFeeChanged(previousManagementFee, managementFee);
   }
 
-  function setPerformanceFee(uint256 performanceFee_) external {
+  /**
+   * @notice Set `performanceFee` in BPS. Caller must be authorized by ACL registry.
+   * @param _performanceFee New `performanceFee` in BPS.
+   * @dev Value is in basis points, i.e. 100 BPS = 1%
+   */
+  function setPerformanceFee(uint256 _performanceFee) external {
     IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
       .requireRole(keccak256("DAO"), msg.sender);
-    require(performanceFee != performanceFee_, "Same performanceFee");
-    uint256 _previousPerformanceFee = performanceFee;
-    performanceFee = performanceFee_;
-    emit PerformanceFeeChanged(_previousPerformanceFee, performanceFee);
+    require(performanceFee != _performanceFee, "Same performanceFee");
+    uint256 previousPerformanceFee = performanceFee;
+    performanceFee = _performanceFee;
+    emit PerformanceFeeChanged(previousPerformanceFee, performanceFee);
   }
 
+  /**
+   * @notice Transfer accrued fees to rewards manager contract. Caller must be authorized by ACL registry.
+   */
   function withdrawAccruedFees() external {
     IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
       .requireRole(keccak256("DAO"), msg.sender);
@@ -189,16 +235,66 @@ contract Pool is AffiliateToken, ReentrancyGuard, Pausable {
     );
   }
 
+  /**
+   * @notice Pause deposits. Caller must be authorized by ACL registry.
+   */
+  function pauseContract() external {
+    IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
+      .requireRole(keccak256("DAO"), msg.sender);
+    _pause();
+  }
+
+  /**
+   * @notice Unpause deposits. Caller must be authorized by ACL registry.
+   */
+  function unpauseContract() external {
+    IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
+      .requireRole(keccak256("DAO"), msg.sender);
+    _unpause();
+  }
+
+  /**
+   * @notice Returns price per pool token in underlying token.
+   * @return Price per pool token in underlying token.
+   * @dev Pool tokens are denominated with 18 decimals. Return value based on underlying token's decimals.
+   */
   function pricePerPoolToken() public view returns (uint256) {
     return valueFor(1e18);
   }
 
+  /**
+   * @notice Returns total value of pool deposits in underlying token.
+   * @return Total value of pool deposits in underlying token.
+   * @dev Return value is denominated in underlying token.
+   */
   function totalValue() public view returns (uint256) {
     return totalVaultBalance(address(this));
   }
 
-  function valueFor(uint256 poolTokens) public view returns (uint256) {
-    return _shareValue(poolTokens);
+  /**
+   * @notice Returns value of `_amount` of pool tokens in underlying tokens.
+   * @return Value of `_amount` of pool tokens in underlying token.
+   * @dev Return value is denominated in underlying token.
+   */
+  function valueFor(uint256 _amount) public view returns (uint256) {
+    return _shareValue(_amount);
+  }
+
+  function _depositFor(uint256 _amount, address _recipient)
+    internal
+    returns (uint256)
+  {
+    require(_amount <= token.balanceOf(msg.sender), "Insufficient balance");
+    _lockForBlock(msg.sender);
+    _takeFees();
+
+    uint256 deposited = _deposit(msg.sender, address(this), _amount, true);
+    uint256 shares = _sharesForValue(deposited);
+    _mint(_recipient, shares);
+
+    emit Deposit(_recipient, _amount, shares);
+    _reportPoolTokenHWM();
+    return shares;
   }
 
   function _reportPoolTokenHWM() internal {
@@ -207,12 +303,12 @@ contract Pool is AffiliateToken, ReentrancyGuard, Pausable {
     }
   }
 
-  function _issuePoolTokensForAmount(address to, uint256 amount)
+  function _issuePoolTokensForAmount(address _to, uint256 _amount)
     internal
     returns (uint256)
   {
-    uint256 tokens = _sharesForValue(amount);
-    return _issuePoolTokens(to, tokens);
+    uint256 tokens = _sharesForValue(_amount);
+    return _issuePoolTokens(_to, tokens);
   }
 
   function _takeManagementFee() internal {
@@ -245,52 +341,23 @@ contract Pool is AffiliateToken, ReentrancyGuard, Pausable {
     feesUpdatedAt = block.timestamp;
   }
 
-  function _calculateWithdrawalFee(uint256 withdrawalAmount)
+  function _calculateWithdrawalFee(uint256 _withdrawalAmount)
     internal
     view
     returns (uint256)
   {
-    return withdrawalAmount.mul(withdrawalFee).div(BPS_DENOMINATOR);
+    return _withdrawalAmount.mul(withdrawalFee).div(BPS_DENOMINATOR);
   }
 
-  function _issuePoolTokens(address to, uint256 amount)
+  function _issuePoolTokens(address _to, uint256 _amount)
     internal
     returns (uint256)
   {
-    _mint(to, amount);
-    return amount;
-  }
-
-  function pauseContract() external {
-    IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
-      .requireRole(keccak256("DAO"), msg.sender);
-    _pause();
-  }
-
-  function unpauseContract() external {
-    IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
-      .requireRole(keccak256("DAO"), msg.sender);
-    _unpause();
+    _mint(_to, _amount);
+    return _amount;
   }
 
   function _lockForBlock(address account) internal {
     blockLocks[account] = block.number;
-  }
-
-  function transfer(address recipient, uint256 amount)
-    public
-    override
-    blockLocked
-    returns (bool)
-  {
-    return super.transfer(recipient, amount);
-  }
-
-  function transferFrom(
-    address sender,
-    address recipient,
-    uint256 amount
-  ) public override blockLocked returns (bool) {
-    return super.transferFrom(sender, recipient, amount);
   }
 }

@@ -1,13 +1,13 @@
-pragma solidity >=0.7.0 <0.8.0;
+// Docgen-SOLC: 0.8.0
+pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "../interfaces/IACLRegistry.sol";
 import "../interfaces/IContractRegistry.sol";
+import "../interfaces/IStaking.sol";
 
 contract KeeperIncentive {
-  using SafeMath for uint256;
   using SafeERC20 for IERC20;
 
   struct Incentive {
@@ -26,6 +26,7 @@ contract KeeperIncentive {
   uint256 public burnRate;
   address internal immutable burnAddress =
     0x00000000219ab540356cBB839Cbe05303d7705Fa; //ETH2.0 Staking Contract
+  uint256 public requiredKeeperStake;
 
   /* ========== EVENTS ========== */
 
@@ -47,38 +48,53 @@ contract KeeperIncentive {
   event ControllerContractAdded(bytes32 contractName, address contractAddress);
   event Burned(uint256 amount);
   event BurnRateChanged(uint256 oldRate, uint256 newRate);
+  event RequiredKeeperStakeChanged(
+    uint256 oldRequirement,
+    uint256 newRequirement
+  );
 
   /* ========== CONSTRUCTOR ========== */
 
-  constructor(IContractRegistry _contractRegistry) public {
+  constructor(
+    IContractRegistry _contractRegistry,
+    uint256 _burnRate,
+    uint256 _requiredKeeperStake
+  ) public {
     contractRegistry = _contractRegistry;
-    burnRate = 25e16;
+    burnRate = _burnRate; //25e16
+    requiredKeeperStake = _requiredKeeperStake; // 2000 ether
   }
 
   /* ==========  MUTATIVE FUNCTIONS  ========== */
 
   function handleKeeperIncentive(
-    bytes32 contractName_,
-    uint8 i,
-    address keeper
+    bytes32 _contractName,
+    uint8 _i,
+    address _keeper
   ) external {
     require(
-      msg.sender == controllerContracts[contractName_],
+      msg.sender == controllerContracts[_contractName],
       "Can only be called by the controlling contract"
     );
 
-    Incentive memory incentive = incentives[contractName_][i];
+    Incentive memory incentive = incentives[_contractName][_i];
 
     if (!incentive.openToEveryone) {
       IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
-        .requireRole(keccak256("Keeper"), keeper);
+        .requireRole(keccak256("Keeper"), _keeper);
+      require(
+        IStaking(contractRegistry.getContract(keccak256("Staking"))).balanceOf(
+          _keeper
+        ) >= requiredKeeperStake,
+        "not enough pop at stake"
+      );
     }
     if (incentive.enabled && incentive.reward <= incentiveBudget) {
-      incentiveBudget = incentiveBudget.sub(incentive.reward);
-      uint256 amountToBurn = incentive.reward.mul(burnRate).div(1e18);
-      uint256 incentivePayout = incentive.reward.sub(amountToBurn);
+      incentiveBudget = incentiveBudget - incentive.reward;
+      uint256 amountToBurn = (incentive.reward * burnRate) / 1e18;
+      uint256 incentivePayout = incentive.reward - amountToBurn;
       IERC20(contractRegistry.getContract(keccak256("POP"))).safeTransfer(
-        keeper,
+        _keeper,
         incentivePayout
       );
       _burn(amountToBurn);
@@ -89,7 +105,7 @@ contract KeeperIncentive {
 
   /**
    * @notice Create Incentives for keeper to call a function
-   * @param contractName_ Name of contract that uses ParticipationRewards in bytes32
+   * @param _contractName Name of contract that uses ParticipationRewards in bytes32
    * @param _reward The amount in POP the Keeper receives for calling the function
    * @param _enabled Is this Incentive currently enabled?
    * @param _openToEveryone Can anyone call the function for rewards or only keeper?
@@ -97,42 +113,42 @@ contract KeeperIncentive {
    * @dev Multiple functions can use the same incentive which can than be updated with one governance vote
    */
   function createIncentive(
-    bytes32 contractName_,
+    bytes32 _contractName,
     uint256 _reward,
     bool _enabled,
     bool _openToEveryone
   ) public {
     IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
       .requireRole(keccak256("DAO"), msg.sender);
-    incentives[contractName_].push(
+    incentives[_contractName].push(
       Incentive({
         reward: _reward,
         enabled: _enabled,
         openToEveryone: _openToEveryone
       })
     );
-    emit IncentiveCreated(contractName_, _reward, _openToEveryone);
+    emit IncentiveCreated(_contractName, _reward, _openToEveryone);
   }
 
   /* ========== RESTRICTED FUNCTIONS ========== */
 
   function updateIncentive(
-    bytes32 contractName_,
-    uint8 i,
+    bytes32 _contractName,
+    uint8 _i,
     uint256 _reward,
     bool _enabled,
     bool _openToEveryone
   ) external {
     IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
       .requireRole(keccak256("DAO"), msg.sender);
-    Incentive storage incentive = incentives[contractName_][i];
+    Incentive storage incentive = incentives[_contractName][_i];
     uint256 oldReward = incentive.reward;
     bool oldOpenToEveryone = incentive.openToEveryone;
     incentive.reward = _reward;
     incentive.enabled = _enabled;
     incentive.openToEveryone = _openToEveryone;
     emit IncentiveChanged(
-      contractName_,
+      _contractName,
       oldReward,
       _reward,
       oldOpenToEveryone,
@@ -140,20 +156,20 @@ contract KeeperIncentive {
     );
   }
 
-  function toggleApproval(bytes32 contractName_, uint8 i) external {
+  function toggleApproval(bytes32 _contractName, uint8 _i) external {
     IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
       .requireRole(keccak256("DAO"), msg.sender);
-    Incentive storage incentive = incentives[contractName_][i];
+    Incentive storage incentive = incentives[_contractName][_i];
     incentive.openToEveryone = !incentive.openToEveryone;
-    emit ApprovalToggled(contractName_, incentive.openToEveryone);
+    emit ApprovalToggled(_contractName, incentive.openToEveryone);
   }
 
-  function toggleIncentive(bytes32 contractName_, uint8 i) external {
+  function toggleIncentive(bytes32 _contractName, uint8 _i) external {
     IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
       .requireRole(keccak256("DAO"), msg.sender);
-    Incentive storage incentive = incentives[contractName_][i];
+    Incentive storage incentive = incentives[_contractName][_i];
     incentive.enabled = !incentive.enabled;
-    emit IncentiveToggled(contractName_, incentive.enabled);
+    emit IncentiveToggled(_contractName, incentive.enabled);
   }
 
   function fundIncentive(uint256 _amount) external {
@@ -162,23 +178,23 @@ contract KeeperIncentive {
       address(this),
       _amount
     );
-    incentiveBudget = incentiveBudget.add(_amount);
+    incentiveBudget = incentiveBudget + _amount;
     emit IncentiveFunded(_amount);
   }
 
   /**
    * @notice In order to allow a contract to use ParticipationReward they need to be added as a controller contract
-   * @param contractName_ the name of the controller contract in bytes32
+   * @param _contractName the name of the controller contract in bytes32
    * @param contract_ the address of the controller contract
    * @dev all critical functions to init/open vaults and add shares to them can only be called by controller contracts
    */
-  function addControllerContract(bytes32 contractName_, address contract_)
+  function addControllerContract(bytes32 _contractName, address contract_)
     external
   {
     IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
       .requireRole(keccak256("DAO"), msg.sender);
-    controllerContracts[contractName_] = contract_;
-    emit ControllerContractAdded(contractName_, contract_);
+    controllerContracts[_contractName] = contract_;
+    emit ControllerContractAdded(_contractName, contract_);
   }
 
   /**
@@ -198,5 +214,16 @@ contract KeeperIncentive {
       _amount
     );
     emit Burned(_amount);
+  }
+
+  /**
+   * @notice Sets the required amount of POP a keeper needs to have staked to handle incentivized functions.
+   * @param _amount Amount of POP a keeper needs to stake
+   */
+  function updateRequiredKeeperStake(uint256 _amount) external {
+    IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
+      .requireRole(keccak256("DAO"), msg.sender);
+    emit RequiredKeeperStakeChanged(requiredKeeperStake, _amount);
+    requiredKeeperStake = _amount;
   }
 }

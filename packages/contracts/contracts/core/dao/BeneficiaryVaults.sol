@@ -1,18 +1,17 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity >=0.7.0 <0.8.0;
+// Docgen-SOLC: 0.8.0
+pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts/math/SafeMath.sol";
-import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
-import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
-import "@openzeppelin/contracts/cryptography/MerkleProof.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
 import "../interfaces/IBeneficiaryVaults.sol";
 import "../interfaces/IBeneficiaryRegistry.sol";
 import "../interfaces/IContractRegistry.sol";
 import "../interfaces/IACLRegistry.sol";
 
 contract BeneficiaryVaults is IBeneficiaryVaults, ReentrancyGuard {
-  using SafeMath for uint256;
   using SafeERC20 for IERC20;
 
   enum VaultStatus {
@@ -44,16 +43,16 @@ contract BeneficiaryVaults is IBeneficiaryVaults, ReentrancyGuard {
 
   /* ========== CONSTRUCTOR ========== */
 
-  constructor(IContractRegistry contractRegistry_) {
-    contractRegistry = contractRegistry_;
+  constructor(IContractRegistry _contractRegistry) {
+    contractRegistry = _contractRegistry;
   }
 
   /* ========== VIEWS ========== */
 
-  function getVault(uint8 vaultId_)
+  function getVault(uint8 _vaultId)
     public
     view
-    _vaultExists(vaultId_)
+    _vaultExists(_vaultId)
     returns (
       uint256 totalAllocated,
       uint256 currentBalance,
@@ -62,7 +61,7 @@ contract BeneficiaryVaults is IBeneficiaryVaults, ReentrancyGuard {
       VaultStatus status
     )
   {
-    Vault storage vault = vaults[vaultId_];
+    Vault storage vault = vaults[_vaultId];
     totalAllocated = vault.totalAllocated;
     currentBalance = vault.currentBalance;
     unclaimedShare = vault.unclaimedShare;
@@ -70,143 +69,141 @@ contract BeneficiaryVaults is IBeneficiaryVaults, ReentrancyGuard {
     status = vault.status;
   }
 
-  function hasClaimed(uint8 vaultId_, address beneficiary_)
+  function hasClaimed(uint8 _vaultId, address _beneficiary)
     public
     view
-    _vaultExists(vaultId_)
+    _vaultExists(_vaultId)
     returns (bool)
   {
-    return vaults[vaultId_].claimed[beneficiary_];
+    return vaults[_vaultId].claimed[_beneficiary];
   }
 
-  function vaultExists(uint8 vaultId_) public view override returns (bool) {
-    return vaultId_ < 3 && vaults[vaultId_].merkleRoot != "";
+  function vaultExists(uint8 _vaultId) public view override returns (bool) {
+    return _vaultId < 3 && vaults[_vaultId].merkleRoot != "";
   }
 
   /* ========== MUTATIVE FUNCTIONS ========== */
 
   /**
    * @notice Initializes a vault for beneficiary claims
-   * @param vaultId_ Vault ID in range 0-2
-   * @param merkleRoot_ Merkle root to support claims
+   * @param _vaultId Vault ID in range 0-2
+   * @param _merkleRoot Merkle root to support claims
    * @dev Vault cannot be initialized if it is currently in an open state, otherwise existing data is reset*
    */
-  function openVault(uint8 vaultId_, bytes32 merkleRoot_) public override {
+  function openVault(uint8 _vaultId, bytes32 _merkleRoot) public override {
     IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
       .requireRole(keccak256("BeneficiaryGovernance"), msg.sender);
-    require(vaultId_ < 3, "Invalid vault id");
+    require(_vaultId < 3, "Invalid vault id");
     require(
-      vaults[vaultId_].merkleRoot == "" ||
-        vaults[vaultId_].status == VaultStatus.Closed,
+      vaults[_vaultId].merkleRoot == "" ||
+        vaults[_vaultId].status == VaultStatus.Closed,
       "Vault must not be open"
     );
 
-    delete vaults[vaultId_];
-    Vault storage vault = vaults[vaultId_];
+    delete vaults[_vaultId];
+    Vault storage vault = vaults[_vaultId];
     vault.totalAllocated = 0;
     vault.currentBalance = 0;
     vault.unclaimedShare = 100e18;
-    vault.merkleRoot = merkleRoot_;
+    vault.merkleRoot = _merkleRoot;
     vault.status = VaultStatus.Open;
 
-    emit VaultOpened(vaultId_, merkleRoot_);
+    emit VaultOpened(_vaultId, _merkleRoot);
   }
 
   /**
    * @notice Close an open vault and redirect rewards to other vaults
    * @dev Vault must be in an open state
-   * @param vaultId_ Vault ID in range 0-2
+   * @param _vaultId Vault ID in range 0-2
    */
-  function closeVault(uint8 vaultId_) public override _vaultExists(vaultId_) {
+  function closeVault(uint8 _vaultId) public override _vaultExists(_vaultId) {
     IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
       .requireRole(keccak256("BeneficiaryGovernance"), msg.sender);
-    Vault storage vault = vaults[vaultId_];
+    Vault storage vault = vaults[_vaultId];
     require(vault.status == VaultStatus.Open, "Vault must be open");
 
-    uint256 _remainingBalance = vault.currentBalance;
+    uint256 remainingBalance = vault.currentBalance;
     vault.currentBalance = 0;
     vault.status = VaultStatus.Closed;
 
-    if (_remainingBalance > 0) {
-      totalDistributedBalance = totalDistributedBalance.sub(_remainingBalance);
+    if (remainingBalance > 0) {
+      totalDistributedBalance = totalDistributedBalance - remainingBalance;
       if (_getOpenVaultCount() > 0) {
         allocateRewards();
       }
     }
-    emit VaultClosed(vaultId_);
+    emit VaultClosed(_vaultId);
   }
 
   /**
    * @notice Verifies a valid claim with no cost
-   * @param vaultId_ Vault ID in range 0-2
-   * @param proof_ Merkle proof of path to leaf element
-   * @param beneficiary_ Beneficiary address encoded in leaf element
-   * @param share_ Beneficiary expected share encoded in leaf element
+   * @param _vaultId Vault ID in range 0-2
+   * @param _proof Merkle proof of path to leaf element
+   * @param _beneficiary Beneficiary address encoded in leaf element
+   * @param _share Beneficiary expected share encoded in leaf element
    * @return Returns boolean true or false if claim is valid
    */
   function verifyClaim(
-    uint8 vaultId_,
-    bytes32[] memory proof_,
-    address beneficiary_,
-    uint256 share_
-  ) public view _vaultExists(vaultId_) returns (bool) {
-    require(msg.sender == beneficiary_, "Sender must be beneficiary");
-    require(vaults[vaultId_].status == VaultStatus.Open, "Vault must be open");
+    uint8 _vaultId,
+    bytes32[] memory _proof,
+    address _beneficiary,
+    uint256 _share
+  ) public view _vaultExists(_vaultId) returns (bool) {
+    require(msg.sender == _beneficiary, "Sender must be beneficiary");
+    require(vaults[_vaultId].status == VaultStatus.Open, "Vault must be open");
     require(
       IBeneficiaryRegistry(
         contractRegistry.getContract(keccak256("BeneficiaryRegistry"))
-      ).beneficiaryExists(beneficiary_) == true,
+      ).beneficiaryExists(_beneficiary) == true,
       "Beneficiary does not exist"
     );
 
     return
       MerkleProof.verify(
-        proof_,
-        vaults[vaultId_].merkleRoot,
-        bytes32(keccak256(abi.encodePacked(beneficiary_, share_)))
+        _proof,
+        vaults[_vaultId].merkleRoot,
+        bytes32(keccak256(abi.encodePacked(_beneficiary, _share)))
       );
   }
 
   /**
    * @notice Transfers POP tokens only once to beneficiary on successful claim
    * @dev Applies any outstanding rewards before processing claim
-   * @param vaultId_ Vault ID in range 0-2
-   * @param proof_ Merkle proof of path to leaf element
-   * @param beneficiary_ Beneficiary address encoded in leaf element
-   * @param share_ Beneficiary expected share encoded in leaf element
+   * @param _vaultId Vault ID in range 0-2
+   * @param _proof Merkle proof of path to leaf element
+   * @param _beneficiary Beneficiary address encoded in leaf element
+   * @param _share Beneficiary expected share encoded in leaf element
    */
   function claimReward(
-    uint8 vaultId_,
-    bytes32[] memory proof_,
-    address beneficiary_,
-    uint256 share_
-  ) public nonReentrant _vaultExists(vaultId_) {
+    uint8 _vaultId,
+    bytes32[] memory _proof,
+    address _beneficiary,
+    uint256 _share
+  ) public nonReentrant _vaultExists(_vaultId) {
     require(
-      verifyClaim(vaultId_, proof_, beneficiary_, share_) == true,
+      verifyClaim(_vaultId, _proof, _beneficiary, _share) == true,
       "Invalid claim"
     );
-    require(hasClaimed(vaultId_, beneficiary_) == false, "Already claimed");
+    require(hasClaimed(_vaultId, _beneficiary) == false, "Already claimed");
 
-    Vault storage vault = vaults[vaultId_];
+    Vault storage vault = vaults[_vaultId];
 
-    uint256 _reward = (vault.currentBalance.mul(share_)).div(
-      vault.unclaimedShare
-    );
+    uint256 reward = (vault.currentBalance * _share) / vault.unclaimedShare;
 
-    require(_reward > 0, "No reward");
+    require(reward > 0, "No reward");
 
-    totalDistributedBalance = totalDistributedBalance.sub(_reward);
-    vault.currentBalance = vault.currentBalance.sub(_reward);
-    vault.unclaimedShare = vault.unclaimedShare.sub(share_);
+    totalDistributedBalance = totalDistributedBalance - reward;
+    vault.currentBalance = vault.currentBalance - reward;
+    vault.unclaimedShare = vault.unclaimedShare - _share;
 
-    vault.claimed[beneficiary_] = true;
+    vault.claimed[_beneficiary] = true;
 
     IERC20(contractRegistry.getContract(keccak256("POP"))).transfer(
-      beneficiary_,
-      _reward
+      _beneficiary,
+      reward
     );
 
-    emit RewardClaimed(vaultId_, beneficiary_, _reward);
+    emit RewardClaimed(_vaultId, _beneficiary, reward);
   }
 
   /**
@@ -216,47 +213,47 @@ contract BeneficiaryVaults is IBeneficiaryVaults, ReentrancyGuard {
   function allocateRewards() public override nonReentrant {
     uint256 availableReward = IERC20(
       contractRegistry.getContract(keccak256("POP"))
-    ).balanceOf(address(this)).sub(totalDistributedBalance);
+    ).balanceOf(address(this)) - totalDistributedBalance;
     require(availableReward > 0, "no rewards available");
 
-    uint8 _openVaultCount = _getOpenVaultCount();
-    require(_openVaultCount > 0, "no open vaults");
+    uint8 openVaultCount = _getOpenVaultCount();
+    require(openVaultCount > 0, "no open vaults");
 
     //@todo handle dust after div
-    uint256 _allocation = availableReward.div(_openVaultCount);
-    for (uint8 _vaultId = 0; _vaultId < vaults.length; _vaultId++) {
+    uint256 allocation = availableReward / openVaultCount;
+    for (uint8 vaultId = 0; vaultId < vaults.length; vaultId++) {
       if (
-        vaults[_vaultId].status == VaultStatus.Open &&
-        vaults[_vaultId].merkleRoot != ""
+        vaults[vaultId].status == VaultStatus.Open &&
+        vaults[vaultId].merkleRoot != ""
       ) {
-        vaults[_vaultId].totalAllocated = vaults[_vaultId].totalAllocated.add(
-          _allocation
-        );
-        vaults[_vaultId].currentBalance = vaults[_vaultId].currentBalance.add(
-          _allocation
-        );
+        vaults[vaultId].totalAllocated =
+          vaults[vaultId].totalAllocated +
+          allocation;
+        vaults[vaultId].currentBalance =
+          vaults[vaultId].currentBalance +
+          allocation;
       }
     }
-    totalDistributedBalance = totalDistributedBalance.add(availableReward);
+    totalDistributedBalance = totalDistributedBalance + availableReward;
     emit RewardsAllocated(availableReward);
   }
 
   /* ========== RESTRICTED FUNCTIONS ========== */
 
   function _getOpenVaultCount() internal view returns (uint8) {
-    uint8 _openVaultCount = 0;
+    uint8 openVaultCount = 0;
     for (uint8 i = 0; i < 3; i++) {
       if (vaults[i].merkleRoot != "" && vaults[i].status == VaultStatus.Open) {
-        _openVaultCount++;
+        openVaultCount++;
       }
     }
-    return _openVaultCount;
+    return openVaultCount;
   }
 
   /* ========== MODIFIERS ========== */
 
-  modifier _vaultExists(uint8 vaultId_) {
-    require(vaultExists(vaultId_), "vault must exist");
+  modifier _vaultExists(uint8 _vaultId) {
+    require(vaultExists(_vaultId), "vault must exist");
     _;
   }
 }

@@ -8,11 +8,13 @@ import {
   KeeperIncentive,
   KeeperIncentiveHelper,
   MockERC20,
+  Staking,
 } from "../typechain";
 
 let deployTimestamp;
 let owner: SignerWithAddress, nonOwner: SignerWithAddress;
 let mockPop: MockERC20;
+let staking: Staking;
 let contractRegistry: ContractRegistry;
 let keeperIncentive: KeeperIncentive;
 let keeperIncentiveHelper: KeeperIncentiveHelper;
@@ -25,7 +27,7 @@ describe("Keeper incentives", function () {
     mockPop = (await (
       await mockERC20Factory.deploy("TestPOP", "TPOP", 18)
     ).deployed()) as MockERC20;
-    await mockPop.mint(owner.address, parseEther("100"));
+    await mockPop.mint(owner.address, parseEther("2100"));
     await mockPop.mint(nonOwner.address, parseEther("10"));
 
     const aclRegistry = await (
@@ -41,6 +43,12 @@ describe("Keeper incentives", function () {
     keeperIncentive = await (
       await (
         await ethers.getContractFactory("KeeperIncentive")
+      ).deploy(contractRegistry.address, parseEther("0.25"), parseEther("2000"))
+    ).deployed();
+
+    staking = await (
+      await (
+        await ethers.getContractFactory("Staking")
       ).deploy(contractRegistry.address)
     ).deployed();
 
@@ -63,6 +71,13 @@ describe("Keeper incentives", function () {
       .addContract(
         ethers.utils.id("POP"),
         mockPop.address,
+        ethers.utils.id("1")
+      );
+    await contractRegistry
+      .connect(owner)
+      .addContract(
+        ethers.utils.id("Staking"),
+        staking.address,
         ethers.utils.id("1")
       );
 
@@ -95,6 +110,8 @@ describe("Keeper incentives", function () {
     await mockPop
       .connect(owner)
       .approve(keeperIncentiveHelper.address, parseEther("100000"));
+    await mockPop.connect(owner).approve(staking.address, parseEther("100000"));
+    await staking.connect(owner).stake(parseEther("2000"), 2629800);
   });
   it("functions should only be available for Governance", async function () {
     await expect(
@@ -136,6 +153,18 @@ describe("Keeper incentives", function () {
       .to.emit(keeperIncentive, "BurnRateChanged")
       .withArgs(parseEther("0.25"), parseEther("0.1"));
     expect(await keeperIncentive.burnRate()).to.be.equal(parseEther("0.1"));
+  });
+  it("should adjust the required keeper stake", async function () {
+    expect(
+      await keeperIncentive
+        .connect(owner)
+        .updateRequiredKeeperStake(parseEther("100"))
+    )
+      .to.emit(keeperIncentive, "RequiredKeeperStakeChanged")
+      .withArgs(parseEther("2000"), parseEther("100"));
+    expect(await keeperIncentive.requiredKeeperStake()).to.be.equal(
+      parseEther("100")
+    );
   });
   it("should create an incentive", async () => {
     const result = await keeperIncentive
@@ -276,7 +305,6 @@ describe("Keeper incentives", function () {
   describe("call incentivized functions", function () {
     it("should pay out keeper incentive rewards", async function () {
       const oldBalance = await mockPop.balanceOf(owner.address);
-
       await mockPop
         .connect(nonOwner)
         .approve(keeperIncentive.address, incentive);
@@ -295,6 +323,14 @@ describe("Keeper incentives", function () {
         .incentivisedFunction();
       const newBalance = await mockPop.balanceOf(owner.address);
       expect(newBalance).to.equal(oldBalance);
+    });
+    it("should revert if the keeper didnt stake enough pop", async function () {
+      await keeperIncentive
+        .connect(owner)
+        .updateRequiredKeeperStake(parseEther("3000"));
+      await expect(
+        keeperIncentiveHelper.connect(owner).incentivisedFunction()
+      ).to.be.revertedWith("not enough pop at stake");
     });
     context("approval", function () {
       it("should not be callable for non approved addresses", async function () {
@@ -331,7 +367,11 @@ describe("Keeper incentives", function () {
         keeperIncentive = await (
           await (
             await ethers.getContractFactory("KeeperIncentive")
-          ).deploy(contractRegistry.address)
+          ).deploy(
+            contractRegistry.address,
+            parseEther("0.25"),
+            parseEther("2000")
+          )
         ).deployed();
         await keeperIncentive
           .connect(owner)

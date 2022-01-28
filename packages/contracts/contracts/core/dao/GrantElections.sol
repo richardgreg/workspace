@@ -1,8 +1,8 @@
-pragma solidity >=0.7.0 <=0.8.3;
+// Docgen-SOLC: 0.8.0
+pragma solidity ^0.8.0;
 pragma experimental ABIEncoderV2;
 
-import "@openzeppelin/contracts/math/SafeMath.sol";
-import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "../interfaces/IStaking.sol";
 import "../interfaces/IBeneficiaryRegistry.sol";
 import "../interfaces/IBeneficiaryVaults.sol";
@@ -14,7 +14,6 @@ import "../interfaces/IContractRegistry.sol";
 import "../utils/KeeperIncentive.sol";
 
 contract GrantElections {
-  using SafeMath for uint256;
   using SafeERC20 for IERC20;
 
   struct Vote {
@@ -183,10 +182,10 @@ contract GrantElections {
   function initialize(ElectionTerm _grantTerm, bytes32 _region) public {
     IRegion region = IRegion(contractRegistry.getContract(keccak256("Region")));
     require(region.regionExists(_region), "region doesnt exist");
-    uint8 _term = uint8(_grantTerm);
+    uint8 term = uint8(_grantTerm);
     if (elections.length != 0) {
       Election storage latestElection = elections[
-        activeElections[_region][_term]
+        activeElections[_region][term]
       ];
 
       if (
@@ -198,23 +197,23 @@ contract GrantElections {
           "election not yet finalized"
         );
         require(
-          block.timestamp.sub(latestElection.startTime) >=
+          block.timestamp - latestElection.startTime >=
             latestElection.electionConfiguration.cooldownPeriod,
           "can't start new election, not enough time elapsed since last election"
         );
       }
     }
     address beneficiaryVault = region.regionVaults(_region);
-    if (IBeneficiaryVaults(beneficiaryVault).vaultExists(_term)) {
-      IBeneficiaryVaults(beneficiaryVault).closeVault(_term);
+    if (IBeneficiaryVaults(beneficiaryVault).vaultExists(term)) {
+      IBeneficiaryVaults(beneficiaryVault).closeVault(term);
     }
 
     uint256 electionId = elections.length;
-    activeElections[_region][_term] = electionId;
+    activeElections[_region][term] = electionId;
 
     elections.push();
     Election storage election = elections[electionId];
-    election.electionConfiguration = electionDefaults[_term];
+    election.electionConfiguration = electionDefaults[term];
     election.electionState = ElectionState.Registration;
     election.electionTerm = _grantTerm;
     election.startTime = block.timestamp;
@@ -223,10 +222,10 @@ contract GrantElections {
       contractRegistry.getContract(keccak256("ParticipationReward"))
     ).initializeVault(
         contractName,
-        keccak256(abi.encodePacked(_term, block.timestamp)),
-        block.timestamp.add(electionDefaults[_term].registrationPeriod).add(
-          electionDefaults[_term].votingPeriod
-        )
+        keccak256(abi.encodePacked(term, block.timestamp)),
+        block.timestamp +
+          electionDefaults[term].registrationPeriod +
+          electionDefaults[term].votingPeriod
       );
     if (vaultCreated) {
       election.vaultId = vaultId;
@@ -248,12 +247,12 @@ contract GrantElections {
   function registerForElection(address _beneficiary, uint256 _electionId)
     public
   {
-    Election storage _election = elections[_electionId];
+    Election storage election = elections[_electionId];
 
     refreshElectionState(_electionId);
 
     require(
-      _election.electionState == ElectionState.Registration,
+      election.electionState == ElectionState.Registration,
       "election not open for registration"
     );
     require(
@@ -263,14 +262,14 @@ contract GrantElections {
       "address is not eligible for registration"
     );
     require(
-      _election.registeredBeneficiaries[_beneficiary] == false,
+      election.registeredBeneficiaries[_beneficiary] == false,
       "only register once"
     );
 
-    _collectRegistrationBond(_election);
+    _collectRegistrationBond(election);
 
-    _election.registeredBeneficiaries[_beneficiary] = true;
-    _election.registeredBeneficiariesList.push(_beneficiary);
+    election.registeredBeneficiaries[_beneficiary] = true;
+    election.registeredBeneficiariesList.push(_beneficiary);
 
     emit BeneficiaryRegistered(_beneficiary, _electionId);
   }
@@ -279,10 +278,9 @@ contract GrantElections {
     Election storage election = elections[_electionId];
     if (
       block.timestamp >=
-      election
-        .startTime
-        .add(election.electionConfiguration.registrationPeriod)
-        .add(election.electionConfiguration.votingPeriod)
+      election.startTime +
+        election.electionConfiguration.registrationPeriod +
+        election.electionConfiguration.votingPeriod
     ) {
       election.electionState = ElectionState.Closed;
       if (election.electionConfiguration.useChainLinkVRF) {
@@ -297,7 +295,7 @@ contract GrantElections {
       }
     } else if (
       block.timestamp >=
-      election.startTime.add(election.electionConfiguration.registrationPeriod)
+      election.startTime + election.electionConfiguration.registrationPeriod
     ) {
       election.electionState = ElectionState.Voting;
     } else if (block.timestamp >= election.startTime) {
@@ -325,12 +323,12 @@ contract GrantElections {
       "address already voted for election term"
     );
 
-    uint256 _usedVoiceCredits = 0;
-    uint256 _stakedVoiceCredits = IStaking(
+    uint256 usedVoiceCredits = 0;
+    uint256 stakedVoiceCredits = IStaking(
       contractRegistry.getContract(keccak256("Staking"))
     ).getVoiceCredits(msg.sender);
 
-    require(_stakedVoiceCredits > 0, "must have voice credits from staking");
+    require(stakedVoiceCredits > 0, "must have voice credits from staking");
 
     for (uint256 i = 0; i < _beneficiaries.length; i++) {
       // todo: consider skipping iteration instead of throwing since if a beneficiary is removed from the registry during an election, it can prevent votes from being counted
@@ -339,51 +337,53 @@ contract GrantElections {
         "ineligible beneficiary"
       );
 
-      _usedVoiceCredits = _usedVoiceCredits.add(_voiceCredits[i]);
-      uint256 _sqredVoiceCredits = sqrt(_voiceCredits[i]);
+      usedVoiceCredits = usedVoiceCredits + _voiceCredits[i];
+      uint256 sqredVoiceCredits = sqrt(_voiceCredits[i]);
 
       Vote memory _vote = Vote({
         voter: msg.sender,
         beneficiary: _beneficiaries[i],
-        weight: _sqredVoiceCredits
+        weight: sqredVoiceCredits
       });
 
       election.votes.push(_vote);
       election.voters[msg.sender] = true;
     }
     require(
-      _usedVoiceCredits <= _stakedVoiceCredits,
+      usedVoiceCredits <= stakedVoiceCredits,
       "Insufficient voice credits"
     );
     if (election.vaultId != "") {
       ParticipationReward(
         contractRegistry.getContract(keccak256("ParticipationReward"))
-      ).addShares(
-          contractName,
-          election.vaultId,
-          msg.sender,
-          _usedVoiceCredits
-        );
+      ).addShares(contractName, election.vaultId, msg.sender, usedVoiceCredits);
     }
     emit UserVoted(msg.sender, election.electionTerm);
   }
 
+  function fundKeeperIncentive(uint256 _amount) public {
+    IERC20 POP = IERC20(contractRegistry.getContract(keccak256("POP")));
+    require(POP.balanceOf(msg.sender) >= _amount, "not enough pop");
+    POP.safeTransferFrom(msg.sender, address(this), _amount);
+    incentiveBudget = incentiveBudget + _amount;
+  }
+
   function getRandomNumber(uint256 _electionId) public {
-    Election storage _election = elections[_electionId];
+    Election storage election = elections[_electionId];
     require(
-      _election.electionConfiguration.useChainLinkVRF == true,
+      election.electionConfiguration.useChainLinkVRF == true,
       "election doesnt need random number"
     );
     require(
-      _election.electionState == ElectionState.Closed,
+      election.electionState == ElectionState.Closed,
       "election must be closed"
     );
-    require(_election.randomNumber == 0, "randomNumber already set");
+    require(election.randomNumber == 0, "randomNumber already set");
     uint256 randomNumber = IRandomNumberConsumer(
       contractRegistry.getContract(keccak256("RandomNumberConsumer"))
     ).getRandomResult(_electionId);
     require(randomNumber != 0, "random number not yet created");
-    _election.randomNumber = randomNumber;
+    election.randomNumber = randomNumber;
   }
 
   /* ========== RESTRICTED FUNCTIONS ========== */
@@ -394,16 +394,16 @@ contract GrantElections {
     IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
       .requireRole(keccak256("ElectionResultProposer"), msg.sender);
 
-    Election storage _election = elections[_electionId];
+    Election storage election = elections[_electionId];
     require(
-      _election.electionState == ElectionState.Closed ||
-        _election.electionState == ElectionState.FinalizationProposed,
+      election.electionState == ElectionState.Closed ||
+        election.electionState == ElectionState.FinalizationProposed,
       "wrong election state"
     );
-    require(_election.votes.length >= 1, "no elegible awardees");
+    require(election.votes.length >= 1, "no elegible awardees");
 
-    if (_election.electionConfiguration.useChainLinkVRF) {
-      require(_election.randomNumber != 0, "randomNumber required");
+    if (election.electionConfiguration.useChainLinkVRF) {
+      require(election.randomNumber != 0, "randomNumber required");
     }
 
     if (_election.electionState != ElectionState.FinalizationProposed) {
@@ -413,11 +413,21 @@ contract GrantElections {
     }
 
     uint256 finalizationIncentive = electionDefaults[
-      uint8(_election.electionTerm)
+      uint8(election.electionTerm)
     ].finalizationIncentive;
 
-    _election.merkleRoot = _merkleRoot;
-    _election.electionState = ElectionState.FinalizationProposed;
+    if (
+      incentiveBudget >= finalizationIncentive &&
+      election.electionState != ElectionState.FinalizationProposed
+    ) {
+      IERC20 POP = IERC20(contractRegistry.getContract(keccak256("POP")));
+      POP.approve(address(this), finalizationIncentive);
+      POP.safeTransferFrom(address(this), msg.sender, finalizationIncentive);
+      incentiveBudget = incentiveBudget - finalizationIncentive;
+    }
+
+    election.merkleRoot = _merkleRoot;
+    election.electionState = ElectionState.FinalizationProposed;
 
     emit FinalizationProposed(_electionId, _merkleRoot);
   }
@@ -563,18 +573,18 @@ contract GrantElections {
   ) public {
     IACLRegistry(contractRegistry.getContract(keccak256("ACLRegistry")))
       .requireRole(keccak256("DAO"), msg.sender);
-    ElectionConfiguration storage _defaults = electionDefaults[uint8(_term)];
-    _defaults.ranking = _ranking;
-    _defaults.awardees = _awardees;
-    _defaults.useChainLinkVRF = _useChainLinkVRF;
-    _defaults.registrationPeriod = _registrationPeriod;
-    _defaults.votingPeriod = _votingPeriod;
-    _defaults.cooldownPeriod = _cooldownPeriod;
-    _defaults.bondRequirements.amount = _bondAmount;
-    _defaults.bondRequirements.required = _bondRequired;
-    _defaults.finalizationIncentive = _finalizationIncentive;
-    _defaults.enabled = _enabled;
-    _defaults.shareType = _shareType;
+    ElectionConfiguration storage defaults = electionDefaults[uint8(_term)];
+    defaults.ranking = _ranking;
+    defaults.awardees = _awardees;
+    defaults.useChainLinkVRF = _useChainLinkVRF;
+    defaults.registrationPeriod = _registrationPeriod;
+    defaults.votingPeriod = _votingPeriod;
+    defaults.cooldownPeriod = _cooldownPeriod;
+    defaults.bondRequirements.amount = _bondAmount;
+    defaults.bondRequirements.required = _bondRequired;
+    defaults.finalizationIncentive = _finalizationIncentive;
+    defaults.enabled = _enabled;
+    defaults.shareType = _shareType;
   }
 
   /* ========== MODIFIERS ========== */

@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity >=0.7.0 <0.8.0;
+// Docgen-SOLC: 0.8.0
+pragma solidity ^0.8.0;
 pragma experimental ABIEncoderV2;
 
-import "@openzeppelin/contracts/math/SafeMath.sol";
-import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "../interfaces/IRegion.sol";
 import "../interfaces/IStaking.sol";
 import "../interfaces/IBeneficiaryRegistry.sol";
@@ -17,7 +17,6 @@ import "../utils/ParticipationReward.sol";
  * @notice This contract is for submitting beneficiary nomination proposals and beneficiary takedown proposals
  */
 contract BeneficiaryGovernance {
-  using SafeMath for uint256;
   using SafeERC20 for IERC20;
 
   /**
@@ -142,42 +141,42 @@ contract BeneficiaryGovernance {
 
   /**
    * @notice gets number of votes
-   * @param  proposalId id of the proposal
+   * @param  _proposalId id of the proposal
    * @return number of votes to a proposal
    */
-  function getNumberOfVoters(uint256 proposalId)
+  function getNumberOfVoters(uint256 _proposalId)
     external
     view
     returns (uint256)
   {
-    return proposals[proposalId].voterCount;
+    return proposals[_proposalId].voterCount;
   }
 
   /**
    * @notice gets status
-   * @param  proposalId id of the proposal
+   * @param  _proposalId id of the proposal
    * @return status of proposal
    */
-  function getStatus(uint256 proposalId)
+  function getStatus(uint256 _proposalId)
     external
     view
     returns (ProposalStatus)
   {
-    return proposals[proposalId].status;
+    return proposals[_proposalId].status;
   }
 
   /**
    * @notice checks if someone has voted to a specific proposal or not
-   * @param  proposalId id of the proposal
-   * @param  voter address opf voter
+   * @param  _proposalId id of the proposal
+   * @param  _voter address opf voter
    * @return boolean
    */
-  function hasVoted(uint256 proposalId, address voter)
+  function hasVoted(uint256 _proposalId, address _voter)
     external
     view
     returns (bool)
   {
-    return proposals[proposalId].voters[voter];
+    return proposals[_proposalId].voters[_voter];
   }
 
   /* ========== MUTATIVE FUNCTIONS ========== */
@@ -185,6 +184,7 @@ contract BeneficiaryGovernance {
   /**
    * @notice creates a beneficiary nomination proposal or a beneficiary takedown proposal
    * @param  _beneficiary address of the beneficiary
+   * @param  _region id of region
    * @param  _applicationCid IPFS content hash
    * @param  _type the proposal type (nomination / takedown)
    * @return proposalId
@@ -241,7 +241,7 @@ contract BeneficiaryGovernance {
     ).initializeVault(
         contractName,
         keccak256(abi.encodePacked(proposalId, block.timestamp)),
-        block.timestamp.add(DefaultConfigurations.votingPeriod)
+        block.timestamp + DefaultConfigurations.votingPeriod
       );
     if (vaultCreated) {
       proposal.vaultId = vaultId;
@@ -256,19 +256,20 @@ contract BeneficiaryGovernance {
 
   /**
    * @notice refresh status
-   * @param  proposalId id of the proposal
+   * @param  _proposalId id of the proposal
    */
-  function refreshState(uint256 proposalId) external {
-    Proposal storage proposal = proposals[proposalId];
+  function refreshState(uint256 _proposalId) external {
+    Proposal storage proposal = proposals[_proposalId];
     _refreshState(proposal);
   }
 
   /**
    * @notice votes to a specific proposal during the initial voting process
-   * @param  proposalId id of the proposal which you are going to vote
+   * @param  _proposalId id of the proposal which you are going to vote
+   * @param  _vote a yes or no vote
    */
-  function vote(uint256 proposalId, VoteOption _vote) external {
-    Proposal storage proposal = proposals[proposalId];
+  function vote(uint256 _proposalId, VoteOption _vote) external {
+    Proposal storage proposal = proposals[_proposalId];
     _refreshState(proposal);
 
     require(
@@ -284,18 +285,18 @@ contract BeneficiaryGovernance {
     uint256 _voiceCredits = getVoiceCredits(msg.sender);
 
     proposal.voters[msg.sender] = true;
-    proposal.voterCount = proposal.voterCount.add(1);
+    proposal.voterCount = proposal.voterCount + 1;
 
     if (_vote == VoteOption.Yes) {
       require(
         proposal.status == ProposalStatus.New,
         "Initial voting period has already finished!"
       );
-      proposal.yesCount = proposal.yesCount.add(_voiceCredits);
+      proposal.yesCount = proposal.yesCount + _voiceCredits;
     }
 
     if (_vote == VoteOption.No) {
-      proposal.noCount = proposal.noCount.add(_voiceCredits);
+      proposal.noCount = proposal.noCount + _voiceCredits;
     }
 
     if (proposal.vaultId != "") {
@@ -304,15 +305,15 @@ contract BeneficiaryGovernance {
       ).addShares(contractName, proposal.vaultId, msg.sender, _voiceCredits);
     }
 
-    emit Vote(proposalId, msg.sender, _voiceCredits);
+    emit Vote(_proposalId, msg.sender, _voiceCredits);
   }
 
   /**
    * @notice finalizes the voting process
-   * @param  proposalId id of the proposal
+   * @param  _proposalId id of the proposal
    */
-  function finalize(uint256 proposalId) public {
-    Proposal storage proposal = proposals[proposalId];
+  function finalize(uint256 _proposalId) public {
+    Proposal storage proposal = proposals[_proposalId];
     _refreshState(proposal);
 
     require(
@@ -338,15 +339,15 @@ contract BeneficiaryGovernance {
       ).openVault(contractName, proposal.vaultId);
     }
 
-    emit Finalize(proposalId);
+    emit Finalize(_proposalId);
   }
 
   /**
    * @notice claims bond after a successful proposal voting
-   * @param  proposalId id of the proposal
+   * @param  _proposalId id of the proposal
    */
-  function claimBond(uint256 proposalId) public {
-    Proposal storage proposal = proposals[proposalId];
+  function claimBond(uint256 _proposalId) public {
+    Proposal storage proposal = proposals[_proposalId];
     require(
       msg.sender == proposal.proposer,
       "only the proposer may call this function"
@@ -375,18 +376,18 @@ contract BeneficiaryGovernance {
   /**
    * @notice gets the voice credits of an address using the staking contract
    * @param  _address address of the voter
-   * @return _voiceCredits voiceCredits of user
+   * @return voiceCredits voiceCredits of user
    */
   function getVoiceCredits(address _address)
     internal
     view
-    returns (uint256 _voiceCredits)
+    returns (uint256 voiceCredits)
   {
-    _voiceCredits = IStaking(contractRegistry.getContract(keccak256("Staking")))
+    voiceCredits = IStaking(contractRegistry.getContract(keccak256("Staking")))
       .getVoiceCredits(_address);
 
-    require(_voiceCredits > 0, "must have voice credits from staking");
-    return _voiceCredits;
+    require(voiceCredits > 0, "must have voice credits from staking");
+    return voiceCredits;
   }
 
   /**
@@ -439,35 +440,35 @@ contract BeneficiaryGovernance {
 
   /**
    * @notice updates the state of the proposal
-   * @param  proposal passed in proposal
+   * @param  _proposal passed in proposal
    */
-  function _refreshState(Proposal storage proposal) internal {
+  function _refreshState(Proposal storage _proposal) internal {
     if (
-      proposal.status == ProposalStatus.Failed ||
-      proposal.status == ProposalStatus.Passed
+      _proposal.status == ProposalStatus.Failed ||
+      _proposal.status == ProposalStatus.Passed
     ) return;
 
-    uint256 votingPeriod = proposal.configurationOptions.votingPeriod;
-    uint256 vetoPeriod = proposal.configurationOptions.vetoPeriod;
+    uint256 votingPeriod = _proposal.configurationOptions.votingPeriod;
+    uint256 vetoPeriod = _proposal.configurationOptions.vetoPeriod;
     uint256 totalVotingPeriod = votingPeriod + vetoPeriod;
 
     if (
-      block.timestamp >= proposal.startTime.add(votingPeriod) &&
-      block.timestamp < proposal.startTime.add(totalVotingPeriod)
+      block.timestamp >= _proposal.startTime + votingPeriod &&
+      block.timestamp < _proposal.startTime + totalVotingPeriod
     ) {
-      if (proposal.status != ProposalStatus.ChallengePeriod) {
-        if (proposal.yesCount < proposal.noCount) {
-          proposal.status = ProposalStatus.PendingFinalization;
+      if (_proposal.status != ProposalStatus.ChallengePeriod) {
+        if (_proposal.yesCount < _proposal.noCount) {
+          _proposal.status = ProposalStatus.PendingFinalization;
 
           return;
         }
 
-        proposal.status = ProposalStatus.ChallengePeriod;
+        _proposal.status = ProposalStatus.ChallengePeriod;
       }
     }
 
-    if (block.timestamp >= proposal.startTime.add(totalVotingPeriod)) {
-      proposal.status = ProposalStatus.PendingFinalization;
+    if (block.timestamp >= _proposal.startTime + totalVotingPeriod) {
+      _proposal.status = ProposalStatus.PendingFinalization;
     }
   }
 

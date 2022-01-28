@@ -36,6 +36,22 @@ interface Contracts {
   beneficiaryGovernance: Contract;
   region: Contract;
   rewardsEscrow: Contract;
+  mockCrvDUSD: Contract;
+  mockCrvFRAX: Contract;
+  mockCrvUSDN: Contract;
+  mockCrvUST: Contract;
+  mockHYSI: Contract;
+  mockCurveMetapoolDUSD: Contract;
+  mockCurveMetapoolFRAX: Contract;
+  mockCurveMetapoolUSDN: Contract;
+  mockCurveMetapoolUST: Contract;
+  mockYearnVaultDUSD: Contract;
+  mockYearnVaultFRAX: Contract;
+  mockYearnVaultUSDN: Contract;
+  mockYearnVaultUST: Contract;
+  mockBasicIssuanceModule: Contract;
+  hysiBatchInteraction: Contract;
+  mockTriPool: Contract;
   participationReward: Contract;
   keeperIncentive: Contract;
   aclRegistry: Contract;
@@ -86,6 +102,7 @@ export default async function deploy(ethers): Promise<void> {
   const deployContracts = async (): Promise<void> => {
     console.log("deploying contracts ...");
 
+    const MockERC20 = await ethers.getContractFactory("MockERC20");
     const aclRegistry = await (
       await (await ethers.getContractFactory("ACLRegistry")).deploy()
     ).deployed();
@@ -97,9 +114,7 @@ export default async function deploy(ethers): Promise<void> {
     ).deployed();
 
     const mockPop = await (
-      await (
-        await ethers.getContractFactory("MockERC20")
-      ).deploy("TestPOP", "TPOP", 18)
+      await MockERC20.deploy("TestPOP", "TPOP", 18)
     ).deployed();
 
     const beneficiaryVaults = await (
@@ -121,13 +136,160 @@ export default async function deploy(ethers): Promise<void> {
     ).deployed();
 
     const mock3CRV = await (
-      await (
-        await ethers.getContractFactory("MockERC20")
-      ).deploy("3CURVE", "3CRV", 18)
+      await MockERC20.deploy("3CURVE", "3CRV", 18)
     ).deployed();
 
     const WETH = await (
       await (await ethers.getContractFactory("WETH9")).deploy()
+    ).deployed();
+
+    const mockBasicCoin = await (
+      await MockERC20.deploy("Basic", "Basic", 18)
+    ).deployed();
+
+    const mockCrvDUSD = await (
+      await MockERC20.deploy("crvDUSD", "crvDUSD", 18)
+    ).deployed();
+
+    const mockCrvFRAX = await (
+      await MockERC20.deploy("crvFRAX", "crvFRAX", 18)
+    ).deployed();
+
+    const mockCrvUSDN = await (
+      await MockERC20.deploy("crvUSDN", "crvUSDN", 18)
+    ).deployed();
+
+    const mockCrvUST = await (
+      await MockERC20.deploy("crvUST", "crvUST", 18)
+    ).deployed();
+
+    const mockHYSI = await MockERC20.deploy("setToken", "setToken", 18);
+
+    const MockYearnV2Vault = await ethers.getContractFactory(
+      "MockYearnV2Vault"
+    );
+    const mockYearnVaultDUSD = await (
+      await MockYearnV2Vault.deploy(mockCrvDUSD.address)
+    ).deployed();
+    const mockYearnVaultFRAX = await (
+      await MockYearnV2Vault.deploy(mockCrvFRAX.address)
+    ).deployed();
+    const mockYearnVaultUSDN = await (
+      await MockYearnV2Vault.deploy(mockCrvUSDN.address)
+    ).deployed();
+    const mockYearnVaultUST = await (
+      await MockYearnV2Vault.deploy(mockCrvUST.address)
+    ).deployed();
+
+    const MockCurveMetapool = await ethers.getContractFactory(
+      "MockCurveMetapool"
+    );
+
+    //Besides crvUSDX and 3Crv no coins are needed in this test which is why i used the same token in the other places
+    const mockCurveMetapoolDUSD = await (
+      await MockCurveMetapool.deploy(
+        mockBasicCoin.address,
+        mockCrvDUSD.address,
+        mock3CRV.address,
+        mockBasicCoin.address,
+        mockBasicCoin.address,
+        mockBasicCoin.address
+      )
+    ).deployed();
+
+    const mockCurveMetapoolFRAX = await (
+      await MockCurveMetapool.deploy(
+        mockBasicCoin.address,
+        mockCrvFRAX.address,
+        mock3CRV.address,
+        mockBasicCoin.address,
+        mockBasicCoin.address,
+        mockBasicCoin.address
+      )
+    ).deployed();
+
+    const mockCurveMetapoolUSDN = await (
+      await MockCurveMetapool.deploy(
+        mockBasicCoin.address,
+        mockCrvUSDN.address,
+        mock3CRV.address,
+        mockBasicCoin.address,
+        mockBasicCoin.address,
+        mockBasicCoin.address
+      )
+    ).deployed();
+
+    const mockCurveMetapoolUST = await (
+      await MockCurveMetapool.deploy(
+        mockBasicCoin.address,
+        mockCrvUST.address,
+        mock3CRV.address,
+        mockBasicCoin.address,
+        mockBasicCoin.address,
+        mockBasicCoin.address
+      )
+    ).deployed();
+
+    const mockTriPool = await (
+      await MockCurveMetapool.deploy(
+        mockBasicCoin.address,
+        mockBasicCoin.address,
+        mock3CRV.address,
+        mockBasicCoin.address,
+        mockBasicCoin.address,
+        mockBasicCoin.address
+      )
+    ).deployed();
+
+    const mockBasicIssuanceModule = await (
+      await (
+        await ethers.getContractFactory("MockBasicIssuanceModule")
+      ).deploy(
+        [
+          mockYearnVaultDUSD.address,
+          mockYearnVaultFRAX.address,
+          mockYearnVaultUSDN.address,
+          mockYearnVaultUST.address,
+        ],
+        [62, 62, 62, 62]
+      )
+    ).deployed();
+
+    const hysiBatchInteraction = await (
+      await (
+        await ethers.getContractFactory("HysiBatchInteraction")
+      ).deploy(
+        mock3CRV.address,
+        mockHYSI.address,
+        mockBasicIssuanceModule.address,
+        [
+          mockYearnVaultDUSD.address,
+          mockYearnVaultFRAX.address,
+          mockYearnVaultUSDN.address,
+          mockYearnVaultUST.address,
+        ],
+        [
+          {
+            curveMetaPool: mockCurveMetapoolDUSD.address,
+            crvLPToken: mockCrvDUSD.address,
+          },
+          {
+            curveMetaPool: mockCurveMetapoolFRAX.address,
+            crvLPToken: mockCrvFRAX.address,
+          },
+          {
+            curveMetaPool: mockCurveMetapoolUSDN.address,
+            crvLPToken: mockCrvUSDN.address,
+          },
+          {
+            curveMetaPool: mockCurveMetapoolUST.address,
+            crvLPToken: mockCrvUST.address,
+          },
+        ],
+        1800,
+        parseEther("20000"),
+        parseEther("200")
+      )
     ).deployed();
 
     const rewardsEscrow = await (
@@ -286,6 +448,22 @@ export default async function deploy(ethers): Promise<void> {
       uniswapPair,
       beneficiaryGovernance,
       region,
+      mockHYSI,
+      mockCrvDUSD,
+      mockCrvFRAX,
+      mockCrvUSDN,
+      mockCrvUST,
+      mockCurveMetapoolDUSD,
+      mockCurveMetapoolFRAX,
+      mockCurveMetapoolUSDN,
+      mockCurveMetapoolUST,
+      mockYearnVaultDUSD,
+      mockYearnVaultFRAX,
+      mockYearnVaultUSDN,
+      mockYearnVaultUST,
+      mockBasicIssuanceModule,
+      hysiBatchInteraction,
+      mockTriPool,
       participationReward,
       keeperIncentive,
       aclRegistry,
@@ -423,6 +601,28 @@ export default async function deploy(ethers): Promise<void> {
     );
   };
 
+  const mint3CRV = async (): Promise<void> => {
+    console.log("giving everyone 3CRV ...");
+    await bluebird.map(
+      accounts,
+      async (account) => {
+        await contracts.mock3CRV.mint(account.address, parseEther("1250"));
+      },
+      { concurrency: 1 }
+    );
+  };
+
+  const mintHYSI = async (): Promise<void> => {
+    console.log("giving everyone HYSI ...");
+    await bluebird.map(
+      accounts,
+      async (account) => {
+        await contracts.mockHYSI.mint(account.address, parseEther("11"));
+      },
+      { concurrency: 1 }
+    );
+  };
+
   const approveForStaking = async (): Promise<void> => {
     console.log("approving all accounts for staking ...");
     await bluebird.map(
@@ -460,6 +660,49 @@ export default async function deploy(ethers): Promise<void> {
     );
   };
 
+  const fundBasicIssuanceModule = async (): Promise<void> => {
+    console.log("funding basic issuance module");
+    //Fund Basic Issuance module with yToken for redeeming HYSI
+    await contracts.mockYearnVaultDUSD.mint(
+      contracts.mockBasicIssuanceModule.address,
+      parseEther("200000")
+    );
+    await contracts.mockYearnVaultFRAX.mint(
+      contracts.mockBasicIssuanceModule.address,
+      parseEther("200000")
+    );
+    await contracts.mockYearnVaultUSDN.mint(
+      contracts.mockBasicIssuanceModule.address,
+      parseEther("200000")
+    );
+    await contracts.mockYearnVaultUST.mint(
+      contracts.mockBasicIssuanceModule.address,
+      parseEther("200000")
+    );
+  };
+
+  const fundYearnVaults = async (): Promise<void> => {
+    console.log("funding yearn vaults");
+
+    //Fund Yearn Vaults with crvLPToken for redeeming HYSI
+    await contracts.mockCrvDUSD.mint(
+      contracts.mockYearnVaultDUSD.address,
+      parseEther("200000")
+    );
+    await contracts.mockCrvFRAX.mint(
+      contracts.mockYearnVaultFRAX.address,
+      parseEther("200000")
+    );
+    await contracts.mockCrvUSDN.mint(
+      contracts.mockYearnVaultUSDN.address,
+      parseEther("200000")
+    );
+    await contracts.mockCrvUST.mint(
+      contracts.mockYearnVaultUST.address,
+      parseEther("200000")
+    );
+  };
+
   const fundRewardsManager = async (): Promise<void> => {
     console.log("Funding RewardsManager...");
     await contracts.mockPop.mint(accounts[0].address, parseEther("5000"));
@@ -479,6 +722,69 @@ export default async function deploy(ethers): Promise<void> {
         .connect(voter)
         .stake(utils.parseEther("1000"), 86400 * 365 * 4);
     });
+  };
+
+  const createMintBatches = async (): Promise<void> => {
+    console.log("creating hysi mint batches");
+    await bluebird.map(accounts, async (account: SignerWithAddress) => {
+      await contracts.mock3CRV
+        .connect(account)
+        .approve(
+          contracts.hysiBatchInteraction.address,
+          utils.parseEther("500")
+        );
+    });
+    await bluebird.map(accounts, async (account: SignerWithAddress) => {
+      await contracts.hysiBatchInteraction
+        .connect(account)
+        .depositForMint(utils.parseEther("250"));
+    });
+    await ethers.provider.send("evm_increaseTime", [1800]);
+    await ethers.provider.send("evm_mine", []);
+
+    await contracts.hysiBatchInteraction.connect(accounts[0]).batchMint(0);
+    await bluebird.map(accounts, async (account: SignerWithAddress) => {
+      await contracts.hysiBatchInteraction
+        .connect(account)
+        .depositForMint(utils.parseEther("250"));
+    });
+    await ethers.provider.send("evm_increaseTime", [1800]);
+    await ethers.provider.send("evm_mine", []);
+
+    await contracts.hysiBatchInteraction.connect(accounts[0]).batchMint(0);
+  };
+
+  const createRedeemBatches = async (): Promise<void> => {
+    console.log("creating hysi redeem batches");
+    await bluebird.map(accounts, async (account: SignerWithAddress) => {
+      await contracts.mockHYSI
+        .connect(account)
+        .approve(contracts.hysiBatchInteraction.address, utils.parseEther("2"));
+    });
+    await bluebird.map(accounts, async (account: SignerWithAddress) => {
+      await contracts.hysiBatchInteraction
+        .connect(account)
+        .depositForRedeem(utils.parseEther("1"));
+    });
+
+    await ethers.provider.send("evm_increaseTime", [1800]);
+    await ethers.provider.send("evm_mine", []);
+    await contracts.hysiBatchInteraction.connect(accounts[0]).batchRedeem(0);
+    await bluebird.map(accounts, async (account: SignerWithAddress) => {
+      await contracts.hysiBatchInteraction
+        .connect(account)
+        .depositForRedeem(utils.parseEther("1"));
+    });
+
+    await ethers.provider.send("evm_increaseTime", [1800]);
+    await ethers.provider.send("evm_mine", []);
+    await contracts.hysiBatchInteraction.connect(accounts[0]).batchRedeem(0);
+  };
+
+  const transferBeneficiaryRegistryOwnership = async (): Promise<void> => {
+    await contracts.beneficiaryRegistry.transferOwnership(
+      contracts.beneficiaryGovernance.address
+    );
   };
 
   const updateProposalSettings = async (): Promise<void> => {
@@ -1021,8 +1327,22 @@ ADDR_BENEFICIARY_VAULT=${contracts.beneficiaryVaults.address}
 ADDR_REWARDS_MANAGER=${contracts.rewardsManager.address}
 ADDR_UNISWAP_ROUTER=${contracts.uniswapRouter.address}
 ADDR_3CRV=${contracts.mock3CRV.address}
+ADDR_BATCH_HYSI=${contracts.hysiBatchInteraction.address}
+ADDR_HYSI=${contracts.mockHYSI.address}
+ADDR_BASIC_ISSUANCE_MODULE=${contracts.mockBasicIssuanceModule.address}
 ADDR_REGION=${contracts.region.address}
 ADDR_REWARDS_ESCROW=${contracts.rewardsEscrow.address}
+
+ADDR_TRI_POOL=${contracts.mockTriPool.address}
+ADDR_DUSD_METAPOOL=${contracts.mockCurveMetapoolDUSD.address}
+ADDR_FRAX_METAPOOL=${contracts.mockCurveMetapoolFRAX.address}
+ADDR_USDN_METAPOOL=${contracts.mockCurveMetapoolUSDN.address}
+ADDR_UST_METAPOOL=${contracts.mockCurveMetapoolUST.address}
+ADDR_YDUSD=${contracts.mockYearnVaultDUSD.address}
+ADDR_YFRAX=${contracts.mockYearnVaultFRAX.address}
+ADDR_YUSDN=${contracts.mockYearnVaultUSDN.address}
+ADDR_YUST=${contracts.mockYearnVaultUST.address}
+
     `);
   };
 
@@ -1042,10 +1362,17 @@ ADDR_REWARDS_ESCROW=${contracts.rewardsEscrow.address}
   await addingControllerContracts();
   await addBeneficiariesToRegistry();
   await mintPOP();
+  await mint3CRV();
+  await mintHYSI();
   await approveForStaking();
   await prepareUniswap();
+  await fundBasicIssuanceModule();
+  await fundYearnVaults();
   await fundRewardsManager();
   await stakePOP();
+  await createMintBatches();
+  await createRedeemBatches();
+  await transferBeneficiaryRegistryOwnership();
   await updateProposalSettings();
   await addFinalizedProposalsAndBeneficiariesToRegistry();
   await initializeMonthlyElection();
