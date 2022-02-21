@@ -6,12 +6,12 @@ import LinkedInPagePixel from 'components/LinkedInPagePixel';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { Fragment, useEffect, useState, useRef } from 'react';
-import { Facebook, GitHub,  Twitter, X } from 'react-feather';
+import { Facebook, GitHub, Twitter, X } from 'react-feather';
 import * as Icon from 'react-feather';
 import { MobileExpandableMenu } from 'components/MobileExpandableMenu';
 
-import Burger from 'components/Burger'
-import Menu from 'components/Menu'
+import Burger from 'components/Burger';
+import Menu from 'components/Menu';
 import FocusLock from 'react-focus-lock';
 import { useOnClickOutside } from '../hooks';
 
@@ -23,11 +23,9 @@ const IndexPage = () => {
   const [menuVisible, toggleMenu] = useState<boolean>(false);
   const [ctaModalVisible, toggleCtaModal] = useState<boolean>(false);
 
-
   const [open, setOpen] = useState(false);
   const node = useRef();
-  const menuId = "main-menu";
-
+  const menuId = 'main-menu';
 
   useOnClickOutside(node, () => setOpen(false));
 
@@ -45,7 +43,6 @@ const IndexPage = () => {
       }, 1000);
     }
   }, []);
-
 
   function calcAndSetCountdown(): void {
     const now = new Date().getTime();
@@ -120,7 +117,9 @@ const IndexPage = () => {
                   className="validate"
                   target="_blank"
                   noValidate
-                >                  <div
+                >
+                  {' '}
+                  <div
                     id="mc_embed_signup_scroll"
                     className="flex flex-col items-center justify-between w-full px-2 py-2 mt-8 bg-white shadow-xl rounded-xl md:flex-row"
                   >
@@ -227,7 +226,8 @@ const IndexPage = () => {
                   </h1>
                   <p className="text-xl font-landing">
                     Earn high yield on your cryptoassets while creating real
-                    world impact. Popcorn's products fund social impact organizations.
+                    world impact. Popcorn's products fund social impact
+                    organizations.
                   </p>
                   <form
                     action="https://network.us1.list-manage.com/subscribe/post?u=5ce5e82d673fd2cfaf12849a5&amp;id=e85a091ed3"
@@ -412,8 +412,8 @@ const IndexPage = () => {
                 Maximize your Crypto Portfolio
               </h2>
               <p className="text-2xl text-gray-500 font-landing">
-                Popcorn offers a suite of DeFi products for you to generate competitive returns on your
-                crypto assets.
+                Popcorn offers a suite of DeFi products for you to generate
+                competitive returns on your crypto assets.
               </p>
               <img
                 src="/images/bgPopcorn2.svg"
@@ -628,13 +628,11 @@ const IndexPage = () => {
           </div>
         </section>
 
-
         <section className="w-full bg-secondary py-52">
           <div className="w-8/12 mx-auto text-center">
             <h2 className="mb-4 text-4xl font-bold leading-snug">Notify Me</h2>
             <p className="text-2xl font-medium">
-             Get early
-              notification to be part of our journey
+              Get early notification to be part of our journey
             </p>
             <form
               action="https://network.us1.list-manage.com/subscribe/post?u=5ce5e82d673fd2cfaf12849a5&amp;id=e85a091ed3"
@@ -695,8 +693,8 @@ const IndexPage = () => {
                 </a>
               </Link>
               <p className="w-7/12 py-4 text-base font-medium">
-                Earn high yield on your cryptoassets while helping
-                fund educational, environmental and open source initiatives
+                Earn high yield on your cryptoassets while helping fund
+                educational, environmental and open source initiatives
               </p>
               <div className="flex flex-row items-center space-x-4">
                 <Link href="https://github.com/popcorndao" passHref>
@@ -755,13 +753,19 @@ const IndexPage = () => {
                 </a>
               </Link>
             </div>
+            <div className="flex flex-col space-y-3">
+              <p className="text-base font-medium uppercase">Bug Bounty</p>
+              <Link href="https://immunefi.com/bounty/popcornnetwork" passHref>
+                <a className="hover:text-blue-600">Immunefi</a>
+              </Link>
+            </div>
           </div>
           <p className="py-4 text-center font-base">
-          ©2021, Popcorn Ltd All Rights Reserved{" "}
-                  <span className="block text-xs ">Winterbotham Place
-Marlborough &amp; Queen Streets
-P.O. Box SP 62556
-Nassau, BS</span>
+            ©2021, Popcorn Ltd All Rights Reserved{' '}
+            <span className="block text-xs ">
+              Winterbotham Place Marlborough &amp; Queen Streets P.O. Box SP
+              62556 Nassau, BS
+            </span>
           </p>
         </section>
       </div>
@@ -805,7 +809,11 @@ Nassau, BS</span>
                 </div>
                 <div ref={node}>
                   <FocusLock disabled={!open}>
-                    <Burger open={open} setOpen={setOpen} aria-controls={menuId} />
+                    <Burger
+                      open={open}
+                      setOpen={setOpen}
+                      aria-controls={menuId}
+                    />
                     <Menu open={open} setOpen={setOpen} id={menuId} />
                   </FocusLock>
                 </div>
@@ -952,8 +960,8 @@ Nassau, BS</span>
                 Maximize your Crypto Portfolio
               </h2>
               <p className="text-lg text-center text-gray-500 font-landing">
-                Popcorn offers a suite of DeFi products for you to generate competitive returns on your
-                crypto assets.
+                Popcorn offers a suite of DeFi products for you to generate
+                competitive returns on your crypto assets.
               </p>
             </section>
             <section className="w-10/12 h-full mx-auto mt-24">
@@ -962,8 +970,8 @@ Nassau, BS</span>
                 Create Real World Impact
               </h2>
               <p className="text-lg text-center text-gray-500 font-landing">
-                Popcorn's products fund social impact organizations. Choose which
-                initiatives you support:
+                Popcorn's products fund social impact organizations. Choose
+                which initiatives you support:
               </p>
               <div className="w-1/2 mx-auto">
                 <ul className="mt-8 space-y-2 list-disc list-inside">
@@ -1129,8 +1137,7 @@ Nassau, BS</span>
                   Notify Me
                 </h2>
                 <p className="text-lg">
-                Get early
-              notification to be part of our journey
+                  Get early notification to be part of our journey
                 </p>
                 <form
                   action="https://network.us1.list-manage.com/subscribe/post?u=5ce5e82d673fd2cfaf12849a5&amp;id=e85a091ed3"
@@ -1261,6 +1268,12 @@ Nassau, BS</span>
                     </Link>
                   </div>
                 </div>
+                <div className="flex flex-col space-y-3">
+                  <p className="text-base font-medium uppercase">Bug Bounty</p>
+                  <Link href="https://immunefi.com/bounty/popcornnetwork" passHref>
+                    <a className="hover:text-blue-600">Immunefi</a>
+                  </Link>
+                </div>
                 {/*<div className="flex flex-col space-y-3">
             <p className="text-base font-medium uppercase">Documentation</p>
             <Link href="/" passHref>
@@ -1270,11 +1283,12 @@ Nassau, BS</span>
               </div>
               <div className="w-10/12 mx-auto mt-12 border-t border-gray-700 ">
                 <p className="py-4 text-center font-base">
-                ©2021, Popcorn Ltd All Rights Reserved{" "}
-                  <span className="block text-xs ">Winterbotham Place
-Marlborough &amp; Queen Streets
-P.O. Box SP 62556
-Nassau, BS</span>                </p>
+                  ©2021, Popcorn Ltd All Rights Reserved{' '}
+                  <span className="block text-xs ">
+                    Winterbotham Place Marlborough &amp; Queen Streets P.O. Box
+                    SP 62556 Nassau, BS
+                  </span>{' '}
+                </p>
               </div>
             </section>
           </div>
