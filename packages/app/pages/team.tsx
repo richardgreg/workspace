@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { Fragment, useEffect, useState } from 'react';
 import { Facebook, GitHub, Menu, Twitter, X } from 'react-feather';
+import { useCallback } from 'react';
 
 interface TeamMember {
   name: string;
@@ -375,6 +376,11 @@ const TeamPage = () => {
     }
   }, []);
 
+  const redirectToApp = useCallback(() => {
+    // understand the server being used to redirect.
+    // router.push()
+  }, [])
+
   return (
     <div className="font-landing">
       <FacebookPixel />
@@ -504,10 +510,10 @@ const TeamPage = () => {
                 </a>
               </Link>
               <a
-                className="font-medium text-base bg-blue-600 hover:bg-blue-500 text-white rounded-xl p-4 cursor-pointer"
-                onClick={(e) => toggleCtaModal(true)}
+                className="p-4 text-base font-medium text-white bg-blue-600 cursor-pointer hover:bg-blue-500 rounded-xl"
+                onClick={(e) => redirectToApp()}
               >
-                Early Access
+                Launch App
               </a>
             </div>
           </nav>
@@ -807,17 +813,15 @@ const TeamPage = () => {
             <div className="w-10/12 flex flex-row justify-center mt-4 mx-auto mb-12">
               <h3
                 onClick={() => setTeamVisible(!teamVisible)}
-                className={`inline-flex px-8 mr-3 py-2 rounded-full text-xl font-normal ${
-                  teamVisible ? 'bg-activeYellow' : 'bg-inactiveYellow'
-                }`}
+                className={`inline-flex px-8 mr-3 py-2 rounded-full text-xl font-normal ${teamVisible ? 'bg-activeYellow' : 'bg-inactiveYellow'
+                  }`}
               >
                 Team
               </h3>
               <h3
                 onClick={() => setTeamVisible(!teamVisible)}
-                className={`inline-flex px-8 ml-3 py-2 rounded-full text-xl font-normal ${
-                  !teamVisible ? 'bg-activeYellow' : 'bg-inactiveYellow'
-                }`}
+                className={`inline-flex px-8 ml-3 py-2 rounded-full text-xl font-normal ${!teamVisible ? 'bg-activeYellow' : 'bg-inactiveYellow'
+                  }`}
               >
                 Contributors
               </h3>

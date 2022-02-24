@@ -5,7 +5,7 @@ import FacebookPixel from 'components/FacebookPixel';
 import LinkedInPagePixel from 'components/LinkedInPagePixel';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { Fragment, useEffect, useState, useRef } from 'react';
+import React, { Fragment, useEffect, useState, useRef, useCallback } from 'react';
 import { Facebook, GitHub, Twitter, X } from 'react-feather';
 import * as Icon from 'react-feather';
 import { MobileExpandableMenu } from 'components/MobileExpandableMenu';
@@ -63,6 +63,11 @@ const IndexPage = () => {
 
     setCountdown([days, hours, minutes, seconds]);
   }
+
+  const redirectToApp = useCallback(() => {
+    // understand the server being used to redirect.
+    // router.push()
+  }, [])
 
   return (
     <div className="font-landing">
@@ -201,9 +206,9 @@ const IndexPage = () => {
               </Link>
               <a
                 className="p-4 text-base font-medium text-white bg-blue-600 cursor-pointer hover:bg-blue-500 rounded-xl"
-                onClick={(e) => toggleCtaModal(true)}
+                onClick={(e) => redirectToApp()}
               >
-                Early Access
+                Launch App
               </a>
             </div>
           </nav>
