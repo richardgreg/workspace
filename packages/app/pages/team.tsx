@@ -376,11 +376,6 @@ const TeamPage = () => {
     }
   }, []);
 
-  const redirectToApp = useCallback(() => {
-    // understand the server being used to redirect.
-    // router.push()
-  }, [])
-
   return (
     <div className="font-landing">
       <FacebookPixel />
@@ -511,7 +506,8 @@ const TeamPage = () => {
               </Link>
               <a
                 className="p-4 text-base font-medium text-white bg-blue-600 cursor-pointer hover:bg-blue-500 rounded-xl"
-                onClick={(e) => redirectToApp()}
+                target='_blank'
+                href='https://popcorndao.finance/'
               >
                 Launch App
               </a>

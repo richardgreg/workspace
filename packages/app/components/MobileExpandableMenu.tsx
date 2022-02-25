@@ -13,10 +13,6 @@ interface MobileExpandableMenuProps {
 export const MobileExpandableMenu: React.FC<MobileExpandableMenuProps> = ({
   toggleMenuVisible,
 }) => {
-  const redirectToApp = useCallback(() => {
-    // understand the server being used to redirect.
-    // router.push()
-  }, [])
 
   return (
     <div className="z-10 h-screen nav-width">
@@ -74,10 +70,14 @@ export const MobileExpandableMenu: React.FC<MobileExpandableMenuProps> = ({
           ></div> */}
           <div className="w-full mt-16">
             <div
-              className="p-4 text-base font-medium text-white bg-blue-600 cursor-pointer hover:bg-blue-500 rounded-xl text-center"
-              onClick={(e) => redirectToApp()}
+              className=" text-base font-medium text-white bg-blue-600 cursor-pointer hover:bg-blue-500 rounded-xl text-center"
             >
-              Launch App
+              <a className='p-4 display-inline text-base font-medium text-white bg-blue-600  rounded-xl text-center h-full w-full'
+                target='_blank'
+                href='https://popcorndao.finance/'
+              >
+                Launch App
+              </a>
             </div>
           </div>
 
