@@ -4,9 +4,12 @@ import FacebookPixel from 'components/FacebookPixel';
 import { MobileExpandableMenu } from 'components/MobileExpandableMenu';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { Fragment, useEffect, useState } from 'react';
-import { Facebook, GitHub, Menu, Twitter, X } from 'react-feather';
-import { useCallback } from 'react';
+import React, { Fragment, useEffect, useRef, useState } from 'react';
+import { Facebook, GitHub, Twitter, X } from 'react-feather';
+import Burger from 'components/Burger';
+import Menu from 'components/Menu';
+import FocusLock from 'react-focus-lock';
+import { useOnClickOutside } from '../hooks';
 
 interface TeamMember {
   name: string;
@@ -346,6 +349,11 @@ const TeamPage = () => {
   const [ctaModalVisible, toggleCtaModal] = useState<boolean>(false);
   const [teamVisible, setTeamVisible] = useState<boolean>(true);
 
+  const [open, setOpen] = useState(false);
+  const node = useRef();
+  const menuId = 'main-menu';
+  useOnClickOutside(node, () => setOpen(false));
+
   useEffect(() => {
     if (typeof window !== 'undefined' && window.location.pathname !== '/') {
       router.replace(window.location.pathname);
@@ -506,8 +514,8 @@ const TeamPage = () => {
               </Link>
               <a
                 className="p-4 text-base font-medium text-white bg-blue-600 cursor-pointer hover:bg-blue-500 rounded-xl"
-                target='_blank'
-                href='https://popcorndao.finance/'
+                target="_blank"
+                href="https://popcorndao.finance/"
               >
                 Launch App
               </a>
@@ -615,8 +623,7 @@ const TeamPage = () => {
           <div className="w-8/12 mx-auto text-center">
             <h2 className="font-bold text-4xl leading-snug mb-4">Notify Me</h2>
             <p className="text-2xl font-medium">
-              Get early
-              notification to be part of our journey
+              Get early notification to be part of our journey
             </p>
             <form
               action="https://network.us1.list-manage.com/subscribe/post?u=5ce5e82d673fd2cfaf12849a5&amp;id=e85a091ed3"
@@ -672,8 +679,8 @@ const TeamPage = () => {
                 </a>
               </Link>
               <p className="font-medium text-base w-7/12 py-4">
-                Earn high yield on your cryptoassets while helping
-                fund educational, environmental and open source initiatives.
+                Earn high yield on your cryptoassets while helping fund
+                educational, environmental and open source initiatives.
               </p>
               <div className="flex flex-row space-x-4 items-center">
                 <Link href="https://github.com/popcorndao" passHref>
@@ -753,7 +760,7 @@ const TeamPage = () => {
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <MobileExpandableMenu toggleMenuVisible={toggleMenuVisible} />
+          <MobileExpandableMenu />
         </Transition>
         <Transition
           show={!menuVisible}
@@ -766,7 +773,7 @@ const TeamPage = () => {
         >
           <div>
             <header className="w-full bg-primary">
-              <nav className="w-10/12 mx-auto pt-4 pb-3 border-b border-primaryLight flex flex-row items-center justify-between">
+              <nav className="flex flex-row items-center justify-between p-6 border-b border-primaryLight">
                 <div>
                   <Link href="/" passHref>
                     <a>
@@ -774,12 +781,21 @@ const TeamPage = () => {
                       <img
                         src="/images/logo.png"
                         alt="Logo"
-                        className="h-14 flex-grow-0 flex-shrink-0"
+                        className="flex-grow-0 flex-shrink-0 h-14"
                       ></img>
                     </a>
                   </Link>
                 </div>
-                <Menu style={{}} onClick={(e) => toggleMenuVisible(true)} />
+                <div ref={node}>
+                  <FocusLock disabled={!open}>
+                    <Burger
+                      open={open}
+                      setOpen={setOpen}
+                      aria-controls={menuId}
+                    />
+                    <Menu open={open} setOpen={setOpen} id={menuId} />
+                  </FocusLock>
+                </div>
               </nav>
             </header>
             <section className="min-h-full">
@@ -809,15 +825,17 @@ const TeamPage = () => {
             <div className="w-10/12 flex flex-row justify-center mt-4 mx-auto mb-12">
               <h3
                 onClick={() => setTeamVisible(!teamVisible)}
-                className={`inline-flex px-8 mr-3 py-2 rounded-full text-xl font-normal ${teamVisible ? 'bg-activeYellow' : 'bg-inactiveYellow'
-                  }`}
+                className={`inline-flex px-8 mr-3 py-2 rounded-full text-xl font-normal ${
+                  teamVisible ? 'bg-activeYellow' : 'bg-inactiveYellow'
+                }`}
               >
                 Team
               </h3>
               <h3
                 onClick={() => setTeamVisible(!teamVisible)}
-                className={`inline-flex px-8 ml-3 py-2 rounded-full text-xl font-normal ${!teamVisible ? 'bg-activeYellow' : 'bg-inactiveYellow'
-                  }`}
+                className={`inline-flex px-8 ml-3 py-2 rounded-full text-xl font-normal ${
+                  !teamVisible ? 'bg-activeYellow' : 'bg-inactiveYellow'
+                }`}
               >
                 Contributors
               </h3>
@@ -929,8 +947,7 @@ const TeamPage = () => {
                   Notify Me
                 </h2>
                 <p className="text-lg">
-                  Get early
-                  notification to be part of our journey
+                  Get early notification to be part of our journey
                 </p>
                 <form
                   action="https://network.us1.list-manage.com/subscribe/post?u=5ce5e82d673fd2cfaf12849a5&amp;id=e85a091ed3"

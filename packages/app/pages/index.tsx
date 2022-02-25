@@ -781,7 +781,7 @@ const IndexPage = () => {
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <MobileExpandableMenu toggleMenuVisible={toggleMenu} />
+          <MobileExpandableMenu />
         </Transition>
 
         <Transition
