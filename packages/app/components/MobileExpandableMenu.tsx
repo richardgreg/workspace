@@ -2,30 +2,39 @@ import Link from 'next/link';
 
 import React from 'react';
 import { Facebook, GitHub, Twitter } from 'react-feather';
+import { useRouter } from 'next/router';
 
 export const MobileExpandableMenu: React.FC = () => {
+  const router = useRouter();
+
   return (
     <div className="fixed h-full overflow-y-scroll z-10 nav-width mobile-menu-bg">
       <div className="relative w-full min-h-screen h-full transition-opacity duration-1000 ease-in-out ">
         <div className="w-screen px-6 mx-auto nav-animation">
-          <div className="pt-14 flex flex-col divide-y divide-white divide-opacity-50">
+          <div className="pt-24 flex flex-col divide-y divide-white divide-opacity-50">
             <Link href="https://launch.popcorn.network/" passHref>
               <a>
-                <h1 className="ml-3 text-4xl font-light text-white hover:text-gray-700 font-landing py-5">
+                <h1 className="ml-3 text-4xl font-bold text-white hover:text-gray-700 font-landing py-5 border-t border-white border-opacity-50">
                   Token Launch Auction
                 </h1>
               </a>
             </Link>
             <Link href="/docs/Popcorn_whitepaper_v1.pdf" passHref>
               <a>
-                <h1 className="ml-3 text-4xl font-light text-white hover:text-gray-700 font-landing py-5">
+                <h1 className="ml-3 text-4xl font-bold text-white hover:text-gray-700 font-landing py-5">
                   Whitepaper
                 </h1>
               </a>
             </Link>
             <Link href="/team" passHref>
               <a>
-                <h1 className="ml-3 text-4xl font-light text-white hover:text-gray-700 font-landing py-5">
+                <h1
+                  className={`${
+                    router.pathname === '/team'
+                      ? 'text-gray-700'
+                      : 'text-white'
+                  } ml-3 text-4xl font-bold hover:text-gray-700 font-landing py-5`}
+                >
                   Team & Contributors
                 </h1>
               </a>
@@ -76,48 +85,34 @@ export const MobileExpandableMenu: React.FC = () => {
               </Link>
             </div>
           </div>
-          <div className="flex flex-row py-6 font-light justify-evenly">
+          <div className="flex flex-row py-6 justify-evenly">
             <div className="flex flex-col w-1/2 space-y-3">
-              <p className="text-base text-white uppercase font-landing">
-                Site
-              </p>
+              <p className="text-base text-white uppercase font-bold">Site</p>
               <Link href="/" passHref>
-                <a className="text-xl text-white text-semibold">Home</a>
+                <a className="text-xl text-white font-medium">Home</a>
               </Link>
               <Link href="https://medium.com/popcorndao" passHref>
-                <a
-                  className="text-xl text-white text-semibold"
-                  target="_window"
-                >
+                <a className="text-xl text-white font-medium" target="_window">
                   Blog
                 </a>
               </Link>
             </div>
             <div className="flex flex-col w-1/2 ml-20 space-y-3">
-              <p className="text-base text-white uppercase font-landing">
+              <p className="text-base text-white uppercase font-bold">
                 Connect
               </p>
               <Link href="https://twitter.com/Popcorn_DAO" passHref>
-                <a
-                  className="text-xl text-white text-semibold"
-                  target="_window"
-                >
+                <a className="text-xl text-white font-medium" target="_window">
                   Twitter
                 </a>
               </Link>
               <Link href="https://discord.gg/w9zeRTSZsq" passHref>
-                <a
-                  className="text-xl text-white text-semibold"
-                  target="_window"
-                >
+                <a className="text-xl text-white font-medium" target="_window">
                   Discord
                 </a>
               </Link>
               <Link href="https://github.com/popcorndao" passHref>
-                <a
-                  className="text-xl text-white text-semibold"
-                  target="_window"
-                >
+                <a className="text-xl text-white font-medium" target="_window">
                   Github
                 </a>
               </Link>

@@ -781,7 +781,7 @@ const TeamPage = () => {
                       <img
                         src="/images/logo.png"
                         alt="Logo"
-                        className="flex-grow-0 flex-shrink-0 h-14"
+                        className="flex-grow-0 flex-shrink-0 h-16"
                       ></img>
                     </a>
                   </Link>

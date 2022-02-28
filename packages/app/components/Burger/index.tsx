@@ -32,7 +32,7 @@ export default Burger;
 
 export const StyledBurger = styled.button<StyledBurgerProps>`
   position: fixed;
-  top: ${({ open }) => (open ? '32px' : '2rem')};
+  top: ${({ open }) => (open ? '40px' : '2.5rem')};
   right: ${({ open }) => (open ? '16px' : '1rem')};
   display: flex;
   flex-direction: column;
