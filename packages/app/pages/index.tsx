@@ -490,9 +490,21 @@ const IndexPage = () => {
             </div>
           </div>
           <div className="flex flex-wrap w-2/3 ml-10">
+          <img
+              src="images/investor-partners/dao.png"
+              className="mx-6 mb-14"
+            />
+          <img
+              src="images/investor-partners/olympus.png"
+              className="mx-6 mb-14"
+            />
+          <img
+              src="images/investor-partners/giveth.png"
+              className="mx-6 mb-14"
+            />
             <img
               src="images/investor-partners/jump.png"
-              className="mx-6 opacity-50 mb-14"
+              className="mx-6 mb-14"
             />
             <img
               src="images/investor-partners/newform.png"
@@ -1001,8 +1013,20 @@ const IndexPage = () => {
                 Meet our dedicated partners.
               </p>
               <img
+                src="images/investor-partners/dao.png"
+                className="mx-auto mb-14"
+              />
+              <img
+                src="images/investor-partners/olympus.png"
+                className="mx-auto mb-14"
+              />
+              <img
+                src="images/investor-partners/giveth.png"
+                className="mx-auto mb-14"
+              />
+              <img
                 src="images/investor-partners/jump.png"
-                className="mx-auto opacity-50 mb-14"
+                className="mx-auto mb-14"
               />
               <img
                 src="images/investor-partners/newform.png"
