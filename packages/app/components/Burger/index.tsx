@@ -33,7 +33,7 @@ export default Burger;
 export const StyledBurger = styled.button<StyledBurgerProps>`
   position: fixed;
   top: ${({ open }) => (open ? '40px' : '2.5rem')};
-  right: ${({ open }) => (open ? '16px' : '1rem')};
+  right: ${({ open }) => (open ? '36px' : '2.25rem')};
   display: flex;
   flex-direction: column;
   justify-content: space-around;
