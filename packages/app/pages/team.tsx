@@ -485,11 +485,6 @@ const TeamPage = () => {
               </Link>
             </div>
             <div className="space-x-8">
-              <Link href="https://launch.popcorn.network/" passHref>
-                <a className="font-normal text-base hover:text-blue-600">
-                  Token Launch Auction
-                </a>
-              </Link>
               <Link href="/docs/Popcorn_whitepaper_v1.pdf" passHref>
                 <a
                   className="font-normal text-base hover:text-blue-600"

@@ -24,16 +24,6 @@ export const MobileExpandableMenu: React.FC<MobileExpandableMenuProps> = ({
             />
           </div>
           <div className="w-full bg-white " style={{ height: 0.32 }}></div>
-          <Link href="https://launch.popcorn.network/" passHref>
-            <a>
-              <h1
-                className="ml-3 text-4xl font-light text-white hover:text-gray-700 font-landing"
-                style={{ marginTop: 18, marginBottom: 18 }}
-              >
-                Token Launch Auction
-              </h1>
-            </a>
-          </Link>
           <div
             className="w-full bg-white opacity-50"
             style={{ height: 0.72 }}

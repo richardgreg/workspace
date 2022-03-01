@@ -181,11 +181,6 @@ const IndexPage = () => {
               </Link>
             </div>
             <div className="space-x-8">
-              <Link href="https://launch.popcorn.network/" passHref>
-                <a className="text-base font-normal hover:text-blue-600">
-                  Token Launch Auction
-                </a>
-              </Link>
               <Link href="/docs/Popcorn_whitepaper_v1.pdf" passHref>
                 <a
                   className="text-base font-normal hover:text-blue-600"
@@ -1241,11 +1236,6 @@ const IndexPage = () => {
                     >
                       <a className="hover:text-blue-600" target="_window">
                         Popcorn (POP) Token
-                      </a>
-                    </Link>
-                    <Link href="https://launch.popcorn.network/" passHref>
-                      <a className="hover:text-blue-600" target="_window">
-                        Token Launch Auction
                       </a>
                     </Link>
                   </div>
