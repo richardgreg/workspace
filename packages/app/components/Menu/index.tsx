@@ -7,7 +7,8 @@ interface StyledMenuProps {
   open: boolean;
 }
 export const StyledMenu = styled.nav<StyledMenuProps>`
-  height: 100vh;
+  height: 100%;
+  min-height: 100vh;
   display: ${({ open }) => (open ? 'flex' : 'none')};
   flex-direction: column;
   justify-content: center;
@@ -42,7 +43,7 @@ const Menu = ({ open, ...props }) => {
 
   return (
     <StyledMenu open={open} aria-hidden={!isHidden} {...props}>
-      <MobileExpandableMenu toggleMenuVisible={open} />
+      <MobileExpandableMenu />
     </StyledMenu>
   );
 };
