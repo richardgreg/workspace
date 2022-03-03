@@ -954,7 +954,6 @@ const IndexPage = () => {
                 </div>
               </div>
             </section>
-
             <section className="w-10/12 h-full mx-auto">
               <Rocket />
               <h2 className="mt-12 mb-4 text-3xl font-bold leading-snug text-center">
