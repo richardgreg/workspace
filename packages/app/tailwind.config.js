@@ -91,6 +91,7 @@ module.exports = {
         'hero-pattern': "url('/images/bgHero.svg')",
         'impact-pattern': "url('/images/bgImpact.svg')",
         'countdown-pattern': "url('/images/bgCountdown.svg')",
+        'countdown-pattern-mobile': "url('/images/bgFooterMobile.svg')",
         'popcorn1-pattern': "url('/images/bgPopcorn1.svg')",
         'popcorn2-pattern': "url('/images/bgPopcorn2.svg')",
         'popcorn3-pattern': "url('/images/bgPopcorn3.svg')",

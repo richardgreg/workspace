@@ -1132,7 +1132,7 @@ const IndexPage = () => {
               </a>
             </section>
 
-            <section className="w-full py-24 bg-countdown-pattern bg-cover">
+            <section className="w-full py-44 bg-countdown-pattern-mobile bg-cover">
               <div className="w-10/12 mx-auto text-center">
                 <h2 className="mb-4 text-2xl font-bold leading-snug">
                   Notify Me

@@ -940,7 +940,7 @@ const TeamPage = () => {
                 </div>
               </section>
             )}
-            <section className="w-full bg-countdown-pattern bg-cover py-24">
+            <section className="w-full bg-countdown-pattern-mobile bg-cover py-44">
               <div className="w-10/12 mx-auto text-center">
                 <h2 className="font-bold text-2xl leading-snug mb-4">
                   Notify Me
