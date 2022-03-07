@@ -619,7 +619,7 @@ const TeamPage = () => {
           </div>
         </section>
 
-        <section className="w-full bg-secondary py-52">
+        <section className="w-full bg-countdown-pattern bg-cover pt-52 pb-10">
           <div className="w-8/12 mx-auto text-center">
             <h2 className="font-bold text-4xl leading-snug mb-4">Notify Me</h2>
             <p className="text-2xl font-medium">
@@ -670,7 +670,7 @@ const TeamPage = () => {
             </form>
           </div>
         </section>
-        <section className="w-full bg-secondary">
+        <section className="w-full bg-secondary pt-14">
           <div className="w-10/12 mx-auto flex flex-row justify-between border-b border-gray-500 pb-12">
             <div className="w-6/12">
               <Link href="/" passHref>
@@ -885,8 +885,7 @@ const TeamPage = () => {
             {countdownActive && (
               <section>
                 <div
-                  className="bg-countdown-pattern flex-shrink-0 flex-grow-0 w-full
-          h-full pt-60"
+                  className="w-full bg-countdown-pattern bg-cover py-52"
                   style={{
                     backgroundRepeat: 'no-repeat',
                     backgroundSize: 'cover',
@@ -941,7 +940,7 @@ const TeamPage = () => {
                 </div>
               </section>
             )}
-            <section className="w-full bg-secondary py-24">
+            <section className="w-full bg-countdown-pattern bg-cover py-24">
               <div className="w-10/12 mx-auto text-center">
                 <h2 className="font-bold text-2xl leading-snug mb-4">
                   Notify Me

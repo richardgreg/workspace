@@ -629,7 +629,7 @@ const IndexPage = () => {
           </div>
         </section>
 
-        <section className="w-full bg-secondary py-52">
+        <section className="w-full bg-countdown-pattern bg-cover pt-52 pb-10">
           <div className="w-8/12 mx-auto text-center">
             <h2 className="mb-4 text-4xl font-bold leading-snug">Notify Me</h2>
             <p className="text-2xl font-medium">
@@ -685,7 +685,7 @@ const IndexPage = () => {
             </form>
           </div>
         </section>
-        <section className="w-full bg-secondary">
+        <section className="w-full bg-secondary pt-14">
           <div className="flex flex-row justify-between w-10/12 pb-12 mx-auto border-b border-gray-500">
             <div className="w-6/12">
               <Link href="/" passHref>
@@ -1132,7 +1132,7 @@ const IndexPage = () => {
               </a>
             </section>
 
-            <section className="w-full py-24 bg-secondary">
+            <section className="w-full py-24 bg-countdown-pattern bg-cover">
               <div className="w-10/12 mx-auto text-center">
                 <h2 className="mb-4 text-2xl font-bold leading-snug">
                   Notify Me
