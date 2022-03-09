@@ -631,8 +631,8 @@ const IndexPage = () => {
 
         <section className="w-full bg-countdown-pattern bg-cover pt-52 pb-10">
           <div className="w-8/12 mx-auto text-center">
-            <h2 className="mb-4 text-4xl font-bold leading-snug">Notify Me</h2>
-            <p className="text-2xl font-medium">
+            <h2 className="mb-2 text-5xl font-medium leading-snug">Notify Me</h2>
+            <p className="pb-4 text-2xl font-normal">
               Get early notification to be part of our journey
             </p>
             <form
@@ -651,7 +651,7 @@ const IndexPage = () => {
                 <input
                   type="email"
                   name="EMAIL"
-                  className="w-10/12 p-2 mx-4 text-base text-gray-900"
+                  className="w-10/12 p-2 mx-2 text-base text-gray-900"
                   id="mce-EMAIL"
                   placeholder="Email Address"
                   required
@@ -690,34 +690,46 @@ const IndexPage = () => {
             <div className="w-6/12">
               <Link href="/" passHref>
                 <a>
-                  <img src="/images/logo.png" alt="Logo" className="h-10"></img>
+                  <img src="/images/logoFooter.png" alt="Logo" className="h-10"></img>
                 </a>
               </Link>
-              <p className="w-7/12 py-4 text-base font-medium">
+              <p className="w-7/12 py-4 text-base font-normal">
                 Earn high yield on your cryptoassets while helping fund
                 educational, environmental and open source initiatives
               </p>
               <div className="flex flex-row items-center space-x-4">
-                <Link href="https://github.com/popcorndao" passHref>
-                  <GitHub className="cursor-pointer hover:text-blue-600" />
-                </Link>
-                <Link href="https://www.facebook.com/PopcornDAO" passHref>
-                  <Facebook className="cursor-pointer hover:text-blue-600" />
+              <Link href="https://www.facebook.com/PopcornDAO" passHref>
+              <img
+                    src="/images/facebook.svg"
+                    alt="facebook"
+                    className="w-8 h-8 cursor-pointer iconblue hover:text-blue-600"
+                  ></img>
                 </Link>
                 <Link href="https://twitter.com/Popcorn_DAO" passHref>
-                  <Twitter className="cursor-pointer hover:text-blue-600" />
+                <img
+                    src="/images/twitter.svg"
+                    alt="twitter"
+                    className="w-8 h-8 cursor-pointer iconblue hover:text-blue-600"
+                  ></img>
+                </Link>
+                <Link href="https://github.com/popcorndao" passHref>
+                <img
+                    src="/images/github.svg"
+                    alt="github"
+                    className="w-8 h-8 cursor-pointer iconblue hover:text-blue-600"
+                  ></img>
                 </Link>
                 <Link href="https://discord.gg/w9zeRTSZsq" passHref>
                   <img
                     src="/images/discord.svg"
                     alt="discord"
-                    className="w-8 h-8 cursor-pointer discord"
+                    className="w-8 h-8 cursor-pointer iconblue hover:text-blue-600"
                   ></img>
                 </Link>
               </div>
             </div>
-            <div className="flex flex-col space-y-3">
-              <p className="text-base font-medium uppercase">Site</p>
+            <div className="flex flex-col space-y-3 text-base">
+              <p className="text-base font-bold uppercase">Site</p>
               <Link href="/" passHref>
                 <a className="hover:text-blue-600">Home</a>
               </Link>
@@ -736,8 +748,8 @@ const IndexPage = () => {
                 </a>
               </Link>
             </div>
-            <div className="flex flex-col space-y-3">
-              <p className="text-base font-medium uppercase">Connect</p>
+            <div className="flex flex-col space-y-3 text-base">
+              <p className="text-base font-bold uppercase">Connect</p>
               <Link href="https://twitter.com/Popcorn_DAO" passHref>
                 <a className="hover:text-blue-600" target="_window">
                   Twitter
@@ -754,14 +766,14 @@ const IndexPage = () => {
                 </a>
               </Link>
             </div>
-            <div className="flex flex-col space-y-3">
-              <p className="text-base font-medium uppercase">Bug Bounty</p>
+            <div className="flex flex-col space-y-3 text-base">
+              <p className="text-base font-bold uppercase">Bug Bounty</p>
               <Link href="https://immunefi.com/bounty/popcornnetwork" passHref>
                 <a className="hover:text-blue-600">Immunefi</a>
               </Link>
             </div>
           </div>
-          <p className="py-4 text-center font-base">
+          <p className="py-4 text-center font-medium">
             ©2021, Popcorn Ltd All Rights Reserved{' '}
             <span className="block text-xs ">
               Winterbotham Place Marlborough &amp; Queen Streets P.O. Box SP
@@ -1134,10 +1146,10 @@ const IndexPage = () => {
 
             <section className="w-full py-44 bg-countdown-pattern-mobile bg-cover">
               <div className="w-10/12 mx-auto text-center">
-                <h2 className="mb-4 text-2xl font-bold leading-snug">
+                <h2 className="mb-4 text-2xl font-semibold leading-snug">
                   Notify Me
                 </h2>
-                <p className="text-lg">
+                <p className="text-lg font-normal">
                   Get early notification to be part of our journey
                 </p>
                 <form
@@ -1191,43 +1203,53 @@ const IndexPage = () => {
               </div>
             </section>
             <section className="w-full bg-secondary">
-              <div className="w-10/12 mx-auto">
+              <div className="w-10/12 mx-auto -mt-1">
                 <Link href="/" passHref>
                   <a>
                     {/*TODO The logo is slightly blurred even though its copied straight from figma*/}
                     <img
-                      src="/images/logo.png"
+                      src="/images/mobileLogo.png"
                       alt="Logo"
                       className="flex-grow-0 flex-shrink-0 h-10"
                     ></img>
                   </a>
                 </Link>
-                <p className="py-4 text-base font-medium">
-                  Popcorn is a new eco-friendly paradigm for DeFi, where users
-                  can earn high yield on their crypto assets while creating real
-                  world impact.
+                <p className="py-4 text-base font-normal">
+                Earn high yield on your cryptoassets while helping fund educational, environmental and open source initiatives
                 </p>
                 <div className="flex flex-row items-center space-x-4">
-                  <Link href="https://github.com/popcorndao" passHref>
-                    <GitHub className="cursor-pointer hover:text-blue-600" />
-                  </Link>
-                  <Link href="https://www.facebook.com/PopcornDAO" passHref>
-                    <Facebook className="cursor-pointer hover:text-blue-600" />
+                <Link href="https://www.facebook.com/PopcornDAO" passHref>
+                  <img
+                      src="/images/facebook.svg"
+                      alt="facebook"
+                      className="w-8 h-8 cursor-pointer iconblue"
+                    ></img>
                   </Link>
                   <Link href="https://twitter.com/Popcorn_DAO" passHref>
-                    <Twitter className="cursor-pointer hover:text-blue-600" />
+                  <img
+                      src="/images/twitter.svg"
+                      alt="twitter"
+                      className="w-8 h-8 cursor-pointer iconblue"
+                    ></img>
                   </Link>
                   <Link href="https://discord.gg/w9zeRTSZsq" passHref>
                     <img
                       src="/images/discord.svg"
                       alt="discord"
-                      className="w-8 h-8 cursor-pointer discord"
+                      className="w-8 h-8 cursor-pointer iconblue"
+                    ></img>
+                  </Link>
+                  <Link href="https://github.com/popcorndao" passHref>
+                  <img
+                      src="/images/github.svg"
+                      alt="github"
+                      className="w-8 h-8 cursor-pointer iconblue"
                     ></img>
                   </Link>
                 </div>
                 <div className="flex flex-row py-6 justify-evenly">
                   <div className="flex flex-col w-1/2 space-y-3">
-                    <p className="text-base font-medium uppercase">Site</p>
+                    <p className="text-base font-bold uppercase">Site</p>
                     <Link href="/" passHref>
                       <a className="hover:text-blue-600">Home</a>
                     </Link>
@@ -1251,7 +1273,7 @@ const IndexPage = () => {
                     </Link>
                   </div>
                   <div className="flex flex-col w-1/2 space-y-3">
-                    <p className="text-base font-medium uppercase">Connect</p>
+                    <p className="text-base font-bold uppercase">Connect</p>
                     <Link href="https://twitter.com/Popcorn_DAO" passHref>
                       <a className="hover:text-blue-600" target="_window">
                         Twitter
@@ -1270,7 +1292,7 @@ const IndexPage = () => {
                   </div>
                 </div>
                 <div className="flex flex-col space-y-3">
-                  <p className="text-base font-medium uppercase">Bug Bounty</p>
+                  <p className="text-base font-bold uppercase">Bug Bounty</p>
                   <Link href="https://immunefi.com/bounty/popcornnetwork" passHref>
                     <a className="hover:text-blue-600">Immunefi</a>
                   </Link>
