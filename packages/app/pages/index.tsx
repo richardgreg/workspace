@@ -729,7 +729,7 @@ const IndexPage = () => {
               </div>
             </div>
             <div className="flex flex-col space-y-3 text-base">
-              <p className="text-base font-bold uppercase">Site</p>
+              <p className="text-base font-medium uppercase">Site</p>
               <Link href="/" passHref>
                 <a className="hover:text-blue-600">Home</a>
               </Link>
@@ -749,7 +749,7 @@ const IndexPage = () => {
               </Link>
             </div>
             <div className="flex flex-col space-y-3 text-base">
-              <p className="text-base font-bold uppercase">Connect</p>
+              <p className="text-base font-medium uppercase">Connect</p>
               <Link href="https://twitter.com/Popcorn_DAO" passHref>
                 <a className="hover:text-blue-600" target="_window">
                   Twitter
@@ -767,7 +767,7 @@ const IndexPage = () => {
               </Link>
             </div>
             <div className="flex flex-col space-y-3 text-base">
-              <p className="text-base font-bold uppercase">Bug Bounty</p>
+              <p className="text-base font-medium uppercase">Bug Bounty</p>
               <Link href="https://immunefi.com/bounty/popcornnetwork" passHref>
                 <a className="hover:text-blue-600">Immunefi</a>
               </Link>
@@ -1249,7 +1249,7 @@ const IndexPage = () => {
                 </div>
                 <div className="flex flex-row py-6 justify-evenly">
                   <div className="flex flex-col w-1/2 space-y-3">
-                    <p className="text-base font-bold uppercase">Site</p>
+                    <p className="text-base font-medium uppercase">Site</p>
                     <Link href="/" passHref>
                       <a className="hover:text-blue-600">Home</a>
                     </Link>
@@ -1273,7 +1273,7 @@ const IndexPage = () => {
                     </Link>
                   </div>
                   <div className="flex flex-col w-1/2 space-y-3">
-                    <p className="text-base font-bold uppercase">Connect</p>
+                    <p className="text-base font-medium uppercase">Connect</p>
                     <Link href="https://twitter.com/Popcorn_DAO" passHref>
                       <a className="hover:text-blue-600" target="_window">
                         Twitter
@@ -1292,7 +1292,7 @@ const IndexPage = () => {
                   </div>
                 </div>
                 <div className="flex flex-col space-y-3">
-                  <p className="text-base font-bold uppercase">Bug Bounty</p>
+                  <p className="text-base font-medium uppercase">Bug Bounty</p>
                   <Link href="https://immunefi.com/bounty/popcornnetwork" passHref>
                     <a className="hover:text-blue-600">Immunefi</a>
                   </Link>
