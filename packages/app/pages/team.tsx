@@ -619,10 +619,10 @@ const TeamPage = () => {
           </div>
         </section>
 
-        <section className="w-full bg-secondary py-52">
+        <section className="w-full bg-countdown-pattern bg-cover pt-52 pb-10">
           <div className="w-8/12 mx-auto text-center">
-            <h2 className="font-bold text-4xl leading-snug mb-4">Notify Me</h2>
-            <p className="text-2xl font-medium">
+            <h2 className="mb-2 text-5xl font-medium leading-snug">Notify Me</h2>
+            <p className="pb-4 text-2xl font-normal">
               Get early notification to be part of our journey
             </p>
             <form
@@ -636,12 +636,12 @@ const TeamPage = () => {
             >
               <div
                 id="mc_embed_signup_scroll"
-                className="shadow-xl bg-white rounded-xl py-2 px-2 mt-8 w-8/12 mx-auto flex flex-row items-center justify-between"
+                className="flex flex-row items-center justify-between w-8/12 px-2 py-2 mx-auto mt-8 bg-white shadow-xl rounded-xl"
               >
                 <input
                   type="email"
                   name="EMAIL"
-                  className="w-10/12 p-2 text-base mx-4 text-gray-900"
+                  className="w-10/12 p-2 mx-2 text-base text-gray-900"
                   id="mce-EMAIL"
                   placeholder="Email Address"
                   required
@@ -662,53 +662,70 @@ const TeamPage = () => {
                     value="Join Waitlist"
                     name="subscribe"
                     id="mc-embedded-subscribe"
-                    className="font-medium text-base bg-blue-600 hover:bg-blue-500 text-white rounded-xl px-4 py-2 cursor-pointer"
+                    className="px-4 py-2 text-base font-medium text-white bg-blue-600 cursor-pointer hover:bg-blue-500 rounded-xl"
                     readOnly
+                    onClick={() =>
+                      (window as unknown as any).lintrk('track', {
+                        conversionId: '5594906',
+                      })
+                    }
                   />
                 </div>
               </div>
             </form>
           </div>
         </section>
-        <section className="w-full bg-secondary">
-          <div className="w-10/12 mx-auto flex flex-row justify-between border-b border-gray-500 pb-12">
+        <section className="w-full bg-secondary pt-14">
+          <div className="flex flex-row justify-between w-10/12 pb-12 mx-auto border-b border-gray-500">
             <div className="w-6/12">
               <Link href="/" passHref>
                 <a>
-                  <img src="/images/logo.png" alt="Logo" className="h-10"></img>
+                  <img src="/images/logoFooter.png" alt="Logo" className="h-10"></img>
                 </a>
               </Link>
-              <p className="font-medium text-base w-7/12 py-4">
+              <p className="w-7/12 py-4 text-base font-normal">
                 Earn high yield on your cryptoassets while helping fund
-                educational, environmental and open source initiatives.
+                educational, environmental and open source initiatives
               </p>
-              <div className="flex flex-row space-x-4 items-center">
-                <Link href="https://github.com/popcorndao" passHref>
-                  <GitHub className="hover:text-blue-600 cursor-pointer" />
-                </Link>
-                <Link href="https://www.facebook.com/PopcornDAO" passHref>
-                  <Facebook className="hover:text-blue-600 cursor-pointer" />
+              <div className="flex flex-row items-center space-x-4">
+              <Link href="https://www.facebook.com/PopcornDAO" passHref>
+              <img
+                    src="/images/facebook.svg"
+                    alt="facebook"
+                    className="w-8 h-8 cursor-pointer iconblue hover:text-blue-600"
+                  ></img>
                 </Link>
                 <Link href="https://twitter.com/Popcorn_DAO" passHref>
-                  <Twitter className="hover:text-blue-600 cursor-pointer" />
+                <img
+                    src="/images/twitter.svg"
+                    alt="twitter"
+                    className="w-8 h-8 cursor-pointer iconblue hover:text-blue-600"
+                  ></img>
+                </Link>
+                <Link href="https://github.com/popcorndao" passHref>
+                <img
+                    src="/images/github.svg"
+                    alt="github"
+                    className="w-8 h-8 cursor-pointer iconblue hover:text-blue-600"
+                  ></img>
                 </Link>
                 <Link href="https://discord.gg/w9zeRTSZsq" passHref>
                   <img
                     src="/images/discord.svg"
                     alt="discord"
-                    className="w-8 h-8 cursor-pointer discord"
+                    className="w-8 h-8 cursor-pointer iconblue hover:text-blue-600"
                   ></img>
                 </Link>
               </div>
             </div>
-            <div className="flex flex-col space-y-3">
-              <p className="font-medium text-base uppercase">Site</p>
+            <div className="flex flex-col space-y-3 text-base">
+              <p className="text-base font-medium uppercase">Site</p>
               <Link href="/" passHref>
                 <a className="hover:text-blue-600">Home</a>
               </Link>
 
               <Link href="https://medium.com/popcorndao" passHref>
-                <a className="hover:text-blue-600" target="_blank">
+                <a className="hover:text-blue-600" target="_window">
                   Blog
                 </a>
               </Link>
@@ -716,36 +733,42 @@ const TeamPage = () => {
                 href="https://etherscan.io/token/0xd0cd466b34a24fcb2f87676278af2005ca8a78c4"
                 passHref
               >
-                <a className="hover:text-blue-600" target="_blank">
+                <a className="hover:text-blue-600" target="_window">
                   Popcorn (POP) Token
                 </a>
               </Link>
             </div>
-            <div className="flex flex-col space-y-3">
-              <p className="font-medium text-base uppercase">Connect</p>
+            <div className="flex flex-col space-y-3 text-base">
+              <p className="text-base font-medium uppercase">Connect</p>
               <Link href="https://twitter.com/Popcorn_DAO" passHref>
-                <a className="hover:text-blue-600" target="_blank">
+                <a className="hover:text-blue-600" target="_window">
                   Twitter
                 </a>
               </Link>
               <Link href="https://discord.gg/w9zeRTSZsq" passHref>
-                <a className="hover:text-blue-600" target="_blank">
+                <a className="hover:text-blue-600" target="_window">
                   Discord
                 </a>
               </Link>
               <Link href="https://github.com/popcorndao" passHref>
-                <a className="hover:text-blue-600" target="_blank">
+                <a className="hover:text-blue-600" target="_window">
                   Github
                 </a>
               </Link>
             </div>
+            <div className="flex flex-col space-y-3 text-base">
+              <p className="text-base font-medium uppercase">Bug Bounty</p>
+              <Link href="https://immunefi.com/bounty/popcornnetwork" passHref>
+                <a className="hover:text-blue-600">Immunefi</a>
+              </Link>
+            </div>
           </div>
-          <p className="font-base text-center py-4">
+          <p className="py-4 text-center font-medium">
             ©2021, Popcorn Ltd All Rights Reserved{' '}
-            <span className="text-xs block ">
+            <span className="block text-xs ">
               Winterbotham Place Marlborough &amp; Queen Streets P.O. Box SP
               62556 Nassau, BS
-            </span>{' '}
+            </span>
           </p>
         </section>
       </div>
@@ -885,8 +908,7 @@ const TeamPage = () => {
             {countdownActive && (
               <section>
                 <div
-                  className="bg-countdown-pattern flex-shrink-0 flex-grow-0 w-full
-          h-full pt-60"
+                  className="w-full bg-countdown-pattern bg-cover py-52"
                   style={{
                     backgroundRepeat: 'no-repeat',
                     backgroundSize: 'cover',
@@ -941,12 +963,12 @@ const TeamPage = () => {
                 </div>
               </section>
             )}
-            <section className="w-full bg-secondary py-24">
+            <section className="w-full py-44 bg-countdown-pattern-mobile bg-cover">
               <div className="w-10/12 mx-auto text-center">
-                <h2 className="font-bold text-2xl leading-snug mb-4">
+                <h2 className="mb-4 text-2xl font-semibold leading-snug">
                   Notify Me
                 </h2>
-                <p className="text-lg">
+                <p className="text-lg font-normal">
                   Get early notification to be part of our journey
                 </p>
                 <form
@@ -960,12 +982,12 @@ const TeamPage = () => {
                 >
                   <div
                     id="mc_embed_signup_scroll"
-                    className="shadow-xl bg-white rounded-xl py-2 px-2 mt-8 w-full mx-auto flex flex-row items-center justify-between"
+                    className="flex flex-row items-center justify-between w-full px-2 py-2 mx-auto mt-8 bg-white shadow-xl rounded-xl"
                   >
                     <input
                       type="email"
                       name="EMAIL"
-                      className="w-10/12 p-2 text-base mx-4 text-gray-900"
+                      className="w-10/12 p-2 mx-4 text-base text-gray-900"
                       id="mce-EMAIL"
                       placeholder="Email Address"
                       required
@@ -986,8 +1008,13 @@ const TeamPage = () => {
                         value="Join Waitlist"
                         name="subscribe"
                         id="mc-embedded-subscribe"
-                        className="font-medium text-base bg-blue-600 hover:bg-blue-500 text-white rounded-xl px-4 py-2 cursor-pointer"
+                        className="px-4 py-2 text-base font-medium text-white bg-blue-600 cursor-pointer hover:bg-blue-500 rounded-xl"
                         readOnly
+                        onClick={() =>
+                          (window as unknown as any).lintrk('track', {
+                            conversionId: '5594906',
+                          })
+                        }
                       />
                     </div>
                   </div>
@@ -995,51 +1022,58 @@ const TeamPage = () => {
               </div>
             </section>
             <section className="w-full bg-secondary">
-              <div className="w-10/12 mx-auto">
+              <div className="w-10/12 mx-auto -mt-1">
                 <Link href="/" passHref>
                   <a>
                     {/*TODO The logo is slightly blurred even though its copied straight from figma*/}
                     <img
-                      src="/images/logo.png"
+                      src="/images/mobileLogo.png"
                       alt="Logo"
-                      className="h-10 flex-shrink-0 flex-grow-0"
+                      className="flex-grow-0 flex-shrink-0 h-10"
                     ></img>
                   </a>
                 </Link>
-                <p className="font-medium text-base py-4">
-                  <span translate="no">Popcorn</span> is a new eco-friendly
-                  paradigm for DeFi, where users can earn high yield on their
-                  crypto assets while creating real world impact.
+                <p className="py-4 text-base font-normal">
+                Earn high yield on your cryptoassets while helping fund educational, environmental and open source initiatives
                 </p>
-                <div className="flex flex-row space-x-4 items-center">
-                  <Link href="https://github.com/popcorndao" passHref>
-                    <GitHub className="hover:text-blue-600 cursor-pointer" />
-                  </Link>
-                  <Link href="https://www.facebook.com/PopcornDAO" passHref>
-                    <Facebook className="hover:text-blue-600 cursor-pointer" />
+                <div className="flex flex-row items-center space-x-4">
+                <Link href="https://www.facebook.com/PopcornDAO" passHref>
+                  <img
+                      src="/images/facebook.svg"
+                      alt="facebook"
+                      className="w-8 h-8 cursor-pointer iconblue"
+                    ></img>
                   </Link>
                   <Link href="https://twitter.com/Popcorn_DAO" passHref>
-                    <Twitter className="hover:text-blue-600 cursor-pointer" />
+                  <img
+                      src="/images/twitter.svg"
+                      alt="twitter"
+                      className="w-8 h-8 cursor-pointer iconblue"
+                    ></img>
                   </Link>
                   <Link href="https://discord.gg/w9zeRTSZsq" passHref>
                     <img
                       src="/images/discord.svg"
                       alt="discord"
-                      className="w-8 h-8 cursor-pointer discord"
+                      className="w-8 h-8 cursor-pointer iconblue"
+                    ></img>
+                  </Link>
+                  <Link href="https://github.com/popcorndao" passHref>
+                  <img
+                      src="/images/github.svg"
+                      alt="github"
+                      className="w-8 h-8 cursor-pointer iconblue"
                     ></img>
                   </Link>
                 </div>
-                <div className="flex flex-row justify-evenly py-6">
-                  <div className="flex flex-col space-y-3 w-1/2">
-                    <p className="font-medium text-base uppercase">Site</p>
+                <div className="flex flex-row py-6 justify-evenly">
+                  <div className="flex flex-col w-1/2 space-y-3">
+                    <p className="text-base font-medium uppercase">Site</p>
                     <Link href="/" passHref>
                       <a className="hover:text-blue-600">Home</a>
                     </Link>
-                    {/*<Link href="/" passHref>
-                  <a className="hover:text-blue-600">About us</a>
-                </Link>*/}
                     <Link href="https://medium.com/popcorndao" passHref>
-                      <a className="hover:text-blue-600" target="_blank">
+                      <a className="hover:text-blue-600" target="_window">
                         Blog
                       </a>
                     </Link>
@@ -1047,44 +1081,55 @@ const TeamPage = () => {
                       href="https://etherscan.io/token/0xd0cd466b34a24fcb2f87676278af2005ca8a78c4"
                       passHref
                     >
-                      <a className="hover:text-blue-600" target="_blank">
-                        <span translate="no">Popcorn</span> (POP) Token
+                      <a className="hover:text-blue-600" target="_window">
+                        Popcorn (POP) Token
+                      </a>
+                    </Link>
+                    <Link href="https://launch.popcorn.network/" passHref>
+                      <a className="hover:text-blue-600" target="_window">
+                        Token Launch Auction
                       </a>
                     </Link>
                   </div>
-                  <div className="flex flex-col space-y-3 w-1/2">
-                    <p className="font-medium text-base uppercase">Connect</p>
+                  <div className="flex flex-col w-1/2 space-y-3">
+                    <p className="text-base font-medium uppercase">Connect</p>
                     <Link href="https://twitter.com/Popcorn_DAO" passHref>
-                      <a className="hover:text-blue-600" target="_blank">
+                      <a className="hover:text-blue-600" target="_window">
                         Twitter
                       </a>
                     </Link>
                     <Link href="https://discord.gg/w9zeRTSZsq" passHref>
-                      <a className="hover:text-blue-600" target="_blank">
+                      <a className="hover:text-blue-600" target="_window">
                         Discord
                       </a>
                     </Link>
                     <Link href="https://github.com/popcorndao" passHref>
-                      <a className="hover:text-blue-600" target="_blank">
+                      <a className="hover:text-blue-600" target="_window">
                         Github
                       </a>
                     </Link>
                   </div>
                 </div>
+                <div className="flex flex-col space-y-3">
+                  <p className="text-base font-medium uppercase">Bug Bounty</p>
+                  <Link href="https://immunefi.com/bounty/popcornnetwork" passHref>
+                    <a className="hover:text-blue-600">Immunefi</a>
+                  </Link>
+                </div>
                 {/*<div className="flex flex-col space-y-3">
-            <p className="font-medium text-base uppercase">Documentation</p>
+            <p className="text-base font-medium uppercase">Documentation</p>
             <Link href="/" passHref>
               <a className="hover:text-blue-600">Gitbook</a>
             </Link>
           </div>*/}
               </div>
-              <div className="w-10/12 border-t border-gray-700 mt-12 mx-auto ">
-                <p className="font-base text-center py-4">
+              <div className="w-10/12 mx-auto mt-12 border-t border-gray-700 ">
+                <p className="py-4 text-center font-base">
                   ©2021, Popcorn Ltd All Rights Reserved{' '}
-                  <span className="text-xs block ">
+                  <span className="block text-xs ">
                     Winterbotham Place Marlborough &amp; Queen Streets P.O. Box
                     SP 62556 Nassau, BS
-                  </span>
+                  </span>{' '}
                 </p>
               </div>
             </section>
