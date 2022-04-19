@@ -1065,9 +1065,16 @@ const TeamPage = () => {
                     ></img>
                   </Link>
                   <Link href="https://github.com/popcorndao" passHref>
-                  <img
+                    <img
                       src="/images/github.svg"
                       alt="github"
+                      className="w-8 h-8 cursor-pointer iconblue"
+                    ></img>
+                  </Link>
+                  <Link href="https://reddit.com/r/popcorndao" passHref>
+                    <img
+                      src="/images/reddit.svg"
+                      alt="reddit"
                       className="w-8 h-8 cursor-pointer iconblue"
                     ></img>
                   </Link>

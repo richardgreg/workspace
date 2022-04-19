@@ -1269,6 +1269,13 @@ const IndexPage = () => {
                       className="w-8 h-8 cursor-pointer iconblue"
                     ></img>
                   </Link>
+                  <Link href="https://reddit.com/r/popcorndao" passHref>
+                    <img
+                      src="/images/reddit.svg"
+                      alt="reddit"
+                      className="w-8 h-8 cursor-pointer iconblue"
+                    ></img>
+                  </Link>
                 </div>
                 <div className="flex flex-row py-6 justify-evenly">
                   <div className="flex flex-col w-1/2 space-y-3">

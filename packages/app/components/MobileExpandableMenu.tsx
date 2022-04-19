@@ -74,6 +74,14 @@ export const MobileExpandableMenu: React.FC = () => {
                   style={{ width: 33, height: 33 }}
                 ></img>
               </Link>
+              <Link href="https://reddit.com/popcorndao" passHref>
+                <img
+                  src="/images/reddit-white.svg"
+                  alt="reddit"
+                  className="text-white cursor-pointer discord"
+                  style={{ width: 33, height: 33 }}
+                ></img>
+              </Link>
             </div>
           </div>
           <div className="flex flex-row py-6 font-light justify-evenly">
